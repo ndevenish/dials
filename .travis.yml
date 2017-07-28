@@ -49,7 +49,7 @@ before_script:
   - mkdir dials
   - mv {*,.*} dials | true
   - mv dials/deps .
-  - git clone https://github.com/ndevenish/dials-modwrap.git .
+  - git clone https://github.com/ndevenish/dials-modwrap.git && mv dials-modwrap/* .
   - python prepare.py
   # - ./prepare_cmake.sh
   - mkdir build
