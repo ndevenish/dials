@@ -1,0 +1,59 @@
+language: C++
+os:
+  - linux
+  # - osx
+
+addons:
+  apt:
+    packages: 
+      - libhdf5-dev
+      - libeigen3-dev
+      - libtiff5-dev
+      - libboost-python-dev
+cache:
+  directories:
+    - ${TRAVIS_BUILD_DIR}/deps/cmake # If microsoft/GSL decided this was a good idea...
+before_install:
+  - python --version
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update > /dev/null; fi
+install:
+  # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      for package in hdf5 boost-python cmake eigen; do
+        if brew ls --versions $package > /dev/null; then
+          brew outdated $package || brew upgrade $package
+        else
+          brew install $package
+        fi
+      done
+    fi
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  # Good enough for microsoft: Install a recent CMake, or use a cached version
+  - mkdir -p "${DEPS_DIR}" && cd "${DEPS_DIR}"
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin)" ]]; then
+        CMAKE_URL="https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz"
+        mkdir -p cmake && travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
+      fi
+      export PATH="${DEPS_DIR}/cmake/bin:${PATH}"
+    else
+      if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
+    fi
+  - cmake --version | head -n1
+  - pip install mock docopt pathlib2 enum34 
+
+before_script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir dials
+  - mv {*,.*} dials | true
+  - mv dials/deps .
+  - git clone https://github.com/ndevenish/dials-modwrap.git .
+  - python prepare.py
+  # - ./prepare_cmake.sh
+  - mkdir build
+  - cd build
+  - cmake ..
+script:
+  - make -j 2
