@@ -3,6 +3,11 @@ os:
   - linux
   # - osx
 
+# Don't build the travis branch
+branches:
+  except:
+    - travis
+
 addons:
   apt:
     packages: 
@@ -57,3 +62,4 @@ before_script:
   - cmake ..
 script:
   - make -j 2
+
