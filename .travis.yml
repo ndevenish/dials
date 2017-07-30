@@ -62,7 +62,7 @@ before_script:
     cd cmake
     ./do_autogen.sh
     cd ..
-    mv cmake/prepare_singlemodule.py.py .
+    mv cmake/prepare_singlemodule.py .
   - python prepare_singlemodule.py
   - mkdir build
   - cd build
