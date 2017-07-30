@@ -47,19 +47,27 @@ install:
       if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
     fi
   - cmake --version | head -n1
-  - pip install mock docopt pathlib2 enum34 
+  - pip install mock docopt pathlib2 enum34 pyyaml
+
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
+# Move the current repository into a dials subdirectory
   - mkdir dials
   - mv {*,.*} dials | true
   - mv dials/deps .
-  - git clone https://github.com/ndevenish/dials-modwrap.git && mv dials-modwrap/* .
+  - git clone https://github.com/ndevenish/autobuild.git cmake
+  # Ensure we have the latest CMakeLists - regenerate them
+  - |
+    cd cmake
+    ./do_autogen.sh
+    cd ..
+    mv cmake/prepare.py .
   - python prepare.py
-  # - ./prepare_cmake.sh
   - mkdir build
   - cd build
   - cmake ..
+
 script:
   - make -j 2
 
