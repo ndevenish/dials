@@ -22,6 +22,9 @@ cache:
 before_install:
   - python --version
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update > /dev/null; fi
+  - ls 
+  - find build
+  - false
 install:
   # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
   - |
