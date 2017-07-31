@@ -57,7 +57,7 @@ before_script:
   - cd ${TRAVIS_BUILD_DIR}
   # Move the current repository into a dials subdirectory
   - mkdir dials
-  - mv $(git ls-tree --name-only) dials && mv .git dials/
+  - mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
   # Verify what our folder looks like
   - ls
   # - mv {*,.*} dials | true
