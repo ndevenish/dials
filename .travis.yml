@@ -22,9 +22,7 @@ cache:
 before_install:
   - python --version
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update > /dev/null; fi
-  - ls 
-  - find build
-  - false
+
 install:
   # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
   - |
@@ -57,10 +55,15 @@ install:
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
-# Move the current repository into a dials subdirectory
+  # Move the current repository into a dials subdirectory
   - mkdir dials
-  - mv {*,.*} dials | true
-  - mv dials/deps .
+  - mv $(git ls-tree --name-only) dials && mv .git dials/
+  # Verify what our folder looks like
+  - ls
+  # - mv {*,.*} dials | true
+  # Rescue files moved into the wrong directory
+  # - mv dials/deps .
+  # - mv dials/build .
   - git clone https://github.com/ndevenish/autobuild.git cmake
   # Ensure we have the latest CMakeLists - regenerate them. This is required 
   # whilst the cmake system is in heavy flux.
