@@ -82,6 +82,9 @@ before_script:
       # Use the old module list; any new modules won't need to be touched anyway
       MODULES=$(cat build/commit_ids.txt | awk '{ print $1; }')
       # Find the oldest time in the build directory
+      echo "Oldest time: ""
+      find -type f -printf '%T+ %p\n' | sort | head -n 1
+      
       OLDEST_MTIME=$(find . -type f -printf "%.10T@\n" | sort | head -n 1)
       if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
         echo "Backdating to $(date -d @$OLDEST_MTIME)"
@@ -96,11 +99,11 @@ before_script:
         echo "  Handling cache backdate for $repo"
         # Find the old commit and if it exists in the repository, we can backdate
         OLDREV=$(cat commit_ids.txt | grep "${repo} " | awk '{ print $2; }')
-        if git cat-file -t $OLDREV; then
+        if GIT_DIR=$repo/.git git cat-file -e $OLDREV; then
           # The commit exists. Backdate everything...
           find $repo | xargs touch -t $OLDEST_TS
           # And then forward-date everything that has changed
-          git diff --name-only | xargs touch -c
+          GIT_DIR=$repo/.git git diff --name-only | xargs touch -c
         else
           echo "  Commit $OLDREV does not exist in repository; not backdating"
         fi
