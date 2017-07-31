@@ -82,9 +82,9 @@ before_script:
       # Use the old module list; any new modules won't need to be touched anyway
       MODULES=$(cat build/commit_ids.txt | awk '{ print $1; }')
       # Find the oldest time in the build directory
-      echo "Oldest time: ""
+      echo "Oldest time: "
       find -type f -printf '%T+ %p\n' | sort | head -n 1
-      
+
       OLDEST_MTIME=$(find . -type f -printf "%.10T@\n" | sort | head -n 1)
       if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
         echo "Backdating to $(date -d @$OLDEST_MTIME)"
