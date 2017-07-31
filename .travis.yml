@@ -83,7 +83,13 @@ before_script:
       MODULES=$(cat build/commit_ids.txt | awk '{ print $1; }')
       # Find the oldest time in the build directory
       OLDEST_MTIME=$(find . -type f -printf "%.10T@\n" | sort | head -n 1)
-      echo "Backdating to $(date -r $OLDEST_MTIME)"
+      if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+        echo "Backdating to $(date -d @$OLDEST_MTIME)"
+        OLDEST_TS=$(date -d @$OLDEST_MTIME +%Y%m%d%H%M.%S)
+      else
+        echo "Backdating to $(date -r $OLDEST_MTIME)"
+        OLDEST_TS=$(date -r $OLDEST_MTIME +%Y%m%d%H%M.%S)
+      fi
 
       # Change the mtime of ALL checked out files to match this
       for repo in $MODULES; do
@@ -92,7 +98,7 @@ before_script:
         OLDREV=$(cat commit_ids.txt | grep "${repo} " | awk '{ print $2; }')
         if git cat-file -t $OLDREV; then
           # The commit exists. Backdate everything...
-          find $repo | xargs touch -t $(date -r $OLDEST_MTIME +%Y%m%d%H%M.%S)
+          find $repo | xargs touch -t $OLDEST_TS
           # And then forward-date everything that has changed
           git diff --name-only | xargs touch -c
         else
