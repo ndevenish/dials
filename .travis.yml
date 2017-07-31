@@ -105,5 +105,5 @@ before_script:
   - cmake ..
 
 script:
-  - make -j 2
+  - make -j 3
 
