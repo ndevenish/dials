@@ -1,6 +1,6 @@
 language: C++
 os:
-  # - linux
+  - linux
   - osx
 
 # Don't build the travis branch
