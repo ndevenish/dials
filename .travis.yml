@@ -1,4 +1,4 @@
-language: C++
+language: cpp
 os:
   - linux
   - osx
@@ -18,6 +18,7 @@ addons:
 cache:
   directories:
     - ${TRAVIS_BUILD_DIR}/deps/cmake # If microsoft/GSL decided this was a good idea...
+    - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
 before_install:
   - python --version
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update > /dev/null; fi
@@ -32,6 +33,8 @@ install:
           brew install $package
         fi
       done
+      # We want special options for this one so custom install
+      brew install findutils --with-default-names
     fi
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   # Good enough for microsoft: Install a recent CMake, or use a cached version
@@ -49,7 +52,6 @@ install:
   - cmake --version | head -n1
   - pip install mock docopt pathlib2 enum34 pyyaml
 
-
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
 # Move the current repository into a dials subdirectory
@@ -57,13 +59,47 @@ before_script:
   - mv {*,.*} dials | true
   - mv dials/deps .
   - git clone https://github.com/ndevenish/autobuild.git cmake
-  # Ensure we have the latest CMakeLists - regenerate them
+  # Ensure we have the latest CMakeLists - regenerate them. This is required 
+  # whilst the cmake system is in heavy flux.
   - |
     cd cmake
     ./do_autogen.sh
     cd ..
     mv cmake/prepare_singlemodule.py .
-  - python prepare_singlemodule.py
+  # Get all the other modules we need to compile
+  - python prepare_singlemodule.py --write-log
+  # Handle timestamp updating from the cache. Since travis gives a fresh checkout
+  # every time, all files in the repository will be newer than the build cache dates,
+  # and so everything will be rebuilt anyway. This backdates things that haven't changed.
+  - | 
+    if [[ -f build/commit_ids.txt ]]; then
+      # Use the old module list; any new modules won't need to be touched anyway
+      MODULES=$(cat build/commit_ids.txt | awk '{ print $1; }')
+      # Find the oldest time in the build directory
+      OLDEST_MTIME=$(find . -type f -printf "%.10T@\n" | sort | head -n 1)
+      echo "Backdating to $(date -r $OLDEST_MTIME)"
+
+      # Change the mtime of ALL checked out files to match this
+      for repo in $MODULES; do
+        echo "  Handling cache backdate for $repo"
+        # Find the old commit and if it exists in the repository, we can backdate
+        OLDREV=$(cat commit_ids.txt | grep "${repo} " | awk '{ print $2; }')
+        if git cat-file -t $OLDREV; then
+          # The commit exists. Backdate everything...
+          find $repo | xargs touch -t $(date -r $OLDEST_MTIME +%Y%m%d%H%M.%S)
+          # And then forward-date everything that has changed
+          git diff --name-only | xargs touch -c
+        else
+          echo "  Commit $OLDREV does not exist in repository; not backdating"
+        fi
+      done
+    else
+      echo "No build/commit_ids.txt; Not syncing timestamps"
+    fi
+    # Finally, replace the old commit id file
+    mkdir -p build
+    mv commit_ids.txt build/
+  # Do the actual building
   - mkdir build
   - cd build
   - cmake ..
