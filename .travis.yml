@@ -100,7 +100,7 @@ before_script:
     mkdir -p build
     mv commit_ids.txt build/
   # Do the actual building
-  - mkdir build
+  - mkdir -p build
   - cd build
   - cmake ..
 
