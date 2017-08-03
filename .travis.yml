@@ -51,7 +51,7 @@ install:
       if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
     fi
   - cmake --version | head -n1
-  - pip install mock docopt pathlib2 enum34 pyyaml
+  - pip install mock docopt pathlib2 enum34 pyyaml ninja
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
@@ -117,8 +117,7 @@ before_script:
   # Do the actual building
   - mkdir -p build
   - cd build
-  - cmake ..
+  - cmake -GNinja ..
 
 script:
-  - make -j 3
-
+  - cmake --build .
