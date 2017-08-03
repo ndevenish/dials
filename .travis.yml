@@ -52,6 +52,7 @@ install:
     fi
   - cmake --version | head -n1
   - pip install mock docopt pathlib2 enum34 pyyaml ninja
+  - ninja --help 2>&1 | grep parallel
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
@@ -120,4 +121,4 @@ before_script:
   - cmake -GNinja ..
 
 script:
-  - cmake --build .
+  - ninja -j 3
