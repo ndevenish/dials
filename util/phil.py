@@ -20,10 +20,12 @@ class FilenameDataWrapper(object):
         self.filename = filename
         self.data = data
 
+  def __repr__(self):
+    return 'FilenameDataWrapper({}, {})'.format(repr(self.filename), repr(self.data))
+
 
 class ExperimentListConverters(object):
     """ A phil converter for the experiment list class. """
-
     phil_type = "experiment_list"
 
     cache = {}

@@ -46,7 +46,7 @@ def _phil_repr(self, in_scope=False):
     s.write('<phil.scope_extract """')
   s.write('{\n')
   # Step over every named element in this
-  phil_names = [x for x in self.__dict__ if not x.startswith("_")]
+  phil_names = sorted([x for x in self.__dict__ if not x.startswith("_")])
   # Get the maximum length of an attribute (non sub-scope) value
   max_len = max(len(x) for x in phil_names if not isinstance(getattr(self, x), phil.scope_extract))
   for name in phil_names:
@@ -100,7 +100,7 @@ def main(argv):
   #list(itertools.chain(*[x.data for x in params.input.experiments]))
 
   find_laue_group(experiments=all_experiments, reflections=all_reflections)
-  
+
   # # Convert to a pandas dataframe for some probing
   # print("Converting")
   # import pandas as pd
@@ -109,7 +109,6 @@ def main(argv):
   # store = pd.HDFStore('reflections.h5')
   # store["reflections"] = df
   # store.close()
-
 
   import pdb
   pdb.set_trace()
