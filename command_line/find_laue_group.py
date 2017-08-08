@@ -14,7 +14,7 @@ import sys
 import logging
 import itertools
 from StringIO import StringIO
-from math import ceil, log10
+from math import log10, floor
 
 import dials.util.log
 import dials.array_family.flex
@@ -93,6 +93,9 @@ def find_laue_group(experiments, reflections):
   ref = reflections[0]
 
 
+  import code
+  # code.interact(local=locals())
+  code.interact(local=dict(globals(), **locals()))
 
 
 
@@ -117,6 +120,8 @@ def find_laue_group(experiments, reflections):
   import code
   # code.interact(local=locals())
   code.interact(local=dict(globals(), **locals()))
+
+
   
 
 
@@ -149,22 +154,14 @@ def main(argv):
   
   find_laue_group(experiments=all_experiments, reflections=all_reflections)
 
-def _patch_flex(flex, dtype, shape=None, ndim=1):
-  import numpy
-  flex.__repr__ = numpy.array_repr
-  if shape is None:
-    flex.shape = property(lambda x: (len(x),))
-  else:
-    flex.shape = property(shape)
-  flex.ndim = ndim
-  flex.dtype = numpy.dtype(dtype)
-  # dtype('int64')
-
-
 ##############################################################################
 # Monkeypatching scitbx/cctbx for diagnostics output
 #
 # For safety and sanity, nothing is applied unless we run this module as __main__
+
+import re
+
+re_remove_dtype = re.compile(r"(?:,|\()\s*dtype=\w+(?=,|\))")
 
 _summaryEdgeItems = 3     # repr N leading and trailing items of each dimension
 _summaryThreshold = 1000  # total items > triggers array summarization
@@ -238,9 +235,48 @@ def _double_vec_repr(self):
   s += "])"
   return s
 
+_max_column_width = 50
+_max_column_height = 60
+
+def _reftable_repr(self):
+  _max_display_width = 100
+  s = "{}(\n".format(type(self).__name__)
+  indent = "    "
+  maxcol = max(len(x) for x in self.keys())
+
+  rows = []
+  for column in sorted(self.keys()):
+    row = indent + column.ljust(maxcol) + " = "
+    # Now do a single-line representation of the column....
+    data = self[column]
+    remaining_space = _max_display_width - len(row)
+    data_repr = " ".join(x.strip() for x in repr(data).splitlines())
+    if len(data_repr) > remaining_space:
+      data_repr = data_repr[:remaining_space-3] + "..."
+    row += data_repr
+    rows.append(row)
+  s += "\n".join(rows)
+  s += ")\n"
+  s += "[{} rows x {} columns]".format(len(self), len(list(self.keys())))
+  return s
+
+# re_remove_dtype
+def _patch_flex(flex, dtype, shape=None, ndim=1):
+  import numpy
+  flex.__repr__ = lambda x: re_remove_dtype.sub("", numpy.array_repr(x))
+  if shape is None:
+    flex.shape = property(lambda x: (len(x),))
+  else:
+    flex.shape = property(shape)
+  flex.ndim = ndim
+  flex.dtype = numpy.dtype(dtype)
+  # dtype('int64')
+
 def do_monkeypatching():
   import scitbx.array_family.flex
   import cctbx.array_family.flex
+  # import dials.array_family.flex
+
   _patch_flex(scitbx.array_family.flex.size_t, int)
   _patch_flex(scitbx.array_family.flex.double, float)
   _patch_flex(scitbx.array_family.flex.int, int)
@@ -248,6 +284,7 @@ def do_monkeypatching():
   
   cctbx.array_family.flex.miller_index.__repr__ = _miller_repr
   scitbx.array_family.flex.vec3_double.__repr__ = _double_vec_repr
+  dials.array_family.flex.reflection_table.__repr__ = _reftable_repr
 
   phil.scope_extract.__repr__ = _phil_repr
   phil.scope_extract.__str__ = lambda x: x.__repr__(in_scope=True)
