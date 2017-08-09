@@ -10,11 +10,15 @@ Usage:
 
 from __future__ import absolute_import, print_function, division
 
+import re
 import sys
 import logging
 import itertools
 from StringIO import StringIO
 from math import log10, floor
+from functools import reduce
+
+import enum
 
 import dials.util.log
 import dials.array_family.flex
@@ -41,64 +45,45 @@ phil_scope = phil.parse('''
   }
 ''')
 
-import enum
-class Flags(enum.IntEnum):
-  BACKGROUND_INCLUDES_BAD_PIXELS = 32768
-  BAD_REFERENCE = 2097152
-  BAD_SPOT = 64512
-  CENTROID_OUTLIER = 131072
-  DONT_INTEGRATE = 128
-  FAILED_DURING_BACKGROUND_MODELLING = 262144
-  FAILED_DURING_PROFILE_FITTING = 1048576
-  FAILED_DURING_SUMMATION = 524288
-  FOREGROUND_INCLUDES_BAD_PIXELS = 16384
-  IN_POWDER_RING = 8192
-  INCLUDES_BAD_PIXELS = 49152
-  INDEXED = 4
-  INTEGRATED = 768
-  INTEGRATED_PRF = 512
-  INTEGRATED_SUM = 256
-  OBSERVED = 2
-  OVERLAPPED_BG = 2048
-  OVERLAPPED_FG = 4096
-  OVERLOADED = 1024
-  PREDICTED = 1
-  REFERENCE_SPOT = 64
-  STRONG = 32
-  USED_IN_MODELLING = 65536
-  USED_IN_REFINEMENT = 8
+def _get_reflections_filter(reflections):
+  """Calculates and returns a reflections selection filter.
 
-  @classmethod
-  def resolve(cls, value):
-    return FlagViewer({ev for ev in cls if value & ev.value})
+  This filters for spots that have been integrated, and validates that the 
+  assumptions about the data make sense.
+  """
+  logger.debug("Filtering {} reflections:".format(len(reflections)))
+  # Only use reflections that were actually integrated
+  filter_integrated = reflections.get_flags(reflections.flags.integrated)
+  logger.debug("  {} reflections were integrated ({} ignored)".format(sum(filter_integrated), len(reflections)-sum(filter_integrated)))
+  # Validate that this filtered all the entries without an experiment
+  assert not any((reflections["id"] < 0) & filter_integrated), "Experiment-less reflections have been integrated"
+  # Check that the variances are sensible
+  assert not any((reflections['intensity.sum.variance'] <= 0) & filter_integrated), "Integrated reflections should always have variance"
 
-class FlagViewer(set):
-  # def __init__(self, value):
-  #   self.value = value
-  def __repr__(self):
-    flag_names = sorted([n.name.upper() for n in self]) # Flags.resolve(self.value)
-    if flag_names:
-      return " | ".join(flag_names)
-    else:
-      return "{None}"
-  # def __hash__(self):
-  #   return self.value
+  return filter_integrated
 
 def find_laue_group(experiments, reflections):
   """Do the main routine. Can be called separately from instantiation"""
 
-  # Convert to a pandas dataframe for some probing
-  print("Converting")
-  import pandas as pd
-  ref = reflections[0]
+  # Filter each table down to the valid data
+  reflections = [ref.select(_get_reflections_filter(ref)) for ref in reflections]
+  # Flatten all tables into one megatable
+  reflections = reduce(lambda x, y: x.append(y), reflections)
+
+  # To copy check_indexing_symmetry's progress, print some hkl stats
+  h, k, l = [[x[n] for x in reflections["miller_index"]] for n in range(3)]
+  logger.debug("Range on h: {:-2d}, {:-2d}".format(h.min(), h.max()))
+  logger.debug("Range on k: {:-2d}, {:-2d}".format(k.min(), k.max()))
+  logger.debug("Range on l: {:-2d}, {:-2d}".format(l.min(), l.max()))
 
 
   import code
-  # code.interact(local=locals())
   code.interact(local=dict(globals(), **locals()))
 
 
-
+  # Convert to a pandas dataframe for some probing
+  print("Converting")
+  import pandas as pd
   df = pd.DataFrame({y[0]: [x for x in ref[y[0]]] for y in ref.cols()})
   # Make flags easy-to-interpret
   df["flags"] = [Flags.resolve(x) for x in df["flags"]]
@@ -148,7 +133,7 @@ def main(argv):
 
   logger.debug("Parameters = {}".format(params))
 
-  # Unwrap all of the data objects from the PHIL parser
+  # UNWRAP all of the data objects from the PHIL parser
   all_reflections = flatten_reflections(params.input.reflections)
   all_experiments = flatten_experiments(params.input.experiments)
   
@@ -159,7 +144,43 @@ def main(argv):
 #
 # For safety and sanity, nothing is applied unless we run this module as __main__
 
-import re
+class Flags(enum.IntEnum):
+  BACKGROUND_INCLUDES_BAD_PIXELS = 32768
+  BAD_REFERENCE = 2097152
+  BAD_SPOT = 64512
+  CENTROID_OUTLIER = 131072
+  DONT_INTEGRATE = 128
+  FAILED_DURING_BACKGROUND_MODELLING = 262144
+  FAILED_DURING_PROFILE_FITTING = 1048576
+  FAILED_DURING_SUMMATION = 524288
+  FOREGROUND_INCLUDES_BAD_PIXELS = 16384
+  IN_POWDER_RING = 8192
+  INCLUDES_BAD_PIXELS = 49152
+  INDEXED = 4
+  INTEGRATED = 768
+  INTEGRATED_PRF = 512
+  INTEGRATED_SUM = 256
+  OBSERVED = 2
+  OVERLAPPED_BG = 2048
+  OVERLAPPED_FG = 4096
+  OVERLOADED = 1024
+  PREDICTED = 1
+  REFERENCE_SPOT = 64
+  STRONG = 32
+  USED_IN_MODELLING = 65536
+  USED_IN_REFINEMENT = 8
+
+  @classmethod
+  def resolve(cls, value):
+    return FlagViewer({ev for ev in cls if value & ev.value})
+
+class FlagViewer(set):
+  def __repr__(self):
+    flag_names = sorted([n.name.upper() for n in self]) # Flags.resolve(self.value)
+    if flag_names:
+      return " | ".join(flag_names)
+    else:
+      return "{None}"
 
 re_remove_dtype = re.compile(r"(?:,|\()\s*dtype=\w+(?=,|\))")
 
@@ -196,43 +217,51 @@ def _phil_repr(self, in_scope=False):
 
 def _miller_repr(self):
   """Special-case repr for miller-index objects"""
-  s = type(self).__name__ + "(["
-  indent = "\n"+ " "*len(s)
-  # Work out how to align the data
-  format_sample = self
-  if len(self) > _summaryThreshold:
-    format_sample = list(self[:_summaryEdgeItems]) + list(self[-_summaryEdgeItems:])
-  # Do we have negative symbols
-  negs = [any(x[i] < 0 for x in format_sample) for i in range(3)]
-  # Maximum width
-  maxw = [max(int(1+floor(log10(abs(x[i])) if x[i] != 0 else 0)) for x in format_sample) for i in range(3)]
-  fmts = "(" + ", ".join(["{{:{}{}d}}".format(" " if neg else "", w+(1 if neg else 0)) for neg, w in zip(negs, maxw)]) + ")"
+  s = type(self).__name__ + "("
+  if len(self):
+    s += "["
 
-  # tup_fmt = ()
+    indent = "\n"+ " "*len(s)
+    # Work out how to align the data
+    format_sample = self
+    if len(self) > _summaryThreshold:
+      format_sample = list(self[:_summaryEdgeItems]) + list(self[-_summaryEdgeItems:])
+    # Do we have negative symbols
+    negs = [any(x[i] < 0 for x in format_sample) for i in range(3)]
+    # Maximum width
+    maxw = [max(int(1+floor(log10(abs(x[i])) if x[i] != 0 else 0)) for x in format_sample) for i in range(3)]
+    fmts = "(" + ", ".join(["{{:{}{}d}}".format(" " if neg else "", w+(1 if neg else 0)) for neg, w in zip(negs, maxw)]) + ")"
 
-  if len(self) > _summaryThreshold:
-    "({: 3d}, {: 3d}, {: 3d})"
-    s += indent.join(fmts.format(*x) for x in self[:_summaryEdgeItems])
-    s += indent + "..." + indent
-    s += indent.join(fmts.format(*x) for x in self[-_summaryEdgeItems:])
-  else:
-    s += indent.join(fmts.format(*x) for x in self)
-  s += "])"
+    # tup_fmt = ()
+
+    if len(self) > _summaryThreshold:
+      "({: 3d}, {: 3d}, {: 3d})"
+      s += indent.join(fmts.format(*x) for x in self[:_summaryEdgeItems])
+      s += indent + "..." + indent
+      s += indent.join(fmts.format(*x) for x in self[-_summaryEdgeItems:])
+    else:
+      s += indent.join(fmts.format(*x) for x in self)
+
+    s += "]"
+  s += ")"
   return s
 
 def _double_vec_repr(self):
   """Special-case repr for miller-index objects"""
-  s = type(self).__name__ + "(["
-  indent = "\n"+ " "*len(s)
+  s = type(self).__name__ + "("
+  if self:
+    s += "["
+    indent = "\n"+ " "*len(s)
 
-  if len(self) > _summaryThreshold:
-    "({: 3d}, {: 3d}, {: 3d})"
-    s += indent.join(repr(x) for x in self[:_summaryEdgeItems])
-    s += indent + "..." + indent
-    s += indent.join(repr(x) for x in self[-_summaryEdgeItems:])
-  else:
-    s += indent.join(repr(x) for x in self)
-  s += "])"
+    if len(self) > _summaryThreshold:
+      "({: 3d}, {: 3d}, {: 3d})"
+      s += indent.join(repr(x) for x in self[:_summaryEdgeItems])
+      s += indent + "..." + indent
+      s += indent.join(repr(x) for x in self[-_summaryEdgeItems:])
+    else:
+      s += indent.join(repr(x) for x in self)
+    s += "]"
+  s += ")"
   return s
 
 _max_column_width = 50
@@ -240,24 +269,27 @@ _max_column_height = 60
 
 def _reftable_repr(self):
   _max_display_width = 100
-  s = "{}(\n".format(type(self).__name__)
-  indent = "    "
-  maxcol = max(len(x) for x in self.keys())
+  s = "<{}".format(type(self).__name__)
+  if self:
+    s += "\n"
+    indent = "    "
+    maxcol = max(len(x) for x in self.keys())
 
-  rows = []
-  for column in sorted(self.keys()):
-    row = indent + column.ljust(maxcol) + " = "
-    # Now do a single-line representation of the column....
-    data = self[column]
-    remaining_space = _max_display_width - len(row)
-    data_repr = " ".join(x.strip() for x in repr(data).splitlines())
-    if len(data_repr) > remaining_space:
-      data_repr = data_repr[:remaining_space-3] + "..."
-    row += data_repr
-    rows.append(row)
-  s += "\n".join(rows)
-  s += ")\n"
-  s += "[{} rows x {} columns]".format(len(self), len(list(self.keys())))
+    rows = []
+    for column in sorted(self.keys()):
+      row = indent + column.ljust(maxcol) + " = "
+      # Now do a single-line representation of the column....
+      data = self[column]
+      remaining_space = _max_display_width - len(row)
+      data_repr = " ".join(x.strip() for x in repr(data).splitlines())
+      if len(data_repr) > remaining_space:
+        data_repr = data_repr[:remaining_space-3] + "..."
+      row += data_repr
+      rows.append(row)
+    s += "\n".join(rows)
+  s += ">"
+  if self:
+    s += "\n[{} rows x {} columns]".format(len(self), len(list(self.keys())))
   return s
 
 # re_remove_dtype
@@ -275,6 +307,7 @@ def _patch_flex(flex, dtype, shape=None, ndim=1):
 def do_monkeypatching():
   import scitbx.array_family.flex
   import cctbx.array_family.flex
+  import dxtbx.model
   # import dials.array_family.flex
 
   _patch_flex(scitbx.array_family.flex.size_t, int)
@@ -288,6 +321,8 @@ def do_monkeypatching():
 
   phil.scope_extract.__repr__ = _phil_repr
   phil.scope_extract.__str__ = lambda x: x.__repr__(in_scope=True)
+
+  dxtbx.model.ExperimentList.__repr__ = lambda x: "[" + ", ".join(repr(x) for x in self) + "]"
 
 if __name__ == "__main__":
   try:
