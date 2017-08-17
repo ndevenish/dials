@@ -17,6 +17,7 @@ import itertools
 from StringIO import StringIO
 from math import log10, floor
 from functools import reduce
+import time
 
 import enum
 
@@ -25,7 +26,13 @@ import dials.array_family.flex
 from dials.util import halraiser
 from dials.util.options import OptionParser, flatten_reflections, flatten_experiments
 
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 from libtbx import phil
+
+from cctbx import miller, sgtbx
+import dials.algorithms.symmetry.origin as dials_origin
+
 
 logger = logging.getLogger("dials.find_laue_group")
 
@@ -45,6 +52,20 @@ phil_scope = phil.parse('''
   }
 ''')
 
+def all_space_groups():
+  for x in range(1,230):
+    sgbase = sgtbx.space_group_info(number=x)
+    if str(sgbase.reference_setting()) == str(sgbase.primitive_setting()):
+      yield sgbase.group()
+    else:
+      yield sgbase.reference_setting().group()
+      yield sgbase.primitive_setting().group()
+
+def all_compatible_space_groups(unit_cell,**kwargs):
+  for group in all_space_groups():
+    if group.is_compatible_unit_cell(unit_cell, **kwargs):
+      yield group
+
 def _get_reflections_filter(reflections):
   """Calculates and returns a reflections selection filter.
 
@@ -62,8 +83,80 @@ def _get_reflections_filter(reflections):
 
   return filter_integrated
 
+def to_pandas(table):
+  """Convert a reflection table to a pandas dataframe"""
+  # Convert to a pandas dataframe for some probing
+  import pandas as pd
+  df = pd.DataFrame({y[0]: [x for x in table[y[0]]] for y in table.cols()})
+  # Make flags easy-to-interpret
+  df["flags"] = [Flags.resolve(x) for x in df["flags"]]
+  return df
+
+  # # Remove data with no miller index
+  # accept_entries = df["miller_index"] != (0,0,0)
+  # # Must have a non-zero variance
+  # accept_entries &= df["intensity.sum.variance"] > 0
+
+  # data = df[accept_entries]
+
+  # h, k, l = [df["miller_index"].apply(lambda x: x[n]) for n in [0,1,2]]
+
+
+  # logger.debug("Range on h: {:-2d}, {:-2d}".format(h.min(), h.max()))
+  # logger.debug("Range on k: {:-2d}, {:-2d}".format(k.min(), k.max()))
+  # logger.debug("Range on l: {:-2d}, {:-2d}".format(l.min(), l.max()))
+
+def group_reflections(table, space_group=None):
+  """Group equivalent reflections in a reflection table"""
+  assert space_group is None
+  start = time.time()
+
+  avail_reflections = set(table["miller_index"])
+  unique_reflections = set()
+  while avail_reflections:
+    reflection = avail_reflections.pop()
+    unique_reflections.add(reflection)
+    mate = tuple(-x for x in reflection)
+    if mate in avail_reflections:
+      avail_reflections.remove(mate)
+  print("Down to {} unique reflections".format(len(unique_reflections)))
+
+  results = {x: dials.array_family.flex.reflection_table() for x in unique_reflections}
+  
+  # for reflection in unique_reflections:
+  for i, row in enumerate(table):
+    if time.time() - start > 10:
+      start = time.time()
+      print("{} remaining".format(len(table)-i))
+
+    reflection = row["miller_index"]
+    if not row["miller_index"] in unique_reflections:
+      reflection = tuple(-x for x in reflection)
+    results[reflection].append(row)
+
+
+  # # For now, ignore space group and merge +, -
+  # # available = ~dials.array_family.flex.bool(len(reflections))
+  # while avail_reflections:
+
+  #   reflection = avail_reflections.pop()
+  #   mate = tuple(-x for x in reflection)
+  #   avail_reflections.remove(mate)
+  #   matches = table["miller_index"] == reflection
+  #   # Match friedel pairs
+  #   matches |= table["miller_index"] == mate
+  #   # Pull out the results, then reduce the table
+  #   results[reflection] = table.select(matches)
+  #   table = table.select(~matches)
+
+  return results
+
+
 def find_laue_group(experiments, reflections):
   """Do the main routine. Can be called separately from instantiation"""
+
+  # For now, easier to verify that we don't have multiple crystals
+  assert all(experiments[0].crystal == x.crystal for x in experiments[1:])
 
   # Filter each table down to the valid data
   reflections = [ref.select(_get_reflections_filter(ref)) for ref in reflections]
@@ -72,43 +165,28 @@ def find_laue_group(experiments, reflections):
 
   # To copy check_indexing_symmetry's progress, print some hkl stats
   h, k, l = [[x[n] for x in reflections["miller_index"]] for n in range(3)]
-  logger.debug("Range on h: {:-2d}, {:-2d}".format(h.min(), h.max()))
-  logger.debug("Range on k: {:-2d}, {:-2d}".format(k.min(), k.max()))
-  logger.debug("Range on l: {:-2d}, {:-2d}".format(l.min(), l.max()))
+  logger.debug("Range on h: {:-2d}, {:-2d}".format(min(h), max(h)))
+  logger.debug("Range on k: {:-2d}, {:-2d}".format(min(k), max(k)))
+  logger.debug("Range on l: {:-2d}, {:-2d}".format(min(l), max(l)))
 
+  symmetry = dials_origin.cctbx_crystal_from_dials(experiments[0].crystal)
+  oind = reflections["miller_index"].deep_copy()
+  mset = miller.set(crystal_symmetry=symmetry, indices=reflections["miller_index"])
+
+  # import pdb
+  # pdb.set_trace()
+  # list(all_compatible_space_groups(experiments[0].crystal.get_unit_cell(), relative_length_tolerance=0.3))
 
   import code
   code.interact(local=dict(globals(), **locals()))
-
-
-  # Convert to a pandas dataframe for some probing
-  print("Converting")
-  import pandas as pd
-  df = pd.DataFrame({y[0]: [x for x in ref[y[0]]] for y in ref.cols()})
-  # Make flags easy-to-interpret
-  df["flags"] = [Flags.resolve(x) for x in df["flags"]]
-
-  # Remove data with no miller index
-  accept_entries = df["miller_index"] != (0,0,0)
-  # Must have a non-zero variance
-  accept_entries &= df["intensity.sum.variance"] > 0
-
-  data = df[accept_entries]
-
-  h, k, l = [df["miller_index"].apply(lambda x: x[n]) for n in [0,1,2]]
-
-
-  logger.debug("Range on h: {:-2d}, {:-2d}".format(h.min(), h.max()))
-  logger.debug("Range on k: {:-2d}, {:-2d}".format(k.min(), k.max()))
-  logger.debug("Range on l: {:-2d}, {:-2d}".format(l.min(), l.max()))
-
-  import code
-  # code.interact(local=locals())
-  code.interact(local=dict(globals(), **locals()))
-
 
   
+def _load_experiment(filename, check_format=False):
+  """Convenience method to load an experiments file from a filename"""
+  return ExperimentListFactory.from_json_file(filename, check_format=check_format)
 
+def _load_reflections(filename):
+  return dials.array_family.flex.reflection_table.from_pickle(filename)
 
 def main(argv):
   optionparser = OptionParser(
@@ -182,7 +260,10 @@ class FlagViewer(set):
     else:
       return "{None}"
 
+# Remove dtype= section from numpy output
 re_remove_dtype = re.compile(r"(?:,|\()\s*dtype=\w+(?=,|\))")
+# Regular expression to help make repr's oneline
+reReprToOneLine = re.compile("\n\\s+")
 
 _summaryEdgeItems = 3     # repr N leading and trailing items of each dimension
 _summaryThreshold = 1000  # total items > triggers array summarization
@@ -221,7 +302,7 @@ def _miller_repr(self):
   if len(self):
     s += "["
 
-    indent = "\n"+ " "*len(s)
+    indent = ",\n"+ " "*len(s)
     # Work out how to align the data
     format_sample = self
     if len(self) > _summaryThreshold:
@@ -304,11 +385,38 @@ def _patch_flex(flex, dtype, shape=None, ndim=1):
   flex.dtype = numpy.dtype(dtype)
   # dtype('int64')
 
+def _cctbx_crystal_symmetry_repr(self):
+  parts = []
+  if self.space_group_info() is not None:
+    parts.append("space_group_symbol='{}'".format(str(self.space_group_info())))
+  if self.unit_cell() is not None:
+    parts.append("unit_cell={}".format(self.unit_cell().parameters()))
+  return "symmetry({})".format(", ".join(parts))
+
+def _cctbx_miller_set_repr(self):
+  """Repr function for miller set and array objects"""
+  parts = ["crystal_symmetry=" + _cctbx_crystal_symmetry_repr(self)]
+  if self.indices():
+    parts.append("indices="+ reReprToOneLine.sub(" ", repr(self.indices())))
+  if self.anomalous_flag() is not None:
+    parts.append("anomalous_flag=" + str(self.anomalous_flag()))
+  if hasattr(self, "data") and self.data() is not None:
+    parts.append("data="+ reReprToOneLine.sub(" ", repr(self.data())))
+  if hasattr(self, "sigmas") and self.sigmas() is not None:
+    parts.append("sigmas="+ reReprToOneLine.sub(" ", repr(self.sigmas())))
+  if hasattr(self, "info") and self.info() is not None:
+    parts.append("sigmas="+ reReprToOneLine.sub(" ", repr(self.sigmas())))
+
+  return type(self).__name__ + "(" + ", ".join(parts) + ")"
+
 def do_monkeypatching():
   import scitbx.array_family.flex
   import cctbx.array_family.flex
+  import cctbx.uctbx
   import dxtbx.model
-  # import dials.array_family.flex
+  import cctbx.crystal
+  import cctbx.sgtbx
+  import cctbx.miller
 
   _patch_flex(scitbx.array_family.flex.size_t, int)
   _patch_flex(scitbx.array_family.flex.double, float)
@@ -322,7 +430,17 @@ def do_monkeypatching():
   phil.scope_extract.__repr__ = _phil_repr
   phil.scope_extract.__str__ = lambda x: x.__repr__(in_scope=True)
 
-  dxtbx.model.ExperimentList.__repr__ = lambda x: "[" + ", ".join(repr(x) for x in self) + "]"
+  cctbx.crystal.symmetry.__repr__ = _cctbx_crystal_symmetry_repr
+  cctbx.miller.set.__repr__ = _cctbx_miller_set_repr
+  cctbx.sgtbx.space_group_info.__repr__ = lambda x: type(x).__name__ + "('{}')".format(str(x))
+  cctbx.sgtbx.space_group.__repr__ = lambda x: "<" + type(x).__name__ + " type=" + repr(x.type().lookup_symbol()) + ">"
+
+  cctbx.uctbx.unit_cell.__repr__ = lambda x: "{}({})".format(type(x).__name__, x.parameters())
+  cctbx.uctbx.ext.unit_cell.__repr__ = lambda x: "{}({})".format(type(x).__name__, x.parameters())
+
+  dxtbx.model.ExperimentList.__repr__ = lambda self: "[" + ", ".join(repr(x) for x in self) + "]"
+
+  # <cctbx_uctbx_ext.unit_cell object at 0x101077c20>
 
 if __name__ == "__main__":
   try:
