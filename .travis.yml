@@ -74,6 +74,10 @@ before_script:
     mv cmake/prepare_singlemodule.py .
   # Get all the other modules we need to compile
   - python prepare_singlemodule.py --write-log
+  # Whilst cmake isn't updated to use the new boost libraries, grab the
+  # updated FindBoost.cmake
+  - wget -P cmake/Modules https://raw.githubusercontent.com/Kitware/CMake/master/Modules/FindBoost.cmake
+  
   # Handle timestamp updating from the cache. Since travis gives a fresh checkout
   # every time, all files in the repository will be newer than the build cache dates,
   # and so everything will be rebuilt anyway. This backdates things that haven't changed.
