@@ -76,7 +76,7 @@ install:
           { travis_retry wget -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_BUILD_DIR}; } || exit 1
         fi
         mkdir -p ${BOOST_DIR}
-        (cd ${BOOST_BUILD_DIR} && ./bootstrap.sh && ./b2 -j 3 --prefix=${BOOST_DIR} --with-python install) || exit 1
+        (cd ${BOOST_BUILD_DIR} && ./bootstrap.sh && ./b2 -j 3 -d0 --prefix=${BOOST_DIR} --with-python install) || exit 1
       fi
       CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
     fi
@@ -98,7 +98,7 @@ install:
 
 
   # Other python libs we know about
-  - pip install mock docopt pathlib2 enum34 pyyaml
+  - pip install --user mock docopt pathlib2 enum34 pyyaml
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
