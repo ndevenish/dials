@@ -111,7 +111,7 @@ before_script:
   # Install the scons conversion repository
   - pip install --user git+https://github.com/ndevenish/read_scons.git
   # Get all the other modules we need to compile
-  - python prepare_singlemodule.py --write-log
+  - python cmake/prepare_singlemodule.py --write-log
 
   # Generate the CMakelists
   - tbx2cmake . cmake/autogen/autogen.yaml .
