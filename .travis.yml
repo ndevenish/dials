@@ -109,7 +109,7 @@ before_script:
   # Grab the autobuild repository
   - git clone https://github.com/ndevenish/autobuild.git cmake
   # Install the scons conversion repository
-  - pip install git+https://github.com/ndevenish/read_scons.git
+  - pip install --user git+https://github.com/ndevenish/read_scons.git
   # Get all the other modules we need to compile
   - python prepare_singlemodule.py --write-log
 
