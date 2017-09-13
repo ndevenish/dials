@@ -99,6 +99,7 @@ install:
 
   # Other python libs we know about
   - pip install --user mock docopt pathlib2 enum34 pyyaml
+  - find -type d ${DEPS_DIR}
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
