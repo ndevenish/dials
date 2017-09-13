@@ -3,6 +3,9 @@ os:
   - linux
   - osx
 
+env:
+  - BOOST_VERSION=1.56.0
+
 # Don't build the travis branch
 branches:
   except:
@@ -14,20 +17,37 @@ addons:
       - libhdf5-dev
       - libeigen3-dev
       - libtiff5-dev
-      - libboost-python-dev
+      # - libboost-python-dev # We want to control boost version explicitly now
 cache:
   directories:
-    - ${TRAVIS_BUILD_DIR}/deps/cmake # If microsoft/GSL decided this was a good idea...
+    # - ${TRAVIS_BUILD_DIR}/deps/cmake
     - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
+    - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
+
 before_install:
   - python --version
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update > /dev/null; fi
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew update > /dev/null;
+      export HOMEBREW_NO_AUTO_UPDATE=1
+    fi
 
 install:
+  ############################################################################
+  # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
+  ############################################################################
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+
+  ############################################################################
+  # Setup default versions and override compiler if needed
+  ############################################################################
+  - if [[ "${BOOST_VERSION}" == "default" ]]; then BOOST_VERSION=1.56.0; fi
+
   # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      for package in hdf5 boost-python cmake eigen; do
+      for package in hdf5 cmake eigen; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
         else
@@ -37,9 +57,33 @@ install:
       # We want special options for this one so custom install
       brew install findutils --with-default-names
     fi
-  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  # Good enough for microsoft: Install a recent CMake, or use a cached version
-  - mkdir -p "${DEPS_DIR}" && cd "${DEPS_DIR}"
+  
+
+  ############################################################################
+  # Build/Install specified boost version with boost-python
+  ############################################################################
+  - |
+    if [[ "${BOOST_VERSION}" != "" ]]; then
+      BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION}
+      BOOST_BUILD_DIR=~/build_tmp/boost
+      if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
+        if [[ "${BOOST_VERSION}" == "trunk" ]]; then
+          BOOST_URL="http://github.com/boostorg/boost.git"
+          travis_retry git clone --depth 1 --recursive ${BOOST_URL} ${BOOST_BUILD_DIR} || exit 1
+        else
+          BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
+          mkdir -p ${BOOST_BUILD_DIR}
+          { travis_retry wget -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_BUILD_DIR}; } || exit 1
+        fi
+        mkdir -p ${BOOST_DIR}
+        (cd ${BOOST_BUILD_DIR} && ./bootstrap.sh && ./b2 -j 3 --prefix=${BOOST_DIR} --with-python install) || exit 1
+      fi
+      CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
+    fi
+
+  ############################################################################
+  # Install a recent CMake
+  ############################################################################
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin)" ]]; then
@@ -51,33 +95,27 @@ install:
       if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
     fi
   - cmake --version | head -n1
+
+
+  # Other python libs we know about
   - pip install mock docopt pathlib2 enum34 pyyaml
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
   # Move the current repository into a dials subdirectory
-  - mkdir dials
-  - mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
+  - mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
   # Verify what our folder looks like
   - ls
-  # - mv {*,.*} dials | true
-  # Rescue files moved into the wrong directory
-  # - mv dials/deps .
-  # - mv dials/build .
+  # Grab the autobuild repository
   - git clone https://github.com/ndevenish/autobuild.git cmake
-  # Ensure we have the latest CMakeLists - regenerate them. This is required 
-  # whilst the cmake system is in heavy flux.
-  - |
-    cd cmake
-    ./do_autogen.sh
-    cd ..
-    mv cmake/prepare_singlemodule.py .
+  # Install the scons conversion repository
+  - pip install git+https://github.com/ndevenish/read_scons.git
   # Get all the other modules we need to compile
   - python prepare_singlemodule.py --write-log
-  # Whilst cmake isn't updated to use the new boost libraries, grab the
-  # updated FindBoost.cmake
-  - wget -P cmake/Modules https://raw.githubusercontent.com/Kitware/CMake/master/Modules/FindBoost.cmake
-  
+
+  # Generate the CMakelists
+  - tbx2cmake . cmake/autogen/autogen.yaml .
+
   # Handle timestamp updating from the cache. Since travis gives a fresh checkout
   # every time, all files in the repository will be newer than the build cache dates,
   # and so everything will be rebuilt anyway. This backdates things that haven't changed.
@@ -118,10 +156,12 @@ before_script:
     # Finally, replace the old commit id file
     mkdir -p build
     mv commit_ids.txt build/
+
+
   # Do the actual building
   - mkdir -p build
   - cd build
-  - cmake ..
+  - cmake .. ${CMAKE_OPTIONS}
 
 script:
   - make -j 3
