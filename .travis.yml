@@ -99,7 +99,12 @@ install:
 
   # Other python libs we know about
   - pip install --user mock docopt pathlib2 enum34 pyyaml
-  - export PATH=$HOME/.local/bin:$PATH
+
+  # On OSX, make sure that the --user pip is on the path
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      export PATH=$(python -c "import site, os; print(os.path.join(site.USER_BASE, 'bin'))"):$PATH
+    fi
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
