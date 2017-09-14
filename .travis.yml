@@ -100,7 +100,6 @@ install:
   # Other python libs we know about
   - pip install --user mock docopt pathlib2 enum34 pyyaml
   - export PATH=$HOME/.local/bin:$PATH
-  - find ${DEPS_DIR} -type d
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
