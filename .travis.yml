@@ -5,6 +5,11 @@ os:
 
 env:
   - BOOST_VERSION=1.56.0
+  - BOOST_VERSION=1.65.1
+
+matrix:
+  allow_failures:
+    - env: BOOST_VERSION=1.65.1
 
 # Don't build the travis branch
 branches:
