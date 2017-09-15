@@ -135,10 +135,11 @@ before_script:
   # Install the scons conversion repository
   - pip install --user git+https://github.com/ndevenish/read_scons.git
   # Get all the other modules we need to compile
-  - python cmake/prepare_singlemodule.py --write-log
+  - python cmake/prepare_singlemodule.py --write-log --no-cmake
 
   # Generate the CMakelists
   - tbx2cmake . cmake/autogen/autogen.yaml .
+  - cp cmake/RootCMakeLists.txt CMakeLists.txt
 
   # Handle timestamp updating from the cache. Since travis gives a fresh checkout
   # every time, all files in the repository will be newer than the build cache dates,
