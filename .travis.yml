@@ -22,17 +22,15 @@ addons:
       - libhdf5-dev
       - libeigen3-dev
       - libtiff5-dev
-      # - libboost-python-dev # We want to control boost version explicitly now
 cache:
   directories:
-    # - ${TRAVIS_BUILD_DIR}/deps/cmake
     - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
     - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
 
 before_install:
   - python --version
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update homebrew
       brew update > /dev/null;
       export HOMEBREW_NO_AUTO_UPDATE=1
     fi
@@ -51,7 +49,7 @@ install:
 
   # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
       for package in hdf5 cmake eigen; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
@@ -68,7 +66,7 @@ install:
   # Build/Install specified boost version with boost-python
   ############################################################################
   - |
-    if [[ "${BOOST_VERSION}" != "" ]]; then
+    if [[ "${BOOST_VERSION}" != "" ]]; then # Install requested boost version
       BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION}
       BOOST_BUILD_DIR=~/build_tmp/boost
       if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
@@ -90,7 +88,7 @@ install:
   # Install a recent CMake
   ############################################################################
   - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then # Install/upgrade cmake
       CMAKE_MAJOR=3.9
       CMAKE_POINT_RELEASE=3.9.2
       # If the path for cmake exists, check if it is the right version
@@ -112,6 +110,12 @@ install:
    # Whilst cmake isn't updated to use the new boost libraries, grab the
    # updated FindBoost.cmake
   - wget -P cmake/Modules https://raw.githubusercontent.com/Kitware/CMake/2581ab4395aa7dd2ecec98bf69b03e23c09af73a/Modules/FindBoost.cmake
+  - |
+    echo $(pwd)
+    grep 1.65.1 cmake/Modules
+    echo "All entries here"
+    find $(pwd) -type d
+
   - cmake --version | head -n1
 
 
@@ -120,7 +124,7 @@ install:
 
   # On OSX, make sure that the --user pip is on the path
   - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update PATH for pip --user
       export PATH=$(python -c "import site, os; print(os.path.join(site.USER_BASE, 'bin'))"):$PATH
     fi
 
@@ -144,7 +148,7 @@ before_script:
   # every time, all files in the repository will be newer than the build cache dates,
   # and so everything will be rebuilt anyway. This backdates things that haven't changed.
   - | 
-    if [[ -f build/commit_ids.txt ]]; then
+    if [[ -f build/commit_ids.txt ]]; then # Update build cache timestamps
       # Use the old module list; any new modules won't need to be touched anyway
       MODULES=$(cat build/commit_ids.txt | awk '{ print $1; }')
       # Find the oldest time in the build directory
