@@ -107,14 +107,6 @@ install:
     else
       if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
     fi
-   # Whilst cmake isn't updated to use the new boost libraries, grab the
-   # updated FindBoost.cmake
-  - travis_retry wget --quiet -P cmake/Modules https://raw.githubusercontent.com/Kitware/CMake/2581ab4395aa7dd2ecec98bf69b03e23c09af73a/Modules/FindBoost.cmake
-  - |
-    echo $(pwd)
-    grep 1.65.1 cmake/Modules
-    echo "All entries here"
-    find $(pwd) -type d
 
   - cmake --version | head -n1
 
@@ -136,6 +128,10 @@ before_script:
   - ls
   # Grab the autobuild repository
   - git clone https://github.com/ndevenish/autobuild.git cmake
+  # Whilst cmake isn't updated to use the new boost libraries, grab the
+  # updated FindBoost.cmake. Put this in the user module path.
+  - travis_retry wget --quiet -P cmake/Modules https://raw.githubusercontent.com/Kitware/CMake/2581ab4395aa7dd2ecec98bf69b03e23c09af73a/Modules/FindBoost.cmake
+  
   # Install the scons conversion repository
   - pip install --user git+https://github.com/ndevenish/read_scons.git
   # Get all the other modules we need to compile
