@@ -345,15 +345,9 @@ namespace dials { namespace algorithms {
     template <typename T>
     struct Data {
       int m;
-      T x;
+      T   x;
       T   y;
     };
-
-    template<typename T>
-    Data<T> operator-(const Data&& L, const Data&& R)
-    {
-      return {L.m + R.m, L.x + R.x, L.y + R.y};
-    }
 
     DispersionThreshold(int2 image_size,
               int2 kernel_size,
