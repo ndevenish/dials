@@ -377,6 +377,8 @@ namespace dials { namespace algorithms {
       }
 
       // Allocate the buffer
+      // Technically this over-allocates if e.g. we use a single
+      // Should probably revisit the buffer being a char anyway?
       std::size_t element_size = sizeof(Data<double>);
       buffer_.resize(element_size * image_size[0] * image_size[1]);
     }
@@ -567,6 +569,12 @@ namespace dials { namespace algorithms {
       DIALS_ASSERT(sizeof(T) <= sizeof(double));
 
       // Cast the buffer to the table type
+      // IS THIS WRONG??!? - 
+      //    buffer_ is actually a vector<char> e.g. enough bytes to store
+      //    an array of Data<double> the size of the image. This is using
+      //    T (which we know is probably smaller than double, so that's okay)
+      //    but using the number of bytes as the size of the reference array,
+      //    even though we're asking for a ref<Data<T>> ???
       af::ref< Data<T> > table((Data<T> *)&buffer_[0], buffer_.size());
 
       // compute the summed area table
