@@ -392,7 +392,7 @@ namespace dials { namespace algorithms {
     void compute_sat(
         af::ref< Data<T> > table,
         const af::const_ref< T, af::c_grid<2> > &src,
-        const af::const_ref< bool, af::c_grid<2> > &mask) {
+        const af::const_ref< bool, af::c_grid<2> > &mask) const {
 
       // Largest value to consider
       const T BIG = (1 << 24); // About 16m counts
