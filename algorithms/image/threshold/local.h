@@ -432,14 +432,97 @@ namespace dials { namespace algorithms {
       }
     }
 
+    /**
+     * Compute the threshold
+     * @param src - The input array
+     * @param mask - The mask array
+     * @param gain - The gain array
+     * @param dst The output array
+     */
     template <typename T>
-    void compute_threshold(
-      af::ref< Data<T> > table,
-      const af::const_ref< T, af::c_grid<2> > &src,
-      const af::const_ref< bool, af::c_grid<2> > &mask,
-      const af::const_ref< double, af::c_grid<2> > &gain,
-      af::ref< bool, af::c_grid<2> > dst);
+    void compute_threshold(af::ref<Data<T> > table,
+                           const af::const_ref<T, af::c_grid<2> > &src,
+                           const af::const_ref<bool, af::c_grid<2> > &mask,
+                           const af::const_ref<double, af::c_grid<2> > &gain,
+                           af::ref<bool, af::c_grid<2> > dst) {
+      // Get the size of the image
+      const std::size_t ysize = src.accessor()[0];
+      const std::size_t xsize = src.accessor()[1];
 
+      // The kernel size
+      const int kxsize = kernel_size_[1];
+      const int kysize = kernel_size_[0];
+
+      // Calculate the local mean at every point
+      // #pragma omp parallel for
+      for (std::size_t j = 0, k = 0; j < ysize; ++j) {
+        for (std::size_t i = 0; i < xsize; ++i, ++k) {
+          // Construct the kernel bounding box
+          // i0,j0 Is the lower corner of the area diagonal to the kernel
+          const int i0 = i - kxsize - 1;
+          const int j0 = j - kysize - 1;
+
+          // i1,j1 is the corner of our kernel
+          int i1 = i + kxsize;
+          int j1 = j + kysize;
+          i1 = i1 < xsize ? i1 : xsize - 1;
+          j1 = j1 < ysize ? j1 : ysize - 1;
+
+          // k0, k1 are the 1D index of the start of the rows for the
+          // two corners (kernel, and diagonal exclusion zone)
+          const int k0 = j0 * xsize;
+          const int k1 = j1 * xsize;
+
+          /* To compute the value for the sum over area of an integral image,
+
+              A---------B
+              |         |
+              C---------D  Area = D - B - C + A
+          */
+          // Compute the number of points valid in the local area,
+          // the sum of the pixel values and the num of the squared pixel
+          // values.
+          double m = 0;
+          double x = 0;
+          double y = 0;
+          if (i0 >= 0 && j0 >= 0) {
+            const Data<T> &d00 = table[k0 + i0];
+            const Data<T> &d10 = table[k1 + i0];
+            const Data<T> &d01 = table[k0 + i1];
+            m += d00.m - (d10.m + d01.m);
+            x += d00.x - (d10.x + d01.x);
+            y += d00.y - (d10.y + d01.y);
+          } else if (i0 >= 0) {
+            // Special case: kernel goes off the top of the area
+            const Data<T> &d10 = table[k1 + i0];
+            m -= d10.m;
+            x -= d10.x;
+            y -= d10.y;
+          } else if (j0 >= 0) {
+            // Special case: Kernel goes off the left of the area
+            const Data<T> &d01 = table[k0 + i1];
+            m -= d01.m;
+            x -= d01.x;
+            y -= d01.y;
+          }
+          // + D
+          const Data<T> &d11 = table[k1 + i1];
+          m += d11.m;
+          x += d11.x;
+          y += d11.y;
+
+          // Compute the thresholds
+          dst[k] = false;
+          if (mask[k] && m >= min_count_ && x >= 0 && src[k] > threshold_) {
+            double a = m * y - x * x;
+            double b = m * src[k] - x;
+            double c = gain[k] * x * (m - 1 + nsig_b_ * std::sqrt(2 * (m - 1)));
+            double d = nsig_s_ * std::sqrt(gain[k] * x * m);
+            dst[k] = a > c && b > d;
+          }
+        }
+      }
+    }
 
     /**
      * Compute the threshold
@@ -594,7 +677,6 @@ namespace dials { namespace algorithms {
     int min_count_;
     std::vector<char> buffer_;
   };
-
 
   /**
    * A class to help debug spot finding by exposing the results of various bits
