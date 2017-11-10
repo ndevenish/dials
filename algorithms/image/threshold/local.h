@@ -345,9 +345,15 @@ namespace dials { namespace algorithms {
     template <typename T>
     struct Data {
       int m;
-      T   x;
+      T x;
       T   y;
     };
+
+    template<typename T>
+    Data<T> operator-(const Data&& L, const Data&& R)
+    {
+      return {L.m + R.m, L.x + R.x, L.y + R.y};
+    }
 
     DispersionThreshold(int2 image_size,
               int2 kernel_size,
@@ -399,6 +405,14 @@ namespace dials { namespace algorithms {
       std::size_t ysize = src.accessor()[0];
       std::size_t xsize = src.accessor()[1];
 
+      /*  What we are doing here is effectively creating three integral
+          images:
+            - Unmasked pixels
+            - Pixel Values
+            - Pixel Values Squared
+          This will give us everything we need to calculate over an area
+          the average, the integral, the variance.
+      */
       // Create the summed area table
       for (std::size_t j = 0, k = 0; j < ysize; ++j) {
         int m = 0;
@@ -421,6 +435,15 @@ namespace dials { namespace algorithms {
         }
       }
     }
+
+    template <typename T>
+    void compute_threshold(
+      af::ref< Data<T> > table,
+      const af::const_ref< T, af::c_grid<2> > &src,
+      const af::const_ref< bool, af::c_grid<2> > &mask,
+      const af::const_ref< double, af::c_grid<2> > &gain,
+      af::ref< bool, af::c_grid<2> > dst);
+
 
     /**
      * Compute the threshold
@@ -494,82 +517,6 @@ namespace dials { namespace algorithms {
         }
       }
     }
-
-    /**
-     * Compute the threshold
-     * @param src - The input array
-     * @param mask - The mask array
-     * @param gain - The gain array
-     * @param dst The output array
-     */
-    template <typename T>
-    void compute_threshold(
-        af::ref< Data<T> > table,
-        const af::const_ref< T, af::c_grid<2> > &src,
-        const af::const_ref< bool, af::c_grid<2> > &mask,
-        const af::const_ref< double, af::c_grid<2> > &gain,
-        af::ref< bool, af::c_grid<2> > dst) {
-
-      // Get the size of the image
-      std::size_t ysize = src.accessor()[0];
-      std::size_t xsize = src.accessor()[1];
-
-      // The kernel size
-      int kxsize = kernel_size_[1];
-      int kysize = kernel_size_[0];
-
-      // Calculate the local mean at every point
-      for (std::size_t j = 0, k = 0; j < ysize; ++j) {
-        for (std::size_t i = 0 ; i < xsize; ++i, ++k) {
-          int i0 = i - kxsize - 1, i1 = i + kxsize;
-          int j0 = j - kysize - 1, j1 = j + kysize;
-          i1 = i1 < xsize ? i1 : xsize - 1;
-          j1 = j1 < ysize ? j1 : ysize - 1;
-          int k0 = j0*xsize;
-          int k1 = j1*xsize;
-
-          // Compute the number of points valid in the local area,
-          // the sum of the pixel values and the num of the squared pixel
-          // values.
-          double m = 0;
-          double x = 0;
-          double y = 0;
-          if (i0 >= 0 && j0 >= 0) {
-            const Data<T>& d00 = table[k0+i0];
-            const Data<T>& d10 = table[k1+i0];
-            const Data<T>& d01 = table[k0+i1];
-            m += d00.m - (d10.m + d01.m);
-            x += d00.x - (d10.x + d01.x);
-            y += d00.y - (d10.y + d01.y);
-          } else if (i0 >= 0) {
-            const Data<T>& d10 = table[k1+i0];
-            m -= d10.m;
-            x -= d10.x;
-            y -= d10.y;
-          } else if (j0 >= 0) {
-            const Data<T>& d01 = table[k0+i1];
-            m -= d01.m;
-            x -= d01.x;
-            y -= d01.y;
-          }
-          const Data<T>& d11 = table[k1+i1];
-          m += d11.m;
-          x += d11.x;
-          y += d11.y;
-
-          // Compute the thresholds
-          dst[k] = false;
-          if (mask[k] && m >= min_count_ && x >= 0 && src[k] > threshold_) {
-            double a = m * y - x * x;
-            double b = m * src[k] - x;
-            double c = gain[k] * x * (m-1+nsig_b_ * std::sqrt(2*(m-1)));
-            double d = nsig_s_ * std::sqrt(gain[k] * x * m);
-            dst[k] = a > c && b > d;
-          }
-        }
-      }
-    }
-
     /**
      * Compute the threshold for the given image and mask.
      * @param src - The input image array.
