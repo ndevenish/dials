@@ -68,7 +68,7 @@ install:
     if [[ "${BOOST_VERSION}" != "" ]]; then # Install requested boost version
       BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION}
       BOOST_BUILD_DIR=~/build_tmp/boost
-      if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
+      if [[ -z "$(ls -A ${BOOST_DIR} 2>&1)" ]]; then
         if [[ "${BOOST_VERSION}" == "trunk" ]]; then
           BOOST_URL="http://github.com/boostorg/boost.git"
           travis_retry git clone --depth 1 --recursive ${BOOST_URL} ${BOOST_BUILD_DIR} || exit 1
@@ -91,14 +91,14 @@ install:
       CMAKE_MAJOR=3.10
       CMAKE_POINT_RELEASE=3.10.0
       # If the path for cmake exists, check if it is the right version
-      if [[ -n "$(ls -A ${DEPS_DIR}/cmake/bin)" ]]; then
+      if [[ -n "$(ls -A ${DEPS_DIR}/cmake/bin 2>&1)" ]]; then
         if [[ $(cmake/bin/cmake --version | head -n1 | awk '{ print $3; }') != "${CMAKE_POINT_RELEASE}" ]]; then
           echo "CMake out of date. Removing so we can recreate."
           rm -rf cmake
         fi
       fi
       # If the path doesn't exist, then download cmake
-      if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin)" ]]; then
+      if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin 2>&1)" ]]; then
         CMAKE_URL="https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_POINT_RELEASE}-Linux-x86_64.tar.gz"
         mkdir -p cmake && travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
       fi
@@ -122,7 +122,7 @@ install:
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
   # Move the current repository into a dials subdirectory
-  - mkdir dials && mv $(git ls-tree --name-only HEAD) modules/dials && mv .git dials/
+  - mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
   # Verify what our folder looks like
   - ls
   # Grab the autobuild repository
