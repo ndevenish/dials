@@ -119,6 +119,8 @@ install:
       export PATH=$(python -c "import site, os; print(os.path.join(site.USER_BASE, 'bin'))"):$PATH
     fi
 
+  - find ${BOOST_DIR}
+
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
   # Move the current repository into a dials subdirectory
