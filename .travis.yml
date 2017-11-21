@@ -61,6 +61,9 @@ install:
       brew install findutils --with-default-names
     fi
 
+  # Other python libs we know about - need numpy before boost is built
+  - pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
+
   ############################################################################
   # Build/Install specified boost version with boost-python
   ############################################################################
@@ -109,9 +112,6 @@ install:
 
   - cmake --version | head -n1
 
-
-  # Other python libs we know about
-  - pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
 
   # On OSX, make sure that the --user pip is on the path
   - |
