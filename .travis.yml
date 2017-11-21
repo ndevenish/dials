@@ -128,7 +128,7 @@ before_script:
   # Grab the autobuild repository
   - git clone https://github.com/ndevenish/autobuild.git cmake
   # Install the scons conversion repository
-  - pip install --user https://github.com/ndevenish/tbxtools.git
+  - pip install --user git+https://github.com/ndevenish/tbxtools.git
   # Get all the other modules we need to compile
   - python cmake/prepare_singlemodule.py --write-log --no-cmake
 
