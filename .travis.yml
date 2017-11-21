@@ -111,7 +111,7 @@ install:
 
 
   # Other python libs we know about
-  - pip install --user mock docopt pathlib2 enum34 pyyaml ninja
+  - pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
 
   # On OSX, make sure that the --user pip is on the path
   - |
@@ -181,8 +181,8 @@ before_script:
   # Do the actual building
   - mkdir -p build
   - cd build
-  - cmake .. ${CMAKE_OPTIONS}
 
 script:
+  - cmake .. ${CMAKE_OPTIONS}
   - make -j 3
 
