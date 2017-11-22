@@ -8,10 +8,15 @@ from __future__ import division, print_function, absolute_import, unicode_litera
 import boost.python
 from dials.algorithms.spot_finding import ImageSetSpotfinder
 
+import logging
+
+logger = logging.getLogger()
+
 
 class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
-    def __init__(
-        self,
+    @staticmethod
+    def create(
+        cls,
         threshold_function=None,
         mask=None,
         region_of_interest=None,
@@ -29,7 +34,12 @@ class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
         write_hot_pixel_mask=False,
     ):
         """
-        Initialise, passing through the ExtractSpots configuration
+        Validates the configuration and creates an ImageSetSpotfinder.
+
+        Static creation method as it didn't seem initially possible to inject a
+        new __init__ constructor for a boost.python class.
+
+        :returns: A configured ImageSetSpotfinder
         """
 
         # Set the required strategies
@@ -60,7 +70,7 @@ class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
         ), "MT ExtractSpots called with wrong mp_method ({})".format(mp_method)
         assert region_of_interest is None
 
-        super(ImageSetSpotfinder_aux, self).__init__(mask)
+        return ImageSetSpotfinder(mask)
 
     def __call__(self, imageset):
         """

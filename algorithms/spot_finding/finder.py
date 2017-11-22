@@ -10,7 +10,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from ..spot_finding import ImageSetSpotfinder
+from .imageset_spotfinder import ImageSetSpotfinder
 
 import logging
 import math
@@ -820,7 +820,9 @@ class SpotFinder(object):
         # Choose the exact implementation depending on whether we asked for
         # "threads" in the mp_method
         create_spot_extractor = (
-            ExtractSpots if not self.mp_method == "threads" else ImageSetSpotfinder
+            ExtractSpots
+            if not self.mp_method == "threads"
+            else ImageSetSpotfinder.create
         )
         extract_spots = create_spot_extractor(
             threshold_function=self.threshold_function,
