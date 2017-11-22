@@ -10,6 +10,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from ..spot_finding import ImageSetSpotfinder
+
 import logging
 import math
 import os
@@ -815,7 +817,12 @@ class SpotFinder(object):
             mask = tuple(m1 & m2 for m1, m2 in zip(mask, self.mask))
 
         # Set the spot finding algorithm
-        extract_spots = ExtractSpots(
+        # Choose the exact implementation depending on whether we asked for
+        # "threads" in the mp_method
+        create_spot_extractor = (
+            ExtractSpots if not self.mp_method == "threads" else ImageSetSpotfinder
+        )
+        extract_spots = create_spot_extractor(
             threshold_function=self.threshold_function,
             mask=mask,
             region_of_interest=self.region_of_interest,

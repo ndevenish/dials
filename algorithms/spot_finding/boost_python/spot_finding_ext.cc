@@ -11,6 +11,8 @@
 #include <boost/python.hpp>
 #include <boost/python/def.hpp>
 #include <dials/algorithms/spot_finding/helpers.h>
+#include <dials/algorithms/spot_finding/imageset_spotfinder.h>
+
 
 namespace dials { namespace algorithms { namespace boost_python {
 
@@ -22,7 +24,8 @@ namespace dials { namespace algorithms { namespace boost_python {
       .def("add", &StrongSpotCombiner::add)
       .def("shoeboxes", &StrongSpotCombiner::shoeboxes)
       ;
-
+    class_<ImageSetSpotfinder>("ImageSetSpotfinder", no_init)
+        .def(
+            init<const af::const_ref<bool, af::c_grid<2> > &>((arg("mask"))));
   }
-
 }}}
