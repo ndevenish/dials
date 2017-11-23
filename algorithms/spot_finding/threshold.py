@@ -100,7 +100,7 @@ class DispersionThresholdStrategy(ThresholdStrategy):
         # Save the constant gain
         self._gain_map = None
 
-        # Create a buffer
+        # A cache for the calculation object based on image size
         self.algorithm = {}
 
     def __call__(self, image, mask):
@@ -116,6 +116,10 @@ class DispersionThresholdStrategy(ThresholdStrategy):
         from dials.array_family import flex
 
         # Initialise the algorithm
+        # This appears to cache the algorithm setup for a specific image size -
+        # Presumably so we don't have to recreate the object for every image.
+        # EXCEPT: As I currently understand it, this class is created on demand
+        # for each image anyway. So this is all vestigial?
         try:
             algorithm = self.algorithm[image.all()]
         except Exception:
@@ -127,6 +131,9 @@ class DispersionThresholdStrategy(ThresholdStrategy):
                 self._threshold,
                 self._min_count,
             )
+            # C++ signature:
+            #  (int2   image_size, int2   kernel_size, double nsig_b,
+            #   double nsig_s,     double threshold,   int    min_count)
             self.algorithm[image.all()] = algorithm
 
         # Set the gain
