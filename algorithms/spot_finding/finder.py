@@ -822,7 +822,7 @@ class SpotFinder(object):
         create_spot_extractor = (
             ExtractSpots
             if not self.mp_method == "threads"
-            else ImageSetSpotfinder.create
+            else ImageSetSpotfinder.configure
         )
         extract_spots = create_spot_extractor(
             threshold_function=self.threshold_function,

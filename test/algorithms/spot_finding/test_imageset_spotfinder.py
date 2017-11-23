@@ -13,5 +13,5 @@ import scitbx.array_family.flex as flex
 def test_basic_creation():
     with pytest.raises(Exception):
         i = ImageSetSpotfinder()
-    basic_mask = flex.bool()
-    ImageSetSpotfinder(basic_mask)
+    basic_mask = flex.bool(10)
+    ImageSetSpotfinder.configure(mask=basic_mask)

@@ -15,8 +15,7 @@ logger = logging.getLogger()
 
 class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
     @staticmethod
-    def create(
-        cls,
+    def configure(
         threshold_function=None,
         mask=None,
         region_of_interest=None,
@@ -34,17 +33,16 @@ class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
         write_hot_pixel_mask=False,
     ):
         """
-        Validates the configuration and creates an ImageSetSpotfinder.
+        Validates the configuration and returns an imageset spotfinder.
 
         Static creation method as it didn't seem initially possible to inject a
         new __init__ constructor for a boost.python class.
 
         :returns: A configured ImageSetSpotfinder
         """
-
         # Set the required strategies
         # self.threshold_function = threshold_function
-        self.mask = mask
+        # self.mask = mask
         # self.mp_method = mp_method
         # self.mp_chunksize = mp_chunksize
         # self.mp_nproc = mp_nproc
@@ -61,12 +59,12 @@ class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
 
         # Validate the assumptions made in this verison of the class
         # For now, only support the normal thresholding function
-        assert isinstance(
+        assert threshold_function is None or isinstance(
             threshold_function, DispersionSpotFinderThresholdExt
         ), "Unexpected threshold function"
         assert not no_shoeboxes_2d, "MT ExtractSpots does not support no_shoeboxes_2d"
         assert (
-            mp_method == "threads"
+            mp_method is None or mp_method == "threads"
         ), "MT ExtractSpots called with wrong mp_method ({})".format(mp_method)
         assert region_of_interest is None
 
