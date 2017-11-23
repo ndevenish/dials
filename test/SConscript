@@ -25,6 +25,9 @@ flag = conf.TryCompile("#include <gtest/gtest.h>", extension=".cpp")
 if flag:
     env.Program(
         target="algorithms/spot_finding/test_imageset_spotfinder",
-        source="algorithms/spot_finding/test_imageset_spotfinder.cc",
+        source=[
+            "algorithms/spot_finding/test_imageset_spotfinder.cc",
+            "../algorithms/spot_finding/imageset_spotfinder.cc",
+        ],
         LIBS=["gtest_main", "gtest"],
     )
