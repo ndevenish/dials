@@ -1,4 +1,4 @@
-/** extract_spots.cc
+/** imageset_spotfinder.cc
  *
  * C++ version of the spot extractor, that coordinates large spot-finding
  * jobs via a multithreaded approach.
@@ -14,6 +14,6 @@ using std::endl;
 using namespace dials::algorithms;
 
 ImageSetSpotfinder::ImageSetSpotfinder(
-    const scitbx::af::const_ref<bool, scitbx::af::c_grid<2> > &mask) {
-  cout << "In constructor" << endl;
+    std::vector<scitbx::af::const_ref<bool, scitbx::af::c_grid<2> > > masks) {
+  cout << "In constructor with " << masks.size() << " masks" << endl;
 }

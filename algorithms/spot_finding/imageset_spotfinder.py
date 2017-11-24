@@ -8,6 +8,10 @@ from __future__ import division, print_function, absolute_import, unicode_litera
 import boost.python
 from dials.algorithms.spot_finding import ImageSetSpotfinder
 
+# from dials.extensions.dispersion_spotfinder_threshold_ext import DispersionSpotFinderThresholdExt
+from dials.interfaces import SpotFinderThresholdIface
+
+
 import logging
 
 logger = logging.getLogger()
@@ -57,11 +61,16 @@ class ImageSetSpotfinder_aux(boost.python.injector, ImageSetSpotfinder):
         # self.min_chunksize = min_chunksize
         # self.write_hot_pixel_mask = write_hot_pixel_mask
 
+        # alg = SpotFinderThresholdIface.extension("dispersion")
+
         # Validate the assumptions made in this verison of the class
-        # For now, only support the normal thresholding function
-        assert threshold_function is None or isinstance(
-            threshold_function, DispersionSpotFinderThresholdExt
+        # For now, only support the normal thresholding function.
+        # Instead of checking via isinstance (importing causes errors in list of
+        # interfaces) just check the name.
+        assert (
+            threshold_function is None or threshold_function.name == "dispersion"
         ), "Unexpected threshold function"
+
         assert not no_shoeboxes_2d, "MT ExtractSpots does not support no_shoeboxes_2d"
         assert (
             mp_method is None or mp_method == "threads"
