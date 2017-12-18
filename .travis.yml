@@ -28,9 +28,15 @@ cache:
     - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
 
 before_install:
+  # Rewrite the path on OSX so that we use the homebrew, rather than system, python
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+    fi
   - python --version
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update homebrew
+      HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 findutils
       brew update > /dev/null;
       export HOMEBREW_NO_AUTO_UPDATE=1
     fi
