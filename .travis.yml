@@ -153,8 +153,6 @@ before_script:
         export CC="sccache cc"
 
         export SCCACHE_BUCKET=ndtraviscache
-        export AWS_ACCESS_KEY_ID=AKIAIV6HXVH4DN7R3MCQ
-        export AWS_SECRET_ACCESS_KEY=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
         sccache --start-server
       fi
     fi
