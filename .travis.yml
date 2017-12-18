@@ -56,7 +56,7 @@ install:
   # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-      for package in hdf5 cmake eigen; do
+      for package in hdf5 cmake eigen sccache; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
         else
@@ -142,6 +142,23 @@ before_script:
   - tbx2cmake . .
   - cp cmake/RootCMakeLists.txt CMakeLists.txt
 
+  # IF we have no cache, then we want to use sccache to build - this means that
+  # we can survive over extra terminations (on OSX)
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      if [[ ! -f build/commit_ids.txt ]]; then
+        echo "FIRST CACHE BUILD: USING S3"
+        export USE_SCCACHE=1
+        export CXX="sccache c++"
+        export CC="sccache cc"
+
+        export SCCACHE_BUCKET=ndtraviscache
+        export AWS_ACCESS_KEY_ID=AKIAIV6HXVH4DN7R3MCQ
+        export AWS_SECRET_ACCESS_KEY=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
+        sccache --start-server
+      fi
+    fi
+
   # Handle timestamp updating from the cache. Since travis gives a fresh checkout
   # every time, all files in the repository will be newer than the build cache dates,
   # and so everything will be rebuilt anyway. This backdates things that haven't changed.
@@ -191,4 +208,9 @@ before_script:
 script:
   - cmake .. ${CMAKE_OPTIONS}
   - make -j 3
+  - |
+    if [[ -n $USE_SCCACHE ]]; then
+      sccache -s
+      sccache --stop-server
+    fi
 
