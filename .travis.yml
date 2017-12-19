@@ -36,6 +36,10 @@ before_install:
       export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
     fi
   - python --version
+  # Define a platform-identical timeout function to end after 46 minutes total
+  - |
+    START_TIME=$(date +%s)
+    function travis_timeout() { perl -e 'alarm shift; exec @ARGV' "$((2760-($(date +%s)-$START_TIME)))" "$@"; }
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update homebrew
       HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 findutils
@@ -166,7 +170,7 @@ before_script:
   # we can survive over extra terminations (on OSX)
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      if [[ ! -f build/commit_ids.txt ]]; then
+      if [[ ! -f build/build_complete ]]; then
         echo "FIRST CACHE BUILD: USING S3"
         export USE_SCCACHE=1
         export CXX="sccache c++"
@@ -176,6 +180,8 @@ before_script:
         sccache --start-server
         echo "Started SCCACHE server"
         sccache -s
+      else
+        echo "build_complete marker exists - not using s3-cache"
       fi
     fi
 
@@ -226,11 +232,15 @@ before_script:
   - cd build
 
 script:
+  # Always give coloured output with CMake here
+  - export CLICOLOR_FORCE=1
   - cmake .. ${CMAKE_OPTIONS}
-  - make -j 3
+  - travis_timeout make -j 3
   - |
     if [[ -n $USE_SCCACHE ]]; then
       sccache -s
       sccache --stop-server
     fi
-
+after_success:
+  # Put a marker so that we know we had a successful complete build
+  - touch build_complete
