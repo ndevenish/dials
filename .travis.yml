@@ -176,6 +176,7 @@ before_script:
         export CXX="sccache c++"
         export CC="sccache cc"
 
+        export SCCACHE_LOG_LEVEL=debug
         export SCCACHE_BUCKET=ndtraviscache
         sccache --start-server
         echo "Started SCCACHE server"
@@ -235,6 +236,8 @@ script:
   # Always give coloured output with CMake here
   - export CLICOLOR_FORCE=1
   - cmake .. ${CMAKE_OPTIONS}
+  # Show estimates of elapsed time whilst running
+  - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)&
   - travis_timeout make -j 3
   - |
     if [[ -n $USE_SCCACHE ]]; then
