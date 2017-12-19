@@ -57,7 +57,7 @@ install:
   - |
     brew cask uninstall oclint || true # Fix bug where this overwrites poured links
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-      for package in hdf5 cmake eigen sccache; do
+      for package in cmake eigen sccache; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
         else
@@ -119,6 +119,25 @@ install:
 
   - cmake --version | head -n1
 
+  ############################################################################
+  # Build/Install specified HDF5 version
+  ############################################################################
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      HDF5_VERSION=1.10.1
+      HDF5_URL=https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-${HDF5_VERSION}.tar.bz2
+      HDF5_DIR=${DEPS_DIR}/hdf5-${HDF5_VERSION}
+      HDF5_BUILD_DIR=~/build_tmp/hdf5
+      if [[ ! -d ${HDF5_DIR} ]]; then
+        mkdir -p ${HDF5_BUILD_DIR} && travis_retry wget --no-check-certificate --quiet -O - "${HDF5_URL}" | tar --strip-components=1 -x -C ${HDF5_BUILD_DIR}
+        ( mkdir -p $HDF5_BUILD_DIR/_build
+          cd ${HDF5_BUILD_DIR}/_build
+          cmake .. -DCMAKE_INSTALL_PREFIX=${HDF5_DIR} -DBUILD_TESTING=off -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --target install
+          )
+      fi
+      CMAKE_OPTIONS+=" -DHDF5_ROOT=${HDF5_DIR}"
+    fi
 
   # On OSX, make sure that the --user pip is on the path
   - |
