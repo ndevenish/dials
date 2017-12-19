@@ -132,8 +132,8 @@ install:
         mkdir -p ${HDF5_BUILD_DIR} && travis_retry wget --quiet --no-check-certificate --quiet -O - "${HDF5_URL}" | tar --strip-components=1 -x -C ${HDF5_BUILD_DIR}
         ( mkdir -p $HDF5_BUILD_DIR/_build
           cd ${HDF5_BUILD_DIR}/_build
-          cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=${HDF5_DIR} -DBUILD_TESTING=off -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --target install
+          cmake .. -DCMAKE_INSTALL_PREFIX=${HDF5_DIR} -DBUILD_TESTING=off -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --target install -- -j 3
           )
       fi
       CMAKE_OPTIONS+=" -DHDF5_ROOT=${HDF5_DIR}"
