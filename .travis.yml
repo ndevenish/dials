@@ -39,7 +39,7 @@ before_install:
   # Define a platform-identical timeout function to end after 46 minutes total
   - |
     START_TIME=$(date +%s)
-    function travis_timeout() { perl -e 'alarm shift; exec @ARGV' "$((2760-($(date +%s)-$START_TIME)))" "$@"; }
+    function travis_timeout() { perl -e 'alarm shift; exec @ARGV' "$((2700-($(date +%s)-$START_TIME)))" "$@"; }
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update homebrew
       HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 findutils
