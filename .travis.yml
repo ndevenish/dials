@@ -55,6 +55,7 @@ install:
 
   # Install/upgrade homebrew dependencies; [pcre libtiff] exist already
   - |
+    brew cask uninstall oclint || true # Fix bug where this overwrites poured links
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
       for package in hdf5 cmake eigen sccache; do
         if brew ls --versions $package > /dev/null; then
