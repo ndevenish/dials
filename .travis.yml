@@ -38,7 +38,7 @@ before_install:
   - python --version
   # Define a platform-identical timeout function to end after 46 minutes total
   - |
-    START_TIME=$(date +%s)
+    export START_TIME=$(date +%s)
     function travis_timeout() { perl -e 'alarm shift; exec @ARGV' "$((2700-($(date +%s)-$START_TIME)))" "$@"; }
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update homebrew
@@ -63,7 +63,7 @@ install:
   - |
     brew cask uninstall oclint || true # Fix bug where this overwrites poured links
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-      for package in cmake eigen sccache findutils; do
+      for package in cmake eigen sccache findutils hdf5; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
         else
@@ -126,22 +126,22 @@ install:
   ############################################################################
   # Build/Install specified HDF5 version
   ############################################################################
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Install HDF5
-      HDF5_VERSION=1.10.1
-      HDF5_URL=https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-${HDF5_VERSION}.tar.bz2
-      HDF5_DIR=${DEPS_DIR}/hdf5-${HDF5_VERSION}
-      HDF5_BUILD_DIR=~/build_tmp/hdf5
-      if [[ ! -d ${HDF5_DIR} ]]; then
-        mkdir -p ${HDF5_BUILD_DIR} && travis_retry wget --quiet --no-check-certificate --quiet -O - "${HDF5_URL}" | tar --strip-components=1 -x -C ${HDF5_BUILD_DIR}
-        ( mkdir -p $HDF5_BUILD_DIR/_build
-          cd ${HDF5_BUILD_DIR}/_build
-          cmake .. -DCMAKE_INSTALL_PREFIX=${HDF5_DIR} -DBUILD_TESTING=off -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --target install -- -j 3
-          )
-      fi
-      CMAKE_OPTIONS+=" -DHDF5_ROOT=${HDF5_DIR}"
-    fi
+  # - |
+  #   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Install HDF5
+  #     HDF5_VERSION=1.10.1
+  #     HDF5_URL=https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-${HDF5_VERSION}.tar.bz2
+  #     HDF5_DIR=${DEPS_DIR}/hdf5-${HDF5_VERSION}
+  #     HDF5_BUILD_DIR=~/build_tmp/hdf5
+  #     if [[ ! -d ${HDF5_DIR} ]]; then
+  #       mkdir -p ${HDF5_BUILD_DIR} && travis_retry wget --quiet --no-check-certificate --quiet -O - "${HDF5_URL}" | tar --strip-components=1 -x -C ${HDF5_BUILD_DIR}
+  #       ( mkdir -p $HDF5_BUILD_DIR/_build
+  #         cd ${HDF5_BUILD_DIR}/_build
+  #         cmake .. -DCMAKE_INSTALL_PREFIX=${HDF5_DIR} -DBUILD_TESTING=off -DCMAKE_BUILD_TYPE=Release
+  #         cmake --build . --target install -- -j 3
+  #         )
+  #     fi
+  #     CMAKE_OPTIONS+=" -DHDF5_ROOT=${HDF5_DIR}"
+  #   fi
 
   # On OSX, make sure that the --user pip is on the path
   - |
@@ -176,7 +176,6 @@ before_script:
         export CXX="sccache c++"
         export CC="sccache cc"
 
-        export SCCACHE_LOG_LEVEL=debug
         export SCCACHE_BUCKET=ndtraviscache
         sccache --start-server
         echo "Started SCCACHE server"
