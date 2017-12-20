@@ -242,7 +242,7 @@ script:
   - export CLICOLOR_FORCE=1
   - cmake .. ${CMAKE_OPTIONS}
   # Show estimates of elapsed time whilst running
-  - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)& & export TIMER_PID=$!
+  - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)& && export TIMER_PID=$!
   - travis_timeout make -j 3
   # - |
   #   if [[ -n $USE_SCCACHE ]]; then
