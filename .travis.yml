@@ -63,7 +63,7 @@ install:
   - |
     brew cask uninstall oclint || true # Fix bug where this overwrites poured links
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-      for package in cmake eigen sccache findutils hdf5; do
+      for package in cmake eigen findutils hdf5; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
         else
@@ -168,22 +168,22 @@ before_script:
 
   # IF we have no cache, then we want to use sccache to build - this means that
   # we can survive over extra terminations (on OSX)
-  - |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      if [[ ! -f build/build_complete ]]; then
-        echo "FIRST CACHE BUILD: USING S3"
-        export USE_SCCACHE=1
-        export CXX="sccache c++"
-        export CC="sccache cc"
+  # - |
+  #   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  #     if [[ ! -f build/build_complete ]]; then
+  #       echo "FIRST CACHE BUILD: USING S3"
+  #       export USE_SCCACHE=1
+  #       export CXX="sccache c++"
+  #       export CC="sccache cc"
 
-        export SCCACHE_BUCKET=ndtraviscache
-        sccache --start-server
-        echo "Started SCCACHE server"
-        sccache -s
-      else
-        echo "build_complete marker exists - not using s3-cache"
-      fi
-    fi
+  #       export SCCACHE_BUCKET=ndtraviscache
+  #       sccache --start-server
+  #       echo "Started SCCACHE server"
+  #       sccache -s
+  #     else
+  #       echo "build_complete marker exists - not using s3-cache"
+  #     fi
+  #   fi
 
   # Handle timestamp updating from the cache. Since travis gives a fresh checkout
   # every time, all files in the repository will be newer than the build cache dates,
@@ -238,11 +238,11 @@ script:
   # Show estimates of elapsed time whilst running
   - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)&
   - travis_timeout make -j 3
-  - |
-    if [[ -n $USE_SCCACHE ]]; then
-      sccache -s
-      sccache --stop-server
-    fi
+  # - |
+  #   if [[ -n $USE_SCCACHE ]]; then
+  #     sccache -s
+  #     sccache --stop-server
+  #   fi
 after_success:
   # Put a marker so that we know we had a successful complete build
   - touch build_complete
