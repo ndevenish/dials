@@ -39,7 +39,7 @@ before_install:
   # Define a platform-identical timeout function to end after 46 minutes total
   - |
     export START_TIME=$(date +%s)
-    function travis_timeout() { perl -e 'alarm shift; exec @ARGV' "$((2700-($(date +%s)-$START_TIME)))" "$@"; }
+    function travis_timeout() { perl -e 'alarm shift; exec @ARGV' "$((2640-($(date +%s)-$START_TIME)))" "$@"; }
   - |
     # Update homebrew
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
