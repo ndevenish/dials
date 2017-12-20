@@ -19,7 +19,7 @@ branches:
 addons:
   apt:
     packages:
-      # - libhdf5-dev
+      - libhdf5-dev
       - libeigen3-dev
       - libtiff5-dev
 cache:
