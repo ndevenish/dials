@@ -23,6 +23,7 @@ addons:
       - libeigen3-dev
       - libtiff5-dev
 cache:
+  timeout: 1000
   directories:
     - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
     - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
