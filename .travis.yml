@@ -96,7 +96,7 @@ install:
           { travis_retry wget -nv -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_BUILD_DIR}; } || exit 1
         fi
         mkdir -p ${BOOST_DIR}
-        (cd ${BOOST_BUILD_DIR} && ./bootstrap.sh && ./b2 -j 3 -d0 --prefix=${BOOST_DIR} --with-python --with-thread --with-chrono --with-date_time install) || exit 1
+        (cd ${BOOST_BUILD_DIR} && ./bootstrap.sh && ./b2 -j 3 -d0 --prefix=${BOOST_DIR} --with-python --with-atomic --with-thread --with-chrono --with-date_time install) || exit 1
       else
         echo "Boost exists in ${BOOST_DIR}; using existing"
       fi
