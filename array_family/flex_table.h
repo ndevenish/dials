@@ -20,6 +20,7 @@
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/remove_if.hpp>
 #include <boost/mpl/transform.hpp>
+#include <boost/python/errors.hpp>
 #include <dials/error.h>
 #include <dials/array_family/scitbx_shared_and_versa.h>
 
@@ -175,7 +176,9 @@ namespace dials { namespace af {
         boost::shared_ptr<map_type> table = t_->table_;
         iterator it = table->find(k_);
         if (it == table->end()) {
-          throw UnknownColumnError(k_.c_str());
+          // Raise a python KeyError
+          PyErr_SetString(PyExc_KeyError, std::string(k_).c_str());
+          throw boost::python::error_already_set();
         }
         return it->second;
       }
@@ -272,7 +275,11 @@ namespace dials { namespace af {
     template <typename T>
     af::shared<T> get(const key_type &key) const {
       const_iterator it = find(key);
-      DIALS_ASSERT(it != end());
+      // Throw a python KeyError if this wasn't valid
+      if (it != end()) {
+        PyErr_SetString(PyExc_KeyError, std::string(key).c_str());
+        throw boost::python::error_already_set();
+      }
       return boost::get< af::shared<T> >(it->second);
     }
 

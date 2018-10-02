@@ -13,6 +13,9 @@ from dxtbx.serialize import load
 from cctbx import sgtbx
 
 
+from dials.array_family import flex
+
+
 def test_init():
     from dials.array_family import flex
 
@@ -1453,3 +1456,9 @@ def test_calculate_entering_flags(dials_regression):
     flags = refl["entering"]
     assert flags.count(True) == 58283
     assert flags.count(False) == 57799
+
+
+def test_pythonic_errors():
+    with pytest.raises(KeyError):
+        t = flex.reflection_table()
+        value = t["some_missing_key"]
