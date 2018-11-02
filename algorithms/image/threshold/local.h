@@ -378,7 +378,9 @@ namespace dials { namespace algorithms {
 
       // Allocate the buffer
       std::size_t element_size = sizeof(Data<double>);
-      buffer_.resize(element_size * image_size[0] * image_size[1]);
+      buffer_ =
+          af::shared<char>(element_size * image_size[0] * image_size[1],
+                     scitbx::af::init_functor_null<char>());
     }
 
     /**
@@ -643,7 +645,7 @@ namespace dials { namespace algorithms {
     double nsig_s_;
     double threshold_;
     int min_count_;
-    std::vector<char> buffer_;
+    af::shared<char> buffer_;
   };
 
 
