@@ -377,6 +377,8 @@ namespace dials { namespace algorithms {
       }
 
       // Allocate the buffer
+      // Technically this over-allocates if e.g. we use a single
+      // Should probably revisit the buffer_ being a char anyway?
       std::size_t element_size = sizeof(Data<double>);
       buffer_ =
           af::shared<char>(element_size * image_size[0] * image_size[1],
@@ -401,6 +403,14 @@ namespace dials { namespace algorithms {
       std::size_t ysize = src.accessor()[0];
       std::size_t xsize = src.accessor()[1];
 
+      /*  What we are doing here is effectively creating three integral
+          images:
+            - Unmasked pixels
+            - Pixel Values
+            - Pixel Values Squared
+          This will give us everything we need to calculate over an area
+          the average, the integral, the variance.
+      */
       // Create the summed area table
       for (std::size_t j = 0, k = 0; j < ysize; ++j) {
         int m = 0;
@@ -505,12 +515,11 @@ namespace dials { namespace algorithms {
      * @param dst The output array
      */
     template <typename T>
-    void compute_threshold(
-        af::ref< Data<T> > table,
-        const af::const_ref< T, af::c_grid<2> > &src,
-        const af::const_ref< bool, af::c_grid<2> > &mask,
-        const af::const_ref< double, af::c_grid<2> > &gain,
-        af::ref< bool, af::c_grid<2> > dst) {
+    void compute_threshold(af::ref<Data<T> > table,
+                           const af::const_ref<T, af::c_grid<2> > &src,
+                           const af::const_ref<bool, af::c_grid<2> > &mask,
+                           const af::const_ref<double, af::c_grid<2> > &gain,
+                           af::ref<bool, af::c_grid<2> > dst) {
 
       // Get the size of the image
       std::size_t ysize = src.accessor()[0];
@@ -523,15 +532,24 @@ namespace dials { namespace algorithms {
       // Calculate the local mean at every point
       for (std::size_t j = 0, k = 0; j < ysize; ++j) {
         for (std::size_t i = 0 ; i < xsize; ++i, ++k) {
+          // Construct the kernel bounding box
+          // i0,j0 Is the lower corner of the area diagonal to the kernel
           int i0 = i - kxsize - 1, i1 = i + kxsize;
           int j0 = j - kysize - 1, j1 = j + kysize;
+          // i1,j1 is the corner of our kernel
           i1 = i1 < xsize ? i1 : xsize - 1;
           j1 = j1 < ysize ? j1 : ysize - 1;
+          // k0, k1 are the 1D index of the start of the rows for the
+          // two corners (kernel, and diagonal exclusion zone)
           int k0 = j0*xsize;
           int k1 = j1*xsize;
 
+          /*  To compute the value for the sum over area of an integral image,
+              A---------B
+              |         |
+              C---------D  Area = D - B - C + A                       */
           // Compute the number of points valid in the local area,
-          // the sum of the pixel values and the num of the squared pixel
+          // the sum of the pixel values and the sum of the squared pixel
           // values.
           double m = 0;
           double x = 0;
@@ -544,16 +562,19 @@ namespace dials { namespace algorithms {
             x += d00.x - (d10.x + d01.x);
             y += d00.y - (d10.y + d01.y);
           } else if (i0 >= 0) {
+            // Special case: kernel goes off the top of the area
             const Data<T>& d10 = table[k1+i0];
             m -= d10.m;
             x -= d10.x;
             y -= d10.y;
           } else if (j0 >= 0) {
+            // Special case: Kernel goes off the left of the area
             const Data<T>& d01 = table[k0+i1];
             m -= d01.m;
             x -= d01.x;
             y -= d01.y;
           }
+          // + D
           const Data<T>& d11 = table[k1+i1];
           m += d11.m;
           x += d11.x;
@@ -593,6 +614,12 @@ namespace dials { namespace algorithms {
       DIALS_ASSERT(sizeof(T) <= sizeof(double));
 
       // Cast the buffer to the table type
+      // NOTE: IS THIS WRONG??!? -
+      //    buffer_ is actually a vector<char> e.g. enough bytes to store
+      //    an array of Data<double> the size of the image. This is using
+      //    T (which we know is probably smaller than double, so that's okay)
+      //    but using the number of bytes as the size of the reference array,
+      //    even though we're asking for a ref<Data<T>> ???
       af::ref< Data<T> > table(
           reinterpret_cast<Data<T>*>(&buffer_[0]),
           buffer_.size());
