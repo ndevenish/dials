@@ -756,6 +756,11 @@ class SpotFinder(object):
         import six.moves.cPickle as pickle
         from dxtbx.format.image import ImageBool
 
+        # Split off hard here for now if mp == threads
+        if self.mp_method == "threads":
+            logger.warning("Using experimental spot-finding architecture")
+            return self._find_spots_async_threads(datablock.extract_imagesets())
+
         # Loop through all the imagesets and find the strong spots
         reflections = flex.reflection_table()
         for i, experiment in enumerate(experiments):
@@ -798,6 +803,42 @@ class SpotFinder(object):
 
         # Return the reflections
         return reflections
+
+    def _find_spots_async_threads(self, imagesets):
+        """Find spots using the Async threaded architecture.
+
+        Args:
+          imageset (Iterable[dxtbx.imageset.ImageSet]): The Imagesets to laod
+
+        Returns:
+          (dials.array_family.flex.reflection_table): The reflection table
+        """
+        from .imageloader import AsyncImageLoader
+
+        # assert False
+        loader = AsyncImageLoader()
+
+        # Parameters to load images with
+        # scan_range
+        # region_of_interest
+
+        #     # Set the spot finding algorithm
+        # extract_spots = ExtractSpots(
+        #   threshold_function        = self.threshold_function,
+        #   mask                      = mask,
+        #   region_of_interest        = self.region_of_interest,
+        #   max_strong_pixel_fraction = self.max_strong_pixel_fraction,
+        #   compute_mean_background   = self.compute_mean_background,
+        #   mp_method                 = self.mp_method,
+        #   mp_nproc                  = self.mp_nproc,
+        #   mp_njobs                  = self.mp_njobs,
+        #   mp_chunksize              = self.mp_chunksize,
+        #   min_spot_size             = self.min_spot_size,
+        #   max_spot_size             = self.max_spot_size,
+        #   filter_spots              = self.filter_spots,
+        #   no_shoeboxes_2d           = self.no_shoeboxes_2d,
+        #   min_chunksize             = self.min_chunksize,
+        #   write_hot_pixel_mask      = self.write_hot_mask)
 
     def _find_spots_in_imageset(self, imageset):
         """

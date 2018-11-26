@@ -7,9 +7,11 @@ from __future__ import absolute_import, division, print_function
 
 # from collections import namedtuple
 import logging
+import numbers
 import queue
 import threading
 
+# from dxtbx.imageset import ImageSweep
 
 logger = logging.getLogger(__name__)
 # Set up thread-local-logging
@@ -52,8 +54,20 @@ class ImagePacket(object):
         self.origin_region = None
 
 
-def _read_image_data(imageset, index, panel):
-    pass
+def _read_image_data(imageset, index):
+    """Reads raw image data from an imageset for processing.
+
+    Args:
+        imageset (dxtbx.imageset.ImageSet): The imageset to load from
+        index (int): The index of the image to load
+
+    Returns:
+        List[ImagePacket]: Image data for each panel and region
+    """
+    logger.debug("Reading ImageSet %s image %d", imageset, index)
+    # Get the image and mask
+    # image = self.imageset.get_corrected_data(index)
+    # mask = self.imageset.get_mask(index)
 
 
 class AsyncImageLoader(object):
@@ -68,21 +82,58 @@ class AsyncImageLoader(object):
         image_queue (Queue[ImagePacket])
     """
 
-    def __init__(self, imagesets, maxsize=0):
+    def __init__(self, imagesets=[], maxsize=0):
         self._image_indices = queue.Queue()
         self._images = queue.Queue(maxsize)
+        self._started = False
+
         # Enqueue separate entries for each panel part.
         for imageset in imagesets:
-            for imageindex in range(len(imageset)):
-                # Had throught about iterating over panels - but appears
-                # to be no provision for reading separate panels?
-                # for panel in range(len(imageset.get_detector())):
-                self._image_indices.put((imageset, imageindex))
+            self.add(imageset)
 
         logger.debug("Created %d image tasks in queue", self._image_indices.qsize())
 
         # Keep track of our threads
         self._threads = set()
+
+    def add(self, imageset, index_range=None):
+        """Add an ImageSet to the load queue.
+
+        Cannot be used after the queue has been started because the
+        queue could be empty, which at the moment terminates all the
+        threads.
+
+        Args:
+            imageset (dxtbx.imageset.ImageSet): The ImageSet
+            index_range (int or Tuple[int,int] or None):
+                The index or range of indices to enqueue for loading. If
+                None, then all images in the imageset range are added. If
+                an integer, then a single image is added. If a Tuple then
+                all images in range [start, end) are added. If either of
+                the range entries are None, then images from the specified
+                start index to the end, or images from the start to the
+                specified index will be added.
+        """
+        assert not self._started
+        # Convert image_range to an actual range min/max
+        if hasattr(imageset, "get_array_range"):
+            max_scan_range = imageset.get_array_range()
+        else:
+            max_scan_range = (0, len(imageset))
+        if index_range is None:
+            index_range = max_scan_range
+        elif isinstance(index_range, numbers.Integral):
+            index_range = (index_range, index_range + 1)
+        else:
+            start, end = index_range
+            if start is None:
+                start = max_scan_range[0]
+            if end is None:
+                end = max_scan_range[1]
+            index_range = (start, end)
+        # Enqueue the selected indices
+        for index in range(*index_range):
+            self._image_indices.put((imageset, index))
 
     @property
     def image_queue(self):
@@ -96,6 +147,7 @@ class AsyncImageLoader(object):
         be complete.
         """
         assert self._image_indices.qsize()
+        self._started = True
         # Launch threads
         thread = threading.Thread(None, self._worker_start)
         thread.daemon = True
@@ -105,6 +157,9 @@ class AsyncImageLoader(object):
     def join(self):
         """Wait until all image regions have been processed."""
         self._image_indices.join()
+        # Make sure every thread is joined
+        for thread in self._threads:
+            thread.join()
 
     def _worker_start(self):
         """The entry point for each worker thread"""

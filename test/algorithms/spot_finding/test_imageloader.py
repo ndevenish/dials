@@ -128,3 +128,31 @@ def test_max_loading(monkeypatch):
     il.image_queue.task_done()
     # Wait for the runner to rejoin
     il.join()
+
+
+def test_late_adding(mock_read_data):
+    one, two, three, four = Mock(), Mock(), Mock(), Mock()
+    imageset = [one, two, three, four]
+    il = imageloader.AsyncImageLoader()
+    il.add(imageset)
+    il.start()
+    il.join()
+    assert il.image_queue.qsize() == 4
+
+    il = imageloader.AsyncImageLoader()
+    il.add(imageset, 1)
+    il.start()
+    il.join()
+    assert il.image_queue.qsize() == 1
+
+    il = imageloader.AsyncImageLoader()
+    il.add(imageset, (None, 2))
+    il.start()
+    il.join()
+    assert il.image_queue.qsize() == 2
+
+    il = imageloader.AsyncImageLoader()
+    il.add(imageset, (1, None))
+    il.start()
+    il.join()
+    assert il.image_queue.qsize() == 3
