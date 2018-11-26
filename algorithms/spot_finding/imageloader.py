@@ -95,7 +95,7 @@ class AsyncImageLoader(object):
         the image queue is full. Call join() to wait for all loading to
         be complete.
         """
-        assert self._image_indices
+        assert self._image_indices.qsize()
         # Launch threads
         thread = threading.Thread(None, self._worker_start)
         thread.daemon = True
@@ -104,7 +104,7 @@ class AsyncImageLoader(object):
 
     def join(self):
         """Wait until all image regions have been processed."""
-        self._imagesets.join()
+        self._image_indices.join()
 
     def _worker_start(self):
         """The entry point for each worker thread"""

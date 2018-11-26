@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 from mock import Mock, call
 import pytest
 import threading
+import time
 
 import dials.algorithms.spot_finding.imageloader as imageloader
 
@@ -54,36 +55,76 @@ def test_load_called(single_thread, mock_read_data):
     )
 
 
-def test_max_loading(monkeypatch):
+def test_async_read(monkeypatch):
     entered_call = threading.Event()
     waiter = threading.Semaphore(0)
 
     def _semaphored_read(*args, **kwargs):
         """An image reading function that explicitly waits for permission"""
         # Once we've entered this call, we know where we should be
-        print("read")
-        # import pdb
-        # pdb.set_trace()
         print("setting")
         entered_call.set()
         print("acquiring")
         waiter.acquire()
+        print("Returning read", args)
         return Mock()(*args, **kwargs)
 
     monkeypatch.setattr(imageloader, "_read_image_data", _semaphored_read)
 
     imageset = [[Mock(), Mock(), Mock()]]
-    il = imageloader.AsyncImageLoader(imageset, maxsize=1)
+    il = imageloader.AsyncImageLoader(imageset)  # , maxsize=1
     il.start()
-    # import pdb
-    # pdb.set_trace()
     # Wait for a thread to get to the read function before checking stuff
-    while True:
-        entered_call.wait(2)
-        print("Main: Still waiting")
-        import pdb
-
-        pdb.set_trace()
+    # Wait, but since a test assert on wait time.
+    assert entered_call.wait(2)
     entered_call.clear()
     # We *Know* that a thread is either waiting or about to
     assert il.image_queue.empty()
+    # Let it continue, then assert that one item has been added and removed
+    waiter.release()
+    assert entered_call.wait(2)
+    assert il.image_queue.qsize() == 1
+    # assert il.image_queue.qsize() == 1
+    # Let the end of the loop run
+    waiter.release()
+    waiter.release()
+    il.join()
+
+
+def test_max_loading(monkeypatch):
+    # entered_call = threading.Event()
+    waiter = threading.Semaphore(0)
+
+    def _notifying_read(*args, **kwargs):
+        """An image reading function that explicitly releases permission"""
+        print("releasing")
+        waiter.release()
+        print("Returning read", args)
+        return Mock()(*args, **kwargs)
+
+    monkeypatch.setattr(imageloader, "_read_image_data", _notifying_read)
+
+    imageset = [[Mock(), Mock(), Mock()]]
+    il = imageloader.AsyncImageLoader(imageset, maxsize=1)
+    il.start()
+    # First time round we have done nothing
+    waiter.acquire()
+    # Then, we get released again on the second read function
+    waiter.acquire()
+
+    assert il.image_queue.qsize() == 1
+    time.sleep(0.2)
+    assert il.image_queue.qsize() == 1
+    # Pull from the queue and wait until we go round again
+    assert il.image_queue.qsize() == 1
+    assert il.image_queue.get()
+    waiter.acquire()
+    assert il.image_queue.qsize() == 1
+    assert il.image_queue.get()
+    assert il.image_queue.get()
+    # Mark tasks as finished
+    il.image_queue.task_done()
+    il.image_queue.task_done()
+    il.image_queue.task_done()
+    # Wait for the runner to rejoin
+    il.join()
