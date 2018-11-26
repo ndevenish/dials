@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function
 
 # from collections import namedtuple
 import logging
-from queue import Queue
+import queue
 import threading
 
 
@@ -52,9 +52,6 @@ class ImagePacket(object):
         self.origin_region = None
 
 
-# RegionIndex = namedtuple("RegionIndex", ["imageset", "index"])
-
-
 def _read_image_data(imageset, index, panel):
     pass
 
@@ -72,8 +69,8 @@ class AsyncImageLoader(object):
     """
 
     def __init__(self, imagesets, maxsize=0):
-        self._image_indices = Queue()
-        self._images = Queue(maxsize)
+        self._image_indices = queue.Queue()
+        self._images = queue.Queue(maxsize)
         # Enqueue separate entries for each panel part.
         for imageset in imagesets:
             for imageindex in range(len(imageset)):
@@ -82,7 +79,7 @@ class AsyncImageLoader(object):
                 # for panel in range(len(imageset.get_detector())):
                 self._image_indices.put((imageset, imageindex))
 
-        logger.debug("Created {} image tasks in queue")
+        logger.debug("Created %d image tasks in queue", self._image_indices.qsize())
 
         # Keep track of our threads
         self._threads = set()
@@ -100,9 +97,10 @@ class AsyncImageLoader(object):
         """
         assert self._image_indices
         # Launch threads
-        thread = threading.Thread(self._worker_start)
+        thread = threading.Thread(None, self._worker_start)
         thread.daemon = True
-        self.threads.add(thread)
+        thread.start()
+        self._threads.add(thread)
 
     def join(self):
         """Wait until all image regions have been processed."""
@@ -110,13 +108,18 @@ class AsyncImageLoader(object):
 
     def _worker_start(self):
         """The entry point for each worker thread"""
+        print("Entering thread")
+
         curthread = threading.current_thread()
         thread.logger = logging.getLogger(__name__ + "." + str(curthread.ident))
-        while True:
-            region_index = self._image_indices.get()
-            thread.logger.debug("Pulled region %s for reading", region_index)
-            # Read this image region
-            image_data = _read_image_data(*region_index)
-            # Put into the output queue and mark as done
-            self._images.put(image_data)
-            self._image_indices.task_done()
+        try:
+            while True:
+                region_index = self._image_indices.get(block=False)
+                thread.logger.debug("Pulled region %s for reading", region_index)
+                # Read this image region
+                image_data = _read_image_data(*region_index)
+                # Put into the output queue and mark as done
+                self._images.put(image_data)
+                self._image_indices.task_done()
+        except queue.Empty:
+            pass
