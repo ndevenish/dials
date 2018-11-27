@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from mock import Mock, call
+from mock import Mock, call, ANY
 import pytest
 import threading
 import time
@@ -47,9 +47,9 @@ def test_load_called(single_thread, mock_read_data):
     il.start()
     mock_read_data.assert_has_calls(
         [
-            call(test_imageset[0], 1),
-            call(test_imageset[0], 0),
-            call(test_imageset[0], 2),
+            call(test_imageset[0], 1, region_of_interest=None),
+            call(test_imageset[0], 0, region_of_interest=None),
+            call(test_imageset[0], 2, region_of_interest=None),
         ],
         any_order=True,
     )
@@ -130,7 +130,7 @@ def test_max_loading(monkeypatch):
     il.join()
 
 
-def test_late_adding(mock_read_data):
+def test_adding_imagesets_after_init(mock_read_data):
     one, two, three, four = Mock(), Mock(), Mock(), Mock()
     imageset = [one, two, three, four]
     il = imageloader.AsyncImageLoader()

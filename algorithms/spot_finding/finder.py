@@ -10,12 +10,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 import logging
 import math
 import os
 
-from dials.util import Sorry
 import libtbx
+
+from dials.array_family import flex
+from dials.util import Sorry
 
 logger = logging.getLogger(__name__)
 
@@ -691,6 +694,32 @@ class ExtractSpots(object):
         return reflections, None
 
 
+def _combine_imageset_scan_range(imageset, scan_range=None):
+    """Combine an imageset range and a scan range to give an index interval.
+
+    Args:
+      imageset (dxtbx.imageset.ImageSet): The ImageSet to apply the range to
+      scan_range (List[Tuple[int, int]] or None):
+        The [start, end] inclusive scan ranges to use. If None, then use
+        the full range.
+
+    Returns:
+      List[Tuple[int, int]]: A set of ranges, each suitable for passing to range()
+    """
+    # Get the max scan range
+    if hasattr(imageset, "get_array_range"):
+        max_scan_range = imageset.get_array_range()
+    else:
+        max_scan_range = (0, len(imageset))
+
+    # Get list of scan ranges
+    if not scan_range or scan_range[0] is None:
+        return [max_scan_range]
+    else:
+        # Convert the input scan ranges to index lookup
+        return [(start, end + 1) for start, end in scan_range]
+
+
 class SpotFinder(object):
     """
     A class to do spot finding and filtering.
@@ -752,7 +781,6 @@ class SpotFinder(object):
         :param experiments: The experiments to process
         :return: The observed spots
         """
-        from dials.array_family import flex
         import six.moves.cPickle as pickle
         from dxtbx.format.image import ImageBool
 
@@ -821,6 +849,19 @@ class SpotFinder(object):
         # Parameters to load images with
         # scan_range
         # region_of_interest
+
+        # Handle scan range loading
+        for imageset in imagesets:
+            index_ranges = _combine_imageset_scan_range(imageset, self.scan_range)
+            for index_range in index_ranges:
+                loader.add(imageset, index_range)
+
+        # Build the consumer for these image ranges
+        loader.start()
+        # Problem: How does consumer know when it is finished?
+        loader.join()
+
+        return flex.reflection_table()
 
         #     # Set the spot finding algorithm
         # extract_spots = ExtractSpots(

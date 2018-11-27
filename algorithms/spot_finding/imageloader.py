@@ -54,12 +54,15 @@ class ImagePacket(object):
         self.origin_region = None
 
 
-def _read_image_data(imageset, index):
+def _read_image_data(imageset, index, region_of_interest=None):
     """Reads raw image data from an imageset for processing.
 
     Args:
         imageset (dxtbx.imageset.ImageSet): The imageset to load from
         index (int): The index of the image to load
+        region_of_interest (Tuple[int,int,int,int]):
+            left,right,top,bottom tuple defining a sub-area of the image
+            to load. Areas outside this may not be used for spotfinding.
 
     Returns:
         List[ImagePacket]: Image data for each panel and region
@@ -77,14 +80,18 @@ class AsyncImageLoader(object):
     Args:
         imagesets (Iterable[ImageSet]): The imagesets to load
         maxsize (int):  The maximum number of images to load at once
+        region_of_interest (Tuple[int,int,int,int]):
+            left,right,top,bottom tuple defining a sub-area of the image
+            to load. Areas outside this may not be used for spotfinding.
 
     Attributes:
         image_queue (Queue[ImagePacket])
     """
 
-    def __init__(self, imagesets=[], maxsize=0):
+    def __init__(self, imagesets=[], maxsize=0, region_of_interest=None):
         self._image_indices = queue.Queue()
         self._images = queue.Queue(maxsize)
+        self._region_of_interest = region_of_interest
         self._started = False
 
         # Enqueue separate entries for each panel part.
@@ -172,7 +179,9 @@ class AsyncImageLoader(object):
                 region_index = self._image_indices.get(block=False)
                 thread.logger.debug("Pulled region %s for reading", region_index)
                 # Read this image region
-                image_data = _read_image_data(*region_index)
+                image_data = _read_image_data(
+                    *region_index, region_of_interest=self._region_of_interest
+                )
                 # Put into the output queue and mark as done
                 self._images.put(image_data)
                 self._image_indices.task_done()
