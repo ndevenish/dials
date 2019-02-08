@@ -1,4 +1,5 @@
-language: cpp
+language: generic
+dist: xenial
 os:
   - linux
   - osx
@@ -164,7 +165,7 @@ before_script:
   # Verify what our folder looks like
   - ls
   # Grab the autobuild repository
-  - git clone https://github.com/ndevenish/autobuild.git cmake
+  - git clone https://github.com/ndevenish/tbxcmake.git cmake
   # Install the scons conversion repository
   - pip install --user git+https://github.com/ndevenish/tbxtools.git
   # Get all the other modules we need to compile
@@ -172,7 +173,7 @@ before_script:
 
   # Generate the CMakelists
   - tbx2cmake . .
-  - cp cmake/RootCMakeLists.txt CMakeLists.txt
+  - cp cmake/CMakeLists.txt CMakeLists.txt
 
   # IF we have no cache, then we want to use sccache to build - this means that
   # we can survive over extra terminations (on OSX)
