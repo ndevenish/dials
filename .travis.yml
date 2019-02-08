@@ -47,7 +47,7 @@ before_install:
   - |
     # Update homebrew
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5
+      HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 python@2
       brew update > /dev/null;
       export HOMEBREW_NO_AUTO_UPDATE=1
     fi
@@ -69,7 +69,7 @@ install:
     # Update dependencies from homebrew
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
       brew cask uninstall oclint || true # Fix bug where this overwrites poured links
-      for package in cmake eigen findutils hdf5 coreutils; do
+      for package in cmake eigen findutils hdf5 coreutils python python@2; do
         if brew ls --versions $package > /dev/null; then
           brew outdated $package || brew upgrade $package
         else
