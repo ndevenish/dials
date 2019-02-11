@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 
@@ -17,7 +19,7 @@ fi
 export START_TIME=$(date +%s)
 
 # Run a command, but stop it before we run out of travis time
-function travis_timeout() {
+travis_timeout() {
 
     # Periodically remind how long the job seems to have been running
     (
@@ -36,10 +38,10 @@ function travis_timeout() {
 }
 
 # Do a step, and show the command
-function step() {
+step() {
     set -x
     "$@"
-    { set +x }; 2>/dev/null
+    { set +x; }; 2>/dev/null
 }
 
 echo "${BOLD}Python versions:${NC}"
@@ -169,3 +171,5 @@ fi
     step cd ${TRAVIS_BUILD_DIR}
     step mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
 )
+
+set +e
