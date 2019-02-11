@@ -1,23 +1,27 @@
 #!/bin/bash
 
+set -e
+
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 # echotitle() {
 #     echo "${BOLD}$*${NC}"
 # }
 
+cd ${TRAVIS_BUILD_DIR}
+
 echo "Working build directory:"
 ls
 # Grab the autobuild repository
-echo "Cloning custom cmake modules"
+echo "${BOLD}Cloning custom cmake modules${NC}"
 git clone https://github.com/ndevenish/tbxcmake.git cmake
-echo "Installing tbx conversion tools"
+echo "${BOLD}Installing tbx conversion tools${NC}"
 pip install --user git+https://github.com/ndevenish/tbxtools.git
-echo "Grabbing remaining distribution modules:"
+echo "${BOLD}Grabbing remaining distribution modules:${NC}"
 # Get all the other modules we need to compile
 python cmake/prepare_singlemodule.py --write-log --no-cmake
 
-echo "Generating CMakeLists"
+echo "${BOLD}Generating CMakeLists${NC}"
 tbx2cmake . .
 cp cmake/CMakeLists.txt CMakeLists.txt
 
