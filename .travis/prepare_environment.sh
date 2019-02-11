@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 BOLD=$(tput bold)
 NC=$(tput sgr0)
@@ -16,7 +17,7 @@ echot() {
 # Also: non-prefixed versions of gnu find utilities
 # Define (possibly platform-specific) variables for build
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+    # export PATH="/usr/local/opt/python/libexec/bin:$PATH"
     export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
     export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 fi
