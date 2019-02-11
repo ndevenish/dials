@@ -4,24 +4,25 @@ set -e
 
 BOLD=$(tput bold)
 NC=$(tput sgr0)
-# echotitle() {
-#     echo "${BOLD}$*${NC}"
-# }
+GREEN=$(tput setaf 2)
+echot() {
+    echo "${BOLD}${GREEN}$@${NC}"
+}
 
 cd ${TRAVIS_BUILD_DIR}
 
 echo "Working build directory:"
 ls
 # Grab the autobuild repository
-echo "${BOLD}Cloning custom cmake modules${NC}"
+echot "Cloning custom cmake modules$"
 git clone https://github.com/ndevenish/tbxcmake.git cmake
-echo "${BOLD}Installing tbx conversion tools${NC}"
+echot "Installing tbx conversion tools"
 pip install --user git+https://github.com/ndevenish/tbxtools.git
-echo "${BOLD}Grabbing remaining distribution modules:${NC}"
+echot "Grabbing remaining distribution modules:"
 # Get all the other modules we need to compile
 python cmake/prepare_singlemodule.py --write-log --no-cmake
 
-echo "${BOLD}Generating CMakeLists${NC}"
+echot "Generating CMakeLists"
 tbx2cmake . .
 cp cmake/CMakeLists.txt CMakeLists.txt
 
@@ -44,7 +45,7 @@ cp cmake/CMakeLists.txt CMakeLists.txt
 #     fi
 #   fi
 
-echo "${BOLD}Updating timestamps${NC}"
+echot "Updating timestamps"
 
 # Handle timestamp updating from the cache. Since travis gives a fresh checkout
 # every time, all files in the repository will be newer than the build cache dates,
