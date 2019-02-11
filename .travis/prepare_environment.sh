@@ -50,15 +50,18 @@ step() {
 }
 
 echot "Python versions:"
-echo "python  $(python --version) ($(which python))"
-echo "python2 $(python2 --version) ($(which python2))"
-echo "python3 $(python3 --version) ($(which python3))"
+echo "python  $(python --version 2>&1  | awk '{ print $2; }') ($(which python))"
+echo "python2 $(python2 --version 2>&1 | awk '{ print $2; }') ($(which python2))"
+echo "python3 $(python3 --version 2>&1 | awk '{ print $2; }') ($(which python3))"
 
 # Update homebrew
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     echot "Updating homebrew:"
-    HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5
+    # HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 || true
     brew update > /dev/null;
+    echo "Installed/available packages:"
+    brew info --json cmake eigen hdf5 | \
+        python -c 'import sys, json; print("\n".join(["{name:8}{linked_keg:>8}{versions[stable]:>8}".format(**x) for x in json.load(sys.stdin)]))' || true
     export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
