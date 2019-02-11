@@ -34,11 +34,8 @@ install:
   - . .travis/prepare_environment.sh
 
 before_script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - ls
-  - ls -a dials
-  - ls -a dials/.travis
   - dials/.travis/prepare_build.sh
+  - cd build && cmake .. ${CMAKE_OPTIONS}
 
 script:
   - cd ${cd ${TRAVIS_BUILD_DIR}}/build

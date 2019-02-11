@@ -88,12 +88,16 @@ mv commit_ids.txt build/
 
 # Do the actual building
 mkdir -p build
-cd build
+# cd build
 
 # Always give coloured output with CMake here
 export CLICOLOR_FORCE=1
 echo "CMake Options: ${CMAKE_OPTIONS}"
-step cmake .. ${CMAKE_OPTIONS}
+
+# Will do configure in separate travis line entry
+
+
+
 # Show estimates of elapsed time whilst running
 # - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)&
 # - export TIMER_PID=$!

@@ -4,6 +4,7 @@ set -e
 
 BOLD=$(tput bold)
 NC=$(tput sgr0)
+GREEN=$(tput setaf 2)
 
 ###############################################################################
 # before-install
@@ -45,14 +46,18 @@ step() {
     )
 }
 
-echo "${BOLD}Python versions:${NC}"
+echot() {
+    echo "${BOLD}${GREEN}$@${NC}"
+}
+
+echot "Python versions:"
 echo "python  $(python --version) ($(which python))"
 echo "python2 $(python2 --version) ($(which python2))"
 echo "python3 $(python3 --version) ($(which python3))"
 
 # Update homebrew
-echo "${BOLD}Updating homebrew:${NC}"
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    echot "Updating homebrew:"
     HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5
     brew update > /dev/null;
     export HOMEBREW_NO_AUTO_UPDATE=1
@@ -75,7 +80,7 @@ if [[ "${BOOST_VERSION}" == "default" ]]; then
 fi
 # Update dependencies from homebrew
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-    echo "${BOLD}Upgrading homebrew packages:${NC}"
+    echot "Upgrading homebrew packages:"
     brew cask uninstall oclint || true # Fix bug where this overwrites poured links
     for package in cmake eigen findutils hdf5 coreutils; do
     if brew ls --versions $package > /dev/null; then
@@ -87,6 +92,7 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
 fi
 
 # Other python libs we know about - need numpy before boost is built
+echot "Python libraries for build"
 step pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
 
 ############################################################################
@@ -95,7 +101,7 @@ step pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
 
 # Install requested boost version
 if [[ "${BOOST_VERSION}" != "" ]]; then
-    echo "${BOLD}Ensuring Boost-${BOOST_VERSION}:${NC}"
+    echot "Ensuring Boost-${BOOST_VERSION}:"
     BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION}
     BOOST_BUILD_DIR=~/build_tmp/boost
     if [[ -z "$(ls -A ${BOOST_DIR} 2>/dev/null)" ]]; then
@@ -122,7 +128,7 @@ fi
 if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     CMAKE_MAJOR=3.10
     CMAKE_POINT_RELEASE=3.10.0
-    echo "${BOLD}Ensuring CMake==${CMAKE_MAJOR}:${NC}"
+    echot "Ensuring CMake==${CMAKE_POINT_RELEASE}:"
     # If the path for cmake exists, check if it is the right version
     if [[ -n "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
     if [[ $(cmake/bin/cmake --version | head -n1 | awk '{ print $3; }') != "${CMAKE_POINT_RELEASE}" ]]; then
@@ -139,8 +145,9 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
 else
     if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
 fi
+
 # step cmake --version | head -n1
-echo "CMake $(cmake --version | head -n1)"
+echo " CMake $(cmake --version | head -n1)"
 
 ############################################################################
 # Build/Install specified HDF5 version
@@ -168,6 +175,7 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update PATH for pip --user
 fi
 
 # Move the current repository into a dials subdirectory
+echot "Moving repository to subdirectory dials/"
 (
     set -x
     cd ${TRAVIS_BUILD_DIR}
