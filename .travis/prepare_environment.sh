@@ -61,7 +61,7 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update > /dev/null;
     echo "Installed/available packages:"
     brew info --json cmake eigen hdf5 | \
-        python -c 'import sys, json; print("\n".join(["{name:8}{linked_keg:>8}{versions[stable]:>8}".format(**x) for x in json.load(sys.stdin)]))' || true
+        python2 -c 'import sys, json; print("             Ver   Avail\n"+"\n".join(["{name:8}{linked_keg:>8}{versions[stable]:>8}".format(**{k:y if y is not None else "" for (k, y) in x.items()}) for x in json.load(sys.stdin)]))' || true
     export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
