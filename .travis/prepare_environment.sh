@@ -5,6 +5,9 @@ set -e
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 GREEN=$(tput setaf 2)
+echot() {
+    echo "${BOLD}${GREEN}$@${NC}"
+}
 
 ###############################################################################
 # before-install
@@ -44,10 +47,6 @@ step() {
         set -x
         "$@"
     )
-}
-
-echot() {
-    echo "${BOLD}${GREEN}$@${NC}"
 }
 
 echot "Python versions:"
@@ -147,7 +146,7 @@ else
 fi
 
 # step cmake --version | head -n1
-echo " CMake $(cmake --version | head -n1)"
+echo "$(cmake --version | head -n1)"
 
 ############################################################################
 # Build/Install specified HDF5 version
