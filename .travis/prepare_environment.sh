@@ -39,15 +39,16 @@ travis_timeout() {
 
 # Do a step, and show the command
 step() {
-    set -x
-    "$@"
-    { set +x; }; 2>/dev/null
+    (
+        set -x
+        "$@"
+    )
 }
 
 echo "${BOLD}Python versions:${NC}"
 echo "python  $(python --version) ($(which python))"
-echo "python2 $(python --version) ($(which python))"
-echo "python3 $(python --version) ($(which python))"
+echo "python2 $(python2 --version) ($(which python2))"
+echo "python3 $(python3 --version) ($(which python3))"
 
 # Update homebrew
 echo "${BOLD}Updating homebrew:${NC}"
@@ -168,8 +169,9 @@ fi
 
 # Move the current repository into a dials subdirectory
 (
-    step cd ${TRAVIS_BUILD_DIR}
-    step mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
+    set -x
+    cd ${TRAVIS_BUILD_DIR}
+    mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
 )
 
 set +e
