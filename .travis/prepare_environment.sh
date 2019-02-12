@@ -123,30 +123,27 @@ step pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
 # Install requested boost version
 if [[ "${BOOST_VERSION}" != "" ]]; then
     echot "Ensuring Boost-${BOOST_VERSION}:"
-    set -x
     BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION}
     BOOST_BUILD_DIR=~/build_tmp/boost
     if [[ -z "$(ls -A ${BOOST_DIR} 2>/dev/null)" ]]; then
-    if [[ "${BOOST_VERSION}" == "trunk" ]]; then
-        BOOST_URL="http://github.com/boostorg/boost.git"
-        travis_retry git clone --depth 1 --recursive ${BOOST_URL} ${BOOST_BUILD_DIR} || exit 1
+        if [[ "${BOOST_VERSION}" == "trunk" ]]; then
+            BOOST_URL="http://github.com/boostorg/boost.git"
+            travis_retry git clone --depth 1 --recursive ${BOOST_URL} ${BOOST_BUILD_DIR} || exit 1
+        else
+            BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
+            mkdir -p ${BOOST_BUILD_DIR}
+            { travis_retry wget -nv -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_BUILD_DIR}; } || exit 2
+        fi
+        mkdir -p ${BOOST_DIR}
+        (
+            builtin cd ${BOOST_BUILD_DIR}
+            ./bootstrap.sh --with-python=$(which python2)
+            ./b2 -j 3 -d0 --prefix=${BOOST_DIR} --with-python --with-atomic --with-thread --with-chrono --with-date_time install
+        ) || exit 3
     else
-        BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz"
-        mkdir -p ${BOOST_BUILD_DIR}
-        { travis_retry wget -nv -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_BUILD_DIR}; } || {
-            echo "Failed... trying separate stages"
-            OUT_FILE=$(mktemp)
-            travis_retry wget -nv -O ${OUT_FILE} ${BOOST_URL}
-            tar --strip-components=1 -xzf ${OUT_FILE} -C ${BOOST_BUILD_DIR}
-        }
-    fi
-    mkdir -p ${BOOST_DIR}
-    (cd ${BOOST_BUILD_DIR} && ./bootstrap.sh --with-python=$(which python2) && ./b2 -j 3 -d0 --prefix=${BOOST_DIR} --with-python --with-atomic --with-thread --with-chrono --with-date_time install) || exit 1
-    else
-    echo "Boost exists in ${BOOST_DIR}; using existing"
+        echo "Boost exists in ${BOOST_DIR}; using existing"
     fi
     CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
-    set +x
 fi
 
 ############################################################################
