@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -x
 
 BOLD=$(tput bold)
 NC=$(tput sgr0)
@@ -73,7 +72,13 @@ fi
 # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
 ############################################################################
 DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+set -x
+set +e
 mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
+echo "? $?"
+pwd
+ls
+set -e
 
 ############################################################################
 # Setup default versions and override compiler if needed
