@@ -1,7 +1,26 @@
 #!/bin/bash
 
+############################################################################
+# Configuration paths and variables
+############################################################################
+
+# Where all the custom dependencies are built into
+DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+# If no Boost specified, install this version
+BOOST_DEFAULT_VERSION=1.63.0
+# Specifier for the version of CMake to use
+CMAKE_SPEC='>=3.12'
+
+############################################################################
+# Convenience definitions and functions
+############################################################################
+
 set -e
 
+# First thing we do is record the start time
+export START_TIME=$(date +%s)
+
+# Coloured output
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 GREEN=$(tput setaf 2)
@@ -9,22 +28,8 @@ echot() {
     echo "${BOLD}${GREEN}$@${NC}"
 }
 
-###############################################################################
-# before-install
-
-# Rewrite the path on OSX so that we use the homebrew, rather than system, python
-# Also: non-prefixed versions of gnu find utilities
-# Define (possibly platform-specific) variables for build
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    # export PATH="/usr/local/opt/python/libexec/bin:$PATH"
-    export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
-    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-fi
-export START_TIME=$(date +%s)
-
 # Run a command, but stop it before we run out of travis time
 travis_timeout() {
-
     # Periodically remind how long the job seems to have been running
     (
         while true; do
@@ -49,21 +54,46 @@ step() {
     )
 }
 
+# Validate a version number against a PEP508-style specifier
+validate_spec() {
+    version=$1
+    shift
+    spec=$*
+    python - <<DOC
+import sys
+try:
+    from packaging.version import parse
+    from packaging.specifiers import SpecifierSet
+except ImportError:
+    from pip._vendor.packaging.version import parse
+    from pip._vendor.packaging.specifiers import SpecifierSet
+
+if parse("${version}") in SpecifierSet("""${spec}"""):
+    sys.exit(0)
+sys.exit(1)
+DOC
+}
+
+############################################################################
+# Set up paths and diagnostic information
+############################################################################
+
+# Use non-prefixed versions of gnu find utilities and coreutils
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
+    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+fi
+
+mkdir -p ${DEPS_DIR}
+
 echot "Python versions:"
 echo "python  $(python --version 2>&1  | awk '{ print $2; }') ($(which python))"
 echo "python2 $(python2 --version 2>&1 | awk '{ print $2; }') ($(which python2))"
 echo "python3 $(python3 --version 2>&1 | awk '{ print $2; }') ($(which python3))"
 
-# # Update homebrew
-# if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-#     echot "Updating homebrew:"
-#     # HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 || true
-#     brew update > /dev/null;
-#     echo "Installed/available packages:"
-#     brew info --json cmake eigen hdf5 | \
-#         python2 -c 'import sys, json; print("             Ver   Avail\n"+"\n".join(["{name:8}{linked_keg:>8}{versions[stable]:>8}".format(**{k:y if y is not None else "" for (k, y) in x.items()}) for x in json.load(sys.stdin)]))' || true
-#     export HOMEBREW_NO_AUTO_UPDATE=1
-# fi
+############################################################################
+# Handle mac OSX dependencies via homebrew
+############################################################################
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     # New more intelligent way to ensure brew dependencies
@@ -71,46 +101,17 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     # - it will only upgrade packages that it needs to
     # - currently doesn't handle unlinked kegs well
     python ${TRAVIS_BUILD_DIR}/.travis/resolve_brew_dependencies.py \
-        'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10' \
+        "cmake${CMAKE_SPEC}" 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10' \
         msgpack
     # Don't do numpy through homebrew - seems broken(?) on default image and
     # upgrading causes a whole painful chain of dependencies. postgis/gdal use
     # this but we don't care about them
     HOMEBREW_NO_AUTO_UPDATE=1 brew uninstall --ignore-dependencies numpy
 fi
-###############################################################################
-# install
 
 ############################################################################
-# All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
+# Python paths and dependencies
 ############################################################################
-DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-
-mkdir -p ${DEPS_DIR}
-# For some reason this sets off a bug in rubys magic cd override in the
-# travis xcode10.1 image - and the cd fails (even though the path exists).
-# Although, we no longer need to move to this path explicitly?
-# && cd ${DEPS_DIR} || true
-
-############################################################################
-# Setup default versions and override compiler if needed
-############################################################################
-if [[ "${BOOST_VERSION}" == "default" ]]; then
-    BOOST_VERSION=1.63.0;
-fi
-# # Update dependencies from homebrew
-# if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-#     echot "Upgrading homebrew packages:"
-#     brew cask uninstall oclint || true # Fix bug where this overwrites poured links
-#     for package in cmake eigen findutils hdf5 coreutils; do
-#     if brew ls --versions $package > /dev/null; then
-#         brew outdated $package || brew upgrade $package
-#     else
-#         brew install $package
-#     fi
-#     done
-# fi
-
 
 # On OSX, make sure that the --user pip is on the path
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update PATH for pip --user
@@ -125,12 +126,14 @@ step pip install --user mock docopt pathlib2 enum34 pyyaml ninja msgpack numpy
 # Build/Install specified boost version with boost-python
 ############################################################################
 
-# Install requested boost version
 if [[ "${BOOST_VERSION}" != "" ]]; then
-    echot "Ensuring Boost-${BOOST_VERSION}:"
+    if [[ "${BOOST_VERSION}" == "default" ]]; then
+        BOOST_VERSION=${BOOST_DEFAULT_VERSION}
+    fi
     BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION}
     BOOST_BUILD_DIR=~/build_tmp/boost
     if [[ -z "$(ls -A ${BOOST_DIR} 2>/dev/null)" ]]; then
+        echot "Installing Boost ${BOOST_VERSION}"
         if [[ "${BOOST_VERSION}" == "trunk" ]]; then
             BOOST_URL="http://github.com/boostorg/boost.git"
             travis_retry git clone --depth 1 --recursive ${BOOST_URL} ${BOOST_BUILD_DIR} || exit 1
@@ -146,7 +149,7 @@ if [[ "${BOOST_VERSION}" != "" ]]; then
             ./b2 -j 3 -d0 --prefix=${BOOST_DIR} --with-python --with-atomic --with-thread --with-chrono --with-date_time install
         ) || exit 3
     else
-        echo "Boost exists in ${BOOST_DIR}; using existing"
+        echot "Using Boost-${BOOST_VERSION} in ${BOOST_DIR}"
     fi
     CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
 fi
@@ -156,25 +159,7 @@ fi
 ############################################################################
 # Install/upgrade cmake
 if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-    # CMAKE_MAJOR=3.12
-    # CMAKE_POINT_RELEASE=3.12.0
-    # echot "Ensuring CMake==${CMAKE_POINT_RELEASE}:"
-    # # If the path for cmake exists, check if it is the right version
-    # if [[ -n "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
-    #     if [[ $(cmake/bin/cmake --version | head -n1 | awk '{ print $3; }') != "${CMAKE_POINT_RELEASE}" ]]; then
-    #         echo "CMake out of date. Removing so we can recreate."
-    #         rm -rf cmake
-    #     fi
-    # fi
-    # # If the path doesn't exist, then download cmake
-    # if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
-    # CMAKE_URL="https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_POINT_RELEASE}-Linux-x86_64.tar.gz"
-    # mkdir -p cmake && travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
-    # fi
-    # export PATH="${DEPS_DIR}/cmake/bin:${PATH}"
     step pip install --user cmake
-else
-    if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
 fi
 
 # step cmake --version | head -n1

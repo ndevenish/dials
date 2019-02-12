@@ -1,5 +1,9 @@
 #!/bin/bash
 
+############################################################################
+# Convenience definitions and functions
+############################################################################
+
 set -e
 
 BOLD=$(tput bold)
@@ -8,6 +12,11 @@ GREEN=$(tput setaf 2)
 echot() {
     echo "${BOLD}${GREEN}$@${NC}"
 }
+
+
+############################################################################
+# Install cmake generators and support repositories
+############################################################################
 
 cd ${TRAVIS_BUILD_DIR}
 
@@ -18,32 +27,24 @@ echot "Cloning custom cmake modules:"
 git clone https://github.com/ndevenish/tbxcmake.git cmake
 echot "Installing tbx conversion tools"
 pip install --user git+https://github.com/ndevenish/tbxtools.git
+
+
+############################################################################
+# Get the rest of cctbx
+############################################################################
+
 echot "Grabbing remaining distribution modules:"
 # Get all the other modules we need to compile
 python cmake/prepare_singlemodule.py --write-log --no-cmake
 
+
+############################################################################
+# Generate/refresh the build
+############################################################################
+
 echot "Generating CMakeLists"
 tbx2cmake . .
 cp cmake/CMakeLists.txt CMakeLists.txt
-
-# IF we have no cache, then we want to use sccache to build - this means that
-# we can survive over extra terminations (on OSX)
-# - |
-#   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-#     if [[ ! -f build/build_complete ]]; then
-#       echo "FIRST CACHE BUILD: USING S3"
-#       export USE_SCCACHE=1
-#       export CXX="sccache c++"
-#       export CC="sccache cc"
-
-#       export SCCACHE_BUCKET=ndtraviscache
-#       sccache --start-server
-#       echo "Started SCCACHE server"
-#       sccache -s
-#     else
-#       echo "build_complete marker exists - not using s3-cache"
-#     fi
-#   fi
 
 echot "Updating timestamps"
 
@@ -58,14 +59,8 @@ if [[ -f build/commit_ids.txt ]]; then
     find -type f -printf '%T+ %p\n' | sort | head -n 1
 
     OLDEST_MTIME=$(find . -type f -printf "%.10T@\n" | sort | head -n 1)
-    # if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-    # We use coreutils on OSX now so use linux-style date
     echo "Backdating to $(date -d @$OLDEST_MTIME)"
     OLDEST_TS=$(date -d @$OLDEST_MTIME +%Y%m%d%H%M.%S)
-    # else
-    #     echo "Backdating to $(date -r $OLDEST_MTIME)"
-    #     OLDEST_TS=$(date -r $OLDEST_MTIME +%Y%m%d%H%M.%S)
-    # fi
 
     # Change the mtime of ALL checked out files to match this
     for repo in $MODULES; do
@@ -88,22 +83,10 @@ fi
 mkdir -p build
 mv commit_ids.txt build/
 
-# Do the actual building
-mkdir -p build
-# cd build
-
 echo "CMake Options: ${CMAKE_OPTIONS}"
 
-# Will do configure in separate travis line entry
-echo "Python available:"
+# Temporary debugging in case CMake finds something odd?
+echo "All python versions in path:"
 python -c 'import os; print([[path+"/"+x for x in os.listdir(path) if os.path.isfile(os.path.join(path,x)) and x.startswith("python")] for path in os.environ["PATH"].split(":") if os.path.isdir(path)])'
 
-# Show estimates of elapsed time whilst running
-# - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)&
-# - export TIMER_PID=$!
-
-# - |
-#   if [[ -n $USE_SCCACHE ]]; then
-#     sccache -s
-#     sccache --stop-server
-#   fi
+# Will do configure in separate travis line entry
