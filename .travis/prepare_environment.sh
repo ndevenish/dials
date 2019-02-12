@@ -38,7 +38,7 @@ travis_timeout() {
     # Save the return value so that we can pass it through to after killing timer
     actual_ret=$?
     kill -9 $TIMER_PID || true
-    return actual_ret
+    return $actual_ret
 }
 
 # Do a step, and show the command
