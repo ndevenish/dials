@@ -106,6 +106,12 @@ fi
 #     done
 # fi
 
+
+# On OSX, make sure that the --user pip is on the path
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update PATH for pip --user
+    export PATH=$(python -c "import site, os; print(os.path.join(site.USER_BASE, 'bin'))"):$PATH
+fi
+
 # Other python libs we know about - need numpy before boost is built
 echot "Python libraries for build"
 step pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
@@ -183,11 +189,6 @@ echo "$(cmake --version | head -n1)"
 #     fi
 #     CMAKE_OPTIONS+=" -DHDF5_ROOT=${HDF5_DIR}"
 #   fi
-
-# On OSX, make sure that the --user pip is on the path
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Update PATH for pip --user
-    export PATH=$(python -c "import site, os; print(os.path.join(site.USER_BASE, 'bin'))"):$PATH
-fi
 
 # Move the current repository into a dials subdirectory
 echot "Moving repository to subdirectory dials/"
