@@ -29,7 +29,7 @@ class CannotMatchVersion(Exception):
 def install_or_upgrade(requirements):
     # First, interrogate homebrew to see what we have
     brew_json = subprocess.check_output(
-        ["brew", "info", "--json"] + [x.name for x in requirements], env=NO_UPDATE
+        ["brew", "info", "--json=v1"] + [x.name for x in requirements], env=NO_UPDATE
     )
     print("Brew output:\n"+brew_json)
     brew_data = {x["name"]: x for x in json.loads(brew_json)}
