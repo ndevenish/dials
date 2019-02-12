@@ -71,7 +71,7 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     # - it will only upgrade packages that it needs to
     # - currently doesn't handle unlinked kegs well
     python ${TRAVIS_BUILD_DIR}/.travis/resolve_brew_dependencies.py \
-        'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10'
+        'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10' msgpack
 fi
 ###############################################################################
 # install
@@ -114,7 +114,7 @@ fi
 
 # Other python libs we know about - need numpy before boost is built
 echot "Python libraries for build"
-step pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy
+step pip install --user mock docopt pathlib2 enum34 pyyaml ninja numpy msgpack
 
 ############################################################################
 # Build/Install specified boost version with boost-python

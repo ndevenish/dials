@@ -24,6 +24,7 @@ addons:
       - libhdf5-dev
       - libeigen3-dev
       - libtiff5-dev
+      - libmsgpack-dev
 cache:
   timeout: 1000
   directories:
