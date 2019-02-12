@@ -118,6 +118,7 @@ except CannotMatchVersion:
         + " Cannot resolve with current brew version. Assuming is upgrade-related."
     )
     print("Running 'brew update':")
+    sys.stdout.flush()
     subprocess.check_call(["brew", "update"])
     try:
         print("Trying install with updated homebrew:")
