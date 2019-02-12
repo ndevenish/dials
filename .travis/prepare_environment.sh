@@ -72,7 +72,6 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     # - currently doesn't handle unlinked kegs well
     python ${TRAVIS_BUILD_DIR}/.travis/resolve_brew_dependencies.py \
         'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10'
-    step brew install findutils hdf5
 fi
 ###############################################################################
 # install

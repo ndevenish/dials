@@ -31,7 +31,6 @@ def install_or_upgrade(requirements):
     brew_json = subprocess.check_output(
         ["brew", "info", "--json=v1"] + [x.name for x in requirements], env=NO_UPDATE
     )
-    print("Brew output:\n"+brew_json)
     brew_data = {x["name"]: x for x in json.loads(brew_json)}
 
     # Can we not get a valid version without updating homebrew?
@@ -135,12 +134,14 @@ if install:
     print(GREEN + BOLD + "Installing: " + NC + " ".join(x.name for x in install))
     cmd = ["brew", "install"] + [x.name for x in install]
     print("+ " + " ".join(cmd))
+    sys.stdout.flush()
     subprocess.check_call(cmd, env=NO_UPDATE)
 
 if upgrade:
     print(GREEN + BOLD + "Upgrading: " + NC + " ".join(x.name for x in upgrade))
     cmd = ["brew", "upgrade"] + [x.name for x in upgrade]
     print("+ " + " ".join(cmd))
+    sys.stdout.flush()
     subprocess.check_call(cmd, env=NO_UPDATE)
 
 if install or upgrade:
