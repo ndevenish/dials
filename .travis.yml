@@ -57,6 +57,9 @@ jobs:
       script:
         - pytest -ra -n 2 --runslow ../modules/dials ../modules/cctbx_project/dxtbx
 
+stages:
+  - Build
+  - Test
 
 # install:
 #   - . .travis/prepare_environment.sh
