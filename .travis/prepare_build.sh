@@ -92,8 +92,6 @@ mv commit_ids.txt build/
 mkdir -p build
 # cd build
 
-# Always give coloured output with CMake here
-export CLICOLOR_FORCE=1
 echo "CMake Options: ${CMAKE_OPTIONS}"
 
 # Will do configure in separate travis line entry

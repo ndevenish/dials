@@ -203,4 +203,7 @@ echot "Moving repository to subdirectory dials/"
     mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
 )
 
+# Always give coloured output with CMake
+export CLICOLOR_FORCE=1
+
 set +e
