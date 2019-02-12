@@ -64,27 +64,28 @@ if [[ -f build/commit_ids.txt ]]; then
     find -type f -printf '%T+ %p\n' | sort | head -n 1
 
     OLDEST_MTIME=$(find . -type f -printf "%.10T@\n" | sort | head -n 1)
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+    # if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+    # We use coreutils on OSX now so use linux-style date
     echo "Backdating to $(date -d @$OLDEST_MTIME)"
     OLDEST_TS=$(date -d @$OLDEST_MTIME +%Y%m%d%H%M.%S)
-    else
-    echo "Backdating to $(date -r $OLDEST_MTIME)"
-    OLDEST_TS=$(date -r $OLDEST_MTIME +%Y%m%d%H%M.%S)
-    fi
+    # else
+    #     echo "Backdating to $(date -r $OLDEST_MTIME)"
+    #     OLDEST_TS=$(date -r $OLDEST_MTIME +%Y%m%d%H%M.%S)
+    # fi
 
     # Change the mtime of ALL checked out files to match this
     for repo in $MODULES; do
-    echo "  Handling cache backdate for $repo"
-    # Find the old commit and if it exists in the repository, we can backdate
-    OLDREV=$(cat commit_ids.txt | grep "${repo} " | awk '{ print $2; }')
-    if GIT_DIR=$repo/.git git cat-file -e $OLDREV; then
-        # The commit exists. Backdate everything...
-        find $repo | xargs touch -t $OLDEST_TS
-        # And then forward-date everything that has changed
-        GIT_DIR=$repo/.git git diff --name-only | xargs touch -c
-    else
-        echo "  Commit $OLDREV does not exist in repository; not backdating"
-    fi
+        echo "  Handling cache backdate for $repo"
+        # Find the old commit and if it exists in the repository, we can backdate
+        OLDREV=$(cat commit_ids.txt | grep "${repo} " | awk '{ print $2; }')
+        if GIT_DIR=$repo/.git git cat-file -e $OLDREV; then
+            # The commit exists. Backdate everything...
+            find $repo | xargs touch -t $OLDEST_TS
+            # And then forward-date everything that has changed
+            GIT_DIR=$repo/.git git diff --name-only | xargs touch -c
+        else
+            echo "  Commit $OLDREV does not exist in repository; not backdating"
+        fi
     done
 else
     echo "No build/commit_ids.txt; Not syncing timestamps"
