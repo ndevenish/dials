@@ -91,6 +91,9 @@ echo "python  $(python --version 2>&1  | awk '{ print $2; }') ($(which python))"
 echo "python2 $(python2 --version 2>&1 | awk '{ print $2; }') ($(which python2))"
 echo "python3 $(python3 --version 2>&1 | awk '{ print $2; }') ($(which python3))"
 
+# Don't try to install packages whilst building
+export NEVER_INSTALL_REQUIRE=1
+
 ############################################################################
 # Handle mac OSX dependencies via homebrew
 ############################################################################
