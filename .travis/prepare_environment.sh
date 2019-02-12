@@ -72,7 +72,10 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     # - currently doesn't handle unlinked kegs well
     python ${TRAVIS_BUILD_DIR}/.travis/resolve_brew_dependencies.py \
         'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10' \
-        msgpack 'numpy~=1.16'
+        msgpack
+    # Don't do numpy through homebrew - seems broken(?) on default image and
+    # upgrading causes a whole painful chain of dependencies
+    HOMEBREW_NO_AUTO_UPDATE=1 brew uninstall numpy
 fi
 ###############################################################################
 # install
@@ -115,7 +118,7 @@ fi
 
 # Other python libs we know about - need numpy before boost is built
 echot "Python libraries for build"
-step pip install --user mock docopt pathlib2 enum34 pyyaml ninja msgpack
+step pip install --user mock docopt pathlib2 enum34 pyyaml ninja msgpack numpy
 
 ############################################################################
 # Build/Install specified boost version with boost-python
