@@ -142,3 +142,7 @@ if upgrade:
     cmd = ["brew", "upgrade"] + [x.name for x in upgrade]
     print("+ " + " ".join(cmd))
     subprocess.check_call(cmd, env=NO_UPDATE)
+
+if install or upgrade:
+    print("After installation:")
+    install_or_upgrade(requirements)
