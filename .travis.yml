@@ -25,7 +25,7 @@ addons:
       - libeigen3-dev
       - libtiff5-dev
       - libmsgpack-dev
-      - sshpass
+      # - sshpass
 cache:
   timeout: 1000
   directories:
