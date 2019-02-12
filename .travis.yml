@@ -42,9 +42,9 @@ jobs:
       script:
         - cd ${TRAVIS_BUILD_DIR}/build
         - travis_timeout make -j 3
-    after_success:
-      # Put a marker so that we know we had a successful complete build
-      - touch build_complete
+      after_success:
+        # Put a marker so that we know we had a successful complete build
+        - touch build_complete
 
     - stage: Test
       install:
