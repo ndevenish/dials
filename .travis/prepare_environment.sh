@@ -74,8 +74,9 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
         'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10' \
         msgpack
     # Don't do numpy through homebrew - seems broken(?) on default image and
-    # upgrading causes a whole painful chain of dependencies
-    HOMEBREW_NO_AUTO_UPDATE=1 brew uninstall numpy
+    # upgrading causes a whole painful chain of dependencies. postgis/gdal use
+    # this but we don't care about them
+    HOMEBREW_NO_AUTO_UPDATE=1 brew uninstall --ignore-dependencies numpy
 fi
 ###############################################################################
 # install
