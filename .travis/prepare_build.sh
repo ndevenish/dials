@@ -20,8 +20,6 @@ echot() {
 
 cd ${TRAVIS_BUILD_DIR}
 
-echo "Working build directory:"
-ls
 # Grab the autobuild repository
 echot "Cloning custom cmake modules:"
 git clone https://github.com/ndevenish/tbxcmake.git cmake
