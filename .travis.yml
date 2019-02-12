@@ -31,17 +31,44 @@ cache:
     - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
     - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
 
-install:
-  - . .travis/prepare_environment.sh
+jobs:
+  include:
+    - stage: Build
+      install:
+        - . .travis/prepare_environment.sh
+      before_script:
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+      script:
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+    after_success:
+      # Put a marker so that we know we had a successful complete build
+      - touch build_complete
 
-before_script:
-  - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
-  - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+    - stage: Test
+      install:
+        - . .travis/prepare_environment.sh
+      before_script:
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      script:
+        - pytest -ra -n 2 --runslow ../modules/dials ../modules/cctbx_project/dxtbx
 
-script:
-  - cd ${TRAVIS_BUILD_DIR}/build
-  - travis_timeout make -j 3
 
-after_success:
-  # Put a marker so that we know we had a successful complete build
-  - touch build_complete
+# install:
+#   - . .travis/prepare_environment.sh
+
+# before_script:
+#   - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+#   - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+
+# script:
+#   - cd ${TRAVIS_BUILD_DIR}/build
+#   - travis_timeout make -j 3
+
+# after_success:
+#   # Put a marker so that we know we had a successful complete build
+#   - touch build_complete
