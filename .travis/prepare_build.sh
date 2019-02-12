@@ -97,8 +97,8 @@ export CLICOLOR_FORCE=1
 echo "CMake Options: ${CMAKE_OPTIONS}"
 
 # Will do configure in separate travis line entry
-
-
+echo "Python available:"
+python -c 'import os; print([[path+"/"+x for x in os.listdir(path) if os.path.isfile(os.path.join(path,x)) and x.startswith("python")] for path in os.environ["PATH"].split(":")])'
 
 # Show estimates of elapsed time whilst running
 # - (while true; do python -c 'import os, time; t=time.time()-float(os.environ["START_TIME"]); print("\nEstimated Elapsed {:2.0f}:{:02.0f}s".format(t//60, t-(t//60)*60))'; sleep 20; done)&
