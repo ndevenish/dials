@@ -54,17 +54,26 @@ echo "python  $(python --version 2>&1  | awk '{ print $2; }') ($(which python))"
 echo "python2 $(python2 --version 2>&1 | awk '{ print $2; }') ($(which python2))"
 echo "python3 $(python3 --version 2>&1 | awk '{ print $2; }') ($(which python3))"
 
-# Update homebrew
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    echot "Updating homebrew:"
-    # HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 || true
-    brew update > /dev/null;
-    echo "Installed/available packages:"
-    brew info --json cmake eigen hdf5 | \
-        python2 -c 'import sys, json; print("             Ver   Avail\n"+"\n".join(["{name:8}{linked_keg:>8}{versions[stable]:>8}".format(**{k:y if y is not None else "" for (k, y) in x.items()}) for x in json.load(sys.stdin)]))' || true
-    export HOMEBREW_NO_AUTO_UPDATE=1
-fi
+# # Update homebrew
+# if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+#     echot "Updating homebrew:"
+#     # HOMEBREW_NO_AUTO_UPDATE=1 brew info cmake eigen hdf5 || true
+#     brew update > /dev/null;
+#     echo "Installed/available packages:"
+#     brew info --json cmake eigen hdf5 | \
+#         python2 -c 'import sys, json; print("             Ver   Avail\n"+"\n".join(["{name:8}{linked_keg:>8}{versions[stable]:>8}".format(**{k:y if y is not None else "" for (k, y) in x.items()}) for x in json.load(sys.stdin)]))' || true
+#     export HOMEBREW_NO_AUTO_UPDATE=1
+# fi
 
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    # New more intelligent way to ensure brew dependencies
+    # - if an update is not required, it will not do one
+    # - it will only upgrade packages that it needs to
+    # - currently doesn't handle unlinked kegs well
+    python ${TRAVIS_BUILD_DIR}/.travis/resolve_brew_dependencies.py \
+        'cmake>=3.12' 'eigen>=3.2.8,<4' coreutils findutils 'hdf5~=1.10'
+
+fi
 ###############################################################################
 # install
 
@@ -72,13 +81,12 @@ fi
 # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
 ############################################################################
 DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-set -x
-set +e
-mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
-echo "? $?"
-pwd
-ls
-set -e
+
+mkdir -p ${DEPS_DIR}
+# For some reason this sets off a bug in rubys magic cd override in the
+# travis xcode10.1 image - and the cd fails (even though the path exists).
+# Although, we no longer need to move to this path explicitly?
+# && cd ${DEPS_DIR} || true
 
 ############################################################################
 # Setup default versions and override compiler if needed
@@ -86,18 +94,18 @@ set -e
 if [[ "${BOOST_VERSION}" == "default" ]]; then
     BOOST_VERSION=1.63.0;
 fi
-# Update dependencies from homebrew
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
-    echot "Upgrading homebrew packages:"
-    brew cask uninstall oclint || true # Fix bug where this overwrites poured links
-    for package in cmake eigen findutils hdf5 coreutils; do
-    if brew ls --versions $package > /dev/null; then
-        brew outdated $package || brew upgrade $package
-    else
-        brew install $package
-    fi
-    done
-fi
+# # Update dependencies from homebrew
+# if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then # Do OSX brew dependencies
+#     echot "Upgrading homebrew packages:"
+#     brew cask uninstall oclint || true # Fix bug where this overwrites poured links
+#     for package in cmake eigen findutils hdf5 coreutils; do
+#     if brew ls --versions $package > /dev/null; then
+#         brew outdated $package || brew upgrade $package
+#     else
+#         brew install $package
+#     fi
+#     done
+# fi
 
 # Other python libs we know about - need numpy before boost is built
 echot "Python libraries for build"
@@ -186,7 +194,7 @@ fi
 echot "Moving repository to subdirectory dials/"
 (
     set -x
-    cd ${TRAVIS_BUILD_DIR}
+    builtin cd ${TRAVIS_BUILD_DIR}
     mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
 )
 
