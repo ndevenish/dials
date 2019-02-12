@@ -1,9 +1,9 @@
 language: c++
 dist: xenial
 osx_image: xcode10.1
-os:
-  - linux
-  - osx
+# os:
+#   - linux
+#   - osx
 
 env:
   - BOOST_VERSION=1.63.0
@@ -34,6 +34,20 @@ cache:
 jobs:
   include:
     - stage: Build
+      os: linux
+      install:
+        - . .travis/prepare_environment.sh
+      before_script:
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+      script:
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      after_success:
+        # Put a marker so that we know we had a successful complete build
+        - touch build_complete
+    - stage: Build
+      os: osx
       install:
         - . .travis/prepare_environment.sh
       before_script:
@@ -47,6 +61,18 @@ jobs:
         - touch build_complete
 
     - stage: Test
+      os: linux
+      install:
+        - . .travis/prepare_environment.sh
+      before_script:
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      script:
+        - pytest -ra -n 2 --runslow ../modules/dials ../modules/cctbx_project/dxtbx
+    - stage: Test
+      os: osx
       install:
         - . .travis/prepare_environment.sh
       before_script:
