@@ -51,6 +51,12 @@ echot "Updating timestamps"
 # every time, all files in the repository will be newer than the build cache dates,
 # and so everything will be rebuilt anyway. This backdates things that haven't changed.
 if [[ -f build/commit_ids.txt ]]; then
+    set -x
+    date --help
+    which date
+    echo $PATH
+    ls /usr/local/opt/coreutils/libexec/gnubin
+
     # Use the old module list; any new modules won't need to be touched anyway
     MODULES=$(cat build/commit_ids.txt | awk '{ print $1; }')
     # Find the oldest time in the build directory
