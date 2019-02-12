@@ -147,22 +147,23 @@ fi
 ############################################################################
 # Install/upgrade cmake
 if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-    CMAKE_MAJOR=3.10
-    CMAKE_POINT_RELEASE=3.10.0
-    echot "Ensuring CMake==${CMAKE_POINT_RELEASE}:"
-    # If the path for cmake exists, check if it is the right version
-    if [[ -n "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
-    if [[ $(cmake/bin/cmake --version | head -n1 | awk '{ print $3; }') != "${CMAKE_POINT_RELEASE}" ]]; then
-        echo "CMake out of date. Removing so we can recreate."
-        rm -rf cmake
-    fi
-    fi
-    # If the path doesn't exist, then download cmake
-    if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
-    CMAKE_URL="https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_POINT_RELEASE}-Linux-x86_64.tar.gz"
-    mkdir -p cmake && travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
-    fi
-    export PATH="${DEPS_DIR}/cmake/bin:${PATH}"
+    # CMAKE_MAJOR=3.12
+    # CMAKE_POINT_RELEASE=3.12.0
+    # echot "Ensuring CMake==${CMAKE_POINT_RELEASE}:"
+    # # If the path for cmake exists, check if it is the right version
+    # if [[ -n "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
+    #     if [[ $(cmake/bin/cmake --version | head -n1 | awk '{ print $3; }') != "${CMAKE_POINT_RELEASE}" ]]; then
+    #         echo "CMake out of date. Removing so we can recreate."
+    #         rm -rf cmake
+    #     fi
+    # fi
+    # # If the path doesn't exist, then download cmake
+    # if [[ -z "$(ls -A ${DEPS_DIR}/cmake/bin 2>/dev/null)" ]]; then
+    # CMAKE_URL="https://cmake.org/files/v${CMAKE_MAJOR}/cmake-${CMAKE_POINT_RELEASE}-Linux-x86_64.tar.gz"
+    # mkdir -p cmake && travis_retry wget --no-check-certificate --quiet -O - "${CMAKE_URL}" | tar --strip-components=1 -xz -C cmake
+    # fi
+    # export PATH="${DEPS_DIR}/cmake/bin:${PATH}"
+    step pip install --user cmake
 else
     if ! brew ls --version cmake &>/dev/null; then brew install cmake; fi
 fi
