@@ -39,14 +39,15 @@ jobs:
       install:
         - . .travis/prepare_environment.sh
       before_script:
-        - echo travis:$SSH_PASSWD | sudo chpasswd
-        - sudo sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
-        - sudo service ssh restart
-        - sudo apt-get install sshpass
-        - sshpass -p $SSH_PASSWD ssh -R 9999:localhost:22 -o StrictHostKeyChecking=no travis@home.ndevenish.com
         - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
         - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
       script:
+        - echo travis:$SSH_PASSWD | sudo chpasswd
+        - sudo sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+        - sudo service ssh restart
+        # - sudo apt-get install sshpass
+        - travis_wait sshpass -p $SSH_PASSWD ssh -R 9999:localhost:22 -o StrictHostKeyChecking=no travis@home.ndevenish.com
+
         - cd ${TRAVIS_BUILD_DIR}/build
         - travis_timeout make -j 3
       after_success:
