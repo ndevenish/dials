@@ -171,7 +171,7 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     (
         mkdir -p ${MSGPACK_BUILD_DIR}/_build
         builtin cd ${MSGPACK_BUILD_DIR}/_build
-        cmake .. -DCMAKE_INSTALL_PREFIX=${MSGPACK_DIR}
+        cmake .. -DCMAKE_INSTALL_PREFIX=${MSGPACK_DIR} -DMSGPACK_BUILD_EXAMPLES=no
         make install
     ) || exit 5
     # CMAKE_OPTIONS+=" -Dmsgpack_ROOT=${MSGPACK_DIR}"
