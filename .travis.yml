@@ -1,6 +1,5 @@
 language: c++
 dist: xenial
-osx_image: xcode10.1
 # os:
 #   - linux
 #   - osx
@@ -54,6 +53,7 @@ jobs:
         - touch build_complete
     - stage: Build
       os: osx
+      osx_image: xcode10.1
       install:
         - . .travis/prepare_environment.sh
       before_script:
@@ -81,6 +81,7 @@ jobs:
         - pytest -ra -n 2 --runslow ../modules/dials ../modules/cctbx_project/dxtbx
     - stage: Test
       os: osx
+      osx_image: xcode10.1
       install:
         - . .travis/prepare_environment.sh
       before_script:
