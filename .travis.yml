@@ -1,87 +1,109 @@
+language: c++
+dist: xenial
+osx_image: xcode10.1
+# os:
+#   - linux
+#   - osx
+
+env:
+  - BOOST_VERSION=1.63.0
+#  - BOOST_VERSION=1.65.1
+
+matrix:
+  allow_failures:
+    - env: BOOST_VERSION=1.65.1
+
+# Don't build the travis branch
+branches:
+  only:
+    - tmaster
+
 addons:
   apt:
     packages:
-      - libjpeg62
-
-language: python
-python:
-  - "2.7"
-
+      - libhdf5-dev
+      - libeigen3-dev
+      - libtiff5-dev
+      - libmsgpack-dev
+      # - sshpass
 cache:
-  directories:
-    - $HOME/build_dials
   timeout: 1000
+  directories:
+    - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
+    - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
 
 jobs:
   include:
-    - stage: build
+    - stage: Build
+      os: linux
       install:
-         # Setup a base installation
-         - ./.travis/setup-base
-
-         # Inject DIALS
-         - rm -rf $HOME/build_dials/modules/dials
-         - mv $HOME/build/dials/dials $HOME/build_dials/modules/dials
-
-         # Update CCTBX
-         - $HOME/build_dials/modules/dials/.travis/clean-cctbx
-         - $HOME/build_dials/modules/dials/.travis/update-cctbx
-
+        - . .travis/prepare_environment.sh
       before_script:
-         # Enter CCTBX environment
-         - cat $HOME/build_dials/build/setpaths.sh
-         - cd $HOME/build_dials/build
-         - . setpaths.sh
-
-         # Prepare for the build step
-         - libtbx.configure .
-
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
       script:
-         # Parallel builds do not work. Only spend at most 40 minutes on a build.
-         # This allows incremental building, so if the build can't be finished within the allotted time
-         # it will be resumed from that point in the next build.
-         - $HOME/build_dials/modules/dials/.travis/build-for 40m
-
-    - name: "Syntax validation - Python 2.7"
-      addons: false
-      cache: false
-      script:
-         - python -m compileall -q *
-
-    - name: "Syntax validation - Python 3.4"
-      addons: false
-      cache: false
-      python: 3.4
-      script:
-         - python3 -m compileall -q *
-
-    - name: "Syntax validation - Python 3.7"
-      addons: false
-      cache: false
-      dist: xenial
-      python: 3.7
-      script:
-         - python3 -m compileall -q *
-
-    - stage: test
+        # - echo travis:$SSH_PASSWD | sudo chpasswd
+        # - sudo sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+        # - sudo service ssh restart
+        # # - sudo apt-get install sshpass
+        # - sshpass -p $SSH_PASSWD ssh -R 9999:localhost:22 -o StrictHostKeyChecking=no travis@home.ndevenish.com
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      after_success:
+        # Put a marker so that we know we had a successful complete build
+        - touch build_complete
+    - stage: Build
+      os: osx
+      install:
+        - . .travis/prepare_environment.sh
       before_script:
-         # Inject DIALS. Again.
-         - rm -rf $HOME/build_dials/modules/dials
-         - mv $HOME/build/dials/dials $HOME/build_dials/modules/dials
-
-         # Enter CCTBX environment
-         - cd $HOME/build_dials/build
-         - . setpaths.sh
-
-         # If needed allow up to further 30 minutes worth of building time
-         - $HOME/build_dials/modules/dials/.travis/build-for 30m if_required
-
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
       script:
-         # Finally. Do what we are here for. Run tests. Yay.
-         - cd $HOME/build_dials/modules/dials
-         - pytest -ra -n 2 --runslow
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      after_success:
+        # Put a marker so that we know we had a successful complete build
+        - touch build_complete
 
-before_cache:
-  - $HOME/build_dials/modules/dials/.travis/clean-cctbx
-  - cd $HOME
-  - rm -rf $HOME/build_dials/modules/dials
+    - stage: Test
+      os: linux
+      install:
+        - . .travis/prepare_environment.sh
+      before_script:
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      script:
+        - pytest -ra -n 2 --runslow ../modules/dials ../modules/cctbx_project/dxtbx
+    - stage: Test
+      os: osx
+      install:
+        - . .travis/prepare_environment.sh
+      before_script:
+        - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+        - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+        - cd ${TRAVIS_BUILD_DIR}/build
+        - travis_timeout make -j 3
+      script:
+        - pytest -ra -n 2 --runslow ../modules/dials ../modules/cctbx_project/dxtbx
+
+stages:
+  - Build
+  - Test
+
+# install:
+#   - . .travis/prepare_environment.sh
+
+# before_script:
+#   - ${TRAVIS_BUILD_DIR}/dials/.travis/prepare_build.sh
+#   - cd ${TRAVIS_BUILD_DIR}/build && cmake .. ${CMAKE_OPTIONS}
+
+# script:
+#   - cd ${TRAVIS_BUILD_DIR}/build
+#   - travis_timeout make -j 3
+
+# after_success:
+#   # Put a marker so that we know we had a successful complete build
+#   - touch build_complete
