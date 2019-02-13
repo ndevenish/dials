@@ -160,20 +160,24 @@ if [[ "${BOOST_VERSION}" != "" ]]; then
     CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
 fi
 
+############################################################################
+# Build/Install msgpack
+############################################################################
+
 if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     MSGPACK_DIR=${DEPS_DIR}/msgpack-${MSGPACK_VERSION}
     MSGPACK_URL=https://github.com/msgpack/msgpack-c/releases/download/cpp-${MSGPACK_VERSION}/msgpack-${MSGPACK_VERSION}.tar.gz
-    MSGPACK_BUILD_DIR=~/build_tmp/msgpack
     if [[ ! -d ${MSGPACK_DIR} ]]; then
+        MSGPACK_BUILD_DIR=~/build_tmp/msgpack
         mkdir -p ${MSGPACK_BUILD_DIR}
         { travis_retry wget -nv -O - ${MSGPACK_URL} | tar --strip-components=1 -xz -C ${MSGPACK_BUILD_DIR}; } || exit 4
+        (
+            mkdir -p ${MSGPACK_BUILD_DIR}/_build
+            builtin cd ${MSGPACK_BUILD_DIR}/_build
+            cmake .. -DCMAKE_INSTALL_PREFIX=${MSGPACK_DIR} -DMSGPACK_BUILD_EXAMPLES=no
+            make install
+        ) || exit 5
     fi
-    (
-        mkdir -p ${MSGPACK_BUILD_DIR}/_build
-        builtin cd ${MSGPACK_BUILD_DIR}/_build
-        cmake .. -DCMAKE_INSTALL_PREFIX=${MSGPACK_DIR} -DMSGPACK_BUILD_EXAMPLES=no
-        make install
-    ) || exit 5
     # CMAKE_OPTIONS+=" -Dmsgpack_ROOT=${MSGPACK_DIR}"
     # Prefer environment variable for now
     export msgpack_ROOT=${MSGPACK_DIR}
