@@ -10,6 +10,9 @@ DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
 BOOST_DEFAULT_VERSION=1.63.0
 # Specifier for the version of CMake to use
 CMAKE_SPEC='>=3.12'
+# The version of msgpack to prefer
+MSGPACK_VERSION=3.1.1
+
 
 ############################################################################
 # Convenience definitions and functions
@@ -155,6 +158,25 @@ if [[ "${BOOST_VERSION}" != "" ]]; then
         echot "Using Boost-${BOOST_VERSION} in ${BOOST_DIR}"
     fi
     CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_DIR}"
+fi
+
+if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+    MSGPACK_DIR=${DEPS_DIR}/msgpack-${MSGPACK_VERSION}
+    MSGPACK_URL=https://github.com/msgpack/msgpack-c/releases/download/cpp-${MSGPACK_VERSION}/msgpack-${MSGPACK_VERSION}.tar.gz
+    MSGPACK_BUILD_DIR=~/build_tmp/msgpack
+    if [[ ! -d ${MSGPACK_DIR} ]]; then
+        mkdir -p ${MSGPACK_BUILD_DIR}
+        { travis_retry wget -nv -O - ${MSGPACK_URL} | tar --strip-components=1 -xz -C ${MSGPACK_BUILD_DIR}; } || exit 4
+    fi
+    (
+        mkdir -p ${MSGPACK_BUILD_DIR}/_build
+        builtin cd ${MSGPACK_BUILD_DIR}/_build
+        cmake .. -DCMAKE_INSTALL_PREFIX=${MSGPACK_DIR}
+        make install
+    ) || exit 5
+    # CMAKE_OPTIONS+=" -Dmsgpack_ROOT=${MSGPACK_DIR}"
+    # Prefer environment variable for now
+    export msgpack_ROOT=${MSGPACK_DIR}
 fi
 
 ############################################################################
