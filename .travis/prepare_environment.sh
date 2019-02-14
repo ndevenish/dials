@@ -126,7 +126,7 @@ fi
 
 # Other python libs we know about - need numpy before boost is built
 echot "Python libraries for build"
-step pip install --user mock docopt pathlib2 enum34 pyyaml ninja msgpack numpy
+step pip install -q --user mock docopt pathlib2 enum34 pyyaml ninja msgpack numpy
 
 ############################################################################
 # Build/Install specified boost version with boost-python
@@ -188,7 +188,7 @@ fi
 ############################################################################
 # Install/upgrade cmake
 if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-    step pip install --user cmake
+    step pip install -q --user cmake
 fi
 
 # step cmake --version | head -n1
