@@ -78,7 +78,7 @@ jobs:
       script:
         - export PATH=${TRAVIS_BUILD_DIR}/build/bin:$PATH
         - which pytest
-        - pytest -ra -n 2 ../modules/dials ../modules/cctbx_project/dxtbx
+        - pytest -ra -n 2 ../dials ../cctbx_project/dxtbx
     - stage: Test
       os: osx
       osx_image: xcode10.1
@@ -92,7 +92,7 @@ jobs:
       script:
         - export PATH=${TRAVIS_BUILD_DIR}/build/bin:$PATH
         - which pytest
-        - pytest -ra -n 2 ../modules/dials ../modules/cctbx_project/dxtbx
+        - pytest -ra -n 2 ../dials ../cctbx_project/dxtbx
 
 stages:
   - Build
