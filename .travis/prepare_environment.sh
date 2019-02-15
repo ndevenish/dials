@@ -126,7 +126,7 @@ fi
 
 # Other python libs we know about - need numpy before boost is built
 echot "Python libraries for build"
-step pip install -q --user mock docopt pathlib2 enum34 pyyaml ninja msgpack numpy
+step pip install -q --user mock docopt pathlib2 enum34 pyyaml ninja msgpack numpy six future
 # Dependencies from libtbx.show_python_dependencies
 step pip install -q --user \
     blosc Jinja2 'mock>=2.0' msgpack orderedset procrunner 'pytest>=3.1,>=3.6' \
