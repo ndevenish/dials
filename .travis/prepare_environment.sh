@@ -131,7 +131,7 @@ step pip install -q --user mock docopt pathlib2 enum34 pyyaml ninja msgpack nump
 step pip install -q --user \
     blosc Jinja2 'mock>=2.0' msgpack orderedset procrunner 'pytest>=3.1,>=3.6' \
     scikit_learn[alldeps] scipy tabulate 'tqdm==4.23.4' pytest-xdist \
-    matplotlib mrcfile wxpython
+    matplotlib mrcfile
 
 ############################################################################
 # Build/Install specified boost version with boost-python
