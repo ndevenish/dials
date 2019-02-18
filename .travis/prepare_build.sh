@@ -6,11 +6,20 @@
 
 set -e
 
+# Coloured output
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 GREEN=$(tput setaf 2)
+GRAY="\e[37m"
+
 echot() {
-    echo "${BOLD}${GREEN}$@${NC}"
+    if [[ -n "${BLOCK_START_TIME}" ]]; then
+        printf "${GRAY}Block executed in ${NC}${BOLD}$(printf '%.0f' $(($(date +%s)-${BLOCK_START_TIME})))${NC}${GRAY}s${NC}\n"
+    fi
+    if [[ -n "$@" ]]; then
+        echo "${BOLD}${GREEN}$@${NC}"
+    fi
+    export BLOCK_START_TIME=$(date +%s)
 }
 
 
@@ -77,14 +86,17 @@ if [[ -f build/commit_ids.txt ]]; then
 else
     echo "No build/commit_ids.txt; Not syncing timestamps"
 fi
+
+echot
+
 # Finally, replace the old commit id file
 mkdir -p build
 mv commit_ids.txt build/
 
 echo "CMake Options: ${CMAKE_OPTIONS}"
 
-# Temporary debugging in case CMake finds something odd?
-echo "All python versions in path:"
-python -c 'import os; print([[path+"/"+x for x in os.listdir(path) if os.path.isfile(os.path.join(path,x)) and x.startswith("python")] for path in os.environ["PATH"].split(":") if os.path.isdir(path)])'
+# # Temporary debugging in case CMake finds something odd?
+# echo "All python versions in path:"
+# python -c 'import os; print([[path+"/"+x for x in os.listdir(path) if os.path.isfile(os.path.join(path,x)) and x.startswith("python")] for path in os.environ["PATH"].split(":") if os.path.isdir(path)])'
 
 # Will do configure in separate travis line entry

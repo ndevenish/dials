@@ -27,11 +27,11 @@ export START_TIME=$(date +%s)
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 GREEN=$(tput setaf 2)
-GRAY=$(tput setaf 7)
+GRAY='\e[37m'
 
 echot() {
     if [[ -n "${BLOCK_START_TIME}" ]]; then
-        echo "${GRAY}Block executed in ${NC}${BOLD}$(printf '%.0f' $(($(date +%s)-${BLOCK_START_TIME})))${NC}${GRAY}s${NC}"
+        printf "${GRAY}Block executed in ${NC}${BOLD}$(printf '%.0f' $(($(date +%s)-${BLOCK_START_TIME})))${NC}${GRAY}s${NC}\n"
     fi
     if [[ -n "$@" ]]; then
         echo "${BOLD}${GREEN}$@${NC}"
