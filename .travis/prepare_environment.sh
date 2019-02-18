@@ -27,8 +27,16 @@ export START_TIME=$(date +%s)
 BOLD=$(tput bold)
 NC=$(tput sgr0)
 GREEN=$(tput setaf 2)
+GRAY=$(tput setaf 7)
+
 echot() {
-    echo "${BOLD}${GREEN}$@${NC}"
+    if [[ -n "${BLOCK_START_TIME}" ]]; then
+        echo "${GRAY}Block executed in ${NC}${BOLD}$(printf '%.0f' $(($(date +%s)-${BLOCK_START_TIME})))${NC}${GRAY}s${NC}"
+    fi
+    if [[ -n "$@" ]]; then
+        echo "${BOLD}${GREEN}$@${NC}"
+    fi
+    export BLOCK_START_TIME=$(date +%s)
 }
 
 # Run a command, but stop it before we run out of travis time
@@ -226,8 +234,11 @@ echot "Moving repository to subdirectory dials/"
     builtin cd ${TRAVIS_BUILD_DIR}
     mkdir dials && mv $(git ls-tree --name-only HEAD) dials && mv .git dials/
 )
+# Print last block time
+echot
 
 # Always give coloured output with CMake
 export CLICOLOR_FORCE=1
+
 
 set +e
