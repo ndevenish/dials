@@ -31,6 +31,7 @@ cache:
     - ${TRAVIS_BUILD_DIR}/build # Cache the whole build directory for incremental builds
     - ${TRAVIS_BUILD_DIR}/deps # Other dependencies like boost, cmake will be installed here
     - $HOME/.cache/pip # Try to speed up pip?
+    - ~/Library/Caches/pip
 
 jobs:
   include:

@@ -33,7 +33,7 @@ cd ${TRAVIS_BUILD_DIR}
 echot "Cloning custom cmake modules:"
 git clone https://github.com/ndevenish/tbxcmake.git cmake
 echot "Installing tbx conversion tools"
-pip install -q --user git+https://github.com/ndevenish/tbxtools.git
+pip install -q --user --no-cache-dir git+https://github.com/ndevenish/tbxtools.git
 
 
 ############################################################################
