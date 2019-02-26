@@ -1,3 +1,4 @@
+# coding: utf-8
 #
 # finder.py
 #
@@ -45,6 +46,135 @@ class Result(object):
         Set the pixel list
         """
         self.pixel_list = pixel_list
+
+
+def _get_gain_value_or_map(imageset, index):
+    # type: (ImageSet, int) -> List[Tuple[float, Union[flex.int, flex.double]]]
+    """Read the gain values and maps for an image.
+
+    Only a value OR a map will be read, not both.
+    """
+    # Read the gain. Duplicate imageset.h:get_gain logic here - as in
+    # detector gains are only used if there is no external lookup.
+    if imageset.external_lookup.gain.data:
+        return [(None, x) for x in imageset.external_lookup.gain.data]
+    # Don't have a gain map defined. Do we have a gain value?
+    detector = imageset.get_detector(index)
+    gain_values = tuple(x.get_gain() for x in detector)
+    # If any of these invalid, we have no gain data
+    if any(x <= 0 for x in gain_values):
+        return [(None, None) for _ in detector]
+    return [(x, None) for x in gain_values]
+
+
+def _get_pedestal_value_or_map(imageset, index):
+    # type: (ImageSet, int) -> List[Tuple[float, Union[flex.int, flex.double]]]
+    """Read the pedestal values or maps for an image.
+
+    Only a value OR a map will be read, not both.
+    """
+    # Read the pedestal. Duplicate imageset.h:get_pedestal logic here.
+    if imageset.external_lookup.pedestal.data:
+        return [(None, x) for x in imageset.external_lookup.pedestal.data]
+    # Don't have a pedestal map defined. Do we have a pedestal value?
+    detector = imageset.get_detector(index)
+    pedestal_values = tuple(x.get_pedestal() for x in detector)
+    # If any of these invalid, we have no gain data
+    if any(x <= 0 for x in pedestal_values):
+        return [(None, None) for _ in detector]
+    return [(x, None) for x in pedestal_values]
+
+
+class ImageDataPacket(object):
+    """Packet holding everything needed to spotfind a single image.
+
+    Attributes:
+      imageset: The origin imageset for this data
+      index:    The index of the image from the imageset
+      panel:    The panel of the image that this data came from
+      data:     The actual image data
+      mask:     The 2D image mask
+      region_of_interest: The sub-region of data to analyze
+
+    Extra Attributes for delayed processing:
+      gain_map: The 2D gain map (if present)
+      gain:     The gain constant
+      dark_map: If present, the pedestal offset map
+      dark:     The pedestal offset constant
+
+    """
+
+    def __init__(
+        self,
+        imageset,
+        index,
+        panel,
+        data,
+        mask=None,
+        region_of_interest=None,
+        gain_map=None,
+        gain=None,
+        dark_map=None,
+        dark=None,
+    ):
+        self.imageset = imageset
+        self.index = index
+        self.panel = panel
+        self.data = data
+        self.mask = mask
+        self.region_of_interest = region_of_interest
+        self.gain = gain
+        self.gain_map = gain_map
+        self.dark = dark
+        self.dark_map = dark_map
+
+
+def _load_data_for_spotfinding(imageset, index, region_of_interest=None):
+    # type: (ImageSet, int, Tuple[int,int,int,int]) -> Iterable[ImageDataPacket]
+    """Loads the data for an image from an imageset.
+
+    Returns a packet of data for processing. At the moment, this is
+    data processed as little as possible to delay looping over the
+    image array multiple times.
+
+    This function returns multiple entries to be threshold-processed
+    separately - this may involve the same panel multiple times with
+    mutually exclusive regions-of-interest.
+
+    Args:
+        imageset: The imageset to load images from.
+        index:    The index of the image in the imageset
+        region_of_interest: An exclusive sub-region of the panels to process
+
+    Returns:
+        An iterable of ImageDataPacket entries. Each should be processed
+        separately.
+    """
+    # Raw data is a flex array for each panel
+    # In c++ this is an Image<type>, but gets converted to a Tuple[flex.<type>] in python
+    image_raw_data = imageset.get_raw_data(
+        index
+    )  # type: Union[Tuple[flex.int], Tuple[flex.double]]
+    masks = imageset.get_mask(index)  # type: Tuple[flex.bool]
+
+    # Get corrections to the raw data
+    gains = _get_gain_value_or_map(imageset, index)
+    pedestals = _get_pedestal_value_or_map(imageset, index)
+
+    for panel_index, data in enumerate(zip(image_raw_data, masks, gains, pedestals)):
+        img, mask, (gain, gain_map), (pedestal, pedestal_map) = data
+        yield ImageDataPacket(
+            imageset,
+            index,
+            panel_index,
+            img,
+            region_of_interest=region_of_interest,
+            mask=mask,
+            gain=gain,
+            gain_map=gain_map,
+            dark=pedestal,
+            dark_map=pedestal_map,
+        )
 
 
 class ExtractPixelsFromImage(object):
@@ -108,51 +238,83 @@ class ExtractPixelsFromImage(object):
                 assert all(i1 + 1 == i2 for i1, i2 in zip(ind[0:-1], ind[1:-1]))
             frame = ind[index]
 
-        # Create the list of pixel lists
-        pixel_list = []
-
         # Get the image and mask
         image = self.imageset.get_corrected_data(index)
         mask = self.imageset.get_mask(index)
 
-        # Set the mask
+        ######################################
+        # Read all the data for the image now
+        panels = list(
+            _load_data_for_spotfinding(self.imageset, index, self.region_of_interest)
+        )
+
+        # If we have a user-specified mask, merge it with the image-based masks
         if self.mask is not None:
             assert len(self.mask) == len(mask)
-            mask = tuple(m1 & m2 for m1, m2 in zip(mask, self.mask))
+            for user_mask, panel in zip(self.mask, panels):
+                panel.mask = panel.mask & user_mask
 
         logger.debug(
             "Number of masked pixels for image %i: %i"
-            % (index, sum(m.count(False) for m in mask))
+            % (index, sum(m.mask.count(False) for m in panels))
         )
+
+        # Create the list of pixel lists
+        pixel_list = []
 
         # Add the images to the pixel lists
         num_strong = 0
         average_background = 0
-        for im, mk in zip(image, mask):
-            if self.region_of_interest is not None:
-                x0, x1, y0, y1 = self.region_of_interest
-                height, width = im.all()
-                assert x0 < x1, "x0 < x1"
-                assert y0 < y1, "y0 < y1"
-                assert x0 >= 0, "x0 >= 0"
-                assert y0 >= 0, "y0 >= 0"
-                assert x1 <= width, "x1 <= width"
-                assert y1 <= height, "y1 <= height"
-                im_roi = im[y0:y1, x0:x1]
-                mk_roi = mk[y0:y1, x0:x1]
-                tm_roi = self.threshold_function.compute_threshold(im_roi, mk_roi)
-                threshold_mask = flex.bool(im.accessor(), False)
-                threshold_mask[y0:y1, x0:x1] = tm_roi
+
+        assert (
+            self.region_of_interest is None
+        ), "Region of interest disabled temporarily"
+
+        for panel in panels:
+            # Loop over panels here
+            # for im, mk in zip(image, mask):
+
+            # if self.region_of_interest is not None:
+            #   x0, x1, y0, y1 = self.region_of_interest
+            #   height, width = im.all()
+            #   assert x0 < x1, "x0 < x1"
+            #   assert y0 < y1, "y0 < y1"
+            #   assert x0 >= 0, "x0 >= 0"
+            #   assert y0 >= 0, "y0 >= 0"
+            #   assert x1 <= width, "x1 <= width"
+            #   assert y1 <= height, "y1 <= height"
+            #   im_roi = im[y0:y1,x0:x1]
+            #   mk_roi = mk[y0:y1,x0:x1]
+            #   tm_roi = self.threshold_function.compute_threshold(im_roi, mk_roi)
+            #   threshold_mask = flex.bool(im.accessor(),False)
+            #   threshold_mask[y0:y1,x0:x1] = tm_roi
+            # else:
+            #   threshold_mask = self.threshold_function.compute_threshold(im, mk)
+
+            # Special case where gain and pedestal are single (or none) values
+            if panel.gain_map is None and panel.dark_map is None and panel.dark is None:
+                import pdb
+
+                pdb.set_trace()
+                threshold_mask = flex.bool()
             else:
-                threshold_mask = self.threshold_function.compute_threshold(im, mk)
+                raise RuntimeError("Currently unsupported configuration")
+
+                # # Generate a boolean threshold mask from the image data
+                # threshold_mask = self.threshold_function.compute_threshold(im, mk)
+
+            # img, mask, gain, gain_map, pedestal, pedestal_map
+            # img, mask, gain, gain_map, pedestal, pedestal_map
 
             # Add the pixel list
-            plist = PixelList(frame, im, threshold_mask)
+            plist = PixelList(frame, panel.data, threshold_mask)
             pixel_list.append(plist)
 
             # Get average background
             if self.compute_mean_background:
-                background = im.as_1d().select((mk & ~threshold_mask).as_1d())
+                background = panel.data.as_1d().select(
+                    (panel.data & ~threshold_mask).as_1d()
+                )
                 average_background += flex.mean(background)
 
             # Add to the spot count
