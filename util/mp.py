@@ -1,11 +1,19 @@
 from __future__ import absolute_import, division, print_function
 
+import ctypes
+import math
 import os
+import threading
+import warnings
+from collections import namedtuple
+from concurrent.futures import Executor, Future
 
 import future.moves.itertools as itertools
 import psutil
 
 import libtbx.easy_mp
+
+from dials.util.cluster_map import cluster_map as drmaa_parallel_map
 
 
 def available_cores() -> int:
@@ -63,8 +71,6 @@ def parallel_map(
     calculation. This function is setup so that in each case we can select
     the number of cores on a machine
     """
-    from dials.util.cluster_map import cluster_map as drmaa_parallel_map
-
     if method == "drmaa":
         return drmaa_parallel_map(
             func=func,
@@ -223,6 +229,161 @@ def batch_multi_node_parallel_map(
         preserve_order=True,
         preserve_exception_message=True,
     )
+
+
+class _ParallelTask(object):
+    """Allows a function to be called and wraps indexing information.
+
+    Does you monnad?
+    """
+
+    def __init__(self, function):
+        self.function = function
+
+    def __call__(self, args):
+        index, item = args
+        result = self.function(item)
+        return index, result
+
+
+MPConfig = namedtuple(
+    "MPConfig", ["method", "njobs", "nproc", "chunksize", "min_chunksize"]
+)
+
+
+def _compute_chunksize(nimg, nproc, min_chunksize):
+    """
+    Compute the chunk size for a given number of images and processes
+
+    Args:
+        nimg: The number of images
+        nproc: The number of processes
+        min_chunksize: The minimum chunksize
+    """
+    chunksize = int(math.ceil(nimg / nproc))
+    remainder = nimg % (chunksize * nproc)
+    test_chunksize = chunksize - 1
+    while test_chunksize >= min_chunksize:
+        test_remainder = nimg % (test_chunksize * nproc)
+        if test_remainder <= remainder:
+            chunksize = test_chunksize
+            remainder = test_remainder
+        test_chunksize -= 1
+    return chunksize
+
+
+# HACK: Need to verify operation/provenance of this function
+def terminate_thread(thread):
+    """Terminates a python thread from another thread.
+
+    :param thread: a threading.Thread instance
+    """
+    if not thread.isAlive():
+        return
+
+    exc = ctypes.py_object(SystemExit)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread.ident), exc)
+    if res == 0:
+        raise ValueError("nonexistent thread id")
+    elif res > 1:
+        # """if it returns a number greater than one, you're in trouble,
+        # and you should call it again with exc=NULL to revert the effect"""
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
+
+
+class BatchExecutor(Executor):
+    """Wrapper to abstract away dealing with easy_mp and multiprocessing."""
+
+    def __init__(
+        self, method, nprocs, njobs=1, default_chunksize=None, min_chunksize=20
+    ):
+        if default_chunksize is libtbx.Auto:
+            default_chunksize = None
+        chunksize = default_chunksize
+        self.config = MPConfig(method, njobs, nprocs, chunksize, min_chunksize)
+        self._threads = []
+
+    def submit(self, func, *args, **kwargs):
+        raise NotImplementedError("Individual function submission not implemented")
+
+    def _threaded_do_parallel_map_call(self, chunksize, func, futures):
+        """Called in a thread. Calls the parallel map function.
+
+        Args:
+            chunksize: Individual submissions can override the configuration
+            func: The function to call
+            futures: The Future objects, with a _item property
+        """
+        futures = list(futures)
+        # Extract something pickleable out of the future items
+        items = [(i, future._item) for i, future in enumerate(futures)]
+
+        def _done_callback(indexed_item):
+            """The batch callback function to mark stuff as done"""
+            index, result = indexed_item
+            futures[index].set_result(result)
+
+        try:
+            # Create a task instance that will wrap/unwrap our internal index
+            task = _ParallelTask(func)
+
+            batch_multi_node_parallel_map(
+                func=task,
+                iterable=items,
+                nproc=self.config.nproc,
+                njobs=self.config.njobs,
+                cluster_method=self.config.method,
+                chunksize=chunksize,
+                callback=_done_callback,
+            )
+        except BaseException as e:
+            for future in futures:
+                # Technically could change state between done/set_exception
+                # but don't need to worry about those instances
+                if not future.done():
+                    future.set_exception(e)
+
+    def map(self, func, iterable, **kwargs):
+        timeout = kwargs.pop("timeout", None)
+        chunksize = kwargs.pop("chunksize", self.config.chunksize)
+
+        assert timeout is None, "Cannot handle timeout"
+        assert not kwargs, "Unexpected arguments: " + repr(kwargs)
+
+        # Build future instances for each iterable
+        futures = []
+        for item in iterable:
+            future = Future()
+            future._item = item
+            # We cannot cancel with easy_mp
+            future.set_running_or_notify_cancel()
+            futures.append(future)
+
+        # If not specified, work out the chunking size here
+        if chunksize is None:
+            chunksize = _compute_chunksize(
+                len(futures),
+                self.config.njobs * self.config.nproc,
+                self.config.min_chunksize,
+            )
+
+        thread = threading.Thread(
+            target=self._threaded_do_parallel_map_call, args=(chunksize, func, futures)
+        )
+        thread.start()
+        self._threads.append(thread)
+        return futures
+
+    def shutdown(self, wait=True):
+        print("Shutdown wait", wait)
+        if wait:
+            for thread in self._threads:
+                thread.join()
+        else:
+            for thread in self._threads:
+                if thread.is_alive():
+                    terminate_thread(thread)
 
 
 if __name__ == "__main__":
