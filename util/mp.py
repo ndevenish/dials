@@ -1,19 +1,25 @@
 from __future__ import absolute_import, division, print_function
 
 import ctypes
+import logging
 import math
 import os
+import pickle
 import threading
 import warnings
 from collections import namedtuple
-from concurrent.futures import Executor, Future
+from concurrent.futures import Executor, Future, ProcessPoolExecutor
 
 import future.moves.itertools as itertools
 import psutil
+import six
+from six.moves import zip
 
 import libtbx.easy_mp
 
 from dials.util.cluster_map import cluster_map as drmaa_parallel_map
+
+logger = logging.getLogger(__name__)
 
 
 def available_cores() -> int:
@@ -242,7 +248,7 @@ class _ParallelTask(object):
 
     def __call__(self, args):
         index, item = args
-        result = self.function(item)
+        result = self.function(*item)
         return index, result
 
 
@@ -292,7 +298,48 @@ def terminate_thread(thread):
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
-class BatchExecutor(Executor):
+def BatchExecutor(method, nprocs=1, njobs=1, *args, **kwargs):
+    assert nprocs > 0, "Invalid number of processors"
+    assert njobs > 0, "Invalid number of jobs"
+    assert njobs == 1 or method is not None, "Cannot specify jobs with multiprocessing"
+    # assert mp_chunksize > 0, "Invalid chunk size"
+    if not method and nprocs == 1:
+        print("DEBUG: Running tasks in serial")
+        return _SerialExecutor()
+    elif six.PY3 and (not method or method == "multiprocessing"):
+        print("DEBUG: Running tasks in python 3 ProcessPoolExecutor")
+        return ProcessPoolExecutor(max_workers=nprocs)
+    else:
+        print("DEBUG: Running tasks with parallel map wrapper")
+        return _WrapBatchParallelMap(method, nprocs, njobs, *args, **kwargs)
+
+
+# class Process
+class _SerialExecutor(Executor):
+    """Shim executor that runs everything serially"""
+
+    def submit(self, func, *args, **kwargs):
+        # For debugging, try to pickle function
+        pickle.dumps(func)
+
+        f = Future()
+        try:
+            result = func(*args, **kwargs)
+        except BaseException as e:
+            f.set_exception(e)
+        else:
+            f.set_result(result)
+        return f
+
+    def map(self, *args, **kwargs):
+        raise NotImplementedError("Cannot use map for now because easy_mp")
+
+    def submit_many(self, func, *iterables):
+        return [self.submit(func, *args) for args in zip(*iterables)]
+
+
+class _WrapBatchParallelMap(Executor):
+
     """Wrapper to abstract away dealing with easy_mp and multiprocessing."""
 
     def __init__(
@@ -344,7 +391,10 @@ class BatchExecutor(Executor):
                 if not future.done():
                     future.set_exception(e)
 
-    def map(self, func, iterable, **kwargs):
+    def map(self, *args, **kwargs):
+        raise NotImplementedError("Cannot use map for now because easy_mp")
+
+    def submit_many(self, func, *iterables, **kwargs):
         timeout = kwargs.pop("timeout", None)
         chunksize = kwargs.pop("chunksize", self.config.chunksize)
 
@@ -353,7 +403,7 @@ class BatchExecutor(Executor):
 
         # Build future instances for each iterable
         futures = []
-        for item in iterable:
+        for item in zip(*iterables):
             future = Future()
             future._item = item
             # We cannot cancel with easy_mp
