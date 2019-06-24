@@ -8,11 +8,11 @@ import pickle
 import threading
 import warnings
 from collections import namedtuple
-from concurrent.futures import Executor, Future, ProcessPoolExecutor
+from concurrent.futures import Executor, Future, ThreadPoolExecutor
 
 import future.moves.itertools as itertools
 import psutil
-import six
+import six.moves.queue as queue
 from six.moves import zip
 
 import libtbx.easy_mp
@@ -305,31 +305,73 @@ def BatchExecutor(method, nprocs=1, njobs=1, *args, **kwargs):
     # assert mp_chunksize > 0, "Invalid chunk size"
     if not method and nprocs == 1:
         print("DEBUG: Running tasks in serial")
-        return _SerialExecutor()
-    elif six.PY3 and (not method or method == "multiprocessing"):
-        print("DEBUG: Running tasks in python 3 ProcessPoolExecutor")
-        return ProcessPoolExecutor(max_workers=nprocs)
+        return _SingleThreadExecutor()
+    # elif not method or method == "multiprocessing": # six.PY3 and (
+    #     print("DEBUG: Running tasks in python 3 ProcessPoolExecutor")
+    #     return ProcessPoolExecutor(max_workers=nprocs)
     else:
         print("DEBUG: Running tasks with parallel map wrapper")
         return _WrapBatchParallelMap(method, nprocs, njobs, *args, **kwargs)
+
+
+class _SingleThreadExecutor(ThreadPoolExecutor):
+    def __init__(self):
+        super(_SingleThreadExecutor, self).__init__(max_workers=1)
+
+    def submit_many(self, func, *iterables):
+        return [self.submit(func, *args) for args in zip(*iterables)]
 
 
 # class Process
 class _SerialExecutor(Executor):
     """Shim executor that runs everything serially"""
 
+    # def __init__(self):
+    #     self._queue = queue.Queue()
+    #     self._shutdown = False
+    #     self._thread = None
+    #     self._lock = threading.Lock()
+
+    # def _do_work_in_thread(self):
+    #     while not self._shutdown:
+    #         try:
+    #             future, call = self._queue.get(timeout=1)
+    #             try:
+    #                 result = call()
+    #             except BaseException as e:
+    #                 future.set_exception(e)
+    #             else:
+    #                 future.set_result(result)
+    #         except queue.Empty:
+    #             with self._lock:
+    #                 if queue.empty():
+    #                     self._thread = None
+    #                     break
+    #     print("ENDING SERIAL QUEUE")
+
+    # def _start_queue(self):
+    #     with self._lock:
+    #         if not self._thread or not self._thread.is_alive():
+    #             self._thread = threading.Thread(target=self._do_work_in_thread)
+    #             self._thread.start()
+
     def submit(self, func, *args, **kwargs):
         # For debugging, try to pickle function
         pickle.dumps(func)
 
         f = Future()
+        # self._queue.put((f, lambda: func(*args, **kwargs)))
         try:
             result = func(*args, **kwargs)
         except BaseException as e:
             f.set_exception(e)
         else:
             f.set_result(result)
+        # self._start_queue()
         return f
+
+    # def shutdown(self, wait=True):
+    #     self._shutdown = True
 
     def map(self, *args, **kwargs):
         raise NotImplementedError("Cannot use map for now because easy_mp")
@@ -342,14 +384,13 @@ class _WrapBatchParallelMap(Executor):
 
     """Wrapper to abstract away dealing with easy_mp and multiprocessing."""
 
-    def __init__(
-        self, method, nprocs, njobs=1, default_chunksize=None, min_chunksize=20
-    ):
-        if default_chunksize is libtbx.Auto:
-            default_chunksize = None
-        chunksize = default_chunksize
+    def __init__(self, method, nprocs, njobs=1, chunksize=None, min_chunksize=20):
+        if chunksize is libtbx.Auto:
+            chunksize = None
         self.config = MPConfig(method, njobs, nprocs, chunksize, min_chunksize)
         self._threads = []
+        self._tasks = queue.Queue()
+        self._shutdown = False
 
     def submit(self, func, *args, **kwargs):
         raise NotImplementedError("Individual function submission not implemented")
@@ -362,6 +403,7 @@ class _WrapBatchParallelMap(Executor):
             func: The function to call
             futures: The Future objects, with a _item property
         """
+        # time.sleep(1)
         futures = list(futures)
         # Extract something pickleable out of the future items
         items = [(i, future._item) for i, future in enumerate(futures)]
@@ -375,6 +417,7 @@ class _WrapBatchParallelMap(Executor):
             # Create a task instance that will wrap/unwrap our internal index
             task = _ParallelTask(func)
 
+            print(self.config)
             batch_multi_node_parallel_map(
                 func=task,
                 iterable=items,
@@ -428,6 +471,7 @@ class _WrapBatchParallelMap(Executor):
     def shutdown(self, wait=True):
         print("Shutdown wait", wait)
         if wait:
+            self._shutdown = True
             for thread in self._threads:
                 thread.join()
         else:
