@@ -15,7 +15,6 @@ from concurrent.futures import Executor, Future, ThreadPoolExecutor
 import future.moves.itertools as itertools
 import psutil
 import six.moves.queue as queue
-from six.moves import zip
 
 import libtbx.easy_mp
 
@@ -239,21 +238,6 @@ def batch_multi_node_parallel_map(
     )
 
 
-class _ParallelTask(object):
-    """Allows a function to be called and wraps indexing information.
-
-    Does you monnad?
-    """
-
-    def __init__(self, function):
-        self.function = function
-
-    def __call__(self, args):
-        index, item = args
-        result = self.function(*item)
-        return index, result
-
-
 MPConfig = namedtuple(
     "MPConfig", ["method", "njobs", "nproc", "chunksize", "min_chunksize"]
 )
@@ -347,14 +331,6 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, *args, **
     else:
         print("DEBUG: Running tasks with parallel map wrapper")
         return _WrapBatchParallelMap(method, max_workers, njobs, *args, **kwargs)
-
-
-class _SingleThreadExecutor(ThreadPoolExecutor):
-    def __init__(self):
-        super(_SingleThreadExecutor, self).__init__(max_workers=1)
-
-    def submit_many(self, func, *iterables):
-        return [self.submit(func, *args) for args in zip(*iterables)]
 
 
 class _SerialExecutor(Executor):
@@ -476,20 +452,3 @@ class _WrapBatchParallelMap(Executor):
         else:
             if self._thread and self._thread.is_alive():
                 terminate_thread(self._thread)
-
-
-if __name__ == "__main__":
-
-    def func(x):
-        return x
-
-    iterable = list(range(100))
-
-    multi_node_parallel_map(
-        func,
-        iterable,
-        nproc=4,
-        njobs=10,
-        cluster_method="multiprocessing",
-        callback=print,
-    )
