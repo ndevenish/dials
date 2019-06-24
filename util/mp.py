@@ -3,8 +3,10 @@ from __future__ import absolute_import, division, print_function
 import ctypes
 import logging
 import math
+import multiprocessing
 import pickle
 import threading
+import time
 import warnings
 from collections import namedtuple
 from concurrent.futures import Executor, Future, ThreadPoolExecutor
@@ -281,20 +283,53 @@ def terminate_thread(thread):
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
-def BatchExecutor(method, nprocs=1, njobs=1, *args, **kwargs):
-    assert nprocs > 0, "Invalid number of processors"
-    assert njobs > 0, "Invalid number of jobs"
-    assert njobs == 1 or method is not None, "Cannot specify jobs with multiprocessing"
-    # assert mp_chunksize > 0, "Invalid chunk size"
-    if not method and nprocs == 1:
-        print("DEBUG: Running tasks in serial")
-        return _SingleThreadExecutor()
-    # elif not method or method == "multiprocessing": # six.PY3 and (
-    #     print("DEBUG: Running tasks in python 3 ProcessPoolExecutor")
-    #     return ProcessPoolExecutor(max_workers=nprocs)
+def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, *args, **kwargs):
+    """
+    Execute tasks in parallel via a variety of methods.
+
+    Args:
+        method:
+            The method to use. If None, then "multiprocessing" will be
+            used if nprocs is None or nprocs > 1, otherwise "threads"
+            will be used with a single executor to effectively process
+            the jobs serially.
+        nprocs:
+            The number of tasks to process concurrently. If nprocs is
+            None or not given, it will default depending on the method:
+                threads:
+                    The number processors on the machine, multiplied
+                    by 5, assuming that ThreadPoolExecutor is often used
+                    to overlap I/O instead of CPU work and the number of
+                    workers should be higher than the number of workers
+                    for multiprocessing.
+                multiprocessing:
+                    It will default to the number of processors on the machine.
+                other:
+                    It will default to 1, assuming that njobs are being speficied.
+    """
+    # Work out default methods
+    if not method and max_workers == 1:
+        method = "threads"
+    elif not method:
+        method = "multiprocessing"
+    # Work out default number of workers
+    if method == "threads" and not max_workers:
+        max_workers = min(32, (multiprocessing.cpu_count() or 1) + 4)
+    elif method == "multiprocessing" and not max_workers:
+        max_workers = multiprocessing.cpu_count()
+    elif not max_workers:
+        max_workers = 1
+
+    # Validate njobs
+    if method in {"threads", "multiprocessing"} and njobs != 1:
+        raise ValueError("Can not specify njobs with method '{}'".format(method))
+
+    if method == "threads":
+        print("DEBUG: Running tasks in threads n={}".format(max_workers))
+        return ThreadPoolExecutor(max_workers=max_workers)
     else:
         print("DEBUG: Running tasks with parallel map wrapper")
-        return _WrapBatchParallelMap(method, nprocs, njobs, *args, **kwargs)
+        return _WrapBatchParallelMap(method, max_workers, njobs, *args, **kwargs)
 
 
 class _SingleThreadExecutor(ThreadPoolExecutor):
@@ -305,62 +340,27 @@ class _SingleThreadExecutor(ThreadPoolExecutor):
         return [self.submit(func, *args) for args in zip(*iterables)]
 
 
-# class Process
 class _SerialExecutor(Executor):
     """Shim executor that runs everything serially"""
-
-    # def __init__(self):
-    #     self._queue = queue.Queue()
-    #     self._shutdown = False
-    #     self._thread = None
-    #     self._lock = threading.Lock()
-
-    # def _do_work_in_thread(self):
-    #     while not self._shutdown:
-    #         try:
-    #             future, call = self._queue.get(timeout=1)
-    #             try:
-    #                 result = call()
-    #             except BaseException as e:
-    #                 future.set_exception(e)
-    #             else:
-    #                 future.set_result(result)
-    #         except queue.Empty:
-    #             with self._lock:
-    #                 if queue.empty():
-    #                     self._thread = None
-    #                     break
-    #     print("ENDING SERIAL QUEUE")
-
-    # def _start_queue(self):
-    #     with self._lock:
-    #         if not self._thread or not self._thread.is_alive():
-    #             self._thread = threading.Thread(target=self._do_work_in_thread)
-    #             self._thread.start()
 
     def submit(self, func, *args, **kwargs):
         # For debugging, try to pickle function
         pickle.dumps(func)
 
         f = Future()
-        # self._queue.put((f, lambda: func(*args, **kwargs)))
         try:
             result = func(*args, **kwargs)
         except BaseException as e:
             f.set_exception(e)
         else:
             f.set_result(result)
-        # self._start_queue()
         return f
 
-    # def shutdown(self, wait=True):
-    #     self._shutdown = True
 
-    def map(self, *args, **kwargs):
-        raise NotImplementedError("Cannot use map for now because easy_mp")
-
-    def submit_many(self, func, *iterables):
-        return [self.submit(func, *args) for args in zip(*iterables)]
+def _do_dispatch_parallel_task(bundled_args):
+    """Pickleable front-end interface to dispatching batch tasks"""
+    i, (func, args, kwargs) = bundled_args
+    return (i, func(*args, **kwargs))
 
 
 class _WrapBatchParallelMap(Executor):
@@ -371,14 +371,11 @@ class _WrapBatchParallelMap(Executor):
         if chunksize is libtbx.Auto:
             chunksize = None
         self.config = MPConfig(method, njobs, nprocs, chunksize, min_chunksize)
-        self._threads = []
+        self._thread = None
         self._tasks = queue.Queue()
         self._shutdown = False
 
-    def submit(self, func, *args, **kwargs):
-        raise NotImplementedError("Individual function submission not implemented")
-
-    def _threaded_do_parallel_map_call(self, chunksize, func, futures):
+    def _threaded_do_check_task_queue(self):
         """Called in a thread. Calls the parallel map function.
 
         Args:
@@ -386,81 +383,82 @@ class _WrapBatchParallelMap(Executor):
             func: The function to call
             futures: The Future objects, with a _item property
         """
-        # time.sleep(1)
-        futures = list(futures)
-        # Extract something pickleable out of the future items
-        items = [(i, future._item) for i, future in enumerate(futures)]
+        while not self._shutdown:
+            print("DEBUG: Checking for tasks")
+            # Once started, wait a second to give time to fill the queue
+            time.sleep(1)
+            # Get the associated lists of task, future
+            tasks = []
+            futures = []
+            try:
+                while True:
+                    future, task = self._tasks.get_nowait()
+                    if future.set_running_or_notify_cancel():
+                        futures.append(future)
+                        tasks.append((len(tasks), task))
+            except queue.Empty:
+                pass
+            if not tasks:
+                continue
+            print("DEBUG: Picking up {} tasks".format(len(tasks)))
 
-        def _done_callback(indexed_item):
-            """The batch callback function to mark stuff as done"""
-            index, result = indexed_item
-            futures[index].set_result(result)
+            futures = list(futures)
 
-        try:
-            # Create a task instance that will wrap/unwrap our internal index
-            task = _ParallelTask(func)
+            def _done_callback(indexed_item):
+                """The batch callback function to mark stuff as done"""
+                index, result = indexed_item
+                futures[index].set_result(result)
 
-            print(self.config)
-            batch_multi_node_parallel_map(
-                func=task,
-                iterable=items,
-                nproc=self.config.nproc,
-                njobs=self.config.njobs,
-                cluster_method=self.config.method,
-                chunksize=chunksize,
-                callback=_done_callback,
-            )
-        except BaseException as e:
-            for future in futures:
-                # Technically could change state between done/set_exception
-                # but don't need to worry about those instances
-                if not future.done():
-                    future.set_exception(e)
+            try:
+                chunksize = self.config.chunksize
+                if not chunksize:
+                    chunksize = _compute_chunksize(
+                        len(tasks), self.config.nproc, self.config.min_chunksize
+                    )
+                batch_multi_node_parallel_map(
+                    func=_do_dispatch_parallel_task,
+                    iterable=tasks,
+                    nproc=self.config.nproc,
+                    njobs=self.config.njobs,
+                    cluster_method=self.config.method,
+                    chunksize=chunksize,
+                    callback=_done_callback,
+                )
+            except BaseException as e:
+                for future in futures:
+                    # Technically could change state between done/set_exception
+                    # but don't need to worry about those instances
+                    if not future.done():
+                        future.set_exception(e)
+        print("DEBUG: Ending task thread loop")
 
-    def map(self, *args, **kwargs):
-        raise NotImplementedError("Cannot use map for now because easy_mp")
+    def _start_thread_processing(self):
+        if not self._thread:
+            self._thread = threading.Thread(target=self._threaded_do_check_task_queue)
+            self._thread.start()
 
-    def submit_many(self, func, *iterables, **kwargs):
-        timeout = kwargs.pop("timeout", None)
-        chunksize = kwargs.pop("chunksize", self.config.chunksize)
-
-        assert timeout is None, "Cannot handle timeout"
-        assert not kwargs, "Unexpected arguments: " + repr(kwargs)
-
-        # Build future instances for each iterable
-        futures = []
-        for item in zip(*iterables):
-            future = Future()
-            future._item = item
-            # We cannot cancel with easy_mp
-            future.set_running_or_notify_cancel()
-            futures.append(future)
-
-        # If not specified, work out the chunking size here
-        if chunksize is None:
-            chunksize = _compute_chunksize(
-                len(futures),
-                self.config.njobs * self.config.nproc,
-                self.config.min_chunksize,
-            )
-
-        thread = threading.Thread(
-            target=self._threaded_do_parallel_map_call, args=(chunksize, func, futures)
-        )
-        thread.start()
-        self._threads.append(thread)
-        return futures
+    def submit(self, func, *args, **kwargs):
+        future = Future()
+        self._tasks.put((future, (func, args, kwargs)))
+        self._start_thread_processing()
+        return future
 
     def shutdown(self, wait=True):
-        print("Shutdown wait", wait)
+        # Cancel all pending tasks
+        try:
+            while True:
+                task, _ = self._tasks.get_nowait()
+                task.cancel()
+        except queue.Empty:
+            pass
+        # Decide how to shut down the processing
         if wait:
             self._shutdown = True
-            for thread in self._threads:
-                thread.join()
+            if self._thread:
+                self._thread.join()
         else:
-            for thread in self._threads:
-                if thread.is_alive():
-                    terminate_thread(thread)
+            if self._thread and self._thread.is_alive():
+                terminate_thread(self._thread)
 
 
 if __name__ == "__main__":
