@@ -3,7 +3,25 @@ from __future__ import absolute_import, division, print_function
 import time
 from concurrent.futures import wait
 
-from dials.util.mp import BatchExecutor
+from dials.util.mp import BatchExecutor, multi_node_parallel_map
+
+
+def _parallel_func(x):
+    return x
+
+
+def test_original_map_interface():
+    """Copied original test from util/mp.py:__main__"""
+    iterable = range(100)
+
+    multi_node_parallel_map(
+        _parallel_func,
+        iterable,
+        nproc=4,
+        njobs=10,
+        cluster_method="multiprocessing",
+        callback=print,
+    )
 
 
 def _do_long_function(i):
