@@ -281,7 +281,7 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs)
             The number of tasks to process concurrently. If nprocs is
             None or not given, it will default depending on the method:
                 threads:
-                    The number processors on the machine, multiplied
+                    The number of processors on the machine, multiplied
                     by 5, assuming that ThreadPoolExecutor is often used
                     to overlap I/O instead of CPU work and the number of
                     workers should be higher than the number of workers
@@ -289,7 +289,7 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs)
                 multiprocessing:
                     It will default to the number of processors on the machine.
                 other:
-                    It will default to 1, assuming that njobs are being speficied.
+                    It will default to 1, assuming that njobs are being specified.
     """
     # Work out default methods
     if not method and max_workers == 1:
