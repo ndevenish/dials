@@ -284,7 +284,7 @@ def terminate_thread(thread):
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
-def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, *args, **kwargs):
+def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs):
     """
     Execute tasks in parallel via a variety of methods.
 
@@ -328,26 +328,26 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, *args, **
     if method == "threads":
         print("DEBUG: Running tasks in threads n={}".format(max_workers))
         return ThreadPoolExecutor(max_workers=max_workers)
-    else:
-        print("DEBUG: Running tasks with parallel map wrapper")
-        return _WrapBatchParallelMap(method, max_workers, njobs, *args, **kwargs)
+
+    print("DEBUG: Running tasks with parallel map wrapper")
+    return _WrapBatchParallelMap(method, max_workers, njobs, **kwargs)
 
 
 class _SerialExecutor(Executor):
     """Shim executor that runs everything serially"""
 
-    def submit(self, func, *args, **kwargs):
+    def submit(self, fn, *args, **kwargs):
         # For debugging, try to pickle function
-        pickle.dumps(func)
+        pickle.dumps(fn)
 
-        f = Future()
+        fut = Future()
         try:
-            result = func(*args, **kwargs)
-        except BaseException as e:
-            f.set_exception(e)
+            result = fn(*args, **kwargs)
+        except BaseException as exc:
+            fut.set_exception(exc)
         else:
-            f.set_result(result)
-        return f
+            fut.set_result(result)
+        return fut
 
 
 def _do_dispatch_parallel_task(bundled_args):
@@ -417,12 +417,12 @@ class _WrapBatchParallelMap(Executor):
                     chunksize=chunksize,
                     callback=_done_callback,
                 )
-            except BaseException as e:
+            except BaseException as exc:
                 for future in futures:
                     # Technically could change state between done/set_exception
                     # but don't need to worry about those instances
                     if not future.done():
-                        future.set_exception(e)
+                        future.set_exception(exc)
         print("DEBUG: Ending task thread loop")
 
     def _start_thread_processing(self):
@@ -430,9 +430,9 @@ class _WrapBatchParallelMap(Executor):
             self._thread = threading.Thread(target=self._threaded_do_check_task_queue)
             self._thread.start()
 
-    def submit(self, func, *args, **kwargs):
+    def submit(self, fn, *args, **kwargs):
         future = Future()
-        self._tasks.put((future, (func, args, kwargs)))
+        self._tasks.put((future, (fn, args, kwargs)))
         self._start_thread_processing()
         return future
 
