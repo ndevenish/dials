@@ -60,40 +60,6 @@ class Result(object):
 _first = True
 
 
-def ExtractPixelsFromImage(
-    imageset,
-    index,
-    threshold_function,
-    mask,
-    region_of_interest,
-    max_strong_pixel_fraction,
-    compute_mean_background,
-):
-    """Run the spotfinding for a single image.
-
-    Args:
-        imageset: The ImageSet to load the image from
-        index:    The index of the image in the imageset
-        threshold_function: The configured thresholding function
-        mask:       The mask to apply to the image
-
-    Returns:
-        PixelList: A list of hot pixels in this image
-    """
-
-    # # Get the frame number
-    # if isinstance(imageset, ImageSweep):
-    #     frame = imageset.get_array_range()[0] + index
-    # else:
-    #     ind = imageset.indices()
-    #     if len(ind) > 1:
-    #         assert all(i1 + 1 == i2 for i1, i2 in zip(ind[0:-1], ind[1:-1]))
-    #     frame = ind[index]
-
-    # Create the list of pixel lists
-    # pixel_list = []
-
-
 class ExtractPixelsFromImage2DNoShoeboxes(object):
     """
     A class to extract pixels from a single image
@@ -169,28 +135,13 @@ class ExtractPixelsFromImage2DNoShoeboxes(object):
         return [reflections]
 
 
-class ExtractSpotsParallelTask(object):
-    """
-    Execute the spot finder task in parallel
-
-    We need this external class so that we can pickle it for cluster jobs
-    """
-
-    def __init__(self, function):
-        """
-        Initialise with the function to call
-        """
-        self.function = function
-
-    def __call__(self, task):
-        """
-        Call the function with th task and save the IO
-        """
-        log.config_simple_cached()
-        result = self.function(task)
-        handlers = logging.getLogger("dials").handlers
-        assert len(handlers) == 1, "Invalid number of logging handlers"
-        return result, handlers[0].messages()
+# class ExtractSpotsParallelTask(object):
+# # TODO: Handle sub-process logging in a better way
+# log.config_simple_cached()
+# result = self.function(task)
+# handlers = logging.getLogger("dials").handlers
+# assert len(handlers) == 1, "Invalid number of logging handlers"
+# return result, handlers[0].messages()
 
 
 def pixel_list_to_shoeboxes(
@@ -546,14 +497,6 @@ class ExtractSpots(object):
         return reflections, None
 
 
-def _placeholder_do_spotfinding(*args):
-    print("Running", args)
-    time.sleep(0.1)
-    result = flex.reflection_table()
-    #
-    return result
-
-
 def _apply_region_of_interest(region, *args):
     # type: (Region, Image) -> List[Image, Image]
     """
@@ -582,6 +525,11 @@ def _apply_region_of_interest(region, *args):
         images.append(im_roi)
 
     return images
+
+
+def _rewrite_pixel_list_frame(frame, pixel_lists):
+    """Rewrite a series of pixel lists so that the frame is different"""
+    return [PixelList(frame, pl.size(), pl.value(), pl.index()) for pl in pixel_lists]
 
 
 def find_spots(threshold_function, image, mask=None, region_of_interest=None):
@@ -629,7 +577,7 @@ def find_spots(threshold_function, image, mask=None, region_of_interest=None):
         # Generate a pixel list from this thresholded mask
         pixel_list = PixelList(0, panel_image, threshold_mask)
         pixel_lists.append(pixel_list)
-        breakpoint()
+
     ###########################################################################
     # START OF EXTRACTSPOTS
 
@@ -758,11 +706,23 @@ def _do_spotfinding(
         threshold_function, image, mask=mask, region_of_interest=region_of_interest
     )
 
+    # Get the imageset-resolved frame number
+    if isinstance(imageset, ImageSweep):
+        frame_number = imageset.get_array_range()[0] + image_index
+    else:
+        indices = imageset.indices()
+        if len(indices) > 1:
+            assert all(i1 + 1 == i2 for i1, i2 in zip(indices[0:-1], indices[1:-1]))
+        frame_number = indices[image_index]
+
+    # Update the pixel lists with the correct frame number
+    pixel_lists = _rewrite_pixel_list_frame(frame_number, pixel_lists)
+
     # result = flex.reflection_table()
     # result["id"] = flex.int(result.nrows(), experiment_index)
     # return result
-    return flex.reflection_table()
-    return pixel_lists
+    # return flex.reflection_table()
+    # return pixel_lists
 
 
 class SpotFinder(object):
