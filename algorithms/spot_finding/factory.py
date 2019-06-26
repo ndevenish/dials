@@ -451,24 +451,23 @@ class SpotFinderFactory(object):
 
         # Setup the spot finder
         return SpotFinder(
+            # Inner params for ExtractPixelsFromImage (per-image)
             threshold_function=threshold_function,
             mask=params.spotfinder.lookup.mask,
-            filter_spots=filter_spots,
-            scan_range=params.spotfinder.scan_range,
-            write_hot_mask=params.spotfinder.write_hot_mask,
-            hot_mask_prefix=params.spotfinder.hot_mask_prefix,
-            mp_method=params.spotfinder.mp.method,
-            mp_nproc=params.spotfinder.mp.nproc,
-            mp_njobs=params.spotfinder.mp.njobs,
-            mp_chunksize=params.spotfinder.mp.chunksize,
+            region_of_interest=params.spotfinder.region_of_interest,
             max_strong_pixel_fraction=params.spotfinder.filter.max_strong_pixel_fraction,
             compute_mean_background=params.spotfinder.compute_mean_background,
-            region_of_interest=params.spotfinder.region_of_interest,
+            # Middle params for ExtractSpots (Per-imageset)
+            filter_spots=filter_spots,
+            write_hot_mask=params.spotfinder.write_hot_mask,
+            no_shoeboxes_2d=no_shoeboxes_2d,
+            mp=params.spotfinder.mp,
+            # Outer params for the SpotFinder object (Per-dataset)
+            scan_range=params.spotfinder.scan_range,
+            hot_mask_prefix=params.spotfinder.hot_mask_prefix,
             mask_generator=mask_generator,
             min_spot_size=params.spotfinder.filter.min_spot_size,
             max_spot_size=params.spotfinder.filter.max_spot_size,
-            no_shoeboxes_2d=no_shoeboxes_2d,
-            min_chunksize=params.spotfinder.mp.min_chunksize,
         )
 
     @staticmethod
