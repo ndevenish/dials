@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function
 
+import os
 import ctypes
 import logging
 import math
@@ -313,6 +314,7 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs)
         method = "threads"
     elif not method:
         method = "multiprocessing"
+
     # Work out default number of workers
     if method == "threads" and not max_workers:
         max_workers = min(32, (multiprocessing.cpu_count() or 1) + 4)
@@ -324,6 +326,24 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs)
     # Validate njobs
     if method in {"threads", "multiprocessing"} and njobs != 1:
         raise ValueError("Can not specify njobs with method '{}'".format(method))
+
+    # Inherit behaviour of windows multiprocessing for now, until we understand
+    # why it was implemented and why easy_mp doesn't work (can probably work to
+    # remove once Python3 with ProcessPoolExecutor)
+    if (
+        os.name == "nt"
+        and method == "multiprocessing"
+        and (max_workers > 1 or njobs > 1)
+    ):
+        logger.warning(
+            """
+*******************************************************************************
+Multiprocessing is not available on windows. Setting nproc = 1, njobs = 1
+*******************************************************************************
+"""
+        )
+        max_workers = 1
+        njobs = 1
 
     if method == "threads":
         print("DEBUG: Running tasks in threads n={}".format(max_workers))
