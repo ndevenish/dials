@@ -163,10 +163,14 @@ class ExtractPixelsFromImage2DNoShoeboxes(object):
             plabeller.add(plist)
 
         # Create shoeboxes from pixel list
-        converter = PixelListToReflectionTable(
-            self.min_spot_size, self.max_spot_size, self.filter_spots, False
+        reflections, _ = pixel_list_to_reflection_table(
+            self.imageset,
+            pixel_labeller,
+            filter_spots=self.filter_spots,
+            min_spot_size=self.min_spot_size,
+            max_spot_size=self.max_spot_size,
+            write_hot_pixel_mask=False,
         )
-        reflections, _ = converter(self.imageset, pixel_labeller)
 
         # Delete the shoeboxes
         del reflections["shoeboxes"]
@@ -199,129 +203,93 @@ class ExtractSpotsParallelTask(object):
         return result, handlers[0].messages()
 
 
-class PixelListToShoeboxes(object):
-    """
-    A helper class to convert pixel list to shoeboxes
-    """
+def pixel_list_to_shoeboxes(
+    imageset, pixel_labeller, min_spot_size, max_spot_size, write_hot_pixel_mask
+):
+    """Convert a pixel list to shoeboxes"""
+    # Extract the pixel lists into a list of reflections
+    shoeboxes = flex.shoebox()
+    spotsizes = flex.size_t()
+    hotpixels = tuple(flex.size_t() for i in range(len(imageset.get_detector())))
+    if isinstance(imageset, ImageSweep):
+        twod = False
+    else:
+        twod = True
+    for i, (p, hp) in enumerate(zip(pixel_labeller, hotpixels)):
+        if p.num_pixels() > 0:
+            creator = flex.PixelListShoeboxCreator(
+                p,
+                i,  # panel
+                0,  # zrange
+                twod,  # twod
+                min_spot_size,  # min_pixels
+                max_spot_size,  # max_pixels
+                write_hot_pixel_mask,
+            )
+            shoeboxes.extend(creator.result())
+            spotsizes.extend(creator.spot_size())
+            hp.extend(creator.hot_pixels())
+    logger.info("")
+    logger.info("Extracted {} spots".format(len(shoeboxes)))
 
-    def __init__(self, min_spot_size, max_spot_size, write_hot_pixel_mask):
-        """
-        Initialize
-        """
-        self.min_spot_size = min_spot_size
-        self.max_spot_size = max_spot_size
-        self.write_hot_pixel_mask = write_hot_pixel_mask
+    # Get the unallocated spots and print some info
+    selection = shoeboxes.is_allocated()
+    shoeboxes = shoeboxes.select(selection)
+    ntoosmall = (spotsizes < min_spot_size).count(True)
+    ntoolarge = (spotsizes > max_spot_size).count(True)
+    assert ntoosmall + ntoolarge == selection.count(False)
+    logger.info("Removed %d spots with size < %d pixels" % (ntoosmall, min_spot_size))
+    logger.info("Removed %d spots with size > %d pixels" % (ntoolarge, max_spot_size))
 
-    def __call__(self, imageset, pixel_labeller):
-        """
-        Convert the pixel list to shoeboxes
-        """
-        # Extract the pixel lists into a list of reflections
-        shoeboxes = flex.shoebox()
-        spotsizes = flex.size_t()
-        hotpixels = tuple(flex.size_t() for i in range(len(imageset.get_detector())))
-        if isinstance(imageset, ImageSweep):
-            twod = False
-        else:
-            twod = True
-        for i, (p, hp) in enumerate(zip(pixel_labeller, hotpixels)):
-            if p.num_pixels() > 0:
-                creator = flex.PixelListShoeboxCreator(
-                    p,
-                    i,  # panel
-                    0,  # zrange
-                    twod,  # twod
-                    self.min_spot_size,  # min_pixels
-                    self.max_spot_size,  # max_pixels
-                    self.write_hot_pixel_mask,
-                )
-                shoeboxes.extend(creator.result())
-                spotsizes.extend(creator.spot_size())
-                hp.extend(creator.hot_pixels())
-        logger.info("")
-        logger.info("Extracted {} spots".format(len(shoeboxes)))
-
-        # Get the unallocated spots and print some info
-        selection = shoeboxes.is_allocated()
-        shoeboxes = shoeboxes.select(selection)
-        ntoosmall = (spotsizes < self.min_spot_size).count(True)
-        ntoolarge = (spotsizes > self.max_spot_size).count(True)
-        assert ntoosmall + ntoolarge == selection.count(False)
-        logger.info(
-            "Removed %d spots with size < %d pixels" % (ntoosmall, self.min_spot_size)
-        )
-        logger.info(
-            "Removed %d spots with size > %d pixels" % (ntoolarge, self.max_spot_size)
-        )
-
-        # Return the shoeboxes
-        return shoeboxes, hotpixels
+    # Return the shoeboxes
+    return shoeboxes, hotpixels
 
 
-class ShoeboxesToReflectionTable(object):
-    """
-    A class to filter shoeboxes and create reflection table
-    """
+def shoeboxes_to_reflection_table(imageset, shoeboxes, filter_spots):
+    """Filter shoeboxes and create reflection table"""
+    # Calculate the spot centroids
+    centroid = shoeboxes.centroid_valid()
+    logger.info("Calculated {} spot centroids".format(len(shoeboxes)))
 
-    def __init__(self, filter_spots):
-        """
-        Initialise the reflection table creator
-        """
-        self.filter_spots = filter_spots
+    # Calculate the spot intensities
+    intensity = shoeboxes.summed_intensity()
+    logger.info("Calculated {} spot intensities".format(len(shoeboxes)))
 
-    def __call__(self, imageset, shoeboxes):
-        """
-        Filter shoeboxes and create reflection table
-        """
-        # Calculate the spot centroids
-        centroid = shoeboxes.centroid_valid()
-        logger.info("Calculated {} spot centroids".format(len(shoeboxes)))
+    # Create the observations
+    observed = flex.observation(shoeboxes.panels(), centroid, intensity)
 
-        # Calculate the spot intensities
-        intensity = shoeboxes.summed_intensity()
-        logger.info("Calculated {} spot intensities".format(len(shoeboxes)))
+    # Filter the reflections and select only the desired spots
+    flags = filter_spots(
+        None, sweep=imageset, observations=observed, shoeboxes=shoeboxes
+    )
+    observed = observed.select(flags)
+    shoeboxes = shoeboxes.select(flags)
 
-        # Create the observations
-        observed = flex.observation(shoeboxes.panels(), centroid, intensity)
-
-        # Filter the reflections and select only the desired spots
-        flags = self.filter_spots(
-            None, sweep=imageset, observations=observed, shoeboxes=shoeboxes
-        )
-        observed = observed.select(flags)
-        shoeboxes = shoeboxes.select(flags)
-
-        # Return as a reflection list
-        return flex.reflection_table(observed, shoeboxes)
+    # Return as a reflection list
+    return flex.reflection_table(observed, shoeboxes)
 
 
-class PixelListToReflectionTable(object):
-    """
-    Helper class to convert the pixel list to reflection table
-    """
-
-    def __init__(
-        self, min_spot_size, max_spot_size, filter_spots, write_hot_pixel_mask
-    ):
-        """
-        Initialise the converter
-        """
-
-        # Setup the pixel list to shoebox converter
-        self.pixel_list_to_shoeboxes = PixelListToShoeboxes(
-            min_spot_size, max_spot_size, write_hot_pixel_mask
-        )
-
-        # Setup the reflection table converter
-        self.shoeboxes_to_reflection_table = ShoeboxesToReflectionTable(filter_spots)
-
-    def __call__(self, imageset, pixel_labeller):
-        """
-        Convert to reflection table
-        """
-        shoeboxes, hot_pixels = self.pixel_list_to_shoeboxes(imageset, pixel_labeller)
-
-        return self.shoeboxes_to_reflection_table(imageset, shoeboxes), hot_pixels
+def pixel_list_to_reflection_table(
+    imageset,
+    pixel_labeller,
+    filter_spots,
+    min_spot_size,
+    max_spot_size,
+    write_hot_pixel_mask,
+):
+    """Convert pixel list to reflection table"""
+    shoeboxes, hot_pixels = pixel_list_to_shoeboxes(
+        imageset,
+        pixel_labeller,
+        min_spot_size=min_spot_size,
+        max_spot_size=max_spot_size,
+        write_hot_pixel_mask=write_hot_pixel_mask,
+    )
+    # Setup the reflection table converter
+    return (
+        shoeboxes_to_reflection_table(imageset, shoeboxes, filter_spots=filter_spots),
+        hot_pixels,
+    )
 
 
 class ExtractSpots(object):
@@ -494,13 +462,14 @@ class ExtractSpots(object):
                 result.pixel_list = None
 
         # Create shoeboxes from pixel list
-        converter = PixelListToReflectionTable(
-            self.min_spot_size,
-            self.max_spot_size,
-            self.filter_spots,
-            self.write_hot_pixel_mask,
+        return pixel_list_to_reflection_table(
+            imageset,
+            pixel_labeller,
+            filter_spots=self.filter_spots,
+            min_spot_size=self.min_spot_size,
+            max_spot_size=self.max_spot_size,
+            write_hot_pixel_mask=self.write_hot_pixel_mask,
         )
-        return converter(imageset, pixel_labeller)
 
     def _find_spots_2d_no_shoeboxes(self, imageset):
         """
@@ -1054,7 +1023,7 @@ class SpotFinder(object):
                     )
                 )
 
-            logger.info("\nFinding spots in image {0} to {1}...".format(j0, j1))
+            logger.info("\nFinding spots in image {} to {}...".format(j0, j1))
             j0 -= 1
             if isinstance(imageset, ImageSweep):
                 j0 -= imageset.get_array_range()[0]
