@@ -311,6 +311,10 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs)
     if method == "threads":
         print("DEBUG: Running tasks in threads n={}".format(max_workers))
         return ThreadPoolExecutor(max_workers=max_workers)
+    elif method == "serial":
+        assert max_workers == 1 and njobs == 1
+        print("DEBUG: Running tasks serially on submit")
+        return _SerialExecutor()
 
     print("DEBUG: Running tasks with parallel map wrapper")
     return _WrapBatchParallelMap(method, max_workers, njobs, **kwargs)
