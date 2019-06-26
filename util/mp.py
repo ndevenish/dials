@@ -349,6 +349,8 @@ class _SerialExecutor(Executor):
             result = fn(*args, **kwargs)
         except BaseException as exc:
             fut.set_exception(exc)
+            # Since this is serially inline, we want errors from submit
+            raise
         else:
             fut.set_result(result)
         return fut
