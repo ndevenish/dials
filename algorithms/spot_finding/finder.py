@@ -608,7 +608,7 @@ def _apply_region_of_interest(region, *args):
         region is None, then no transform is applied.
     """
     if region is None:
-        return list(*args)
+        return list(args)
     assert region.x0 < region.x1, "x0 < x1"
     assert region.y0 < region.y1, "y0 < y1"
     assert region.x0 >= 0, "x0 >= 0"
@@ -670,7 +670,7 @@ def find_spots(threshold_function, image, mask=None, region_of_interest=None):
         # Generate a pixel list from this thresholded mask
         pixel_list = PixelList(0, panel_image, threshold_mask)
         pixel_lists.append(pixel_list)
-
+        breakpoint()
     ###########################################################################
     # START OF EXTRACTSPOTS
 
@@ -772,7 +772,7 @@ def _do_spotfinding(
     This is called by the parallel methods
     """
     # print("Finding {}[{}]".format(experiment_index, image_index))
-    time.sleep(2)
+    time.sleep(0.1)
     # HACK: Must be a better way of doing this?
     # Parallel reading of HDF5 from the same handle is not allowed. Python
     # multiprocessing is a bit messed up and used fork on linux so need to
@@ -802,6 +802,7 @@ def _do_spotfinding(
     # result = flex.reflection_table()
     # result["id"] = flex.int(result.nrows(), experiment_index)
     # return result
+    return flex.reflection_table()
     return pixel_lists
 
 
@@ -899,7 +900,7 @@ class SpotFinder(object):
         with tqdm(total=len(images_to_search), leave=False, smoothing=0) as progress:
             try:
                 pool = BatchExecutor(
-                    method=self.mp.method,
+                    method="serial",  # self.mp.method,
                     max_workers=self.mp.nproc,
                     njobs=self.mp.njobs,
                     chunksize=self.mp.chunksize,
@@ -922,7 +923,7 @@ class SpotFinder(object):
                 # ]
                 start = time.time()
                 futures = []
-                for task in tqdm(images_to_search, desc="Submit"):
+                for task in images_to_search:
                     futures.append(
                         pool.submit(
                             _do_spotfinding,
@@ -941,15 +942,18 @@ class SpotFinder(object):
 
                 #     for task in images_to_search
                 # ]
-                print("Submission took {:.1f}s".format(time.time() - start))
-                sys.exit("OH")
-                # for future in as_completed(futures):
-                #     progress.update(1)
-                #     # breakpoint()
-                #     reflections.extend(future.result())
-                #     # result = future.result()
+                progress.write("Submission took {:.1f}s".format(time.time() - start))
+                # sys.exit("OH")
+                for future in as_completed(futures):
+                    progress.update(1)
+                    # breakpoint()
+                    reflections.extend(future.result())
+                    # result = future.result()
             finally:
-                pool.shutdown(wait=False)
+                # Cancel anything still being waited on
+                for future in futures:
+                    future.cancel()
+                pool.shutdown()
         breakpoint()
         # # We now need to dispatch to multiprocessing here; for now, do linearly
         # for image in tqdm(images_to_search):
