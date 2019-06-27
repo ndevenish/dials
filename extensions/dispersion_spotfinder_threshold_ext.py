@@ -2,6 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+import libtbx
+from libtbx.phil import parse
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.spot_finding.threshold import DispersionThresholdStrategy
+from dials.util.phil import ScopedPhilScope
+
 logger = logging.getLogger("dials.extensions.dispersion_spotfinder_threshold_ext")
 
 
@@ -12,8 +20,6 @@ class DispersionSpotFinderThresholdExt(object):
 
     @classmethod
     def phil(cls):
-        from libtbx.phil import parse
-
         phil = parse(
             """
       gain = None
@@ -71,7 +77,7 @@ class DispersionSpotFinderThresholdExt(object):
 
         :param params: The input parameters
         """
-        self.params = params
+        self.params = ScopedPhilScope(params.spotfinder)
 
     def compute_threshold(self, image, mask):
         """
@@ -81,39 +87,29 @@ class DispersionSpotFinderThresholdExt(object):
         :param mask: The pixel mask on the image
         :returns: A boolean mask showing foreground/background pixels
         """
-
-        import libtbx
-
-        params = self.params
-        if params.spotfinder.threshold.dispersion.global_threshold is libtbx.Auto:
-            params.spotfinder.threshold.dispersion.global_threshold = int(
+        if self.params.threshold.dispersion.global_threshold is libtbx.Auto:
+            self.params.threshold.dispersion.global_threshold = int(
                 estimate_global_threshold(image, mask)
             )
             logger.info(
                 "Setting global_threshold: %i"
-                % (params.spotfinder.threshold.dispersion.global_threshold)
+                % (self.params.threshold.dispersion.global_threshold)
             )
 
-        from dials.algorithms.spot_finding.threshold import DispersionThresholdStrategy
-
         self._algorithm = DispersionThresholdStrategy(
-            kernel_size=params.spotfinder.threshold.dispersion.kernel_size,
-            gain=params.spotfinder.threshold.dispersion.gain,
-            mask=params.spotfinder.lookup.mask,
-            n_sigma_b=params.spotfinder.threshold.dispersion.sigma_background,
-            n_sigma_s=params.spotfinder.threshold.dispersion.sigma_strong,
-            min_count=params.spotfinder.threshold.dispersion.min_local,
-            global_threshold=params.spotfinder.threshold.dispersion.global_threshold,
+            kernel_size=self.params.threshold.dispersion.kernel_size,
+            gain=self.params.threshold.dispersion.gain,
+            mask=self.params.lookup.mask,
+            n_sigma_b=self.params.threshold.dispersion.sigma_background,
+            n_sigma_s=self.params.threshold.dispersion.sigma_strong,
+            min_count=self.params.threshold.dispersion.min_local,
+            global_threshold=self.params.threshold.dispersion.global_threshold,
         )
 
         return self._algorithm(image, mask)
 
 
 def estimate_global_threshold(image, mask=None, plot=False):
-
-    from scitbx.array_family import flex
-    from scitbx import matrix
-
     n_above_threshold = flex.size_t()
     threshold = flex.double()
     for i in range(1, 20):

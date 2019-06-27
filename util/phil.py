@@ -158,3 +158,35 @@ def parse(
         converter_registry=converter_registry,
         process_includes=process_includes,
     )
+
+
+class ScopedPhilScope(object):
+    """
+    Copies a phil scope to a simple attribute-lookup object.
+
+    This is required for e.g. very deep and complex phil trees to be
+    passed over pickle boundaries; because they self-reference and pass
+    this information over pickle, even attempting to pickle a small
+    scope can end up using an excessively large amount of memory (or
+    hang trying to dump).
+    """
+
+    def __init__(self, from_scope):
+        self._params = set()
+        self._phil_path = from_scope.__phil_path__()
+        for attr in dir(from_scope):
+            if attr.startswith("_"):
+                continue
+            value = getattr(from_scope, attr)
+            if isinstance(value, libtbx.phil.scope_extract):
+                value = ScopedPhilScope(value)
+            setattr(self, attr, value)
+            self._params.add(attr)
+
+    def __repr__(self):
+        return "{{{}}}".format(
+            ", ".join(
+                "{}={}".format(key, repr(getattr(self, key)))
+                for key in sorted(self._params)
+            )
+        )

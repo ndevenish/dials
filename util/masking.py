@@ -8,6 +8,7 @@ from iotbx.phil import parse
 
 from dials.array_family import flex
 from dials.util.ext import ResolutionMaskGenerator
+from dials.util.phil import ScopedPhilScope
 from dxtbx.masking import (
     mask_untrusted_rectangle,
     mask_untrusted_circle,
@@ -133,7 +134,7 @@ class MaskGenerator(object):
 
     def __init__(self, params):
         """ Set the parameters. """
-        self.params = params
+        self.params = ScopedPhilScope(params)
 
     def generate(self, imageset):
         """ Generate the mask. """
