@@ -471,9 +471,11 @@ def unpack_python():
 
 def install_python(check_only=False):
     python3 = precommit_home.join("bin").join("python3")
-    if python3.check():
+    if python3.check() and python_version(python3) == python_source_version:
         return python3
-    if check_only:
+    elif python3.check() and check_only:
+        return python3
+    elif check_only:
         return False
     sourcedir = precommit_home / "Python-{}".format(python_source_version)
     ProgressOverall.start()
