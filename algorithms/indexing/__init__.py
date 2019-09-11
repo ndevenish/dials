@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 import warnings
 
 import dials_algorithms_indexing_ext as ext
+from dials.algorithms.indexing import assign_indices
 
 sampling_volume_map = ext.sampling_volume_map
 
@@ -16,8 +17,6 @@ class DialsIndexRefineError(DialsIndexError):
 
 
 def index_reflections(reflections, experiments, d_min=None, tolerance=0.3):
-    from dials.algorithms.indexing import assign_indices
-
     warnings.warn(
         "index_reflections is deprectated, use "
         "dials.algorithms.indexing.assign_indices.AssignIndicesGlobal instead",

@@ -1,5 +1,20 @@
 from __future__ import absolute_import, division, print_function
 
+from math import ceil
+
+from dials.algorithms.integration.parallel_integrator import (
+    GaussianRSIntensityCalculator,
+    GaussianRSMaskCalculator,
+    GaussianRSMultiCrystalMaskCalculator,
+    GaussianRSReferenceCalculator,
+)
+from dials.algorithms.profile_model.gaussian_rs.transform import TransformSpec
+from dials.algorithms.profile_model.modeller import (
+    CircleSampler,
+    GridSampler,
+    SingleSampler,
+)
+
 
 class GaussianRSMaskCalculatorFactory(object):
     """
@@ -11,13 +26,6 @@ class GaussianRSMaskCalculatorFactory(object):
         """
         Create the mask calculator
         """
-        from dials.algorithms.integration.parallel_integrator import (
-            GaussianRSMaskCalculator,
-        )
-        from dials.algorithms.integration.parallel_integrator import (
-            GaussianRSMultiCrystalMaskCalculator,
-        )
-
         result = GaussianRSMultiCrystalMaskCalculator()
         for e in experiments:
             alg = GaussianRSMaskCalculator(
@@ -42,10 +50,6 @@ class GaussianRSIntensityCalculatorFactory(object):
         """
         Create the intensity calculator
         """
-        from dials.algorithms.integration.parallel_integrator import (
-            GaussianRSIntensityCalculator,
-        )
-
         # Return the intensity algorithm
         return GaussianRSIntensityCalculator(data, detector_space, deconvolution)
 
@@ -60,15 +64,6 @@ class GaussianRSReferenceCalculatorFactory(object):
         """
         Create the intensity calculator
         """
-        from dials.algorithms.integration.parallel_integrator import (
-            GaussianRSReferenceCalculator,
-        )
-        from dials.algorithms.profile_model.modeller import SingleSampler
-        from dials.algorithms.profile_model.modeller import CircleSampler
-        from dials.algorithms.profile_model.modeller import GridSampler
-        from dials.algorithms.profile_model.gaussian_rs.transform import TransformSpec
-
-        from math import ceil
 
         # Assume the detector and scan are the same in each case
         detector = experiments[0].detector

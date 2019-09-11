@@ -6,17 +6,20 @@ from __future__ import absolute_import, division, print_function
 
 import json
 import os
-import pytest
-import procrunner
 
+import procrunner
+import pytest
+
+import iotbx.merging_statistics
 from libtbx import phil
-from dxtbx.serialize import load
-from dxtbx.model.experiment_list import ExperimentList
-from dxtbx.model import Crystal, Scan, Beam, Goniometer, Detector, Experiment
-from dials.util import Sorry
+
 from dials.array_family import flex
-from dials.util.options import OptionParser
 from dials.command_line.scale import Script
+from dials.util import Sorry
+from dials.util.options import OptionParser
+from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
+from dxtbx.model.experiment_list import ExperimentList
+from dxtbx.serialize import load
 
 
 def run_one_scaling(working_directory, argument_list):
@@ -47,8 +50,6 @@ def get_merging_stats(
     data_labels=None,
 ):
     """Return a merging statistics result from an mtz file."""
-    import iotbx.merging_statistics
-
     i_obs = iotbx.merging_statistics.select_data(
         scaled_unmerged_mtz, data_labels=data_labels
     )

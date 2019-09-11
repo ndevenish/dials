@@ -1,18 +1,20 @@
 from __future__ import absolute_import, division, print_function
 
 import random
+from math import cos, pi, sin, sqrt
+
+from scitbx import matrix
+from scitbx.array_family import flex
 
 from dials.algorithms.polygon.spatial_interpolation import (
-    regrid_irregular_grid_to_grid,
     regrid_grid_to_irregular_grid,
+    regrid_irregular_grid_to_grid,
 )
 
 
 class TestRegridIrregularToRegular(object):
     @staticmethod
     def test_identical():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         height = 10
         width = 10
@@ -40,8 +42,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_known_offset():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         height = 10
         width = 10
@@ -75,8 +75,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_larger_output():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         height = 10
         width = 10
@@ -105,8 +103,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_larger_input():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         input_height = 20
         input_width = 20
@@ -139,10 +135,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_known_orientation():
-        from scitbx.array_family import flex
-        from scitbx import matrix
-        from math import sin, cos, pi, sqrt
-
         # Set the size of the grid
         input_height = 4
         input_width = 4
@@ -179,10 +171,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_conservation_of_counts():
-        from scitbx.array_family import flex
-        from scitbx import matrix
-        from math import sin, cos, pi
-
         # Set the size of the grid
         input_height = 10
         input_width = 10
@@ -220,8 +208,6 @@ class TestRegridIrregularToRegular(object):
 class TestRegridRegularToIrregular(object):
     @staticmethod
     def test_identical():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         height = 10
         width = 10
@@ -249,8 +235,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_known_offset():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         height = 10
         width = 10
@@ -284,8 +268,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_larger_output():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         height = 10
         width = 10
@@ -314,8 +296,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_larger_input():
-        from scitbx.array_family import flex
-
         # Set the size of the grid
         input_height = 20
         input_width = 20
@@ -346,10 +326,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_known_orientation():
-        from scitbx.array_family import flex
-        from scitbx import matrix
-        from math import sin, cos, pi, sqrt
-
         # Set the size of the grid
         input_height = 4
         input_width = 4
@@ -384,10 +360,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_conservation_of_counts():
-        from scitbx.array_family import flex
-        from scitbx import matrix
-        from math import sin, cos, pi
-
         # Set the size of the grid
         input_height = 10
         input_width = 10

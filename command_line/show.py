@@ -2,13 +2,22 @@
 
 from __future__ import absolute_import, division, print_function
 
+import collections
 import os
-import iotbx.phil
+import sys
+
 import numpy
+from orderedset import OrderedSet
+
+import iotbx.phil
 from libtbx import table_utils
-from dxtbx.model.experiment_list import ExperimentListFactory
 from scitbx.math import five_number_summary
+
+from dials.algorithms.shoebox import MaskCode
+from dials.array_family import flex
 from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 help_message = """
 
@@ -172,9 +181,6 @@ def show_goniometer(goniometer):
 
 def run(args):
     import dials.util.banner  # noqa: F401 - Importing means that it prints
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    from dials.util.options import flatten_reflections
 
     usage = "dials.show [options] models.expt | image_*.cbf"
 
@@ -353,9 +359,6 @@ def show_reflections(
 
     text = []
 
-    import collections
-    from orderedset import OrderedSet
-
     formats = collections.OrderedDict(
         (
             ("miller_index", "%i, %i, %i"),
@@ -415,9 +418,6 @@ def show_reflections(
     )
 
     for rlist in reflections:
-        from dials.array_family import flex
-        from dials.algorithms.shoebox import MaskCode
-
         foreground_valid = MaskCode.Valid | MaskCode.Foreground
         text.append("")
         text.append("Reflection list contains %i reflections" % (len(rlist)))
@@ -620,6 +620,4 @@ def show_reflections(
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

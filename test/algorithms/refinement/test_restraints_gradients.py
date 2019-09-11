@@ -9,19 +9,21 @@ from __future__ import absolute_import, division, print_function
 import math
 import os
 
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from scitbx import matrix
+from scitbx.math import angle_derivative_wrt_vectors
+
+from dials.algorithms.refinement.parameterisation.crystal_parameters import (
+    CrystalOrientationParameterisation,
+    CrystalUnitCellParameterisation,
+)
+from dials.algorithms.refinement.restraints.restraints import SingleUnitCellTie
+
 
 def test(dials_regression):
-    from scitbx import matrix
-    from libtbx.phil import parse
-    from libtbx.test_utils import approx_equal
-
     # Get modules to build models and minimiser using PHIL
     from dials.test.algorithms.refinement import setup_geometry
-
-    from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-        CrystalOrientationParameterisation,
-        CrystalUnitCellParameterisation,
-    )
 
     # Symmetry constrained parameterisation for the unit cell
     DEG2RAD = math.pi / 180.0
@@ -121,11 +123,7 @@ def test(dials_regression):
     assert CrystalOrientationParameterisation(crystal)
     xluc_param = CrystalUnitCellParameterisation(crystal)
 
-    from dials.algorithms.refinement.restraints.restraints import SingleUnitCellTie
-
     assert SingleUnitCellTie(xluc_param, [0] * 6, [0] * 6)
-
-    from scitbx.math import angle_derivative_wrt_vectors
 
     B = matrix.sqr(crystal.get_B())
     O = (B.transpose()).inverse()

@@ -5,17 +5,34 @@ import logging
 import math
 from time import time
 
-from dials.array_family import flex
-from dials.util import log
-from dials.util.version import dials_version
-from dials.util import show_mail_on_error, Sorry
-from dials.util.filter_reflections import filter_reflection_table
-from dials.util.options import flatten_experiments, flatten_reflections
-from dials.util.multi_dataset_handling import parse_multiple_datasets
-from dials.algorithms.refinement.corrgram import create_correlation_plots
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.utils import format_float_with_standard_uncertainty
+import iotbx.cif.model
+import libtbx.load_env
+from cctbx import miller
+from cctbx.sgtbx import space_group
 from libtbx.phil import parse
+from libtbx.table_utils import simple_table
+from libtbx.utils import format_float_with_standard_uncertainty
+
+from dials.algorithms.refinement.corrgram import create_correlation_plots
+from dials.algorithms.refinement.parameterisation.crystal_parameters import (
+    CrystalUnitCellParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.parameter_report import (
+    ParameterReporter,
+)
+from dials.algorithms.refinement.two_theta_refiner import (
+    TwoThetaExperimentsPredictor,
+    TwoThetaPredictionParameterisation,
+    TwoThetaReflectionManager,
+    TwoThetaTarget,
+)
+from dials.array_family import flex
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.filter_reflections import filter_reflection_table
+from dials.util.multi_dataset_handling import parse_multiple_datasets
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 logger = logging.getLogger("dials.command_line.two_theta_refine")
 
@@ -100,9 +117,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = (
             "usage: %s [options] [param.phil] "
@@ -180,8 +194,6 @@ class Script(object):
     @staticmethod
     def convert_to_P1(reflections, experiments):
         """Convert the input crystals to P 1 and reindex the reflections"""
-        from cctbx.sgtbx import space_group
-
         for iexp, exp in enumerate(experiments):
             sel = reflections["id"] == iexp
             xl = exp.crystal
@@ -195,19 +207,6 @@ class Script(object):
 
     @staticmethod
     def create_refiner(params, reflections, experiments):
-
-        from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-            CrystalUnitCellParameterisation,
-        )
-        from dials.algorithms.refinement.parameterisation.parameter_report import (
-            ParameterReporter,
-        )
-        from dials.algorithms.refinement.two_theta_refiner import (
-            TwoThetaReflectionManager,
-            TwoThetaTarget,
-            TwoThetaExperimentsPredictor,
-            TwoThetaPredictionParameterisation,
-        )
 
         # Only parameterise the crystal unit cell
         det_params = None
@@ -280,8 +279,6 @@ class Script(object):
     def cell_param_table(crystal):
         """Construct a table of cell parameters and their ESDs"""
 
-        from libtbx.table_utils import simple_table
-
         cell = crystal.get_unit_cell().parameters()
         esd = crystal.get_cell_parameter_sd()
         vol = crystal.get_unit_cell().volume()
@@ -321,8 +318,6 @@ class Script(object):
     @staticmethod
     def generate_cif(crystal, refiner, filename):
         logger.info("Saving CIF information to %s", filename)
-        from cctbx import miller
-        import iotbx.cif.model
 
         block = iotbx.cif.model.block()
         block["_audit_creation_method"] = dials_version()
@@ -381,8 +376,6 @@ class Script(object):
     @staticmethod
     def generate_mmcif(crystal, refiner, filename):
         logger.info("Saving mmCIF information to %s", filename)
-        from cctbx import miller
-        import iotbx.cif.model
 
         block = iotbx.cif.model.block()
         block["_audit.creation_method"] = dials_version()

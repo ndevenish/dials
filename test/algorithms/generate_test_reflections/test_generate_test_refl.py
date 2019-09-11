@@ -1,11 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import command_line
+
+from dials.algorithms.simulation.generate_test_reflections import main, master_phil
+
 
 def test_generate_test_reflections(tmpdir):
     tmpdir.chdir()
-    from dials.algorithms.simulation.generate_test_reflections import main
-    from dials.algorithms.simulation.generate_test_reflections import master_phil
-    from libtbx.phil import command_line
 
     cmd = command_line.argument_interpreter(master_phil=master_phil)
     working_phil = cmd.process_and_fetch(

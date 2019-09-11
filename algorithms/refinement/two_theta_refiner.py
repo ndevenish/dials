@@ -1,23 +1,26 @@
 """Versions of refinement classes for two theta refinement of the unit cell"""
 
 from __future__ import absolute_import, division, print_function
+
 import logging
+from math import pi, sqrt
 
-logger = logging.getLogger(__name__)
-
-from dials.array_family import flex
-from scitbx import matrix
-from math import sqrt, pi
 from libtbx.table_utils import simple_table
+from scitbx import matrix
 from scitbx.math import five_number_summary
-from dials.algorithms.refinement.reflection_manager import ReflectionManager
-from dials.algorithms.refinement.prediction.managed_predictors import (
-    ExperimentsPredictor,
-)
-from dials.algorithms.refinement.target import Target
+
 from dials.algorithms.refinement.parameterisation.prediction_parameters import (
     PredictionParameterisation,
 )
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ExperimentsPredictor,
+)
+from dials.algorithms.refinement.reflection_manager import ReflectionManager
+from dials.algorithms.refinement.target import Target
+from dials.array_family import flex
+
+logger = logging.getLogger(__name__)
+
 
 # constants
 RAD2DEG = 180.0 / pi

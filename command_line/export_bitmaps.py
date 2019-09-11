@@ -3,10 +3,18 @@ from __future__ import absolute_import, division, print_function
 import os
 import sys
 
+from PIL import Image
+
 import iotbx.phil
-from dials.util.options import flatten_experiments
-from dials.util.options import OptionParser
+from rstbx.slip_viewer.tile_generation import (
+    _get_flex_image,
+    _get_flex_image_multipanel,
+)
+
+from dials.algorithms.image.threshold import DispersionThresholdDebug
+from dials.array_family import flex
 from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 
@@ -114,11 +122,6 @@ def run(args):
 
 
 def imageset_as_bitmaps(imageset, params):
-    from rstbx.slip_viewer.tile_generation import (
-        _get_flex_image,
-        _get_flex_image_multipanel,
-    )
-
     brightness = params.brightness / 100
     vendortype = "made up"
     # check that binning is a power of 2
@@ -202,7 +205,6 @@ def imageset_as_bitmaps(imageset, params):
 
         # now export as a bitmap
         flex_image.prep_string()
-        from PIL import Image
 
         # XXX is size//binning safe here?
         pil_img = Image.frombytes(
@@ -242,9 +244,6 @@ def image_filter(
     min_local,
     kernel_size,
 ):
-
-    from dials.algorithms.image.threshold import DispersionThresholdDebug
-    from dials.array_family import flex
 
     if display == "image":
         return raw_data

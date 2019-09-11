@@ -2,11 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+from cctbx.array_family import flex
+
+from dials.algorithms.integration.overlaps_filter import OverlapsFilterMultiExpt
+from dials.algorithms.shoebox import MaskCode
+from dials.util.options import Importer, flatten_experiments, flatten_reflections
+
 
 def test_for_overlaps(dials_regression):
-    from cctbx.array_family import flex
-    from dials.algorithms.shoebox import MaskCode
-
     code_fgd = MaskCode.Foreground | MaskCode.Valid
 
     def is_fgd(code):
@@ -18,8 +21,6 @@ def test_for_overlaps(dials_regression):
 
     def is_overlap(code):
         return (code & code_overlap) == code_overlap
-
-    from dials.util.options import Importer, flatten_experiments, flatten_reflections
 
     # test data
     refl_path = os.path.join(
@@ -44,8 +45,6 @@ def test_for_overlaps(dials_regression):
 
     reflections = flatten_reflections(importer.reflections)
     experiments = flatten_experiments(importer.experiments)
-
-    from dials.algorithms.integration.overlaps_filter import OverlapsFilterMultiExpt
 
     overlaps_filter = OverlapsFilterMultiExpt(reflections[0], experiments)
     overlaps_filter.remove_foreground_foreground_overlaps()

@@ -1,8 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-from dials.array_family import flex
-from scitbx import matrix
+from collections import namedtuple
+
+from scitbx import matrix, sparse
+
 from dials.algorithms.refinement import DialsRefineConfigError
+from dials.array_family import flex
+
 
 """The PredictionParameterisation class ties together parameterisations for
 individual experimental models: beam, crystal orientation, crystal unit cell
@@ -109,7 +113,6 @@ class PredictionParameterisation(object):
             for i, p in enumerate(goniometer_parameterisations)
             for ids in p.get_experiment_ids()
         }
-        from collections import namedtuple
 
         ParamSet = namedtuple(
             "ParamSet",
@@ -648,8 +651,6 @@ class SparseGradientVectorMixin(object):
         indexed by the given keys. The value for each key will be an empty vector of
         size m, to store the derivatives of n parameters, for m reflections.
         This is the sparse vector version."""
-
-        from scitbx import sparse
 
         new_results = [{key: sparse.matrix_column(m) for key in keys} for _ in range(n)]
         results.extend(new_results)

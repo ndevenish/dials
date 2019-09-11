@@ -1,10 +1,16 @@
 from __future__ import absolute_import, division, print_function
-from iotbx import phil
-from dials.array_family import flex
+
+from math import cos, pi, sin
+
 import six.moves.cPickle as pickle
-from dials.util import Sorry
-from scitbx import matrix
+
 import libtbx.load_env
+from iotbx import phil
+from scitbx import matrix
+
+from dials.array_family import flex
+from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 
@@ -90,8 +96,6 @@ def ellipse_matrix_form(phi, l1, l2):
     where the first axis makes an angle phi with the X axis and the scale factors
     for the axes are l1 and l2.
     See https://www.le.ac.uk/users/dsgp1/COURSES/TOPICS/quadrat.pdf"""
-    from math import cos, sin, pi
-
     deg2rad = pi / 180.0
     phi *= deg2rad
     cphi = cos(phi)
@@ -163,10 +167,6 @@ def make_dx_dy_ellipse(imageset, phi, l1, l2, centre_xy):
 
 
 def main():
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    import libtbx.load_env
-
     usage = "%s [options] image_*.cbf" % (libtbx.env.dispatcher_name)
 
     parser = OptionParser(

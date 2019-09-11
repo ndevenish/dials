@@ -4,13 +4,20 @@ import math
 import random
 
 from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.profile_model.gaussian_rs import (
+    BBoxCalculator3D,
+    CoordinateSystem,
+)
+from dials.algorithms.profile_model.gaussian_rs.transform import (
+    MapFramesForward,
+    MapFramesReverse,
+)
+from dials.model.serialize import load
 
 
 def test_map_frames_forward(dials_data):
-    from dials.model.serialize import load
-    from dials.algorithms.profile_model.gaussian_rs.transform import MapFramesForward
-    from dials.algorithms.profile_model.gaussian_rs import BBoxCalculator3D
-
     sweep = load.sweep(dials_data("centroid_test_data").join("sweep.json").strpath)
 
     # Get the models
@@ -43,9 +50,6 @@ def test_map_frames_forward(dials_data):
     calculate_bbox = BBoxCalculator3D(
         beam, detector, gonio, scan, delta_divergence, delta_mosaicity
     )
-
-    from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem
-    from scitbx.array_family import flex
 
     assert len(detector) == 1
     s0 = beam.get_s0()
@@ -102,10 +106,6 @@ def test_map_frames_forward(dials_data):
 
 
 def test_map_frames_reverse(dials_data):
-    from dials.model.serialize import load
-    from dials.algorithms.profile_model.gaussian_rs.transform import MapFramesReverse
-    from dials.algorithms.profile_model.gaussian_rs import BBoxCalculator3D
-
     sweep = load.sweep(dials_data("centroid_test_data").join("sweep.json").strpath)
 
     # Get the models
@@ -138,9 +138,6 @@ def test_map_frames_reverse(dials_data):
     calculate_bbox = BBoxCalculator3D(
         beam, detector, gonio, scan, delta_divergence, delta_mosaicity
     )
-
-    from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem
-    from scitbx.array_family import flex
 
     s0 = beam.get_s0()
     m2 = gonio.get_rotation_axis()
@@ -203,11 +200,6 @@ def test_map_frames_reverse(dials_data):
 
 
 def test_map_forward_reverse(dials_data):
-    from dials.model.serialize import load
-    from dials.algorithms.profile_model.gaussian_rs.transform import MapFramesReverse
-    from dials.algorithms.profile_model.gaussian_rs.transform import MapFramesForward
-    from dials.algorithms.profile_model.gaussian_rs import BBoxCalculator3D
-
     sweep = load.sweep(dials_data("centroid_test_data").join("sweep.json").strpath)
 
     # Get the models
@@ -250,8 +242,6 @@ def test_map_forward_reverse(dials_data):
     calculate_bbox = BBoxCalculator3D(
         beam, detector, gonio, scan, delta_divergence, delta_mosaicity
     )
-
-    from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem
 
     s0 = beam.get_s0()
     m2 = gonio.get_rotation_axis()

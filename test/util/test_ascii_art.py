@@ -5,10 +5,10 @@ import os
 import six
 import six.moves.cPickle as pickle
 
+from dials.util import ascii_art
+
 
 def test_spot_counts_per_image_plot(dials_regression):
-    from dials.util import ascii_art
-
     data_dir = os.path.join(dials_regression, "indexing_test_data", "i04_weak_data")
     pickle_path = os.path.join(data_dir, "full.pickle")
 

@@ -3,18 +3,33 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 from collections import namedtuple
+from copy import deepcopy
 
 import six
 import six.moves.cPickle as pickle
-from dials.util import show_mail_on_error, Sorry
-from dxtbx.model.experiment_list import Experiment
-from dxtbx.model.experiment_list import ExperimentList
-from dxtbx.model.experiment_list import ExperimentListFactory
-from dxtbx.model.experiment_list import ExperimentListTemplateImporter
-from dxtbx.imageset import ImageGrid
-from dxtbx.imageset import ImageSweep
-from dials.util.options import flatten_experiments
+
 from libtbx.phil import parse
+
+from dials.util import Sorry, show_mail_on_error
+from dials.util.options import OptionParser, flatten_experiments, geometry_phil_scope
+from dials.util.version import dials_version
+from dxtbx.format.image import ImageBool, ImageDouble
+from dxtbx.imageset import ImageGrid, ImageSetFactory, ImageSweep
+from dxtbx.model import (
+    BeamFactory,
+    DetectorFactory,
+    GoniometerFactory,
+    Scan,
+    ScanFactory,
+)
+from dxtbx.model.experiment_list import (
+    Experiment,
+    ExperimentList,
+    ExperimentListFactory,
+    ExperimentListTemplateImporter,
+    SweepDiff,
+)
+from dxtbx.sweep_filenames import template_regex_from_list
 
 logger = logging.getLogger("dials.command_line.import")
 
@@ -305,13 +320,6 @@ class ManualGeometryUpdater(object):
         """
         Override the parameters
         """
-        from dxtbx.imageset import ImageSweep, ImageSetFactory
-        from dxtbx.model import BeamFactory
-        from dxtbx.model import DetectorFactory
-        from dxtbx.model import GoniometerFactory
-        from dxtbx.model import ScanFactory
-        from copy import deepcopy
-
         if self.params.geometry.convert_sweeps_to_stills:
             imageset = ImageSetFactory.imageset_from_anyset(imageset)
         if not isinstance(imageset, ImageSweep):
@@ -362,8 +370,6 @@ class ManualGeometryUpdater(object):
     def extrapolate_imageset(
         self, imageset=None, beam=None, detector=None, goniometer=None, scan=None
     ):
-        from dxtbx.imageset import ImageSetFactory
-
         first, last = scan.get_image_range()
         sweep = ImageSetFactory.make_sweep(
             template=imageset.get_template(),
@@ -378,8 +384,6 @@ class ManualGeometryUpdater(object):
         return sweep
 
     def convert_stills_to_sweep(self, imageset):
-        from dxtbx.model import Scan
-
         assert self.params.geometry.scan.oscillation is not None
         beam = imageset.get_beam(index=0)
         detector = imageset.get_detector(index=0)
@@ -408,8 +412,6 @@ class ManualGeometryUpdater(object):
                 setting_rotation_tolerance=self.params.input.tolerance.goniometer.setting_rotation,
             )
         oscillation = self.params.geometry.scan.oscillation
-        from dxtbx.sweep_filenames import template_regex_from_list
-        from dxtbx.imageset import ImageSetFactory
 
         template, indices = template_regex_from_list(imageset.paths())
         image_range = (min(indices), max(indices))
@@ -440,8 +442,6 @@ class MetaDataUpdater(object):
         """
         Init the class
         """
-        from dials.util.options import geometry_phil_scope
-
         self.params = params
 
         # Create the geometry updater
@@ -551,8 +551,6 @@ class MetaDataUpdater(object):
         return experiments
 
     def update_lookup(self, imageset, lookup):
-        from dxtbx.format.image import ImageBool, ImageDouble
-
         if lookup.size is not None:
             d = imageset.get_detector()
             assert len(lookup.size) == len(d), "Incompatible size"
@@ -676,8 +674,6 @@ class Script(object):
 
     def __init__(self, phil=phil_scope):
         """ Set the expected options. """
-        from dials.util.options import OptionParser
-
         # Create the option parser
         usage = "dials.import [options] /path/to/image/files"
         self.parser = OptionParser(
@@ -701,8 +697,6 @@ class Script(object):
             from dials.util import log
 
             log.config(verbosity=options.verbose, logfile=params.output.log)
-
-        from dials.util.version import dials_version
 
         logger.info(dials_version())
 
@@ -856,8 +850,6 @@ class Script(object):
         """
         Print a diff between sweeps.
         """
-        from dxtbx.model.experiment_list import SweepDiff
-
         diff = SweepDiff(params.input.tolerance)
         text = diff(sweep1, sweep2)
         logger.info("\n".join(text))

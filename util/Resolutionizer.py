@@ -4,10 +4,15 @@ import math
 import sys
 import time
 
+import iotbx.merging_statistics
 import iotbx.phil
+from cctbx import uctbx
 from cctbx.array_family import flex
-from dials.util import Sorry
+from iotbx import reflection_file_reader
 from scitbx import lbfgs
+from scitbx.math import curve_fitting
+
+from dials.util import Sorry
 
 
 def nint(a):
@@ -108,8 +113,6 @@ def fit(x, y, order):
 
 
 def tanh_fit(x, y, iqr_multiplier=None):
-
-    from scitbx.math import curve_fitting
 
     tf = curve_fitting.tanh_fit(x, y)
     f = curve_fitting.tanh(*tf.params)
@@ -279,14 +282,10 @@ class resolution_plot(object):
             self.ax.set_ylim(0, max(ylim[1], 1.05))
 
     def plot_resolution_limit(self, d):
-        from cctbx import uctbx
-
         d_star_sq = uctbx.d_as_d_star_sq(d)
         self.ax.plot([d_star_sq, d_star_sq], self.ax.get_ylim(), linestyle="--")
 
     def savefig(self, filename):
-        from cctbx import uctbx
-
         xticks = self.ax.get_xticks()
         xticks_d = [
             "%.2f" % uctbx.d_star_sq_as_d(ds2) if ds2 > 0 else 0 for ds2 in xticks
@@ -328,8 +327,6 @@ class resolutionizer(object):
 
         self._intensities = i_obs
 
-        import iotbx.merging_statistics
-
         self._merging_statistics = iotbx.merging_statistics.dataset_statistics(
             i_obs=i_obs,
             n_bins=self._params.nbins,
@@ -345,8 +342,6 @@ class resolutionizer(object):
     @classmethod
     def from_unmerged_mtz(cls, scaled_unmerged, params):
         def miller_array_from_mtz(unmerged_mtz):
-            from iotbx import reflection_file_reader
-
             hkl_in = reflection_file_reader.any_reflection_file(scaled_unmerged)
             miller_arrays = hkl_in.as_miller_arrays(merge_equivalents=False)
             i_obs = None

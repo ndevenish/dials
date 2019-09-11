@@ -2,6 +2,9 @@ from __future__ import absolute_import, division, print_function
 
 import six.moves.cPickle as pickle
 
+from dials.algorithms.background.gmodel import Creator
+from dials.algorithms.integration.parallel_integrator import GModelBackgroundCalculator
+
 
 class ModelCache(object):
     """
@@ -52,8 +55,6 @@ class BackgroundAlgorithm(object):
         :param robust: Use the robust background algorithm
         :param tuning_constant: The robust tuning constant
         """
-        from dials.algorithms.background.gmodel import Creator
-
         # Get the model
         model = global_model_cache.get(model)
 
@@ -99,10 +100,6 @@ class GModelBackgroundCalculatorFactory(object):
         :param robust: Use the robust background algorithm
         :param tuning_constant: The robust tuning constant
         """
-        from dials.algorithms.integration.parallel_integrator import (
-            GModelBackgroundCalculator,
-        )
-
         # Get the model
         model = global_model_cache.get(model)
 

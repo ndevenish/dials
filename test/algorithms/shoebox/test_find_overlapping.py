@@ -3,11 +3,10 @@ from __future__ import absolute_import, division, print_function
 import random
 
 from dials.algorithms.shoebox import find_overlapping
+from dials.array_family import flex
 
 
 def test_single_panel():
-    from dials.array_family import flex
-
     nrefl = 1000
 
     # Generate bboxes
@@ -38,8 +37,6 @@ def test_single_panel():
 
 
 def test_multiple_panels():
-    from dials.array_family import flex
-
     nrefl = 1000
 
     # Generate bboxes

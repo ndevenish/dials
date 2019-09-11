@@ -4,12 +4,32 @@ import math
 
 import pytest
 
+from cctbx.sgtbx import space_group, space_group_symbols
+from libtbx.phil import parse
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement.parameterisation.beam_parameters import (
+    BeamParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.crystal_parameters import (
+    CrystalOrientationParameterisation,
+    CrystalUnitCellParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.detector_parameters import (
+    DetectorParameterisationSinglePanel,
+)
+from dials.algorithms.refinement.parameterisation.goniometer_parameters import (
+    GoniometerParameterisation,
+)
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
+from dxtbx.model import ScanFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+
 
 def test():
-    from cctbx.sgtbx import space_group, space_group_symbols
-    from libtbx.phil import parse
-    from scitbx.array_family import flex
-
     ##### Import model builder
 
     from dials.test.algorithms.refinement.setup_geometry import Extract
@@ -17,29 +37,11 @@ def test():
     ##### Imports for reflection prediction
 
     from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        ScansExperimentsPredictor,
-    )
 
     #### Import model parameterisations
 
     from dials.algorithms.refinement.parameterisation.prediction_parameters import (
         XYPhiPredictionParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.detector_parameters import (
-        DetectorParameterisationSinglePanel,
-    )
-    from dials.algorithms.refinement.parameterisation.beam_parameters import (
-        BeamParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-        CrystalOrientationParameterisation,
-        CrystalUnitCellParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.goniometer_parameters import (
-        GoniometerParameterisation,
     )
 
     #### Create models
@@ -64,7 +66,6 @@ def test():
 
     # Build a mock scan for a 72 degree sweep
     sweep_range = (0.0, math.pi / 5.0)
-    from dxtbx.model import ScanFactory
 
     sf = ScanFactory()
     myscan = sf.make_scan(

@@ -3,30 +3,37 @@ Tests for scaling utilities module.
 """
 from __future__ import absolute_import, division, print_function
 
-from math import sqrt, pi
 import os
+from math import pi, sqrt
 
 import numpy as np
 import pytest
-from dxtbx.model import Experiment, Crystal
-from dials.array_family import flex
+from mock import Mock
+
+from libtbx import phil
+from libtbx.test_utils import approx_equal
+
+from dials.algorithms.scaling.scaling_library import create_scaling_model
 from dials.algorithms.scaling.scaling_utilities import (
+    Reasons,
+    align_rotation_axis_along_z,
     calc_crystal_frame_vectors,
     calc_theta_phi,
-    align_rotation_axis_along_z,
-    set_wilson_outliers,
-    quasi_normalisation,
     calculate_prescaling_correction,
-    Reasons,
+    quasi_normalisation,
+    set_wilson_outliers,
 )
+from dials.array_family import flex
+from dials.util.options import OptionParser
 from dials_scaling_ext import (
+    calc_lookup_index,
+    calc_theta_phi,
     calculate_harmonic_tables_from_selections,
     create_sph_harm_lookup_table,
     create_sph_harm_table,
-    calc_lookup_index,
 )
-from libtbx.test_utils import approx_equal
-from mock import Mock
+from dxtbx.model import Crystal, Experiment
+from dxtbx.serialize import load
 
 
 @pytest.fixture(scope="module")
@@ -304,12 +311,6 @@ def test_calculate_harmonic_tables_from_selections():
 
 
 def test_equality_of_two_harmonic_table_methods(dials_regression, run_in_tmpdir):
-    from dials_scaling_ext import calc_theta_phi, calc_lookup_index
-    from dxtbx.serialize import load
-    from dials.util.options import OptionParser
-    from libtbx import phil
-    from dials.algorithms.scaling.scaling_library import create_scaling_model
-
     data_dir = os.path.join(dials_regression, "xia2-28")
     pickle_path = os.path.join(data_dir, "20_integrated.pickle")
     sweep_path = os.path.join(data_dir, "20_integrated_experiments.json")

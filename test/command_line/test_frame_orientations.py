@@ -1,7 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+
 from dials.command_line.frame_orientations import extract_experiment_data
+from dxtbx.model import Crystal, GoniometerFactory, ScanFactory
+from dxtbx.model.experiment_list import Experiment
 
 
 def test_extract_experiment_data():
@@ -10,10 +13,6 @@ def test_extract_experiment_data():
 
     # Set up an Experiment with idealised geometry
     from dxtbx.model import BeamFactory
-    from dxtbx.model import GoniometerFactory
-    from dxtbx.model import Crystal
-    from dxtbx.model import ScanFactory
-    from dxtbx.model.experiment_list import Experiment
 
     beam = BeamFactory.make_beam(unit_s0=(0, 0, -1), wavelength=1.0)
     goniometer = GoniometerFactory.known_axis((1, 0, 0))

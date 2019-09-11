@@ -18,38 +18,40 @@ import time
 from collections import OrderedDict
 
 import six
+
 from cctbx import crystal, sgtbx
-from dials_scaling_ext import row_multiply
-from dials_scaling_ext import calc_sigmasq as cpp_calc_sigmasq
-from dials.array_family import flex
+from libtbx.table_utils import simple_table
+from scitbx import sparse
+
 from dials.algorithms.scaling.basis_functions import basis_function
-from dials.algorithms.scaling.outlier_rejection import determine_outlier_index_arrays
-from dials.algorithms.scaling.Ih_table import IhTable
-from dials.algorithms.scaling.target_function import ScalingTarget, ScalingTargetFixedIH
-from dials.algorithms.scaling.scaling_refiner import (
-    scaling_refinery,
-    error_model_refinery,
+from dials.algorithms.scaling.combine_intensities import (
+    MultiDatasetIntensityCombiner,
+    SingleDatasetIntensityCombiner,
 )
 from dials.algorithms.scaling.error_model.error_model import get_error_model
 from dials.algorithms.scaling.error_model.error_model_target import ErrorModelTarget
+from dials.algorithms.scaling.Ih_table import IhTable
+from dials.algorithms.scaling.outlier_rejection import determine_outlier_index_arrays
 from dials.algorithms.scaling.parameter_handler import create_apm_factory
-from dials.algorithms.scaling.scaling_utilities import (
-    log_memory_usage,
-    DialsMergingStatisticsError,
-)
-from dials.algorithms.scaling.combine_intensities import (
-    SingleDatasetIntensityCombiner,
-    MultiDatasetIntensityCombiner,
-)
 from dials.algorithms.scaling.reflection_selection import (
     calculate_scaling_subset_connected,
-    calculate_scaling_subset_ranges_with_E2,
     calculate_scaling_subset_ranges,
+    calculate_scaling_subset_ranges_with_E2,
     select_connected_reflections_across_datasets,
 )
+from dials.algorithms.scaling.scaling_refiner import (
+    error_model_refinery,
+    scaling_refinery,
+)
+from dials.algorithms.scaling.scaling_utilities import (
+    DialsMergingStatisticsError,
+    log_memory_usage,
+)
+from dials.algorithms.scaling.target_function import ScalingTarget, ScalingTargetFixedIH
+from dials.array_family import flex
 from dials.util.observer import Subject
-from libtbx.table_utils import simple_table
-from scitbx import sparse
+from dials_scaling_ext import calc_sigmasq as cpp_calc_sigmasq
+from dials_scaling_ext import row_multiply
 
 logger = logging.getLogger("dials")
 

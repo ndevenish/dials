@@ -1,11 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+
 from cctbx import sgtbx
 from scitbx import matrix
 from scitbx.math import euler_angles as euler
-from dxtbx.model import Crystal
+
 from dials.algorithms.indexing import compare_orientation_matrices
+from dxtbx.model import Crystal
 
 
 def test_compare_orientation_matrices():

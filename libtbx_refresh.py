@@ -1,7 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
-import dials.precommitbx.nagger
+import os  # required due to cctbx weirdness
+
+import libtbx.load_env
 import libtbx.pkg_utils
+
+import dials.precommitbx.nagger
 
 libtbx.pkg_utils.define_entry_points(
     {
@@ -37,9 +41,6 @@ dials.precommitbx.nagger.nag()
 
 def _install_dials_autocompletion():
     """generate bash.sh and SConscript file in /build/dials/autocomplete"""
-    import libtbx.load_env
-    import os  # required due to cctbx weirdness
-
     # Find the dials source directory
     dist_path = libtbx.env.dist_path("dials")
 

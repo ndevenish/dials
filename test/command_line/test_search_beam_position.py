@@ -1,11 +1,14 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+import sys
 
 import procrunner
 import pytest
+
 import scitbx
 
+from dials.algorithms.indexing.test_index import run_indexing
 from dxtbx.serialize import load
 
 
@@ -109,7 +112,6 @@ def test_index_after_search(dials_data, tmpdir):
         # as it will exceed the maximum Windows command length limits.
         # So, instead:
         import mock
-        import sys
 
         with tmpdir.as_cwd():
             with mock.patch.object(sys, "argv", args):
@@ -156,7 +158,6 @@ def test_index_after_search(dials_data, tmpdir):
 
     # check we can actually index the resulting optimized experiments
     from cctbx import uctbx
-    from dials.algorithms.indexing.test_index import run_indexing
 
     expected_unit_cell = uctbx.unit_cell(
         (57.780, 57.800, 150.017, 89.991, 89.990, 90.007)
@@ -196,8 +197,6 @@ def test_search_single(run_in_tmpdir, dials_regression):
     assert not result.returncode and not result.stderr
     assert os.path.exists("optimised.expt")
 
-    from dxtbx.serialize import load
-
     experiments = load.experiment_list(experiments_path, check_format=False)
     original_imageset = experiments.imagesets()[0]
     optimized_experiments = load.experiment_list("optimised.expt", check_format=False)
@@ -231,8 +230,6 @@ def test_search_small_molecule(dials_data, run_in_tmpdir):
     result = procrunner.run(args)
     assert not result.returncode and not result.stderr
     assert os.path.exists("optimised.expt")
-
-    from dxtbx.serialize import load
 
     datablocks = load.datablock(datablock_path, check_format=False)
     original_imageset = datablocks[0].extract_imagesets()[0]

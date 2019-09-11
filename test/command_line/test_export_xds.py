@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import procrunner
 
+from dials.array_family import flex
+
 
 def test_spots_xds(tmpdir):
     xds_input = "SPOT.XDS"
@@ -34,8 +36,6 @@ def test_spots_xds(tmpdir):
     )
     assert not result.returncode and not result.stderr
     assert tmpdir.join(output_pickle).check(file=1)
-
-    from dials.array_family import flex
 
     reflections = flex.reflection_table.from_file(tmpdir.join(output_pickle).strpath)
     assert len(reflections) == 5

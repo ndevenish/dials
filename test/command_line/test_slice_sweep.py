@@ -2,9 +2,10 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
-import six.moves.cPickle as pickle
 import procrunner
 import pytest
+import six.moves.cPickle as pickle
+
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 

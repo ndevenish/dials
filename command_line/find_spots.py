@@ -3,8 +3,17 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from time import time
 
-from dials.util import show_mail_on_error
+from six.moves import cStringIO as StringIO
+
+import libtbx.load_env
+from libtbx.phil import parse
+
+from dials.array_family import flex
+from dials.util import log, show_mail_on_error
+from dials.util.options import OptionParser, flatten_experiments
+from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.find_spots")
 
@@ -36,7 +45,6 @@ Examples::
 """
 
 # Set the phil scope
-from libtbx.phil import parse
 
 phil_scope = parse(
     """
@@ -79,9 +87,6 @@ class Script(object):
 
     def __init__(self, phil=phil_scope):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = (
             "usage: %s [options] [param.phil] "
@@ -99,11 +104,6 @@ class Script(object):
 
     def run(self, args=None):
         """Execute the script."""
-        from dials.array_family import flex
-        from dials.util.options import flatten_experiments
-        from time import time
-        from dials.util import log
-
         start_time = time()
 
         # Parse the command line
@@ -116,8 +116,6 @@ class Script(object):
                 info=params.output.log,
                 debug=params.output.debug_log,
             )
-
-        from dials.util.version import dials_version
 
         logger.info(dials_version())
 
@@ -174,7 +172,6 @@ class Script(object):
         # Print some per image statistics
         if params.per_image_statistics:
             from dials.algorithms.spot_finding import per_image_analysis
-            from six.moves import cStringIO as StringIO
 
             s = StringIO()
             for i, experiment in enumerate(experiments):

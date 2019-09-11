@@ -5,12 +5,12 @@ from __future__ import absolute_import, division, print_function
 import copy
 import sys
 
-from scitbx.array_family import flex
 import wxtbx.app
+from scitbx.array_family import flex
 
 import dials.util.log
-from dials.util.reciprocal_lattice.viewer import ReciprocalLatticeViewer, phil_scope
 from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.reciprocal_lattice.viewer import ReciprocalLatticeViewer, phil_scope
 
 help_message = """
 Visualise the strong spots from spotfinding in reciprocal space.

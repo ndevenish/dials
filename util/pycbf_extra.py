@@ -1,9 +1,13 @@
 """This module defines some useful header functions for CBF files."""
 from __future__ import absolute_import, division, print_function
 
-from scitbx import matrix
-import pycbf
+from glob import glob
+
 import numpy
+
+from scitbx import matrix
+
+import pycbf
 
 
 def print_info(cbf_path):
@@ -184,8 +188,6 @@ def search_for_image_volume(search_path):
     Returns:
         The image volume
     """
-    from glob import glob
-
     # Load the CBF image volume
     cbf_path = sorted(glob(search_path))
     return get_image_volume(cbf_path)

@@ -4,9 +4,10 @@ import logging
 from functools import reduce
 
 from libtbx.phil import parse
-from dials.algorithms.refinement import DialsRefineConfigError
 from scitbx import sparse
 from scitbx.array_family import flex
+
+from dials.algorithms.refinement import DialsRefineConfigError
 
 logger = logging.getLogger(__name__)
 

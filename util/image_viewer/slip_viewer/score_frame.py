@@ -1,11 +1,13 @@
 # coding: utf-8
 
 from __future__ import absolute_import, division, print_function
-from six.moves import range
-
-import wx
 
 from collections import OrderedDict
+
+import wx
+from six.moves import range
+
+from wxtbx import bitmaps
 
 _scores = OrderedDict()
 
@@ -28,8 +30,6 @@ class ScoreSettingsFrame(wx.MiniFrame):
 
 class ScoreSettingsPanel(wx.Panel):
     def __init__(self, *args, **kwds):
-        from wxtbx import bitmaps
-
         super(ScoreSettingsPanel, self).__init__(*args, **kwds)
 
         # Needed for communication with the root frame.

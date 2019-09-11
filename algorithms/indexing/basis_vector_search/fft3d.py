@@ -3,21 +3,16 @@ from __future__ import absolute_import, division, print_function
 import logging
 import math
 
-from cctbx import crystal
-from cctbx import uctbx
-from cctbx import xray
-from libtbx import libtbx
-from libtbx import phil
-from scitbx import fftpack
+from cctbx import crystal, masks, uctbx, xray
+from libtbx import libtbx, phil
+from scitbx import fftpack, matrix
 from scitbx.array_family import flex
-from scitbx import matrix
 
-from dials.algorithms import indexing
 import dials_algorithms_indexing_ext
+from dials.algorithms import indexing
 
 from . import Strategy
-from .utils import is_approximate_integer_multiple, group_vectors
-
+from .utils import group_vectors, is_approximate_integer_multiple
 
 logger = logging.getLogger(__name__)
 
@@ -248,7 +243,6 @@ class FFT3D(Strategy):
         )
         grid_real_binary.as_1d().set_selected(grid_real_binary.as_1d() > 0, 1)
         grid_real_binary = grid_real_binary.iround()
-        from cctbx import masks
 
         # real space FFT grid dimensions
         cell_lengths = [self._n_points * d_min / 2 for i in range(3)]

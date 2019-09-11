@@ -3,16 +3,19 @@ from __future__ import absolute_import, division, print_function
 import itertools
 import logging
 import math
+
 import pkg_resources
+from six.moves import cStringIO as StringIO
 
 import libtbx.phil
 import scitbx.matrix
-from dials.algorithms.indexing import indexer
-from dials.algorithms.indexing.basis_vector_search import optimise
-from dials.algorithms.indexing.basis_vector_search import combinations
-from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx import easy_mp
+from rstbx.dps_core.cell_assessment import SmallUnitCellVolume
 from scitbx.array_family import flex
-from six.moves import cStringIO as StringIO
+
+from dials.algorithms.indexing import indexer, model_evaluation, non_primitive_basis
+from dials.algorithms.indexing.basis_vector_search import combinations, optimise
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 logger = logging.getLogger(__name__)
 
@@ -155,8 +158,6 @@ class LatticeSearch(indexer.Indexer):
 
     def choose_best_orientation_matrix(self, candidate_orientation_matrices):
 
-        from dials.algorithms.indexing import model_evaluation
-
         solution_scorer = self.params.basis_vector_combinations.solution_scorer
         if solution_scorer == "weighted":
             weighted_params = self.params.basis_vector_combinations.weighted
@@ -210,9 +211,6 @@ class LatticeSearch(indexer.Indexer):
             if refl.get_flags(refl.flags.indexed).count(True) == 0:
                 continue
 
-            from rstbx.dps_core.cell_assessment import SmallUnitCellVolume
-            from dials.algorithms.indexing import non_primitive_basis
-
             threshold = self.params.basis_vector_combinations.sys_absent_threshold
             if threshold and (
                 self._symmetry_handler.target_symmetry_primitive is None
@@ -260,8 +258,6 @@ class LatticeSearch(indexer.Indexer):
             args.append((experiments, refl))
             if len(args) == self.params.basis_vector_combinations.max_refine:
                 break
-
-        from libtbx import easy_mp
 
         evaluator = model_evaluation.ModelEvaluation(self.all_params)
         results = easy_mp.parallel_map(

@@ -1,8 +1,20 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from time import time
 
-from dials.util import show_mail_on_error
+import six.moves.cPickle as pickle
+
+import libtbx.load_env
+from libtbx.phil import parse
+
+from dials.algorithms.background.gmodel import StaticBackgroundModel
+from dials.algorithms.background.modeller import BackgroundModeller
+from dials.array_family import flex
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.command_line import heading
+from dials.util.options import OptionParser, flatten_experiments
+from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.model_background")
 
@@ -10,7 +22,6 @@ help_message = """
 """
 
 # Set the phil scope
-from libtbx.phil import parse
 
 phil_scope = parse(
     """
@@ -281,9 +292,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = (
             "usage: %s [options] [param.phil] "
@@ -297,14 +305,6 @@ class Script(object):
 
     def run(self):
         """Execute the script."""
-        from dials.util.command_line import heading
-        from dials.array_family import flex
-        from dials.util.options import flatten_experiments
-        from time import time
-        from dials.util import log
-        from dials.util import Sorry
-        from dials.algorithms.background.modeller import BackgroundModeller
-
         start_time = time()
 
         # Parse the command line
@@ -316,8 +316,6 @@ class Script(object):
             info=params.output.log,
             debug=params.output.debug_log,
         )
-
-        from dials.util.version import dials_version
 
         logger.info(dials_version())
 
@@ -358,14 +356,11 @@ class Script(object):
 
         # Save the background model
         logger.info("Saving background model to %s" % params.output.model)
-        from dials.algorithms.background.gmodel import StaticBackgroundModel
 
         static_model = StaticBackgroundModel()
         for i in range(len(model)):
             static_model.add(model[i].model)
         with open(params.output.model, "wb") as outfile:
-            import six.moves.cPickle as pickle
-
             pickle.dump(static_model, outfile, protocol=pickle.HIGHEST_PROTOCOL)
 
         # Output some diagnostic images

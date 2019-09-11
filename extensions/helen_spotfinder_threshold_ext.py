@@ -1,5 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+import six.moves.cPickle as pickle
+
+from libtbx.phil import parse
+
+from dials.algorithms.spot_finding.helen import BlobThresholdAlgorithm
+
 
 class HelenSpotFinderThresholdExt(object):
     """ Extensions to do spot finding threshold. """
@@ -8,8 +14,6 @@ class HelenSpotFinderThresholdExt(object):
 
     @classmethod
     def phil(cls):
-        from libtbx.phil import parse
-
         phil = parse(
             """
 
@@ -57,8 +61,6 @@ class HelenSpotFinderThresholdExt(object):
         :param mask: The pixel mask on the image
         :returns: A boolean mask showing foreground/background pixels
         """
-        from dials.algorithms.spot_finding.helen import BlobThresholdAlgorithm
-
         params = self.params.spotfinder.threshold.helen
 
         self._algorithm = BlobThresholdAlgorithm(
@@ -75,7 +77,6 @@ class HelenSpotFinderThresholdExt(object):
         if self.params.spotfinder.threshold.helen.debug:
 
             corr = self._algorithm.correlation(image, mask)
-            import six.moves.cPickle as pickle
 
             with open("correlation.pickle", "wb") as fh:
                 pickle.dump(corr, fh, pickle.HIGHEST_PROTOCOL)

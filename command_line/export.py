@@ -3,8 +3,20 @@ from __future__ import absolute_import, division, print_function
 import logging
 import sys
 
-from libtbx.phil import parse
+from six.moves import cStringIO as StringIO
+
 from libtbx import Auto
+from libtbx.phil import parse
+from scitbx.array_family import flex
+
+from dials.util import export_json
+from dials.util.export_mmcif import MMCIFOutputFile
+from dials.util.export_mtz import export_mtz
+from dials.util.export_sadabs import export_sadabs
+from dials.util.export_xds_ascii import export_xds_ascii
+from dials.util.mosflm import dump
+from dials.util.nexus import dump
+from dials.util.xds import dump
 
 logger = logging.getLogger("dials.command_line.export")
 
@@ -234,13 +246,10 @@ class MTZExporter(object):
         """
         Export the files
         """
-        from dials.util.export_mtz import export_mtz
-
         try:
             m = export_mtz(self.reflections, self.experiments, self.params)
         except ValueError as e:
             raise Sorry(e)
-        from six.moves import cStringIO as StringIO
 
         summary = StringIO()
         m.show_summary(out=summary)
@@ -274,8 +283,6 @@ class SadabsExporter(object):
         self.reflections = reflections[0]
 
     def export(self):
-        from dials.util.export_sadabs import export_sadabs
-
         if "profile" not in params.intensity and "sum" not in params.intensity:
             raise Sorry(
                 """Only intensity options containing sum or profile are compatible with
@@ -321,8 +328,6 @@ class XDSASCIIExporter(object):
         self.reflections = reflections[0]
 
     def export(self):
-        from dials.util.export_xds_ascii import export_xds_ascii
-
         if "profile" not in params.intensity and "sum" not in params.intensity:
             raise Sorry(
                 """Only intensity options containing sum or profile are compatible with
@@ -371,8 +376,6 @@ class NexusExporter(object):
         """
         Export the files
         """
-        from dials.util.nexus import dump
-
         dump(self.experiments, self.reflections, self.params.nxs.hklout)
 
 
@@ -405,8 +408,6 @@ class MMCIFExporter(object):
         """
         Export the files
         """
-        from dials.util.export_mmcif import MMCIFOutputFile
-
         outfile = MMCIFOutputFile(self.params)
         try:
             outfile.write(self.experiments, self.reflections)
@@ -442,8 +443,6 @@ class MosflmExporter(object):
         """
         Export the files
         """
-        from dials.util.mosflm import dump
-
         dump(self.experiments, self.params.mosflm.directory)
 
 
@@ -477,8 +476,6 @@ class XDSExporter(object):
         """
         Export the files
         """
-        from dials.util.xds import dump
-
         dump(self.experiments, self.reflections, self.params.xds.directory)
 
 
@@ -511,9 +508,6 @@ class JsonExporter(object):
         """
         Export the files
         """
-        from dials.util import export_json
-        from scitbx.array_family import flex
-
         imagesets = [expt.imageset for expt in self.experiments]
 
         reflections = None

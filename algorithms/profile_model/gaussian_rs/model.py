@@ -1,10 +1,25 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import sys
+from math import ceil, pi
 
-from dials.model.experiment.profile import ProfileModelExt
 from libtbx.phil import parse
+
+from dials.algorithms.profile_model.gaussian_rs import (
+    BBoxCalculator,
+    GaussianRSProfileModeller,
+    MaskCalculator,
+    PartialityCalculator,
+)
+from dials.algorithms.profile_model.gaussian_rs.calculator import (
+    ProfileModelCalculator,
+    ScanVaryingProfileModelCalculator,
+)
+from dials.algorithms.spot_prediction.reflection_predictor import ReflectionPredictor
 from dials.array_family import flex
+from dials.model.experiment.profile import ProfileModelExt
+from dxtbx.model.experiment_list import Experiment
 
 logger = logging.getLogger(__name__)
 
@@ -98,8 +113,6 @@ phil_scope = parse(
 class Model(ProfileModelExt):
     def __init__(self, params, n_sigma, sigma_b, sigma_m, deg=False):
         """ Initialise with the parameters. """
-        from math import pi
-
         self.params = params
         self._n_sigma = n_sigma
         if deg:
@@ -154,8 +167,6 @@ class Model(ProfileModelExt):
 
     def sigma_b(self, index=None, deg=True):
         """ Return sigma_b. """
-        from math import pi
-
         if index is None:
             sigma_b = self._sigma_b
         else:
@@ -166,8 +177,6 @@ class Model(ProfileModelExt):
 
     def sigma_m(self, index=None, deg=True):
         """ Return sigma_m. """
-        from math import pi
-
         if index is None:
             sigma_m = self._sigma_m
         else:
@@ -301,13 +310,6 @@ class Model(ProfileModelExt):
         :param scan: The scan model
         :return: An instance of the profile model
         """
-        from dials.algorithms.profile_model.gaussian_rs.calculator import (
-            ProfileModelCalculator,
-        )
-        from dials.algorithms.profile_model.gaussian_rs.calculator import (
-            ScanVaryingProfileModelCalculator,
-        )
-
         # Check the number of spots
         if not len(reflections) >= params.gaussian_rs.min_spots.overall:
             if scan is not None:
@@ -423,11 +425,6 @@ class Model(ProfileModelExt):
         :param goniometer: The goniometer model
         :param scan: The scan model
         """
-        from dxtbx.model.experiment_list import Experiment
-        from dials.algorithms.spot_prediction.reflection_predictor import (
-            ReflectionPredictor,
-        )
-
         predict = ReflectionPredictor(
             Experiment(
                 imageset=imageset,
@@ -459,8 +456,6 @@ class Model(ProfileModelExt):
         :param goniometer: The goniometer model
         :param scan: The scan model
         """
-        from dials.algorithms.profile_model.gaussian_rs import PartialityCalculator
-
         # Create the partiality calculator
         calculate = PartialityCalculator(
             crystal, beam, detector, goniometer, scan, self._sigma_m
@@ -495,8 +490,6 @@ class Model(ProfileModelExt):
         :param goniometer: The goniometer model
         :param scan: The scan model
         """
-        from dials.algorithms.profile_model.gaussian_rs import BBoxCalculator
-
         # Check the input
         assert sigma_b_multiplier >= 1.0
 
@@ -540,8 +533,6 @@ class Model(ProfileModelExt):
         :param goniometer: The goniometer model
         :param scan: The scan model
         """
-        from dials.algorithms.profile_model.gaussian_rs import MaskCalculator
-
         # Compute the size in reciprocal space. Add a sigma_b multiplier to enlarge
         # the region of background in the shoebox
         delta_b = self._n_sigma * self._sigma_b
@@ -586,11 +577,6 @@ class Model(ProfileModelExt):
 
         # Define a function to create the fitting class
         def wrapper(experiment):
-            from dials.algorithms.profile_model.gaussian_rs import (
-                GaussianRSProfileModeller,
-            )
-            from math import ceil
-
             # Return if no scan or gonio
             if (
                 experiment.scan is None
@@ -646,8 +632,6 @@ class Model(ProfileModelExt):
 
     def show(self, out=None):
         if out is None:
-            import sys
-
             out = sys.stdout
         print(
             "Warning: Use of the .show() method is deprecated. Use print(object) instead.",

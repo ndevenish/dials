@@ -4,6 +4,9 @@ import sys
 
 import iotbx.phil
 
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.format.FormatCBFMini import FormatCBFMini
+
 help_message = """
 
 Convert data which can be read by DIALS, given a experiment list, to CBF format -
@@ -26,8 +29,6 @@ output {
 
 
 def convert_to_cbf(imageset, template):
-    from dxtbx.format.FormatCBFMini import FormatCBFMini
-
     for i in range(len(imageset)):
         print(template % (i + 1))
         FormatCBFMini.as_file(
@@ -41,9 +42,6 @@ def convert_to_cbf(imageset, template):
 
 
 def run():
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-
     usage = "dials.convert_to_cbf [options] models.expt"
 
     parser = OptionParser(

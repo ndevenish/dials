@@ -5,10 +5,15 @@ import os
 import random
 
 import pytest
+import six.moves.cPickle as pickle
+
 from cctbx import sgtbx
+
+from dials.algorithms.shoebox import MaskCode
 from dials.array_family import flex
+from dials.model.data import Shoebox
 from dials.util import Sorry
-from dxtbx.model import ExperimentList, Experiment, Crystal
+from dxtbx.model import Crystal, Experiment, ExperimentList
 from dxtbx.serialize import load
 
 
@@ -680,7 +685,6 @@ def test_serialize():
     table["col3"] = flex.std_string(c3)
 
     # Pickle, then unpickle
-    import six.moves.cPickle as pickle
 
     obj = pickle.dumps(table)
     new_table = pickle.loads(obj)
@@ -719,8 +723,6 @@ def test_copy():
 
 
 def test_extract_shoeboxes():
-    from dials.algorithms.shoebox import MaskCode
-
     random.seed(0)
 
     reflections = flex.reflection_table()
@@ -914,8 +916,6 @@ def test_split_partials():
 
 
 def test_split_partials_with_shoebox():
-    from dials.model.data import Shoebox
-
     r = flex.reflection_table()
     r["value1"] = flex.double()
     r["value2"] = flex.int()
@@ -1060,8 +1060,6 @@ def test_find_overlapping():
 
 
 def test_to_from_msgpack(tmpdir):
-    from dials.model.data import Shoebox
-
     def gen_shoebox():
         shoebox = Shoebox(0, (0, 4, 0, 3, 0, 1))
         shoebox.allocate()
@@ -1154,8 +1152,6 @@ def test_to_from_msgpack(tmpdir):
 
 
 def test_experiment_identifiers():
-    from dxtbx.model import ExperimentList, Experiment
-
     table = flex.reflection_table()
     table["id"] = flex.int([0, 1, 2, 3])
 
@@ -1218,8 +1214,6 @@ def test_experiment_identifiers():
         table.assert_experiment_identifiers_are_consistent()
 
     identifiers[3] = "mnop"
-
-    import six.moves.cPickle as pickle
 
     pickled = pickle.dumps(table)
     table2 = pickle.loads(pickled)

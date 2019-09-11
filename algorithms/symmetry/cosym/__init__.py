@@ -13,18 +13,24 @@ import logging
 import math
 from collections import OrderedDict
 
+import numpy as np
+import scipy.spatial.distance as ssd
+from sklearn.preprocessing import StandardScaler
+
 import iotbx.phil
+import scitbx.lbfgs
 from cctbx import sgtbx
-from dials.algorithms.indexing.symmetry import find_matching_symmetry
-from dials.algorithms.symmetry.cosym import target
-from dials.algorithms.symmetry.cosym import engine
-from dials.algorithms.symmetry import symmetry_base
-from dials.algorithms.symmetry.determine_space_group import ScoreCorrelationCoefficient
-from dials.util.observer import Subject
-from libtbx import Auto
-from libtbx import table_utils
+from cctbx.merging.brehm_diederichs import minimize_divide
+from libtbx import Auto, table_utils
 from scitbx import matrix
 from scitbx.array_family import flex
+
+from dials.algorithms.indexing.symmetry import find_matching_symmetry
+from dials.algorithms.symmetry import symmetry_base
+from dials.algorithms.symmetry.cosym import engine, target
+from dials.algorithms.symmetry.cosym.seed_clustering import seed_clustering
+from dials.algorithms.symmetry.determine_space_group import ScoreCorrelationCoefficient
+from dials.util.observer import Subject
 
 logger = logging.getLogger(__name__)
 
@@ -275,8 +281,6 @@ class CosymAnalysis(symmetry_base, Subject):
         n_sym_ops = len(self.target.get_sym_ops())
         coords = flex.random_double(NN * n_sym_ops * dim)
 
-        import scitbx.lbfgs
-
         tp = self.params.termination_params
         termination_params = scitbx.lbfgs.termination_parameters(
             traditional_convergence_test=tp.traditional_convergence_test,
@@ -322,8 +326,6 @@ class CosymAnalysis(symmetry_base, Subject):
         if self.target.dim > 3:
             pca.n_components = 3
         x_reduced = pca.fit_transform(X)
-
-        import numpy
 
         self.coords_reduced = flex.double(numpy.ascontiguousarray(x_reduced))
 
@@ -443,8 +445,6 @@ class CosymAnalysis(symmetry_base, Subject):
         return clustering()
 
     def _dbscan_clustering(self):
-        from sklearn.preprocessing import StandardScaler
-
         X = self.coords_reduced.as_numpy_array()
         X = StandardScaler().fit_transform(X)
 
@@ -455,7 +455,6 @@ class CosymAnalysis(symmetry_base, Subject):
             eps=self.params.cluster.dbscan.eps,
             min_samples=self.params.cluster.dbscan.min_samples,
         ).fit(X)
-        import numpy as np
 
         return flex.int(db.labels_.astype(np.int32))
 
@@ -472,7 +471,6 @@ class CosymAnalysis(symmetry_base, Subject):
         assert self.params.cluster.n_clusters in (2, Auto)
         x = self.coords_reduced[:, :1].as_1d()
         y = self.coords_reduced[:, 1:2].as_1d()
-        from cctbx.merging.brehm_diederichs import minimize_divide
 
         selection = minimize_divide(x, y).plus_minus()
         cluster_labels = flex.int(x.size(), 0)
@@ -484,7 +482,6 @@ class CosymAnalysis(symmetry_base, Subject):
 
         # Perform cluster analysis
         from sklearn.cluster import AgglomerativeClustering
-        import numpy as np
 
         model = AgglomerativeClustering(
             n_clusters=self.params.cluster.n_clusters,
@@ -495,8 +492,6 @@ class CosymAnalysis(symmetry_base, Subject):
         return flex.int(model.labels_.astype(np.int32))
 
     def _seed_clustering(self):
-        from dials.algorithms.symmetry.cosym.seed_clustering import seed_clustering
-
         clustering = seed_clustering(
             self.coords,
             len(self.input_intensities),
@@ -555,8 +550,6 @@ class CosymAnalysis(symmetry_base, Subject):
 
 class SymmetryAnalysis(object):
     def __init__(self, coords, sym_ops, subgroups, cb_op_inp_min):
-
-        import scipy.spatial.distance as ssd
 
         self.subgroups = subgroups
         self.cb_op_inp_min = cb_op_inp_min

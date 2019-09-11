@@ -2,24 +2,28 @@
 Test for the target function module.
 """
 from __future__ import absolute_import, division, print_function
+
 import copy
 from collections import OrderedDict
+
 import pytest
-from mock import Mock, MagicMock
-from scitbx import sparse
+from mock import MagicMock, Mock
+
 from libtbx import phil
 from libtbx.test_utils import approx_equal
-from dxtbx.model.experiment_list import ExperimentList
-from dxtbx.model import Crystal, Scan, Beam, Goniometer, Detector, Experiment
-from dials.array_family import flex
-from dials.util.options import OptionParser
-from dials.algorithms.scaling.scaling_library import create_scaling_model
-from dials.algorithms.scaling.scaler_factory import create_scaler
-from dials.algorithms.scaling.target_function import ScalingTarget, ScalingTargetFixedIH
-from dials.algorithms.scaling.parameter_handler import scaling_active_parameter_manager
+from scitbx import sparse
+
 from dials.algorithms.scaling.active_parameter_managers import (
     multi_active_parameter_manager,
 )
+from dials.algorithms.scaling.parameter_handler import scaling_active_parameter_manager
+from dials.algorithms.scaling.scaler_factory import create_scaler
+from dials.algorithms.scaling.scaling_library import create_scaling_model
+from dials.algorithms.scaling.target_function import ScalingTarget, ScalingTargetFixedIH
+from dials.array_family import flex
+from dials.util.options import OptionParser
+from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
+from dxtbx.model.experiment_list import ExperimentList
 
 
 @pytest.fixture

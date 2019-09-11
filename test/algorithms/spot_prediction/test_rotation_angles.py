@@ -4,15 +4,16 @@ import math
 import os
 
 import pytest
+
+from iotbx.xds import integrate_hkl, xparm
+from rstbx.cftbx.coordinate_frame_converter import coordinate_frame_converter
 from scitbx import matrix
+
+import dxtbx
+from dials.algorithms.spot_prediction import RotationAngles
 
 
 def test(dials_regression, run_in_tmpdir):
-    from iotbx.xds import xparm, integrate_hkl
-    from dials.algorithms.spot_prediction import RotationAngles
-    import dxtbx
-    from rstbx.cftbx.coordinate_frame_converter import coordinate_frame_converter
-
     # The XDS files to read from
     integrate_filename = os.path.join(dials_regression, "data/sim_mx/INTEGRATE.HKL")
     gxparm_filename = os.path.join(dials_regression, "data/sim_mx/GXPARM.XDS")

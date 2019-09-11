@@ -2,8 +2,17 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+import libtbx.load_env
+from cctbx import sgtbx
+from iotbx.xds import integrate_hkl, spot_xds
+from libtbx.phil import parse
+from scitbx import matrix
+
 from dials.array_family import flex
 from dials.util import show_mail_on_error
+from dials.util.command_line import Command
+from dials.util.options import OptionParser
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 class SpotXDSImporter(object):
@@ -14,9 +23,6 @@ class SpotXDSImporter(object):
 
     def __call__(self, params, options):
         """ Import the spot.xds file. """
-        from iotbx.xds import spot_xds
-        from dials.util.command_line import Command
-
         # Read the SPOT.XDS file
         Command.start("Reading SPOT.XDS")
         handle = spot_xds.reader()
@@ -75,10 +81,6 @@ class IntegrateHKLImporter(object):
 
     def __call__(self, params, options):
         """ Import the integrate.hkl file. """
-
-        from iotbx.xds import integrate_hkl
-        from dials.util.command_line import Command
-        from cctbx import sgtbx
 
         # Get the unit cell to calculate the resolution
         uc = self._experiment.crystal.get_unit_cell()
@@ -143,8 +145,6 @@ class IntegrateHKLImporter(object):
     def derive_reindex_matrix(self, handle):
         """Derive a reindexing matrix to go from the orientation matrix used
         for XDS integration to the one used for DIALS integration."""
-        from scitbx import matrix
-
         dA = matrix.sqr(self._experiment.crystal.get_A())
         dbeam = matrix.col(self._experiment.beam.get_sample_to_source_direction())
         daxis = matrix.col(self._experiment.goniometer.get_rotation_axis())
@@ -175,8 +175,6 @@ class XDSFileImporter(object):
         self.args = args
 
     def __call__(self, params, options):
-        from dxtbx.model.experiment_list import ExperimentListFactory
-
         # Get the XDS.INP file
         xds_inp = os.path.join(self.args[0], "XDS.INP")
         if params.input.xds_file is None:
@@ -385,10 +383,6 @@ class Script(object):
 
     def __init__(self):
         """ Initialise the script. """
-        from dials.util.options import OptionParser
-        from libtbx.phil import parse
-        import libtbx.load_env
-
         # Create the phil parameters
         phil_scope = parse(
             """
@@ -457,8 +451,6 @@ class Script(object):
         importer(params, options)
 
     def select_importer(self, args):
-        from dxtbx.model.experiment_list import ExperimentListFactory
-
         path, filename = os.path.split(args[0])
         if filename == "SPOT.XDS":
             return SpotXDSImporter(args[0])

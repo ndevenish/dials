@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
-from docutils import nodes
+
 import jinja2
+from docutils import nodes
 from docutils.parsers.rst import Directive
 from docutils.parsers.rst.directives import unchanged
 

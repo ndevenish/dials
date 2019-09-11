@@ -4,20 +4,26 @@ import copy
 import logging
 import math
 
+from six.moves import StringIO
+
 import scitbx.matrix
 from cctbx import crystal, sgtbx
 from cctbx.crystal_orientation import crystal_orientation
-from cctbx.sgtbx import bravais_types, change_of_basis_op, subgroups
-from cctbx.sgtbx import lattice_symmetry
+from cctbx.sgtbx import bravais_types, change_of_basis_op, lattice_symmetry, subgroups
 from cctbx.sgtbx.bravais_types import bravais_lattice
-from dials.algorithms.indexing import DialsIndexError
-from dials.util.log import LoggingContext
-from dxtbx.model import Crystal
-from libtbx import easy_mp
+from libtbx import easy_mp, table_utils
 from rstbx.dps_core.lepage import iotbx_converter
 from rstbx.symmetry.subgroup import MetricSubgroup
 from scitbx.array_family import flex
-from six.moves import StringIO
+
+from dials.algorithms.indexing import DialsIndexError
+from dials.algorithms.indexing.refinement import refine
+from dials.command_line.check_indexing_symmetry import (
+    get_symop_correlation_coefficients,
+    normalise_intensities,
+)
+from dials.util.log import LoggingContext
+from dxtbx.model import Crystal
 
 logger = logging.getLogger(__name__)
 
@@ -68,8 +74,6 @@ class RefinedSettingsList(list):
         return result
 
     def labelit_printout(self):
-        from libtbx import table_utils
-
         table_data = [
             [
                 "Solution",
@@ -218,10 +222,6 @@ def identify_likely_solutions(all_solutions):
 
 def refine_subgroup(args):
     assert len(args) == 4
-    from dials.command_line.check_indexing_symmetry import (
-        get_symop_correlation_coefficients,
-        normalise_intensities,
-    )
 
     params, subgroup, used_reflections, experiments = args
 
@@ -233,8 +233,6 @@ def refine_subgroup(args):
     unrefined_crystal = copy.deepcopy(subgroup.unrefined_crystal)
     for expt in experiments:
         expt.crystal = unrefined_crystal
-
-    from dials.algorithms.indexing.refinement import refine
 
     subgroup.max_cc = None
     subgroup.min_cc = None

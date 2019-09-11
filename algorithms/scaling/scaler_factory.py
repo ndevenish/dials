@@ -2,20 +2,28 @@
 Collection of factories for creating the scalers.
 """
 from __future__ import absolute_import, division, print_function
+
 import logging
+
 from libtbx import Auto
-from dials.array_family import flex
-from dials.algorithms.scaling.scaler import MultiScaler, TargetScaler, SingleScaler
-from dials.algorithms.scaling.scaling_utilities import (
-    quasi_normalisation,
-    Reasons,
-    BadDatasetForScalingException,
-    calc_crystal_frame_vectors,
-)
-from dials.algorithms.scaling.scaling_library import choose_scaling_intensities
+
 from dials.algorithms.scaling.reflection_selection import (
     determine_reflection_selection_parameters,
 )
+from dials.algorithms.scaling.scaler import (
+    MultiScaler,
+    NullScaler,
+    SingleScaler,
+    TargetScaler,
+)
+from dials.algorithms.scaling.scaling_library import choose_scaling_intensities
+from dials.algorithms.scaling.scaling_utilities import (
+    BadDatasetForScalingException,
+    Reasons,
+    calc_crystal_frame_vectors,
+    quasi_normalisation,
+)
+from dials.array_family import flex
 
 logger = logging.getLogger("dials")
 
@@ -170,8 +178,6 @@ class NullScalerFactory(ScalerFactory):
     @classmethod
     def create(cls, params, experiment, reflection_table):
         """Return Null Scaler."""
-        from dials.algorithms.scaling.scaler import NullScaler
-
         logger.info("Preprocessing target dataset for scaling. \n")
         reflection_table, reasons = cls.filter_bad_reflections(reflection_table)
         variance_mask = reflection_table["variance"] <= 0.0

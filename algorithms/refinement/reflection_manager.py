@@ -2,14 +2,21 @@
 principally ReflectionManager."""
 from __future__ import absolute_import, division, print_function
 
-from past.builtins import cmp
 import copy
 import logging
 import math
 import random
 
-from dials.algorithms.refinement import DialsRefineConfigError
-from dials.algorithms.refinement import weighting_strategies
+from past.builtins import cmp
+
+import libtbx
+from libtbx.phil import parse
+from libtbx.table_utils import simple_table
+from scitbx import matrix
+from scitbx.array_family import flex
+from scitbx.math import five_number_summary
+
+from dials.algorithms.refinement import DialsRefineConfigError, weighting_strategies
 from dials.algorithms.refinement.analysis.centroid_analysis import CentroidAnalyser
 from dials.algorithms.refinement.outlier_detection.outlier_base import (
     phil_str as outlier_phil_str,
@@ -19,11 +26,6 @@ from dials.algorithms.refinement.refinement_helpers import (
     set_obs_s1,
 )
 from dials.array_family import flex
-import libtbx
-from libtbx.phil import parse
-from libtbx.table_utils import simple_table
-from scitbx import matrix
-from scitbx.math import five_number_summary
 
 logger = logging.getLogger(__name__)
 
@@ -128,8 +130,6 @@ class BlockCalculator(object):
 
     def _create_block_columns(self):
         """Create a column to contain the block number."""
-
-        from scitbx.array_family import flex
 
         self._reflections["block"] = flex.size_t(len(self._reflections))
         self._reflections["block_centre"] = flex.double(len(self._reflections))
@@ -794,9 +794,6 @@ class StillsReflectionManager(ReflectionManager):
                 "Unable to calculate summary statistics for zero observations"
             )
             return
-
-        from libtbx.table_utils import simple_table
-        from scitbx.math import five_number_summary
 
         try:
             x_resid = l["x_resid"]

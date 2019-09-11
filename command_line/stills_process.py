@@ -3,17 +3,29 @@ from __future__ import absolute_import, division, print_function
 import copy
 import logging
 import os
+import socket
 import sys
 import tarfile
 import time
+
 import six.moves.cPickle as pickle
 from six.moves import StringIO
 
-import dials.util
-from dials.array_family import flex
-from dxtbx.model.experiment_list import ExperimentListFactory
-from dxtbx.model.experiment_list import ExperimentList
+from libtbx import easy_mp
+from libtbx.phil import parse
 from libtbx.utils import Abort, Sorry
+
+import dials.util
+from dials.algorithms.indexing.indexer import Indexer
+from dials.algorithms.indexing.stills_indexer import calc_2D_rmsd_and_displacements
+from dials.algorithms.integration.integrator import IntegratorFactory
+from dials.algorithms.profile_model.factory import ProfileModelFactory
+from dials.array_family import flex
+from dials.command_line.dials_import import ManualGeometryUpdater
+from dials.util import log
+from dials.util.options import OptionParser
+from dxtbx.imageset import ImageSetFactory
+from dxtbx.model.experiment_list import ExperimentList, ExperimentListFactory
 
 logger = logging.getLogger("dials.command_line.stills_process")
 
@@ -23,7 +35,6 @@ DIALS script for processing still images. Import, index, refine, and integrate a
 seperately.
 """
 
-from libtbx.phil import parse
 
 control_phil_str = """
   input {
@@ -235,8 +246,6 @@ def do_import(filename, load_models=True):
     if len(experiments) == 0:
         raise Abort("Could not load %s" % filename)
 
-    from dxtbx.imageset import ImageSetFactory
-
     for experiment in experiments:
         if load_models:
             experiment.load_models()
@@ -255,8 +264,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-
         # The script usage
         usage = "usage: dials.stills_process [options] [param.phil] filenames"
 
@@ -269,8 +276,6 @@ class Script(object):
     def load_reference_geometry(self):
         if self.params.input.reference_geometry is None:
             return
-
-        from dxtbx.model.experiment_list import ExperimentListFactory
 
         try:
             ref_experiments = ExperimentListFactory.from_json_file(
@@ -294,9 +299,6 @@ class Script(object):
 
     def run(self):
         """Execute the script."""
-        from dials.util import log
-        from libtbx import easy_mp
-
         # Parse the command line
         params, options, all_paths = self.parser.parse_args(
             show_diff_phil=False, return_unhandled=True, quick_parse=True
@@ -358,7 +360,6 @@ class Script(object):
                     )
 
         self.load_reference_geometry()
-        from dials.command_line.dials_import import ManualGeometryUpdater
 
         update_geometry = ManualGeometryUpdater(params)
 
@@ -708,8 +709,6 @@ class Processor(object):
             )
 
     def debug_start(self, tag):
-        import socket
-
         self.debug_str = "%s,%s" % (socket.gethostname(), tag)
         self.debug_str += ",%s,%s,%s\n"
         self.debug_write("start")
@@ -858,8 +857,6 @@ class Processor(object):
         return observed
 
     def index(self, experiments, reflections):
-        from dials.algorithms.indexing.indexer import Indexer
-
         st = time.time()
 
         logger.info("*" * 80)
@@ -1006,8 +1003,6 @@ class Processor(object):
 
         # Get the integrator from the input parameters
         logger.info("Configuring integrator from input parameters")
-        from dials.algorithms.profile_model.factory import ProfileModelFactory
-        from dials.algorithms.integration.integrator import IntegratorFactory
 
         # Compute the profile model
         # Predict the reflections
@@ -1114,9 +1109,6 @@ class Processor(object):
                 )
 
         self.write_integration_pickles(integrated, experiments)
-        from dials.algorithms.indexing.stills_indexer import (
-            calc_2D_rmsd_and_displacements,
-        )
 
         rmsd_indexed, _ = calc_2D_rmsd_and_displacements(indexed)
         log_str = "RMSD indexed (px): %f\n" % (rmsd_indexed)

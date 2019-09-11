@@ -1,8 +1,5 @@
 from __future__ import absolute_import, division, print_function
 
-from future import standard_library
-
-standard_library.install_aliases()
 import http.client
 import json
 import os
@@ -11,8 +8,14 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from multiprocessing.pool import ThreadPool as thread_pool
+
+from future import standard_library
 
 import libtbx.phil
+from libtbx.introspection import number_of_processors
+
+standard_library.install_aliases()
 
 
 def work(host, port, filename, params):
@@ -25,8 +28,6 @@ def work(host, port, filename, params):
 
 
 def _nproc():
-    from libtbx.introspection import number_of_processors
-
     return number_of_processors(return_value_if_unknown=-1)
 
 
@@ -91,8 +92,6 @@ def work_all(
     grid=None,
     nproc=None,
 ):
-    from multiprocessing.pool import ThreadPool as thread_pool
-
     if nproc is None:
         nproc = _nproc()
     pool = thread_pool(processes=nproc)

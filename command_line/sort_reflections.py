@@ -2,8 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+
 import dials.util
 from dials.array_family import flex
+from dials.util.options import OptionParser, flatten_reflections
 
 help_message = """
 
@@ -20,9 +23,6 @@ class Sort(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        from libtbx.phil import parse
-
         phil_scope = parse(
             """
 
@@ -56,8 +56,6 @@ class Sort(object):
 
     def run(self):
         """Execute the script."""
-        from dials.util.options import flatten_reflections
-
         # Parse the command line
         params, options = self.parser.parse_args(show_diff_phil=True)
         reflections = flatten_reflections(params.input.reflections)

@@ -2,6 +2,17 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
+
+import scipy.stats
+
+from cctbx import miller
+from iotbx import mtz
+
+from dials.array_family import flex
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dxtbx.model import Crystal, Experiment, ExperimentList
+
 """
 Examine the distribution of diffraction spot intensities.
 
@@ -21,9 +32,6 @@ along with plots of z as a function of batch number, of multiplicity, of
 detector position, of measured multiplicity, of absolute intensity and of
 I/sigma.
 """
-
-import logging
-from dials.array_family import flex
 
 
 log = logging.getLogger("dials.util.intensity_explorer")
@@ -72,9 +80,6 @@ class IntensityDist(object):
         Defaults to None.
         :type: outfile: str
         """
-
-        from dxtbx.model import ExperimentList
-        from cctbx import miller
 
         if not isinstance(rtable, flex.reflection_table) or not isinstance(
             elist, ExperimentList
@@ -325,8 +330,6 @@ class IntensityDist(object):
     def _probplot_data(self):
         """Generate the data for a normal probability plot of z-scores."""
 
-        import scipy.stats
-
         for key, rtable in self.rtables.items():
             order = flex.sort_permutation(rtable["intensity.z_score"])
             osm = flex.double(rtable.size(), 0)
@@ -354,9 +357,6 @@ def data_from_unmerged_mtz(filename):
       * ``id``
     :rtype: dials.array_family_flex_ext.reflection_table
     """
-
-    from iotbx import mtz
-    from dxtbx.model import Crystal, Experiment, ExperimentList
 
     m = mtz.object(filename).crystals()  # Parse MTZ, with lots of useful methods.
     # Get some data and turn it into a reflection table and experiment list.
@@ -404,12 +404,6 @@ def data_from_unmerged_mtz(filename):
 
 
 def data_from_pickle_and_json():
-    from dials.util.options import (
-        OptionParser,
-        flatten_reflections,
-        flatten_experiments,
-    )
-
     help_message = """
 
   Generates a dials.array_family.flex.reflection_table and a

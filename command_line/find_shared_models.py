@@ -1,8 +1,16 @@
 from __future__ import absolute_import, division, print_function
 
+import datetime
 import logging
+from time import time
 
-from dials.util import show_mail_on_error
+import libtbx.load_env
+from libtbx.phil import parse
+
+from dials.util import log, show_mail_on_error
+from dials.util.options import OptionParser, flatten_experiments
+from dials.util.version import dials_version
+from dxtbx.imageset import ImageSweep
 
 logger = logging.getLogger("dials.command_line.find_shared_models")
 
@@ -18,7 +26,6 @@ Examples::
 """
 
 # Set the phil scope
-from libtbx.phil import parse
 
 phil_scope = parse(
     """
@@ -41,9 +48,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = (
             "usage: %s [options] [param.phil] "
@@ -57,12 +61,6 @@ class Script(object):
 
     def run(self):
         """Execute the script."""
-        from dials.util.options import flatten_experiments
-        from dxtbx.imageset import ImageSweep
-        from time import time
-        from dials.util import log
-        import datetime
-
         start_time = time()
 
         # Parse the command line
@@ -74,8 +72,6 @@ class Script(object):
             info=params.output.log,
             debug=params.output.debug_log,
         )
-
-        from dials.util.version import dials_version
 
         logger.info(dials_version())
 

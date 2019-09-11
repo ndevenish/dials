@@ -62,15 +62,19 @@ are those which are selected by either method - inter-dataset connectedness or
 intra-dataset connectedness.
 """
 from __future__ import absolute_import, division, print_function
+
 import logging
-from math import pi, floor
+from math import floor, pi
+
 import libtbx
 from libtbx.table_utils import simple_table
-from dials.array_family import flex
+from scitbx import sparse
+
 from dials.algorithms.scaling.scaling_utilities import (
-    Reasons,
     BadDatasetForScalingException,
+    Reasons,
 )
+from dials.array_family import flex
 from dials_scaling_ext import calc_theta_phi
 
 logger = logging.getLogger("dials")
@@ -360,8 +364,6 @@ with a total number between %s and %s.""",
         max_total,
     )
 
-    from scitbx import sparse
-
     class_matrix = sparse.matrix(n_datasets, sel_Ih_table.Ih_table.size())
 
     sel_Ih_table.Ih_table["class_index"] = sel_Ih_table.Ih_table["dataset_id"]
@@ -410,8 +412,6 @@ def select_highly_connected_reflections_in_bin(
 
     Ih_table_block.Ih_table["loc_indices"] = flex.size_t(range(0, Ih_table_block.size))
     Ih_table_block = Ih_table_block.select_on_groups(sel)
-
-    from scitbx import sparse
 
     class_matrix = sparse.matrix(12, Ih_table_block.size)
 

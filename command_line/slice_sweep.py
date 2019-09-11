@@ -2,10 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 from os.path import basename, splitext
 
+from libtbx.phil import parse
+
 from dials.algorithms.refinement.refinement_helpers import calculate_frame_numbers
-from dxtbx.model.experiment_list import ExperimentList
-from dials.util import show_mail_on_error, Sorry
+from dials.util import Sorry, show_mail_on_error
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 from dials.util.slice import slice_experiments, slice_reflections
+from dxtbx.model.experiment_list import ExperimentList
 
 help_message = """
 
@@ -28,7 +31,6 @@ Examples::
 """
 
 # The phil scope
-from libtbx.phil import parse
 
 phil_scope = parse(
     """
@@ -97,8 +99,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-
         usage = (
             "usage: dials.slice_sweep [options] [param.phil] "
             "models.expt observations.refl"
@@ -116,8 +116,6 @@ class Script(object):
 
     def run(self):
         """Execute the script."""
-
-        from dials.util.options import flatten_reflections, flatten_experiments
 
         # Parse the command line
         params, options = self.parser.parse_args(show_diff_phil=True)

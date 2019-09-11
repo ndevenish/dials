@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import iotbx.detectors
 
+from dxtbx.format.FormatPYunspecified import FormatPYunspecified
+
 # store default ImageFactory function
 defaultImageFactory = iotbx.detectors.ImageFactory
 
@@ -15,7 +17,5 @@ def SlipViewerImageFactory(filename):
 
 # Use the dxtbx class as it handles all possible variance of NPY images
 def NpyImageFactory(filename):
-    from dxtbx.format.FormatPYunspecified import FormatPYunspecified
-
     img = FormatPYunspecified(filename)
     return img.get_detectorbase()

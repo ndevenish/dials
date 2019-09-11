@@ -1,7 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
-import dials.util.log
 import warnings
+
+import dials.util.log
 
 dials.util.log.print_banner()
 warnings.warn(

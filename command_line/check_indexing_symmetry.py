@@ -1,24 +1,22 @@
 from __future__ import absolute_import, division, print_function
 
-import math
 import logging
+import math
 import sys
 
-import libtbx.load_env
-from libtbx.utils import show_times_at_exit
-
 import iotbx.phil
+import libtbx.load_env
 from cctbx import sgtbx
 from cctbx.crystal import symmetry as crystal_symmetry
 from cctbx.miller import set as miller_set
 from cctbx.sgtbx import space_group as sgtbx_space_group
+from libtbx.utils import format_float_with_standard_uncertainty, show_times_at_exit
+
 from dials.algorithms.symmetry import origin
 from dials.array_family import flex
-from dials.util.options import OptionParser
-from dials.util.options import flatten_reflections, flatten_experiments
 from dials.util import log
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 from dials.util.version import dials_version
-from libtbx.utils import format_float_with_standard_uncertainty
 
 logger = logging.getLogger("dials.command_line.check_indexing_symmetry")
 

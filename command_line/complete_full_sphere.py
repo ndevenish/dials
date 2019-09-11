@@ -3,12 +3,18 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import math
 
+import libtbx.load_env
+from cctbx import crystal
 from libtbx.phil import parse
+from scitbx import matrix
 
+from dials.algorithms.refinement import rotation_decomposition
+from dials.algorithms.shadowing.filter import filter_shadowed_reflections
 from dials.array_family import flex
-from dials.util import show_mail_on_error
-
+from dials.util import log, show_mail_on_error
+from dials.util.options import OptionParser, flatten_experiments
 
 logger = logging.getLogger("dials.command_line.complete_full_sphere")
 
@@ -34,9 +40,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = "usage: %s [options] " % libtbx.env.dispatcher_name
 
@@ -51,17 +54,11 @@ class Script(object):
 
     def run(self):
         params, options = self.parser.parse_args(show_diff_phil=True)
-        from dials.util import log
 
         log.config(
             info="dials.complete_full_sphere.log",
             debug="dials.complete_full_sphere.debug.log",
         )
-
-        import math
-        from scitbx import matrix
-        from dials.algorithms.refinement import rotation_decomposition
-        from dials.util.options import flatten_experiments
 
         model_shadow = params.shadow
 
@@ -103,7 +100,6 @@ class Script(object):
 
         # now get a full set of all unique miller indices
         from cctbx import miller
-        from cctbx import crystal
 
         all_indices = miller.build_set(
             crystal_symmetry=crystal.symmetry(
@@ -207,7 +203,6 @@ class Script(object):
 
         # now get a full set of all unique miller indices
         from cctbx import miller
-        from cctbx import crystal
 
         obs = miller.set(
             crystal_symmetry=crystal.symmetry(
@@ -221,8 +216,6 @@ class Script(object):
         return obs
 
     def predict_to_miller_set_with_shadow(self, expt, resolution):
-        from dials.algorithms.shadowing.filter import filter_shadowed_reflections
-
         predicted = flex.reflection_table.from_predictions(expt, dmin=resolution)
 
         # transmogrify this to an ExperimentList from an Experiment
@@ -240,7 +233,6 @@ class Script(object):
 
         # now get a full set of all unique miller indices
         from cctbx import miller
-        from cctbx import crystal
 
         obs = miller.set(
             crystal_symmetry=crystal.symmetry(

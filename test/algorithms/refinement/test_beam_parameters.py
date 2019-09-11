@@ -1,22 +1,23 @@
 from __future__ import absolute_import, division, print_function
 
-from math import pi
 import random
+from math import pi
 
 import pytest
+
 from scitbx import matrix
+
+from dials.algorithms.refinement.parameterisation.beam_parameters import (
+    BeamParameterisation,
+)
+from dials.algorithms.refinement.refinement_helpers import (
+    get_fd_gradients,
+    random_param_shift,
+)
+from dxtbx.model import BeamFactory
 
 
 def test_beam_parameters():
-    from dxtbx.model import BeamFactory
-    from dials.algorithms.refinement.parameterisation.beam_parameters import (
-        BeamParameterisation,
-    )
-    from dials.algorithms.refinement.refinement_helpers import (
-        get_fd_gradients,
-        random_param_shift,
-    )
-
     # make a random beam vector and parameterise it
     bf = BeamFactory()
     s0 = bf.make_beam(matrix.col.random(3, 0.5, 1.5), wavelength=1.2)

@@ -1,14 +1,33 @@
 from __future__ import absolute_import, division, print_function
 
-import sys
-import os
 import itertools
 import optparse
+import os
 import pickle
+import sys
 import traceback
 from collections import defaultdict, namedtuple
+from glob import glob
 
 from orderedset import OrderedSet
+
+import libtbx.phil
+
+from dials.util import Sorry
+from dials.util.phil import (
+    ExperimentListConverters,
+    FilenameDataWrapper,
+    ReflectionTableConverters,
+    parse,
+)
+from dxtbx.model.experiment_list import (
+    BeamComparison,
+    DetectorComparison,
+    ExperimentList,
+    ExperimentListFactory,
+    GoniometerComparison,
+    InvalidExperimentListError,
+)
 
 try:
     import cPickle  # deliberately not using six.moves
@@ -17,8 +36,6 @@ try:
 except ImportError:
     pickle_errors = (pickle.UnpicklingError,)
 
-import libtbx.phil
-from dials.util import Sorry
 
 tolerance_phil_scope = libtbx.phil.parse(
     """
@@ -276,10 +293,6 @@ class Importer(object):
         :param load_models: Whether to load all models for ExperimentLists
         :return: Unhandled arguments
         """
-        from dxtbx.model.experiment_list import ExperimentListFactory
-        from dials.util.phil import FilenameDataWrapper, ExperimentListConverters
-        from glob import glob
-
         # If filenames contain wildcards, expand
         args_new = []
         for arg in args:
@@ -317,9 +330,6 @@ class Importer(object):
         :param verbose: Print verbose output
         :returns: Unhandled arguments
         """
-        from dials.util.phil import ExperimentListConverters
-        from dxtbx.model.experiment_list import InvalidExperimentListError
-
         converter = ExperimentListConverters(check_format)
         unhandled = []
         for argument in args:
@@ -343,8 +353,6 @@ class Importer(object):
         :param verbose: Print verbose output
         :returns: Unhandled arguments
         """
-        from dials.util.phil import ReflectionTableConverters
-
         converter = ReflectionTableConverters()
         unhandled = []
         for argument in args:
@@ -384,8 +392,6 @@ class PhilCommandParser(object):
         :param read_experiments_from_images: Try to read the experiments from images
         :param check_format: Check the format when reading images
         """
-        from dials.util.phil import parse
-
         # Set the system phil scope
         if phil is None:
             self._system_phil = parse("")
@@ -446,11 +452,6 @@ class PhilCommandParser(object):
                             ignoring class constructor options.
         :return: The options and parameters and (optionally) unhandled arguments
         """
-        from dxtbx.model.experiment_list import BeamComparison
-        from dxtbx.model.experiment_list import DetectorComparison
-        from dxtbx.model.experiment_list import GoniometerComparison
-        from dials.util.phil import parse
-
         # Parse the command line phil parameters
         user_phils = []
         unhandled = []
@@ -576,8 +577,6 @@ class PhilCommandParser(object):
 
         :return: The input phil scope
         """
-        from dials.util.phil import parse
-
         # Create the input scope
         require_input_scope = (
             self._read_experiments
@@ -1136,8 +1135,6 @@ def flatten_experiments(filename_object_list):
     :param filename_object_list: The parameter item
     :return: The flattened experiment lists
     """
-    from dxtbx.model.experiment_list import ExperimentList
-
     result = ExperimentList()
     for o in filename_object_list:
         result.extend(o.data)

@@ -4,11 +4,12 @@ import random
 
 import pytest
 
+from scitbx.array_family import flex
+
+from dials.algorithms.image.filter import index_of_dispersion_filter
+
 
 def test():
-    from dials.algorithms.image.filter import index_of_dispersion_filter
-    from scitbx.array_family import flex
-
     # Create an image
     image = flex.random_double(2000 * 2000)
     image.reshape(flex.grid(2000, 2000))

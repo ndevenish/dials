@@ -1,28 +1,26 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+from numpy import median
+
+from scitbx.array_family import flex
+
+from dials.algorithms.image.filter import median_filter
 
 
 def generate_image(xsize, ysize):
-    from scitbx.array_family import flex
-
     image = flex.random_double(xsize * ysize)
     image.reshape(flex.grid(ysize, xsize))
     return image
 
 
 def generate_mask(xsize, ysize):
-    from scitbx.array_family import flex
-
     mask = flex.random_bool(xsize * ysize, 0.9)
     mask.reshape(flex.grid(ysize, xsize))
     return mask
 
 
 def test_filter():
-    from numpy import median
-    from dials.algorithms.image.filter import median_filter
-
     xsize = 200
     ysize = 300
     kernel = (3, 3)
@@ -45,9 +43,6 @@ def test_filter():
 
 
 def test_masked_filter():
-    from numpy import median
-    from dials.algorithms.image.filter import median_filter
-
     xsize = 200
     ysize = 300
     kernel = (3, 3)

@@ -1,9 +1,19 @@
 from __future__ import absolute_import, division, print_function
 
+import json
 import logging
+import os
+from os.path import exists, join
+from uuid import uuid4
 
+import libtbx
+import libtbx.load_env
 from libtbx.phil import parse
-from dials.util import show_mail_on_error, Sorry
+
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.options import OptionParser
+from dials.util.stream import Decoder, ZMQStream
+from dials.util.version import dials_version
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 logger = logging.getLogger("dials.command_line.import_stream")
@@ -64,9 +74,6 @@ class Script(object):
 
     def __init__(self):
         """ Set the expected options. """
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # Create the option parser
         usage = "usage: %s [options]" % libtbx.env.dispatcher_name
         self.parser = OptionParser(
@@ -75,14 +82,6 @@ class Script(object):
 
     def run(self):
         """ Parse the options. """
-        from dials.util import log
-        import libtbx
-        from uuid import uuid4
-        from dials.util.stream import ZMQStream, Decoder
-        from os.path import join, exists
-        import os
-        import json
-
         # Parse the command line arguments in two passes to set up logging early
         params, options = self.parser.parse_args(show_diff_phil=False, quick_parse=True)
 
@@ -92,7 +91,6 @@ class Script(object):
             info=params.output.log,
             debug=params.output.debug_log,
         )
-        from dials.util.version import dials_version
 
         logger.info(dials_version())
 

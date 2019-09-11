@@ -2,12 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 from collections import defaultdict
-from math import sqrt, floor
+from math import floor, sqrt
 
-from cctbx import miller
-from cctbx import crystal, uctbx
-from dials.array_family import flex
 import six
+
+from cctbx import crystal, miller, uctbx
+
+from dials.array_family import flex
 
 logger = logging.getLogger("dials.command_line.compute_delta_cchalf")
 

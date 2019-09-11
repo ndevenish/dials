@@ -6,8 +6,9 @@ import os
 import pickle
 import shutil
 
-from dials.array_family import flex
 import procrunner
+
+from dials.array_family import flex
 
 
 def test2(dials_data, tmpdir):

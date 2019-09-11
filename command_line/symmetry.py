@@ -1,21 +1,24 @@
-from __future__ import division, absolute_import, print_function
+from __future__ import absolute_import, division, print_function
 
 import copy
 import logging
 import random
+import sys
 
-from cctbx import sgtbx
 import iotbx.phil
+from cctbx import sgtbx
+from rstbx.symmetry.constraints import parameter_reduction
 
+from dials.algorithms.symmetry.determine_space_group import determine_space_group
 from dials.array_family import flex
-from dials.util import log, Sorry
-from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util import Sorry, log
+from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
 from dials.util.multi_dataset_handling import (
     assign_unique_identifiers,
     parse_multiple_datasets,
 )
-from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
-from dials.algorithms.symmetry.determine_space_group import determine_space_group
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.symmetry")
 
@@ -105,8 +108,6 @@ input data and filtering settings e.g partiality_threshold"""
         self._export_experiments_reflections(experiments, reflections, result)
 
     def _export_experiments_reflections(self, experiments, reflections, result):
-        from rstbx.symmetry.constraints import parameter_reduction
-
         reindexed_experiments = copy.deepcopy(experiments)
         reindexed_reflections = flex.reflection_table()
         cb_op_inp_best = (
@@ -182,8 +183,6 @@ def run(args):
         verbosity=options.verbose, info=params.output.log, debug=params.output.debug_log
     )
 
-    from dials.util.version import dials_version
-
     logger.info(dials_version())
 
     # Log the diff phil
@@ -217,6 +216,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

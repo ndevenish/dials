@@ -1,9 +1,17 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from time import time
 
+from libtbx.phil import parse
+
+from dials.algorithms.integration.integrator import IntegratorFactory
 from dials.array_family import flex
-from dials.util import show_mail_on_error, Sorry
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.command_line import heading
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 logger = logging.getLogger("dials.command_line.integrate")
 # DIALS_ENABLE_COMMAND_LINE_COMPLETION
@@ -30,7 +38,6 @@ Examples::
 """
 
 # Create the phil scope
-from libtbx.phil import parse
 
 phil_scope = parse(
     """
@@ -124,8 +131,6 @@ class Script(object):
 
     def __init__(self, phil=phil_scope):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-
         # The script usage
         usage = "usage: dials.integrate [options] models.expt"
 
@@ -140,12 +145,6 @@ class Script(object):
 
     def run(self, args=None):
         """ Perform the integration. """
-        from dials.util.command_line import heading
-        from dials.util.options import flatten_reflections, flatten_experiments
-        from dials.util import log
-        from time import time
-        from dials.util import Sorry
-
         # Check the number of arguments is correct
         start_time = time()
 
@@ -177,8 +176,6 @@ class Script(object):
                 info=params.output.log,
                 debug=params.output.debug_log,
             )
-
-        from dials.util.version import dials_version
 
         logger.info(dials_version())
 
@@ -243,7 +240,6 @@ class Script(object):
 
         # Initialise the integrator
         from dials.algorithms.profile_model.factory import ProfileModelFactory
-        from dials.algorithms.integration.integrator import IntegratorFactory
 
         # Modify experiment list if scan range is set.
         experiments, reference = self.split_for_scan_range(
@@ -422,9 +418,6 @@ class Script(object):
 
     def process_reference(self, reference):
         """ Load the reference spots. """
-        from time import time
-        from dials.util import Sorry
-
         if reference is None:
             return None, None
         st = time()
@@ -500,8 +493,6 @@ class Script(object):
 
     def save_reflections(self, reflections, filename):
         """ Save the reflections to file. """
-        from time import time
-
         st = time()
         logger.info("Saving %d reflections to %s" % (len(reflections), filename))
         reflections.as_file(filename)
@@ -509,8 +500,6 @@ class Script(object):
 
     def save_experiments(self, experiments, filename):
         """ Save the profile model parameters. """
-        from time import time
-
         st = time()
         logger.info("Saving the experiments to %s" % filename)
         experiments.as_file(filename)
@@ -573,9 +562,6 @@ class Script(object):
 
     def split_for_scan_range(self, experiments, reference, scan_range):
         """ Update experiments when scan range is set. """
-        from dxtbx.model.experiment_list import ExperimentList
-        from dxtbx.model.experiment_list import Experiment
-
         # Only do anything is the scan range is set
         if scan_range is not None and len(scan_range) > 0:
 

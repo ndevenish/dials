@@ -2,8 +2,12 @@
 
 from __future__ import absolute_import, division, print_function
 
-from dials.util import show_mail_on_error
+import libtbx.load_env
 from libtbx.phil import parse
+
+from dials.util import Sorry, show_mail_on_error
+from dials.util.command_line import Command
+from dials.util.options import OptionParser
 
 # Create the help message
 help_message = """
@@ -37,9 +41,6 @@ class Script(object):
 
     def __init__(self):
         """ Initialise the script. """
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = (
             "usage: %s [options] /path/to/image/reflection/files"
@@ -51,9 +52,6 @@ class Script(object):
 
     def run(self):
         """ Run the script. """
-        from dials.util.command_line import Command
-        from dials.util import Sorry
-
         # Parse the command line arguments
         params, options = self.parser.parse_args(show_diff_phil=True)
         if len(params.input.reflections) == 0:

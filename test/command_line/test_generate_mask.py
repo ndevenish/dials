@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
-import six.moves.cPickle as pickle
 import procrunner
 import pytest
+import six.moves.cPickle as pickle
 
 from dials.command_line.generate_mask import generate_mask, phil_scope
 from dxtbx.serialize import load

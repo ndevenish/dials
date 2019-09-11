@@ -2,14 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import procrunner
 import pytest
+import six.moves.cPickle as pickle
+
+from dials.algorithms.background.gmodel import StaticBackgroundModel
+from dials.array_family import flex
 
 
 @pytest.fixture
 def model(tmpdir):
-    from dials.array_family import flex
-    from dials.algorithms.background.gmodel import StaticBackgroundModel
-    import six.moves.cPickle as pickle
-
     ysize = 2527
     xsize = 2463
     data = flex.double(flex.grid(ysize, xsize), 1)
@@ -59,8 +59,6 @@ def test_simple(dials_data, model, tmpdir):
     )
     assert not result.returncode and not result.stderr
     assert reflns_g_simple.check()
-
-    from dials.array_family import flex
 
     reflections1 = flex.reflection_table.from_file(reflns_simple.strpath)
     reflections3 = flex.reflection_table.from_file(reflns_g_simple.strpath)
@@ -118,8 +116,6 @@ def test_robust(dials_data, model, tmpdir):
     )
     assert not result.returncode and not result.stderr
     assert reflns_g_robust.check()
-
-    from dials.array_family import flex
 
     reflections2 = flex.reflection_table.from_file(reflns_robust.strpath)
     reflections4 = flex.reflection_table.from_file(reflns_g_robust.strpath)

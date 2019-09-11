@@ -1,8 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-from scitbx.array_family import flex
-from cctbx import crystal, sgtbx, uctbx
 import pytest
+
+from cctbx import crystal, sgtbx, uctbx
+from cctbx.sgtbx.lattice_symmetry import metric_subgroups
+from scitbx.array_family import flex
+
+from dials.algorithms.symmetry.cosym import SymmetryAnalysis
 
 
 def test_symmetry_analysis():
@@ -81,15 +85,11 @@ def test_symmetry_analysis():
         space_group_info=sgtbx.space_group_info("R3:H"),
     ).minimum_cell()
 
-    from cctbx.sgtbx.lattice_symmetry import metric_subgroups
-
     subgroups = metric_subgroups(
         crystal_symmetry, max_delta=5, bravais_types_only=False
     )
 
     cb_op_inp_min = sgtbx.change_of_basis_op()
-
-    from dials.algorithms.symmetry.cosym import SymmetryAnalysis
 
     analysis = SymmetryAnalysis(coords, sym_ops, subgroups, cb_op_inp_min)
 

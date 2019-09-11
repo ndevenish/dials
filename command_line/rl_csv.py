@@ -1,9 +1,11 @@
 # LIBTBX_SET_DISPATCHER_NAME dev.dials.csv
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import iotbx.phil
-from dials.util.options import OptionParser
-from dials.util.options import flatten_experiments, flatten_reflections
+
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 phil_scope = iotbx.phil.parse(
     """
@@ -96,6 +98,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

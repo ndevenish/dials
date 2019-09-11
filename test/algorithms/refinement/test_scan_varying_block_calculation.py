@@ -4,11 +4,21 @@ https://github.com/dials/dials/issues/511"""
 
 from __future__ import absolute_import, division, print_function
 
-import pytest
 from math import pi
-from dials.algorithms.refinement.reflection_manager import BlockCalculator
-from dxtbx.model.experiment_list import ExperimentList, Experiment
+
+import pytest
+
+from cctbx.sgtbx import space_group, space_group_symbols
 from scitbx.array_family import flex
+
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
+from dials.algorithms.refinement.reflection_manager import BlockCalculator
+from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+from dials.test.algorithms.refinement.setup_geometry import Extract
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 
 def create_experiments(image_start=1):
@@ -25,7 +35,6 @@ def create_experiments(image_start=1):
       """,
         process_includes=True,
     )
-    from dials.test.algorithms.refinement.setup_geometry import Extract
 
     models = Extract(master_phil, overrides)
 
@@ -66,14 +75,6 @@ def create_experiments(image_start=1):
 
 
 def generate_reflections(experiments):
-
-    from dials.algorithms.spot_prediction import IndexGenerator
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        ScansExperimentsPredictor,
-    )
-    from dials.algorithms.spot_prediction import ray_intersection
-    from cctbx.sgtbx import space_group, space_group_symbols
 
     detector = experiments[0].detector
     crystal = experiments[0].crystal

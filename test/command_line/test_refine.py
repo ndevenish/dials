@@ -13,10 +13,12 @@ import os
 
 import procrunner
 import pytest
+
+from libtbx.test_utils import approx_equal
+
 from dials.algorithms.refinement.engine import Journal
 from dials.array_family import flex
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx.test_utils import approx_equal
 
 
 def test1(dials_regression, tmpdir):

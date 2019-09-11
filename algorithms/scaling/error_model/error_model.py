@@ -2,11 +2,14 @@
 Error model classes for scaling.
 """
 from __future__ import absolute_import, division, print_function
+
 import logging
-from math import log, exp
-from dials.array_family import flex
-from scitbx import sparse
+from math import exp, log
+
 from libtbx.table_utils import simple_table
+from scitbx import sparse
+
+from dials.array_family import flex
 
 logger = logging.getLogger("dials.scale")
 

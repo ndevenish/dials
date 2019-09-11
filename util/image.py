@@ -1,22 +1,25 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
+import numpy
+
+from scitbx.array_family import flex
+
+import pycbf
+
 
 class reader:
     """A class to read the CBF files used in DIALS"""
 
     def read_file(self, filename):
         """Read the CBF file"""
-        import pycbf
-
         self.cbf_handle = pycbf.cbf_handle_struct()
         self.cbf_handle.read_file(filename, pycbf.MSG_DIGEST)
         self.cbf_handle.rewind_datablock()
 
     def get_data(self):
         """Get the gain array from the file"""
-        import numpy
-        from scitbx.array_family import flex
-
         # Select the first datablock and rewind all the categories
         self.cbf_handle.select_datablock(0)
         self.cbf_handle.select_category(0)
@@ -44,8 +47,6 @@ class reader:
 
 
 if __name__ == "__main__":
-    import sys
-
     handle = reader()
     handle.read_file(sys.argv[1])
     image = handle.get_data()

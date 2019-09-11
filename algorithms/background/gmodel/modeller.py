@@ -2,6 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+import six.moves.cPickle as pickle
+
+from dials.algorithms.background.gmodel import FillGaps, Fitter, PixelFilter
+from dials.algorithms.image.fill_holes import simple_fill
+from dials.array_family import flex
 from dials.util.phil import parse
 
 logger = logging.getLogger(__name__)
@@ -32,8 +37,6 @@ class Modeller(object):
     def __init__(
         self, beam, detector, min_count=5, nsigma=6, sigma=0.5, kernel_size=9, niter=10
     ):
-        from dials.algorithms.background.gmodel import PixelFilter
-
         self.beam = beam
         self.detector = detector
 
@@ -66,9 +69,6 @@ class Modeller(object):
         self._filter.add(image, mask)
 
     def compute(self):
-        from dials.algorithms.background.gmodel import FillGaps
-        from dials.algorithms.image.fill_holes import simple_fill
-
         result = self._filter.compute(self.min_count, self.nsigma)
 
         data = result.data()
@@ -119,17 +119,12 @@ class Creator(object):
         self.background = self.modeller.compute()
         self.modeller = None
         if self.params.debug.output:
-            import six.moves.cPickle as pickle
-
             filename = self.params.debug.filename
             logger.info("Writing background model to %s" % filename)
             with open(filename, "wb") as outfile:
                 pickle.dump(self.background, outfile, protocol=pickle.HIGHEST_PROTOCOL)
 
     def compute(self, reflections):
-        from dials.algorithms.background.gmodel import Fitter
-        from dials.array_family import flex
-
         assert self.finalized()
         fitter = Fitter(self.background)
         scale = fitter(reflections["shoebox"])

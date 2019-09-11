@@ -2,14 +2,27 @@ from __future__ import absolute_import, division, print_function
 
 import random
 
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.background.simple import (
+    Constant2dModeller,
+    Constant3dModeller,
+    Linear2dModeller,
+    Linear3dModeller,
+)
+from dials.algorithms.simulation.generate_test_reflections import (
+    random_background_plane2,
+)
+from dials.array_family import flex
+from dials.util.command_line import ProgressBar
+
 
 class TestExact(object):
     def setup_class(self):
         self.size = (9, 10, 11)
 
     def test_constant2d_modeller(self):
-        from dials.algorithms.background.simple import Constant2dModeller
-
         modeller = Constant2dModeller()
         eps = 1e-7
         for i in range(10):
@@ -20,8 +33,6 @@ class TestExact(object):
                 assert abs(model.params()[j] - c[j]) < eps
 
     def test_constant3d_modeller(self):
-        from dials.algorithms.background.simple import Constant3dModeller
-
         modeller = Constant3dModeller()
         eps = 1e-7
         for i in range(10):
@@ -32,8 +43,6 @@ class TestExact(object):
                 assert abs(model.params()[j] - c) < eps
 
     def test_linear2d_modeller(self):
-        from dials.algorithms.background.simple import Linear2dModeller
-
         modeller = Linear2dModeller()
         eps = 1e-7
         for i in range(10):
@@ -45,8 +54,6 @@ class TestExact(object):
                     assert abs(model.params()[k + j * 3] - p[j][k]) < eps
 
     def test_linear3d_modeller(self):
-        from dials.algorithms.background.simple import Linear3dModeller
-
         modeller = Linear3dModeller()
         eps = 1e-7
         for i in range(10):
@@ -57,8 +64,6 @@ class TestExact(object):
                 assert abs(model.params()[j] - p[j]) < eps
 
     def generate_constant_background_2d(self, size, bmin, bmax):
-        from scitbx.array_family import flex
-
         data = flex.double(flex.grid(size), 0)
         mask = flex.bool(flex.grid(size), True)
         slice_size = (1, size[1], size[2])
@@ -70,17 +75,12 @@ class TestExact(object):
         return cs, data, mask
 
     def generate_constant_background_3d(self, size, bmin, bmax):
-        from scitbx.array_family import flex
-
         c = random.uniform(bmin, bmax)
         data = flex.double(flex.grid(size), c)
         mask = flex.bool(flex.grid(size), True)
         return c, data, mask
 
     def generate_linear_background_2d(self, size, bmin, bmax):
-        from scitbx.array_family import flex
-        from scitbx import matrix
-
         data = flex.double(flex.grid(size), 0)
         mask = flex.bool(flex.grid(size), True)
         params = []
@@ -110,9 +110,6 @@ class TestExact(object):
         return params, data, mask
 
     def generate_linear_background_3d(self, size, bmin, bmax):
-        from scitbx.array_family import flex
-        from scitbx import matrix
-
         data = flex.double(flex.grid(size), 0)
         mask = flex.bool(flex.grid(size), True)
         a000 = random.uniform(bmin, bmax)
@@ -159,9 +156,6 @@ class TestPoisson(object):
         self.size = (9, 9, 9)
 
     def test_constant2d_modeller(self):
-        from dials.algorithms.background.simple import Constant2dModeller
-        from dials.array_family import flex
-
         modeller = Constant2dModeller()
         ma = 10
         sboxes, masks = self.generate_background(self.size, 1000, ma, 0, 0, 0)
@@ -181,9 +175,6 @@ class TestPoisson(object):
         self.assert_std_norm(z)
 
     def test_constant3d_modeller(self):
-        from dials.algorithms.background.simple import Constant3dModeller
-        from dials.array_family import flex
-
         modeller = Constant3dModeller()
 
         ma = 10
@@ -204,9 +195,6 @@ class TestPoisson(object):
         self.assert_std_norm(z)
 
     def test_linear2d_modeller(self):
-        from dials.algorithms.background.simple import Linear2dModeller
-        from dials.array_family import flex
-
         modeller = Linear2dModeller()
 
         # Generate shoeboxes
@@ -240,9 +228,6 @@ class TestPoisson(object):
         self.assert_std_norm(zc)
 
     def test_linear3d_modeller(self):
-        from dials.algorithms.background.simple import Linear3dModeller
-        from dials.array_family import flex
-
         modeller = Linear3dModeller()
 
         # Generate shoeboxes
@@ -279,8 +264,6 @@ class TestPoisson(object):
         self.assert_std_norm(zd)
 
     def assert_std_norm(self, z):
-        from dials.array_family import flex
-
         mv = flex.mean_and_variance(z)
         m = mv.mean()
         s = mv.unweighted_sample_standard_deviation()
@@ -296,12 +279,6 @@ class TestPoisson(object):
             )
 
     def generate_background(self, size, N, A, B, C, D):
-        from dials.algorithms.simulation.generate_test_reflections import (
-            random_background_plane2,
-        )
-        from dials.array_family import flex
-        from dials.util.command_line import ProgressBar
-
         sboxes = []
         masks = []
         progress = ProgressBar(title="Generating Background")

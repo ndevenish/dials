@@ -1,8 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
 import os
-from libtbx import easy_run
 from glob import glob
+
+from libtbx import easy_run
 
 
 def test_spot_counts_per_image(dials_data, run_in_tmpdir):

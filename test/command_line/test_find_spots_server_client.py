@@ -1,12 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
 import multiprocessing
-import procrunner
-import pytest
 import socket
 import time
 import timeit
 from xml.dom import minidom
+
+import procrunner
+import pytest
 
 
 def start_server(server_command, working_directory):

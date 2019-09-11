@@ -2,6 +2,9 @@ from __future__ import absolute_import, division, print_function
 
 from scitbx.array_family import flex
 
+from annlib_ext import AnnAdaptor
+from dials.array_family import flex
+
 
 class SpotMatcher(object):
     """Match the observed with predicted spots."""
@@ -24,8 +27,6 @@ class SpotMatcher(object):
 
         :returns: The list of matched reflections
         """
-        from dials.array_family import flex
-
         # Find the nearest neighbours and distances
         nn, dist = self._find_nearest_neighbours(observed, predicted)
 
@@ -81,8 +82,6 @@ class SpotMatcher(object):
 
         :returns: (nearest neighbours, distance)
         """
-        from annlib_ext import AnnAdaptor
-
         # Create the KD Tree
         ann = AnnAdaptor(pxyz.as_double().as_1d(), 3)
 

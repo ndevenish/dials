@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.integration.sum import sum_image_volume
+
 
 class IntegrationAlgorithm(object):
     """A class to perform 3D summation integration"""
@@ -13,8 +15,6 @@ class IntegrationAlgorithm(object):
         :param reflections: The reflections to integrate
         :return: The list of integrated reflections
         """
-        from dials.algorithms.integration.sum import sum_image_volume
-
         # Integrate and return the reflections
         if image_volume is None:
             intensity = reflections["shoebox"].summed_intensity()

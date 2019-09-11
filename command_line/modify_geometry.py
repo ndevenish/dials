@@ -1,6 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import libtbx.phil
+
+from dials.command_line.dials_import import ManualGeometryUpdater
+from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 """
@@ -18,9 +23,6 @@ output {
 
 
 def run(args):
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-
     usage = "dials.modify_geometry [options] models.expt"
 
     parser = OptionParser(
@@ -37,8 +39,6 @@ def run(args):
     if len(experiments) == 0:
         parser.print_help()
         exit(0)
-
-    from dials.command_line.dials_import import ManualGeometryUpdater
 
     update_geometry = ManualGeometryUpdater(params)
 
@@ -58,6 +58,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

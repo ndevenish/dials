@@ -9,6 +9,8 @@ import libtbx.phil
 from scitbx import matrix
 from scitbx.array_family import flex
 
+from dials.util import log
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 from dials.util.reciprocal_lattice import Render3d
 
 try:
@@ -127,11 +129,6 @@ class PngScene(object):
 
 
 def run():
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    from dials.util.options import flatten_reflections
-    from dials.util import log
-
     usage = "dials.rl_png [options] experiments.json observations.refl"
 
     parser = OptionParser(

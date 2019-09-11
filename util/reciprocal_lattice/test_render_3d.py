@@ -4,6 +4,7 @@ import random
 
 import pytest
 import six
+
 from dials.array_family import flex
 from dials.util.reciprocal_lattice import Render3d
 

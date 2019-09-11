@@ -4,9 +4,9 @@ Tests for the dials.algorithms.scaling.plots module
 from __future__ import absolute_import, division, print_function
 
 from dials.algorithms.scaling.plots import (
-    plot_scaling_models,
-    plot_outliers,
     normal_probability_plot,
+    plot_outliers,
+    plot_scaling_models,
 )
 
 

@@ -1,9 +1,15 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+
 import pytest
+
 from cctbx import uctbx
+from libtbx.phil import parse
+
 from dials.algorithms.indexing.test_index import run_indexing
+from dials.algorithms.refinement.refiner import RefinerFactory, phil_scope
+from dxtbx.serialize import load
 
 
 def test_run(dials_regression, tmpdir):
@@ -21,8 +27,6 @@ def test_run(dials_regression, tmpdir):
     strong_pickle = os.path.join(
         dials_regression, "indexing_test_data", "phi_scan", "strong.pickle"
     )
-
-    from dxtbx.serialize import load
 
     imageset_old = load.experiment_list(
         experiments_old, check_format=False
@@ -128,11 +132,7 @@ def test_run(dials_regression, tmpdir):
         ]
     )
 
-    from libtbx.phil import parse
-    from dials.algorithms.refinement.refiner import phil_scope
-
     params = phil_scope.fetch(source=parse("")).extract()
-    from dials.algorithms.refinement.refiner import RefinerFactory
 
     refiner_old = RefinerFactory.from_parameters_data_experiments(
         params, result_old.indexed_reflections, old_exps

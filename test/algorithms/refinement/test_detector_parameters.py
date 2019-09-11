@@ -1,23 +1,25 @@
 from __future__ import absolute_import, division, print_function
-from math import sin, cos, pi, sqrt
+
 import random
 import textwrap
+from math import cos, pi, sin, sqrt
 
-from scitbx import matrix
 from libtbx.test_utils import approx_equal
+from scitbx import matrix
 
-from dxtbx.model import Panel, Detector
-from dxtbx.model import DetectorFactory
-from dxtbx.model import BeamFactory
-
+from dials.algorithms.refinement.parameterisation.detector_parameters import (
+    DetectorParameterisationMultiPanel,
+    DetectorParameterisationSinglePanel,
+)
 from dials.algorithms.refinement.refinement_helpers import (
     get_fd_gradients,
     random_param_shift,
 )
-from dials.algorithms.refinement.parameterisation.detector_parameters import (
-    DetectorParameterisationSinglePanel,
-    DetectorParameterisationMultiPanel,
+from dials.test.algorithms.refinement.setup_geometry import random_vector_close_to
+from dials.test.algorithms.refinement.test_multi_panel_detector_parameterisation import (
+    make_panel_in_array,
 )
+from dxtbx.model import BeamFactory, Detector, DetectorFactory, Panel
 
 
 def random_panel(lim=(0, 50)):
@@ -64,11 +66,6 @@ def random_panel(lim=(0, 50)):
 def make_multi_panel(single_panel_detector):
     """Create a 3x3 multi-panel detector filling the same space as
     a supplied single panel detector"""
-
-    from dials.test.algorithms.refinement.test_multi_panel_detector_parameterisation import (
-        make_panel_in_array,
-    )
-    from dials.test.algorithms.refinement.setup_geometry import random_vector_close_to
 
     multi_panel_detector = Detector()
     for x in range(3):

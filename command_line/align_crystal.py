@@ -5,10 +5,18 @@ from __future__ import absolute_import, division, print_function
 import collections
 import copy
 import json
+import sys
 
 import iotbx.phil
+import libtbx.load_env
 from cctbx import sgtbx
+from libtbx import table_utils
+from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 from scitbx import matrix
+
+from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.model import MultiAxisGoniometer
 
 help_message = """
 Calculation of possible goniometer settings for re-alignment of crystal axes.
@@ -105,8 +113,6 @@ class align_crystal(object):
     vector_names = {a.elems: "a", b.elems: "b", c.elems: "c"}
 
     def __init__(self, experiment, vectors, frame="reciprocal", mode="main"):
-        from dials.util import Sorry
-
         self.experiment = experiment
         self.vectors = vectors
         self.frame = frame
@@ -116,8 +122,6 @@ class align_crystal(object):
 
         self.s0 = matrix.col(self.experiment.beam.get_s0())
         self.rotation_axis = matrix.col(gonio.get_rotation_axis())
-
-        from dxtbx.model import MultiAxisGoniometer
 
         if not isinstance(gonio, MultiAxisGoniometer):
             raise Sorry("Only MultiAxisGoniometer models supported")
@@ -201,9 +205,6 @@ class align_crystal(object):
 
                 for perm in referential_permutations:
                     S = matrix.sqr(perm[0].elems + perm[1].elems + perm[2].elems)
-                    from rstbx.cftbx.coordinate_frame_helpers import (
-                        align_reference_frame,
-                    )
 
                     R = align_reference_frame(v1_0, S * l1, v2_0, S * l2)
 
@@ -268,8 +269,6 @@ class align_crystal(object):
     info = show
 
     def __str__(self):
-        from libtbx import table_utils
-
         U = matrix.sqr(self.experiment.crystal.get_U())
         B = matrix.sqr(self.experiment.crystal.get_B())
 
@@ -364,10 +363,6 @@ class align_crystal(object):
 
 
 def run(args):
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    import libtbx.load_env
-
     usage = "%s [options] models.expt" % (libtbx.env.dispatcher_name)
 
     parser = OptionParser(
@@ -443,6 +438,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

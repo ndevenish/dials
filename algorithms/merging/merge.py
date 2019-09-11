@@ -1,18 +1,20 @@
 """Merging functions for experiment lists and reflection tables."""
 import logging
 
+from six.moves import cStringIO as StringIO
+
+from mmtbx.scaling import data_statistics
+
+from dials.algorithms.scaling.scaling_library import (
+    merging_stats_from_scaled_array,
+    scaled_data_as_miller_array,
+)
 from dials.array_family import flex
 from dials.command_line.space_group import run_sys_abs_checks
-from dials.algorithms.scaling.scaling_library import (
-    scaled_data_as_miller_array,
-    merging_stats_from_scaled_array,
-)
-from dials.util.filter_reflections import filter_reflection_table
-from dials.util.export_mtz import MADMergedMTZWriter, MergedMTZWriter
 from dials.report.analysis import make_merging_statistics_summary
+from dials.util.export_mtz import MADMergedMTZWriter, MergedMTZWriter
+from dials.util.filter_reflections import filter_reflection_table
 from dxtbx.model import ExperimentList
-from mmtbx.scaling import data_statistics
-from six.moves import cStringIO as StringIO
 
 logger = logging.getLogger("dials")
 

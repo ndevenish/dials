@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+
+from dials.algorithms.background.gmodel import BackgroundAlgorithm
+
 
 class GModelBackgroundExt(object):
     """ An extension class implementing a robust GLM background algorithm. """
@@ -8,8 +12,6 @@ class GModelBackgroundExt(object):
 
     @classmethod
     def phil(cls):
-        from libtbx.phil import parse
-
         phil = parse(
             """
 
@@ -42,9 +44,6 @@ class GModelBackgroundExt(object):
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-        from dials.algorithms.background.gmodel import BackgroundAlgorithm
-
         # Create some default parameters
         if params is None:
             params = self.phil().fetch(parse("")).extract()

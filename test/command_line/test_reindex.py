@@ -5,9 +5,11 @@ import os
 import procrunner
 import pytest
 import six
-from cctbx import sgtbx
-from dxtbx.serialize import load
 from six.moves import cPickle as pickle
+
+from cctbx import sgtbx
+
+from dxtbx.serialize import load
 
 
 def pickle_loads(data):

@@ -1,5 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.background.median import create
+from dials.array_family import flex
+
 
 class BackgroundAlgorithm(object):
     """ Class to do background subtraction. """
@@ -18,9 +21,6 @@ class BackgroundAlgorithm(object):
 
         :param reflections: The list of reflections
         """
-        from dials.algorithms.background.median import create
-        from dials.array_family import flex
-
         # Do the background subtraction
         if image_volume is None:
             success = create(reflections["shoebox"])

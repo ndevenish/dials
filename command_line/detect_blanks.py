@@ -2,11 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import math
+import sys
 
 import libtbx.phil
 from libtbx.math_utils import iceil
-from dials.util import Sorry
 from scitbx.array_family import flex
+
+from dials.util import Sorry, log
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 logger = logging.getLogger("dials.command_line.detect_blanks")
 
@@ -195,11 +198,6 @@ def blank_regions_from_sel(d):
 
 
 def run(args):
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    from dials.util.options import flatten_reflections
-    from dials.util import log
-
     usage = "dials.detect_blanks [options] models.expt observations.refl"
 
     parser = OptionParser(
@@ -323,6 +321,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

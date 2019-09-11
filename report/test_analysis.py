@@ -1,18 +1,21 @@
 """Tests for dials.report.analysis module"""
 from __future__ import absolute_import, division, print_function
+
 import pytest
 from mock import mock
+
 from cctbx import miller
-from dxtbx.model import Crystal
+
 from dials.array_family import flex
 from dials.report.analysis import (
-    scales_vs_batch,
-    i_sig_i_vs_batch,
-    rmerge_vs_batch,
     batch_dependent_properties,
-    reflection_tables_to_batch_dependent_properties,
     combined_table_to_batch_dependent_properties,
+    i_sig_i_vs_batch,
+    reflection_tables_to_batch_dependent_properties,
+    rmerge_vs_batch,
+    scales_vs_batch,
 )
+from dxtbx.model import Crystal
 
 
 @pytest.fixture

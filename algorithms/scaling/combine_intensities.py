@@ -6,10 +6,11 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 import boost.python
-from cctbx import miller, crystal
+from cctbx import crystal, miller
+from libtbx.table_utils import simple_table
+
 from dials.algorithms.scaling.scaling_utilities import DialsMergingStatisticsError
 from dials.array_family import flex
-from libtbx.table_utils import simple_table
 
 miller_ext = boost.python.import_ext("cctbx_miller_ext")
 logger = logging.getLogger("dials")

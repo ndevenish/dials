@@ -4,8 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import math
 import random
-from scitbx import matrix
+
 from libtbx.test_utils import approx_equal
+from scitbx import matrix
+from scitbx.math import euler_angles_xyz_angles
 
 from dials.algorithms.refinement.rotation_decomposition import (
     solve_r3_rotation_for_angles_given_axes,
@@ -68,8 +70,6 @@ def _test_rotation_matrices(phi1, phi2, phi3):
 
 
 def _test_vs_euler_angles_xyz_angles(phi1, phi2, phi3):
-
-    from scitbx.math import euler_angles_xyz_angles
 
     # compose rotation matrix
     R1 = matrix.col((1, 0, 0)).axis_and_angle_as_r3_rotation_matrix(phi1, deg=False)

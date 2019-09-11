@@ -2,13 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+import os
 import sys
 
-import libtbx.load_env
 import iotbx.phil
+import libtbx.load_env
+
 from dials.util import Sorry
-from dials.util.options import OptionParser
-from dials.util.options import flatten_experiments
+from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 """
@@ -50,7 +51,6 @@ def run(args):
 
     if len(experiments) == 0:
         if len(args):
-            import os
             from iotbx.reflection_file_reader import any_reflection_file
 
             for arg in args:

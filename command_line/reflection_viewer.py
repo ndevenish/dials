@@ -1,5 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.util.options import OptionParser, flatten_reflections
+from dials.viewer.viewer_interface import extract_n_show
+
 # LIBTBX_PRE_DISPATCHER_INCLUDE_SH export PHENIX_GUI_ENVIRONMENT=1
 
 
@@ -19,8 +22,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-
         usage = "dials.reflection_viewer [options] experiment.expt"
 
         # Create the parser
@@ -29,9 +30,6 @@ class Script(object):
         )
 
     def run(self):
-
-        from dials.util.options import flatten_reflections
-        from dials.viewer.viewer_interface import extract_n_show
 
         # Parse the command line
         params, options = self.parser.parse_args(show_diff_phil=True)

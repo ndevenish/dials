@@ -7,11 +7,16 @@ import os
 
 import iotbx.phil
 import libtbx
+from cctbx import sgtbx
+from cctbx.sgtbx import bravais_types
+
+from dials.algorithms.indexing.symmetry import (
+    refined_settings_factory_from_refined_triclinic,
+)
 from dials.array_family import flex
-from dials.util import Sorry
-from dials.util.options import OptionParser
-from dials.util.options import flatten_reflections
-from dials.util.options import flatten_experiments
+from dials.util import Sorry, log
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.refine_bravais_settings")
 help_message = """
@@ -88,9 +93,6 @@ refinement {
 
 
 def bravais_lattice_to_space_groups(chiral_only=True):
-    from cctbx import sgtbx
-    from cctbx.sgtbx import bravais_types
-
     bravais_lattice_to_sg = collections.OrderedDict()
     for sgn in range(230):
         sg = sgtbx.space_group_info(number=sgn + 1).group()
@@ -126,8 +128,6 @@ def short_space_group_name(space_group):
 
 
 def run(args=None):
-    from dials.util import log
-
     usage = "dials.refine_bravais_settings indexed.expt indexed.refl [options]"
 
     parser = OptionParser(
@@ -143,8 +143,6 @@ def run(args=None):
 
     # Configure the logging
     log.config(verbosity=options.verbose, logfile=params.output.log)
-
-    from dials.util.version import dials_version
 
     logger.info(dials_version())
 
@@ -192,10 +190,6 @@ def run(args=None):
             # different default to dials.refine
             # tukey is faster and more appropriate at the indexing step
             params.refinement.reflections.outlier.algorithm = "tukey"
-
-    from dials.algorithms.indexing.symmetry import (
-        refined_settings_factory_from_refined_triclinic,
-    )
 
     cb_op_to_primitive = (
         experiments[0]

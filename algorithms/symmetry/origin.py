@@ -5,19 +5,21 @@ measured intensities.
 
 from __future__ import absolute_import, division, print_function
 
+from cctbx import sgtbx
+from cctbx.crystal import symmetry as crystal_symmetry
+from cctbx.miller import set as miller_set
+
+from dials.array_family import flex
+
 
 def cctbx_crystal_from_dials(crystal):
     space_group = crystal.get_space_group()
     unit_cell = crystal.get_unit_cell()
-    from cctbx.crystal import symmetry as crystal_symmetry
 
     return crystal_symmetry(unit_cell, space_group.type().lookup_symbol())
 
 
 def cctbx_i_over_sigi_ms_from_dials_data(reflections, cctbx_crystal_symmetry):
-    from dials.array_family import flex
-    from cctbx.miller import set as miller_set
-
     refl = reflections.select(reflections["intensity.sum.variance"] > 0)
     return miller_set(cctbx_crystal_symmetry, refl["miller_index"]).array(
         data=refl["intensity.sum.value"],
@@ -26,8 +28,6 @@ def cctbx_i_over_sigi_ms_from_dials_data(reflections, cctbx_crystal_symmetry):
 
 
 def offset_miller_indices(indices, offset):
-    from dials.array_family import flex
-
     return flex.miller_index(
         *[mi.iround() for mi in (indices.as_vec3_double() + offset).parts()]
     )
@@ -81,8 +81,6 @@ def get_hkl_offset_correlation_coefficients(
     # changing the miller indices
 
     from dials.array_family import flex
-    from cctbx.miller import set as miller_set
-    from cctbx import sgtbx
 
     cs = cctbx_crystal_from_dials(dials_crystal)
     ms = cctbx_i_over_sigi_ms_from_dials_data(dials_reflections, cs)

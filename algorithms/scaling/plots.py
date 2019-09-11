@@ -3,13 +3,18 @@
 Make plotly plots for html output by dials.scale, dials.report or xia2.report.
 """
 from __future__ import absolute_import, division, print_function
-from collections import OrderedDict
+
 import math as pymath
+from collections import OrderedDict
+from math import exp, pi
+
 import numpy as np
+
 from scitbx import math as scitbxmath
 from scitbx.math import distributions
-from dials.array_family import flex
+
 from dials.algorithms.scaling.model.model import PhysicalScalingModel
+from dials.array_family import flex
 
 
 def plot_scaling_models(scaling_model_dict):
@@ -403,7 +408,6 @@ def normal_probability_plot(data):
     n = y.size()
     width = histy.slot_centers()[1] - histy.slot_centers()[0]
     gaussian = []
-    from math import exp, pi
 
     for x in histy.slot_centers():
         gaussian.append(n * width * exp(-(x ** 2) / 2.0) / ((2.0 * pi) ** 0.5))

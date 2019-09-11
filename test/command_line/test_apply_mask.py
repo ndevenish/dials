@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import procrunner
 
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 
 def test(dials_data, tmpdir):
     input_filename = dials_data("centroid_test_data").join("datablock.json").strpath
@@ -18,8 +20,6 @@ def test(dials_data, tmpdir):
         working_directory=tmpdir.strpath,
     )
     assert not result.returncode and not result.stderr
-
-    from dxtbx.model.experiment_list import ExperimentListFactory
 
     experiments = ExperimentListFactory.from_json_file(output_filename)
 
@@ -45,8 +45,6 @@ def test_experiments(dials_data, tmpdir):
         working_directory=tmpdir.strpath,
     )
     assert not result.returncode and not result.stderr
-
-    from dxtbx.model.experiment_list import ExperimentListFactory
 
     experiments = ExperimentListFactory.from_json_file(output_filename)
 

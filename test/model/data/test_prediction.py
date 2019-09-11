@@ -2,11 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
+from dials.model.data import Prediction
+
 
 @pytest.fixture
 def prediction():
-    from dials.model.data import Prediction
-
     pred = Prediction()
     pred.miller_index = (1, 2, 3)
     pred.beam_vector = (4, 5, 6)
@@ -35,8 +35,6 @@ def test_data(prediction):
 
 
 def test_equality(prediction):
-    from dials.model.data import Prediction
-
     pred2 = Prediction(prediction)
     assert pred2 == prediction
     pred2 = Prediction(prediction)

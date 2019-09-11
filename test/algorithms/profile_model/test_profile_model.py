@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.profile_model.gaussian_rs import Model
+
 
 def test_load_and_dump():
-    from dials.algorithms.profile_model.gaussian_rs import Model
-
     d1 = {"__id__": "gaussian_rs", "n_sigma": 3, "sigma_b": 1, "sigma_m": 2}
     d2 = {"__id__": "gaussian_rs", "n_sigma": 2, "sigma_b": 4, "sigma_m": 5}
     model1 = Model.from_dict(d1)

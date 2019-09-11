@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+
+from dials.algorithms.background.median import BackgroundAlgorithm
+
 
 class MedianBackgroundExt(object):
     """ An extension class implementing a median background algorithm. """
@@ -8,8 +12,6 @@ class MedianBackgroundExt(object):
 
     @classmethod
     def phil(cls):
-        from libtbx.phil import parse
-
         return parse("")
 
     def __init__(self, params, experiments):
@@ -19,8 +21,6 @@ class MedianBackgroundExt(object):
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from dials.algorithms.background.median import BackgroundAlgorithm
-
         self._algorithm = BackgroundAlgorithm(experiments)
 
     def compute_background(self, reflections, image_volume=None):

@@ -7,10 +7,10 @@ from __future__ import absolute_import, division, print_function
 import time as systime
 
 import pytest
+import tqdm
 from six.moves import StringIO
 
 from dials.util import progress
-import tqdm
 
 
 class TTYStringIO(StringIO):

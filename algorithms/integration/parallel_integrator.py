@@ -1,9 +1,30 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from math import ceil, floor
 
+import six.moves.cPickle as pickle
+
+import libtbx
+from libtbx.introspection import machine_memory_info
+from libtbx.table_utils import format as table
+
+from dials.algorithms.background.glm.algorithm import GLMBackgroundCalculatorFactory
+from dials.algorithms.background.gmodel.algorithm import (
+    GModelBackgroundCalculatorFactory,
+)
+from dials.algorithms.background.simple.algorithm import (
+    SimpleBackgroundCalculatorFactory,
+)
+from dials.algorithms.integration.integrator import frame_hist
+from dials.algorithms.integration.processor import NullTask, job
+from dials.algorithms.profile_model.gaussian_rs.algorithm import (
+    GaussianRSIntensityCalculatorFactory,
+    GaussianRSMaskCalculatorFactory,
+    GaussianRSReferenceCalculatorFactory,
+)
+from dials.util import pprint
 from dials_algorithms_integration_parallel_integrator_ext import (
-    Logger,
     GaussianRSIntensityCalculator,
     GaussianRSMaskCalculator,
     GaussianRSMultiCrystalMaskCalculator,
@@ -11,6 +32,7 @@ from dials_algorithms_integration_parallel_integrator_ext import (
     GaussianRSReferenceCalculator,
     GaussianRSReferenceProfileData,
     GLMBackgroundCalculator,
+    Logger,
     MultiThreadedIntegrator,
     MultiThreadedReferenceProfiler,
     ReferenceProfileData,
@@ -18,7 +40,6 @@ from dials_algorithms_integration_parallel_integrator_ext import (
     SimpleBlockList,
     SimpleReflectionManager,
 )
-from dials.algorithms.integration.processor import NullTask
 
 __all__ = [
     "BackgroundCalculatorFactory",
@@ -62,10 +83,6 @@ class MaskCalculatorFactory(object):
         """
         Select the mask calculator
         """
-        from dials.algorithms.profile_model.gaussian_rs.algorithm import (
-            GaussianRSMaskCalculatorFactory,
-        )
-
         # Get the parameters
         if params is None:
             from dials.command_line.integrate import phil_scope
@@ -93,16 +110,6 @@ class BackgroundCalculatorFactory(object):
         """
         Select the background calculator
         """
-        from dials.algorithms.background.simple.algorithm import (
-            SimpleBackgroundCalculatorFactory,
-        )
-        from dials.algorithms.background.glm.algorithm import (
-            GLMBackgroundCalculatorFactory,
-        )
-        from dials.algorithms.background.gmodel.algorithm import (
-            GModelBackgroundCalculatorFactory,
-        )
-
         # Get the parameters
         if params is None:
             from dials.command_line.integrate import phil_scope
@@ -188,10 +195,6 @@ class IntensityCalculatorFactory(object):
         """
         Select the intensity calculator
         """
-        from dials.algorithms.profile_model.gaussian_rs.algorithm import (
-            GaussianRSIntensityCalculatorFactory,
-        )
-
         # Get the parameters
         if params is None:
             from dials.command_line.integrate import phil_scope
@@ -237,10 +240,6 @@ class ReferenceCalculatorFactory(object):
         """
         Select the reference calculator
         """
-        from dials.algorithms.profile_model.gaussian_rs.algorithm import (
-            GaussianRSReferenceCalculatorFactory,
-        )
-
         # Get the parameters
         if params is None:
             from dials.command_line.integrate import phil_scope
@@ -276,8 +275,6 @@ def assert_enough_memory(required_memory, max_memory_usage):
     :param required_memory: The required number of bytes
     :param max_memory_usage: The maximum memory usage allowed
     """
-    from libtbx.introspection import machine_memory_info
-
     # Compute percentage of max available. The function is not portable to
     # windows so need to add a check if the function fails. On windows no
     # warning will be printed
@@ -373,8 +370,6 @@ class IntegrationJob(object):
 
         :return: The processed data
         """
-        from dials.algorithms.integration.processor import job
-
         # Set the global process ID
         job.index = self.index
 
@@ -430,8 +425,6 @@ class IntegrationJob(object):
         """
         Integrate the reflections
         """
-        from dials.algorithms.integration.integrator import frame_hist
-
         # Compute the partiality
         self.reflections.compute_partiality(self.experiments)
 
@@ -656,9 +649,6 @@ class IntegrationManager(object):
         """
         Compute the required memory
         """
-        from libtbx.introspection import machine_memory_info
-        from math import floor
-
         memory_info = machine_memory_info()
         total_memory = memory_info.memory_total()
         max_memory_usage = self.params.integration.block.max_memory_usage
@@ -676,9 +666,6 @@ class IntegrationManager(object):
         """
         Compute the processing block size.
         """
-        import libtbx
-        from math import ceil
-
         block = self.params.integration.block
         max_block_size = self.compute_max_block_size()
         if block.size in [libtbx.Auto, "auto", "Auto"]:
@@ -737,8 +724,6 @@ class IntegrationManager(object):
         """
         Get a summary of the processing
         """
-        from libtbx.table_utils import format as table
-
         # Compute the task table
         if self.experiments.all_stills():
             rows = [["#", "Group", "Frame From", "Frame To", "# Reflections"]]
@@ -831,8 +816,6 @@ class ReferenceCalculatorJob(object):
 
         :return: The processed data
         """
-        from dials.algorithms.integration.processor import job
-
         # Set the global process ID
         job.index = self.index
 
@@ -885,8 +868,6 @@ class ReferenceCalculatorJob(object):
         """
         Integrate the reflections
         """
-        from dials.algorithms.integration.integrator import frame_hist
-
         # Compute the partiality
         self.reflections.compute_partiality(self.experiments)
 
@@ -1134,9 +1115,6 @@ class ReferenceCalculatorManager(object):
         """
         Compute the required memory
         """
-        from libtbx.introspection import machine_memory_info
-        from math import floor
-
         memory_info = machine_memory_info()
         total_memory = memory_info.memory_total()
         max_memory_usage = self.params.integration.block.max_memory_usage
@@ -1154,9 +1132,6 @@ class ReferenceCalculatorManager(object):
         """
         Compute the processing block size.
         """
-        import libtbx
-        from math import ceil
-
         block = self.params.integration.block
         max_block_size = self.compute_max_block_size()
         if block.size in [libtbx.Auto, "auto", "Auto"]:
@@ -1212,8 +1187,6 @@ class ReferenceCalculatorManager(object):
         """
         Get a summary of the processing
         """
-        from libtbx.table_utils import format as table
-
         # Compute the task table
         if self.experiments.all_stills():
             rows = [["#", "Group", "Frame From", "Frame To", "# Reflections"]]
@@ -1264,8 +1237,6 @@ class ReferenceCalculatorManager(object):
 
 class ReferenceCalculatorProcessor(object):
     def __init__(self, experiments, reflections, params=None):
-        from dials.util import pprint
-
         # Create the reference manager
         reference_manager = ReferenceCalculatorManager(experiments, reflections, params)
 
@@ -1287,8 +1258,6 @@ class ReferenceCalculatorProcessor(object):
         # Write the profiles to file
         if params.integration.debug.reference.output:
             with open(params.integration.debug.reference.filename, "wb") as outfile:
-                import six.moves.cPickle as pickle
-
                 pickle.dump(self._profiles, outfile)
 
         # Print the profiles to the debug log

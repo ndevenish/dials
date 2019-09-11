@@ -1,6 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+import re
+from os.path import exists
+
 import libtbx.phil
+from libtbx.utils import Sorry
+
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 class FilenameDataWrapper(object):
@@ -25,10 +32,6 @@ class ExperimentListConverters(object):
         return self.phil_type
 
     def from_string(self, s):
-        from dxtbx.model.experiment_list import ExperimentListFactory
-        from os.path import exists
-        from libtbx.utils import Sorry
-
         if s is None:
             return None
         if s not in self.cache:
@@ -64,10 +67,6 @@ class ReflectionTableConverters(object):
         return self.phil_type
 
     def from_string(self, s):
-        from dials.array_family import flex
-        from os.path import exists
-        from libtbx.utils import Sorry
-
         if s is None:
             return None
         if s not in self.cache:
@@ -98,11 +97,8 @@ class ReflectionTableSelectorConverters(object):
         return self.phil_type
 
     def from_string(self, s):
-        from dials.array_family import flex
-
         if s is None:
             return None
-        import re
 
         regex = r"^\s*([\w\.]+)\s*(<=|!=|==|>=|<|>|&)\s*(.+)\s*$"
         matches = re.findall(regex, s)

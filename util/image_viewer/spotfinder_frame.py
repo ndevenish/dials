@@ -3,11 +3,24 @@ from __future__ import absolute_import, division, print_function
 import itertools
 import math
 
-from past.builtins import basestring, unicode
-
 import wx
+from past.builtins import basestring, unicode
+from wx.lib.intctrl import IntCtrl
+
 from cctbx import crystal, uctbx
 from cctbx.miller import index_generator
+from libtbx import group_args
+from libtbx.utils import flat_list, time_log
+from rstbx.slip_viewer import pyslip
+from rstbx.viewer.frame import SettingsFrame
+from scitbx import matrix
+from wxtbx import bitmaps, icons
+from wxtbx.phil_controls import EVT_PHIL_CONTROL
+from wxtbx.phil_controls.floatctrl import FloatCtrl
+from wxtbx.phil_controls.intctrl import IntCtrl as PhilIntCtrl
+from wxtbx.phil_controls.ints import IntsCtrl
+from wxtbx.phil_controls.strctrl import StrCtrl
+
 from dials.algorithms.image.threshold import (
     DispersionExtendedThresholdDebug as DispersionThresholdDebug,
 )
@@ -18,20 +31,7 @@ from dials.util import masking
 from dials.util.image_viewer.mask_frame import MaskSettingsFrame
 from dials.util.image_viewer.spotfinder_wrap import chooser_wrapper
 from dxtbx.imageset import ImageSet
-from dxtbx.model.experiment_list import ExperimentList
-from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import group_args
-from libtbx.utils import flat_list, time_log
-from rstbx.slip_viewer import pyslip
-from rstbx.viewer.frame import SettingsFrame
-from scitbx import matrix
-from wx.lib.intctrl import IntCtrl
-from wxtbx import bitmaps, icons
-from wxtbx.phil_controls import EVT_PHIL_CONTROL
-from wxtbx.phil_controls.floatctrl import FloatCtrl
-from wxtbx.phil_controls.intctrl import IntCtrl as PhilIntCtrl
-from wxtbx.phil_controls.ints import IntsCtrl
-from wxtbx.phil_controls.strctrl import StrCtrl
+from dxtbx.model.experiment_list import ExperimentList, ExperimentListFactory
 
 from .slip_viewer.frame import XrayFrame
 from .viewer_tools import (

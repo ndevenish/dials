@@ -1,6 +1,18 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import platform
+from time import time
+
+from libtbx.table_utils import format as table
+
+from dials.algorithms.integration.processor import job
+from dials.algorithms.integration.report import IntegrationReport
+from dials.array_family import flex
+from dials.model.data import ImageVolume, MultiPanelImageVolume, make_image
+from dials.util.command_line import heading
+from dials.util.mp import multi_node_parallel_map
+from dials_algorithms_integration_integrator_ext import ReflectionManagerPerImage
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +32,6 @@ class TimingInfo(object):
 
     def __str__(self):
         """ Convert to string. """
-        from libtbx.table_utils import format as table
-
         rows = [
             ["Read time", "%.2f seconds" % (self.read)],
             ["Pre-process time", "%.2f seconds" % (self.initialize)],
@@ -73,10 +83,6 @@ class ProcessorImageBase(object):
 
         :return: The processing results
         """
-        from time import time
-        from dials.util.mp import multi_node_parallel_map
-        import platform
-
         start_time = time()
         self.manager.initialize()
         mp_method = self.manager.params.integration.mp.method
@@ -153,8 +159,6 @@ class Result(object):
 
 class Dataset(object):
     def __init__(self, frames, size):
-        from dials.array_family import flex
-
         self.frames = frames
         nframes = frames[1] - frames[0]
         self.data = []
@@ -164,8 +168,6 @@ class Dataset(object):
             self.mask.append(flex.bool(flex.grid(nframes, sz[0], sz[1])))
 
     def set_image(self, index, data, mask):
-        from dials.array_family import flex
-
         for d1, d2 in zip(self.data, data):
             h, w = d2.all()
             d2.reshape(flex.grid(1, h, w))
@@ -205,12 +207,6 @@ class Task(object):
 
         :return: The processed data
         """
-        from dials.model.data import make_image
-        from dials.model.data import MultiPanelImageVolume
-        from dials.model.data import ImageVolume
-        from dials.algorithms.integration.processor import job
-        from time import time
-
         # Set the job index
         job.index = self.index
 
@@ -324,11 +320,6 @@ class ManagerImage(object):
         """
         Initialise the processing
         """
-        from dials_algorithms_integration_integrator_ext import (
-            ReflectionManagerPerImage,
-        )
-        from time import time
-
         # Get the start time
         start_time = time()
 
@@ -387,8 +378,6 @@ class ManagerImage(object):
         """
         Finalize the processing and finish.
         """
-        from time import time
-
         # Get the start time
         start_time = time()
 
@@ -474,8 +463,6 @@ class InitializerRot(object):
         """
         Do some pre-processing.
         """
-        from dials.array_family import flex
-
         # Compute some reflection properties
         reflections.compute_zeta_multi(self.experiments)
         reflections.compute_d(self.experiments)
@@ -517,8 +504,6 @@ class ImageIntegratorExecutor(object):
         pass
 
     def process(self, image_volume, experiments, reflections):
-        from dials.algorithms.integration.processor import job
-
         # Compute the partiality
         reflections.compute_partiality(experiments)
 
@@ -612,9 +597,6 @@ class ImageIntegrator(object):
         """
         Integrate the data
         """
-        from dials.algorithms.integration.report import IntegrationReport
-        from dials.util.command_line import heading
-
         # Init the report
         self.profile_model_report = None
         self.integration_report = None

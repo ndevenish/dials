@@ -6,17 +6,28 @@ import os
 
 import pytest
 
+from cctbx.sgtbx import space_group, space_group_symbols
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement.parameterisation.crystal_parameters import (
+    CrystalOrientationParameterisation,
+    CrystalUnitCellParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.parameter_report import (
+    ParameterReporter,
+)
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
+from dials.algorithms.refinement.reflection_manager import ReflectionManager
+from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+from dxtbx.model import GoniometerFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+
 
 def generate_reflections(experiments):
-    from dials.algorithms.spot_prediction import IndexGenerator
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        ScansExperimentsPredictor,
-    )
-    from dials.algorithms.spot_prediction import ray_intersection
-    from cctbx.sgtbx import space_group, space_group_symbols
-    from scitbx.array_family import flex
-
     detector = experiments[0].detector
     crystal = experiments[0].crystal
 
@@ -82,8 +93,6 @@ def test1(dials_regression):
         (40.0, 0.0, 0.0), (0.0, 40.0, 0.0), (0.0, 0.0, 40.0), space_group_symbol="P1"
     )
 
-    from dxtbx.model import GoniometerFactory
-
     goniometer = GoniometerFactory.known_axis((1.0, 0.0, 0.0))
 
     # Build a mock scan for a 180 degree sweep
@@ -101,8 +110,6 @@ def test1(dials_regression):
     im_width = scan.get_oscillation(deg=False)[1]
     assert sweep_range == (0.0, math.pi)
     assert im_width == pytest.approx(0.1 * math.pi / 180.0)
-
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
 
     # Build an experiment list
     experiments = ExperimentList()
@@ -145,10 +152,6 @@ def test1(dials_regression):
     from dials.algorithms.refinement.parameterisation.beam_parameters import (
         BeamParameterisation,
     )
-    from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-        CrystalOrientationParameterisation,
-        CrystalUnitCellParameterisation,
-    )
 
     beam_param = BeamParameterisation(beam, goniometer)
     xlo_param = CrystalOrientationParameterisation(crystal)
@@ -165,9 +168,6 @@ def test1(dials_regression):
     from dials.algorithms.refinement.parameterisation.prediction_parameters import (
         XYPhiPredictionParameterisation,
     )
-    from dials.algorithms.refinement.parameterisation.parameter_report import (
-        ParameterReporter,
-    )
 
     pred_param = XYPhiPredictionParameterisation(
         experiments, [det_param], [beam_param], [xlo_param], [xluc_param]
@@ -180,7 +180,6 @@ def test1(dials_regression):
     from dials.algorithms.refinement.target import (
         LeastSquaresPositionalResidualWithRmsdCutoff,
     )
-    from dials.algorithms.refinement.reflection_manager import ReflectionManager
 
     refman = ReflectionManager(refs, experiments, nref_per_degree=20)
 
@@ -224,8 +223,6 @@ def test1(dials_regression):
     # compare detector with original detector
     orig_det = im_set.get_detector()
     refined_det = refiner.get_experiments()[0].detector
-
-    from scitbx import matrix
 
     for op, rp in zip(orig_det, refined_det):
         # compare the origin vectors by...

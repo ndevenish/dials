@@ -1,17 +1,17 @@
 from __future__ import absolute_import, division, print_function
 
-from dials.algorithms.refinement.engine import Journal
 import os
 
 import procrunner
 import pytest
 
+from dials.algorithms.refinement.engine import Journal
+from dials.array_family import flex
+
 
 def test_joint_refinement(dials_regression, run_in_tmpdir):
     """A basic test of joint refinement of the CS-PAD detector at hierarchy level 2
     with 300 crystals."""
-    from dials.array_family import flex
-
     bevington = pytest.importorskip("scitbx.examples.bevington")
     if not hasattr(bevington, "non_linear_ls_eigen_wrapper"):
         pytest.skip("Skipping test as SparseLevMar engine not available")

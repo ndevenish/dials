@@ -1,10 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import iotbx.phil
-from dials.util.options import OptionParser
-from dials.util.options import flatten_experiments
-from dials.util.options import flatten_reflections
+
+from dials.algorithms.shoebox import MaskCode
 from dials.array_family import flex
+from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 help_message = """
 Augment spot list with additional information - for example number of pixels
@@ -25,8 +28,6 @@ find_max = False
 def add_max_pixels_to_reflections(reflections):
     """Iterate through reflections, find max pixel in each shoebox and max
     valid, add columns thereof"""
-
-    from dials.algorithms.shoebox import MaskCode
 
     good = MaskCode.Foreground | MaskCode.Valid
 
@@ -71,8 +72,6 @@ def add_resolution_to_reflections(reflections, experiments):
 def augment_reflections(reflections, params, experiments=None):
     """Add extra columns of derived data."""
 
-    from dials.algorithms.shoebox import MaskCode
-
     good = MaskCode.Foreground | MaskCode.Valid
 
     if params.find_max:
@@ -97,8 +96,6 @@ def augment_reflections(reflections, params, experiments=None):
 
 
 def run(args):
-    from dials.util import Sorry
-
     usage = "dials.augment_spots [options] [models.expt] strong.refl"
 
     parser = OptionParser(
@@ -125,6 +122,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

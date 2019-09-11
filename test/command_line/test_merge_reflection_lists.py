@@ -2,10 +2,10 @@ from __future__ import absolute_import, division, print_function
 
 import procrunner
 
+from dials.array_family import flex
+
 
 def test(run_in_tmpdir):
-    from dials.array_family import flex
-
     table = flex.reflection_table()
     table["hkl"] = flex.miller_index(360)
     table["id"] = flex.int(360)

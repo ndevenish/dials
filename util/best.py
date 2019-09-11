@@ -4,12 +4,18 @@ import logging
 import math
 import os
 
+from iotbx.mtz.extract_from_symmetry_lib import ccp4_symbol
+from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.command_line.background import background
+from dxtbx.model import Crystal
+
 logger = logging.getLogger(__name__)
 
 
 def write_background_file(file_name, imageset, n_bins):
-    from dials.command_line.background import background
-
     d, I, sig = background(imageset, imageset.indices()[0], n_bins=n_bins)
 
     logger.info("Saving background file to %s" % file_name)
@@ -19,8 +25,6 @@ def write_background_file(file_name, imageset, n_bins):
 
 
 def write_integrated_hkl(prefix, reflections):
-    from scitbx.array_family import flex
-
     expt_ids = reflections["id"]
     integrated_sel = reflections.get_flags(reflections.flags.integrated_sum)
     for i_expt in range(flex.max(expt_ids) + 1):
@@ -45,11 +49,6 @@ def write_integrated_hkl(prefix, reflections):
 
 
 def write_par_file(file_name, experiment):
-    from scitbx import matrix
-    from dxtbx.model import Crystal
-    from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
-    from iotbx.mtz.extract_from_symmetry_lib import ccp4_symbol
-
     imageset = experiment.imageset
     detector = imageset.get_detector()
     goniometer = imageset.get_goniometer()

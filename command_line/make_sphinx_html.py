@@ -9,8 +9,10 @@ import shutil
 from datetime import datetime
 from optparse import SUPPRESS_HELP, OptionParser
 
-import libtbx.load_env
 import procrunner
+
+import libtbx.load_env
+from libtbx.auto_build.bootstrap import Toolbox
 
 # Disable all HTTPS verification. This is to work around an issue
 # in biopython, possibly biopython relying on unreliable servers.
@@ -43,7 +45,6 @@ def update_dials_download_links():
     )
 
     release_info = None
-    from libtbx.auto_build.bootstrap import Toolbox
 
     print("Checking DIALS release status: ", end="")
     if Toolbox().download_to_file(

@@ -1,8 +1,14 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import sys
+
+import six.moves.cPickle as pickle
 
 import iotbx.phil
+
+from dials.array_family import flex
+from dials.util import Sorry, log
 from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 logger = logging.getLogger("dials.command_line.find_hot_pixels")
@@ -38,10 +44,6 @@ help_message = """
 
 
 def run(args):
-    from dials.util import Sorry
-    from dials.util import log
-    import six.moves.cPickle as pickle
-
     usage = "dials.find_hot_pixels [options] models.expt strong.refl"
 
     # Create the option parser
@@ -100,8 +102,6 @@ def hot_pixel_mask(imageset, reflections):
     depth = imageset.get_array_range()[1] - imageset.get_array_range()[0]
     xylist = filter_reflections(reflections, depth)
 
-    from dials.array_family import flex
-
     mask = flex.bool(
         flex.grid(reversed(imageset.get_detector()[0].get_image_size())), True
     )
@@ -127,6 +127,4 @@ def filter_reflections(reflections, depth):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

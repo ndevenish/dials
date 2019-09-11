@@ -1,5 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
+import wx
+
+from dials.util.image_viewer.spotfinder_frame import SpotFrame
+from dials.util.spotfinder_frame import create_load_image_event
+
 from .slip_viewer.frame import chooser_wrapper as _chooser_wrapper
 
 try:
@@ -49,9 +54,6 @@ class spot_wrapper(object):
         self.frame = None
 
     def display(self, experiments, reflections):
-        import wx
-        from dials.util.image_viewer.spotfinder_frame import SpotFrame
-
         app = wx.App()
 
         self.frame = SpotFrame(
@@ -77,7 +79,5 @@ class spot_wrapper(object):
         app.MainLoop()
 
     def load_image(self, filename):
-        from dials.util.spotfinder_frame import create_load_image_event
-
         if self.frame is not None:
             create_load_image_event(self.frame, filename)

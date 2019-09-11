@@ -1,19 +1,23 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+
 import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib.pyplot as plt
 
+from libtbx.phil import parse
+from scitbx import matrix
+
+import dials.util
 from dials.algorithms.refinement.rotation_decomposition import (
     solve_r3_rotation_for_angles_given_axes,
 )
 from dials.command_line.analyse_output import ensure_directory
+from dials.util.options import OptionParser, flatten_experiments
 
-import dials.util
-from libtbx.phil import parse
+matplotlib.use("Agg")
+
 
 phil_scope = parse(
     """
@@ -69,8 +73,6 @@ class Script(object):
 
     def __init__(self):
         """Setup the script."""
-        from dials.util.options import OptionParser
-
         usage = "usage: dials.plot_scan_varying_model [options] refined.expt"
         self.parser = OptionParser(
             usage=usage,
@@ -82,9 +84,6 @@ class Script(object):
 
     def run(self):
         """Run the script."""
-        from dials.util.options import flatten_experiments
-        from scitbx import matrix
-
         params, options = self.parser.parse_args()
         if len(params.input.experiments) == 0:
             self.parser.print_help()

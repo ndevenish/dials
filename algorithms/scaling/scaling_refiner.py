@@ -4,18 +4,22 @@ Classes are inherited from the dials.refinement engine with a few
 methods overwritten to use them with scaling code."""
 
 from __future__ import absolute_import, division, print_function
+
 import logging
-from dials.algorithms.refinement.engine import (
-    SimpleLBFGS,
-    GaussNewtonIterations,
-    LevenbergMarquardtIterations,
-    LBFGScurvs,
-)
-from dials.algorithms.scaling.scaling_utilities import log_memory_usage
+
+from iotbx import merging_statistics
 from libtbx.phil import parse
 from libtbx.table_utils import simple_table
 from scitbx.array_family import flex
-from iotbx import merging_statistics
+
+from dials.algorithms.refinement.engine import (
+    GaussNewtonIterations,
+    LBFGScurvs,
+    LevenbergMarquardtIterations,
+    SimpleLBFGS,
+)
+from dials.algorithms.scaling.scaler import MultiScalerBase
+from dials.algorithms.scaling.scaling_utilities import log_memory_usage
 
 logger = logging.getLogger("dials")
 
@@ -257,8 +261,6 @@ class ScalingRefinery(object):
 
     def return_scaler(self):
         """return scaler method"""
-        from dials.algorithms.scaling.scaler import MultiScalerBase
-
         print_step_table(self)
 
         if self._scaler.id_ == "single":

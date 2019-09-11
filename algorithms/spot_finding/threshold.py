@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.image import threshold
+from dials.algorithms.image.threshold import maximum_deviation, probability_distribution
+from dials.array_family import flex
+
 
 class ThresholdStrategy(object):
     """
@@ -45,9 +49,6 @@ class UnimodalThresholdStrategy(ThresholdStrategy):
         :param image: The image to process
         :return: The thresholded image
         """
-        from dials.algorithms.image.threshold import maximum_deviation
-        from dials.algorithms.image.threshold import probability_distribution
-
         # Get the probability distribution from the image
         p = probability_distribution(image, self._hrange)
 
@@ -93,9 +94,6 @@ class DispersionThresholdStrategy(ThresholdStrategy):
         :param mask: The mask to use
         :return: The thresholded image
         """
-        from dials.algorithms.image import threshold
-        from dials.array_family import flex
-
         # Initialise the algorithm
         try:
             algorithm = self.algorithm[image.all()]
@@ -162,9 +160,6 @@ class DispersionExtendedThresholdStrategy(ThresholdStrategy):
         :param mask: The mask to use
         :return: The thresholded image
         """
-        from dials.algorithms.image import threshold
-        from dials.array_family import flex
-
         # Initialise the algorithm
         try:
             algorithm = self.algorithm[image.all()]

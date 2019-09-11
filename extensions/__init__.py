@@ -1,5 +1,25 @@
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+
+from dials.extensions.dispersion_extended_spotfinder_threshold_ext import (
+    DispersionExtendedSpotFinderThresholdExt,
+)
+from dials.extensions.dispersion_spotfinder_threshold_ext import (
+    DispersionSpotFinderThresholdExt,
+)
+from dials.extensions.gaussian_rs_profile_model_ext import GaussianRSProfileModelExt
+from dials.extensions.glm_background_ext import GLMBackgroundExt
+from dials.extensions.global_spotfinder_threshold_ext import (
+    GlobalSpotFinderThresholdExt,
+)
+from dials.extensions.gmodel_background_ext import GModelBackgroundExt
+from dials.extensions.helen_spotfinder_threshold_ext import HelenSpotFinderThresholdExt
+from dials.extensions.median_background_ext import MedianBackgroundExt
+from dials.extensions.null_background_ext import NullBackgroundExt
+from dials.extensions.simple_background_ext import SimpleBackgroundExt
+from dials.extensions.simple_centroid_ext import SimpleCentroidExt
+
 
 class _Extension(object):
     """A base class for extension groups.
@@ -23,8 +43,6 @@ class _Extension(object):
 
         :returns: The phil scope for the interface or extension
         """
-        from libtbx.phil import parse
-
         if cls == _Extension:
             raise RuntimeError("Extension has no phil parameters")
         doc = "\n".join('"%s"' % d for d in cls.__doc__.strip().splitlines())
@@ -83,19 +101,6 @@ class SpotFinderThreshold(_Extension):
 
     @classmethod
     def extensions(cls):
-        from dials.extensions.dispersion_spotfinder_threshold_ext import (
-            DispersionSpotFinderThresholdExt,
-        )
-        from dials.extensions.dispersion_extended_spotfinder_threshold_ext import (
-            DispersionExtendedSpotFinderThresholdExt,
-        )
-        from dials.extensions.helen_spotfinder_threshold_ext import (
-            HelenSpotFinderThresholdExt,
-        )
-        from dials.extensions.global_spotfinder_threshold_ext import (
-            GlobalSpotFinderThresholdExt,
-        )
-
         return [
             DispersionSpotFinderThresholdExt,
             DispersionExtendedSpotFinderThresholdExt,
@@ -114,10 +119,6 @@ class ProfileModel(_Extension):
 
     @classmethod
     def extensions(cls):
-        from dials.extensions.gaussian_rs_profile_model_ext import (
-            GaussianRSProfileModelExt,
-        )
-
         return [GaussianRSProfileModelExt]
 
 
@@ -129,8 +130,6 @@ class Centroid(_Extension):
 
     @classmethod
     def extensions(cls):
-        from dials.extensions.simple_centroid_ext import SimpleCentroidExt
-
         return [SimpleCentroidExt]
 
 
@@ -142,12 +141,6 @@ class Background(_Extension):
 
     @classmethod
     def extensions(cls):
-        from dials.extensions.glm_background_ext import GLMBackgroundExt
-        from dials.extensions.gmodel_background_ext import GModelBackgroundExt
-        from dials.extensions.simple_background_ext import SimpleBackgroundExt
-        from dials.extensions.null_background_ext import NullBackgroundExt
-        from dials.extensions.median_background_ext import MedianBackgroundExt
-
         return [
             GLMBackgroundExt,
             GModelBackgroundExt,

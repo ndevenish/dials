@@ -7,31 +7,33 @@ import logging
 from collections import OrderedDict
 
 import six
+from jinja2 import ChoiceLoader, Environment, PackageLoader
+
 from cctbx import uctbx
-from dials.util.observer import Observer, singleton
-from dials.algorithms.scaling.plots import (
-    plot_scaling_models,
-    plot_outliers,
-    normal_probability_plot,
-)
-from dials.report.analysis import (
-    reflection_tables_to_batch_dependent_properties,
-    make_merging_statistics_summary,
-)
-from dials.report.plots import (
-    scale_rmerge_vs_batch_plot,
-    i_over_sig_i_vs_batch_plot,
-    i_over_sig_i_vs_i_plot,
-    ResolutionPlotsAndStats,
-    IntensityStatisticsPlots,
-    AnomalousPlotter,
-)
-from dials.algorithms.scaling.scale_and_filter import make_scaling_filtering_plots
-from dials.util.batch_handling import batch_manager, get_image_ranges
-from dials.util.exclude_images import get_valid_image_ranges
-from jinja2 import Environment, ChoiceLoader, PackageLoader
 from libtbx.table_utils import simple_table
 from scitbx.array_family import flex
+
+from dials.algorithms.scaling.plots import (
+    normal_probability_plot,
+    plot_outliers,
+    plot_scaling_models,
+)
+from dials.algorithms.scaling.scale_and_filter import make_scaling_filtering_plots
+from dials.report.analysis import (
+    make_merging_statistics_summary,
+    reflection_tables_to_batch_dependent_properties,
+)
+from dials.report.plots import (
+    AnomalousPlotter,
+    IntensityStatisticsPlots,
+    ResolutionPlotsAndStats,
+    i_over_sig_i_vs_batch_plot,
+    i_over_sig_i_vs_i_plot,
+    scale_rmerge_vs_batch_plot,
+)
+from dials.util.batch_handling import batch_manager, get_image_ranges
+from dials.util.exclude_images import get_valid_image_ranges
+from dials.util.observer import Observer, singleton
 
 logger = logging.getLogger("dials")
 

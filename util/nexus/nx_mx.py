@@ -3,9 +3,17 @@ from __future__ import absolute_import, division, print_function
 import collections
 import math
 from copy import deepcopy
+from time import strftime
 
 import numpy as np
+
+from cctbx import uctbx
 from scitbx import matrix
+from scitbx.array_family import flex
+
+from dxtbx.imageset import ImageSweep
+from dxtbx.model import Beam, Crystal, Detector, Goniometer, Scan
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 # Extensions to NXMX
 #
@@ -344,8 +352,6 @@ def dump_goniometer(entry, goniometer, scan):
 
 def dump_crystal(entry, crystal, scan):
     """ Export the crystal model. """
-    from scitbx.array_family import flex
-
     # Get the sample
     nx_sample = get_nx_sample(entry, "sample")
 
@@ -418,8 +424,6 @@ def dump_crystal(entry, crystal, scan):
 
 
 def dump_details(entry):
-    from time import strftime
-
     # Program info
     entry["program_name"] = "dials.export_nxmx"
     entry["program_name"].attrs["version"] = 1
@@ -465,8 +469,6 @@ def dump_details(entry):
 
 
 def load_beam(entry):
-    from dxtbx.model import Beam
-
     EPS = 1e-7
 
     # Get the nx_beam
@@ -482,8 +484,6 @@ def load_beam(entry):
 
 
 def load_detector(entry):
-    from dxtbx.model import Detector
-
     # Get the detector module object
     nx_instrument = get_nx_instrument(entry, "instrument")
     nx_detector = get_nx_detector(nx_instrument, "detector")
@@ -551,8 +551,6 @@ def load_detector(entry):
 
 
 def load_goniometer(entry):
-    from dxtbx.model import Goniometer
-
     # Write out the rotation axis and oscillation
     nx_sample = get_nx_sample(entry, "sample")
     try:
@@ -592,8 +590,6 @@ def load_goniometer(entry):
 
 
 def load_scan(entry):
-    from dxtbx.model import Scan
-
     # Write out the rotation axis and oscillation
     nx_sample = get_nx_sample(entry, "sample")
     try:
@@ -614,11 +610,6 @@ def load_scan(entry):
 
 
 def load_crystal(entry):
-    from dxtbx.model import Crystal
-    from scitbx.array_family import flex
-    from cctbx import uctbx
-    import numpy
-
     # Get the sample
     nx_sample = get_nx_sample(entry, "sample")
 
@@ -687,8 +678,6 @@ def load_crystal(entry):
 
 
 def dump(entry, experiments):
-    from dxtbx.imageset import ImageSweep
-
     print("Dumping NXmx")
 
     # Rotate the experiments such that beam direction is along (0, 0, -1)
@@ -804,9 +793,6 @@ def find_nx_mx_entries(nx_file, entry):
 
 
 def load(entry, exp_index):
-    from dxtbx.model.experiment_list import ExperimentList
-    from dxtbx.model.experiment_list import Experiment
-
     print("Loading NXmx")
 
     # Check file contains the feature

@@ -6,8 +6,10 @@ for reports of several programs.
 from __future__ import absolute_import, division, print_function
 
 from collections import OrderedDict
+from math import exp, pi
 
 import numpy as np
+
 from cctbx import uctbx
 from scitbx.array_family import flex
 from scitbx.math import distributions
@@ -1068,7 +1070,6 @@ https://doi.org/10.1107/S0907444905036693
         n = y.size()
         width = histy.slot_centers()[1] - histy.slot_centers()[0]
         gaussian = []
-        from math import exp, pi
 
         for x in histy.slot_centers():
             gaussian.append(n * width * exp(-(x ** 2) / 2.0) / ((2.0 * pi) ** 0.5))

@@ -8,13 +8,15 @@ import shlex
 import shutil
 import sys
 
+import procrunner
+
+import libtbx.load_env  # required for libtbx.env.find_in_repositories
+from libtbx.test_utils import open_tmp_directory
+
 try:
     import dials_data.download
 except ImportError:
     dials_data = None
-import libtbx.load_env  # required for libtbx.env.find_in_repositories
-from libtbx.test_utils import open_tmp_directory
-import procrunner
 
 
 class Job(object):

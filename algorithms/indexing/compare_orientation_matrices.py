@@ -2,13 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+from cctbx import sgtbx
 from scitbx import matrix
 from scitbx.math import r3_rotation_axis_and_angle_from_matrix
 
 
 def difference_rotation_matrix_axis_angle(crystal_a, crystal_b, target_angle=0):
-    from cctbx import sgtbx
-
     # assert crystal_a.get_space_group() == crystal_b.get_space_group()
     space_group = crystal_b.get_space_group()
     best_R_ab = None

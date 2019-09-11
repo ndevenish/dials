@@ -6,21 +6,25 @@ https://doi.org/10.1107/S2059798317010348
 Usage: dials.plot_Fo_vs_Fc hklin=refined.mtz
 """
 
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
+
 import sys
-from dials.util import Sorry, show_mail_on_error
-from dials.util.options import OptionParser
+from math import sqrt
 
 # from libtbx.table_utils import simple_table
 import matplotlib
-
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
+
 from iotbx import mtz
+from libtbx.phil import parse
 from scitbx.array_family import flex
 from scitbx.lstbx import normal_eqns, normal_eqns_solving
-from math import sqrt
+
+from dials.util import Sorry, show_mail_on_error
+from dials.util.options import OptionParser
+
+matplotlib.use("Agg")
 
 
 class HyperbolaFit(normal_eqns.non_linear_ls, normal_eqns.non_linear_ls_mixin):
@@ -88,8 +92,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
-
         # The phil scope
         phil_scope = parse(
             """

@@ -3,6 +3,10 @@ from __future__ import absolute_import, division, print_function
 import math
 
 import wx
+from wx.lib.agw.floatspin import EVT_FLOATSPIN, FloatSpin
+
+import cctbx.miller
+from cctbx.crystal import symmetry
 
 
 class UCSettingsFrame(wx.MiniFrame):
@@ -25,7 +29,6 @@ class UCSettingsPanel(wx.Panel):
         super(UCSettingsPanel, self).__init__(*args, **kwds)
 
         self.phil_params = args[0].phil_params
-        from wx.lib.agw.floatspin import EVT_FLOATSPIN, FloatSpin
 
         # Needed to draw and delete the rings.  XXX Applies to
         # calibration_frame as well?
@@ -344,9 +347,6 @@ class UCSettingsPanel(wx.Panel):
             dc.DrawCircle(x, y, radius * scale)
 
     def DrawRings(self):
-        from cctbx.crystal import symmetry
-        import cctbx.miller
-
         frame = self.GetParent().GetParent()
 
         try:

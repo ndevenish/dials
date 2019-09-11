@@ -5,11 +5,14 @@ import os
 
 import procrunner
 import pytest
+
+from iotbx import mtz
+
 from dials.array_family import flex
 from dials.util.multi_dataset_handling import assign_unique_identifiers
-from dxtbx.serialize.load import _decode_dict
+from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.serialize import load
-from iotbx import mtz
+from dxtbx.serialize.load import _decode_dict
 
 # Tests used to check for h5py
 # May need to add this again if lack of this check causes issues.
@@ -188,8 +191,6 @@ def test_json(dials_data, tmpdir):
     )
     assert not result.returncode and not result.stderr
     assert tmpdir.join("rlp.json").check(file=1)
-
-    from dxtbx.model.experiment_list import ExperimentListFactory
 
     with tmpdir.join("rlp.json").open("rb") as f:
         d = json.load(f, object_hook=_decode_dict)

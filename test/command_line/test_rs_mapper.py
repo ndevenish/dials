@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function
 import procrunner
 import pytest
 
+from scitbx.array_family import flex
+
 
 def test_rs_mapper(dials_data, tmpdir):
     result = procrunner.run(
@@ -18,7 +20,6 @@ def test_rs_mapper(dials_data, tmpdir):
 
     # load results
     from iotbx import ccp4_map
-    from scitbx.array_family import flex
 
     m = ccp4_map.map_reader(file_name=tmpdir.join("junk.ccp4").strpath)
     assert len(m.data) == 7189057

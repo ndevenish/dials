@@ -1,38 +1,42 @@
 from __future__ import absolute_import, division, print_function
 
-# Tests for RestraintsParameterisation and associated classes used in refinement
-
 import os
 import random
 
-from dials.algorithms.refinement import RefinerFactory
-from dials.array_family import flex
-from dials.algorithms.refinement.restraints import RestraintsParameterisation
-from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx.phil import parse
 import pytest
+
+from libtbx.phil import parse
+
+from dials.algorithms.refinement import RefinerFactory
+from dials.algorithms.refinement.parameterisation.beam_parameters import (
+    BeamParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.crystal_parameters import (
+    CrystalOrientationParameterisation,
+    CrystalUnitCellParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.detector_parameters import (
+    DetectorParameterisationSinglePanel,
+)
+from dials.algorithms.refinement.restraints import RestraintsParameterisation
+from dials.array_family import flex
+from dials.test.algorithms.refinement.setup_geometry import Extract
+from dxtbx.model.experiment_list import (
+    Experiment,
+    ExperimentList,
+    ExperimentListFactory,
+)
+
+# Tests for RestraintsParameterisation and associated classes used in refinement
 
 
 def test_single_crystal_restraints_gradients():
     """Simple test with a single triclinic crystal restrained to a target unit cell"""
 
-    from dials.test.algorithms.refinement.setup_geometry import Extract
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
-
     #### Import model parameterisations
 
     from dials.algorithms.refinement.parameterisation.prediction_parameters import (
         XYPhiPredictionParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.detector_parameters import (
-        DetectorParameterisationSinglePanel,
-    )
-    from dials.algorithms.refinement.parameterisation.beam_parameters import (
-        BeamParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-        CrystalOrientationParameterisation,
-        CrystalUnitCellParameterisation,
     )
 
     overrides = """geometry.parameters.crystal.a.length.range = 10 50
@@ -152,23 +156,10 @@ def test_single_crystal_restraints_gradients():
 def test_two_triclinic_crystals():
     """Simple test with two triclinic crystals restrained to a target unit cell"""
 
-    from dials.test.algorithms.refinement.setup_geometry import Extract
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
-
     #### Import model parameterisations
 
     from dials.algorithms.refinement.parameterisation.prediction_parameters import (
         XYPhiPredictionParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.detector_parameters import (
-        DetectorParameterisationSinglePanel,
-    )
-    from dials.algorithms.refinement.parameterisation.beam_parameters import (
-        BeamParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-        CrystalOrientationParameterisation,
-        CrystalUnitCellParameterisation,
     )
 
     overrides = """geometry.parameters.crystal.a.length.range = 10 50

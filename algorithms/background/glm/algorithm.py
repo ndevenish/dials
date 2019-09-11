@@ -1,5 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.background.glm import Creator
+from dials.algorithms.integration.parallel_integrator import GLMBackgroundCalculator
+
 
 class BackgroundAlgorithm(object):
     """ Class to do background subtraction. """
@@ -14,8 +17,6 @@ class BackgroundAlgorithm(object):
         :param model: The background model
         :param tuning_constant: The robust tuning constant
         """
-        from dials.algorithms.background.glm import Creator
-
         if model == "constant2d":
             model = Creator.model.constant2d
         elif model == "constant3d":
@@ -65,11 +66,6 @@ class GLMBackgroundCalculatorFactory(object):
         :param model: The background model
         :param tuning_constant: The robust tuning constant
         """
-        from dials.algorithms.integration.parallel_integrator import (
-            GLMBackgroundCalculator,
-        )
-        from dials.algorithms.background.glm import Creator
-
         if model == "constant2d":
             model = Creator.model.constant2d
         elif model == "constant3d":

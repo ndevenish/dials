@@ -1,16 +1,23 @@
 from __future__ import absolute_import, division, print_function
 
 import math
+from random import randint, seed
 
 from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.profile_model.gaussian_rs import (
+    CoordinateSystem,
+    MaskCalculator3D,
+    Model,
+)
+from dials.algorithms.shoebox import MaskCode
+from dials.array_family import flex
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from dxtbx.serialize import load
 
 
 def test(dials_data):
-    from dxtbx.serialize import load
-    from dials.algorithms.profile_model.gaussian_rs import Model
-    from dials.algorithms.profile_model.gaussian_rs import MaskCalculator3D
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-
     sweep = load.imageset(dials_data("centroid_test_data").join("sweep.json").strpath)
     crystal = load.crystal(
         dials_data("centroid_test_data").join("crystal.json").strpath
@@ -47,10 +54,6 @@ def test(dials_data):
     mask_foreground = MaskCalculator3D(
         beam, detector, goniometer, scan, delta_d, delta_m
     )
-
-    from scitbx.array_family import flex
-    from dials.algorithms.shoebox import MaskCode
-    from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem
 
     s0 = beam.get_s0()
     m2 = goniometer.get_rotation_axis()
@@ -155,10 +158,6 @@ def test(dials_data):
 
 
 def generate_reflections(detector, beam, scan, experiment, num):
-    from random import randint, seed
-    from dials.array_family import flex
-    from dials.algorithms.shoebox import MaskCode
-
     seed(0)
     assert len(detector) == 1
     beam_vector = flex.vec3_double(num)

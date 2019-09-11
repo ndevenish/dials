@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import procrunner
 
+from dials.array_family import flex
+
 
 def test_sort_intensities(dials_data, tmpdir):
     result = procrunner.run(
@@ -15,8 +17,6 @@ def test_sort_intensities(dials_data, tmpdir):
     )
     assert not result.returncode and not result.stderr
     assert tmpdir.join("sorted1.refl").check(file=1)
-
-    from dials.array_family import flex
 
     data = flex.reflection_table.from_file(tmpdir.join("sorted1.refl").strpath)
     assert_sorted(data["intensity.sum.value"])
@@ -36,8 +36,6 @@ def test_reverse_sort_intensities(dials_data, tmpdir):
     assert not result.returncode and not result.stderr
     assert tmpdir.join("sorted2.refl").check(file=1)
 
-    from dials.array_family import flex
-
     data = flex.reflection_table.from_file(tmpdir.join("sorted2.refl").strpath)
     assert_sorted(data["intensity.sum.value"], reverse=True)
 
@@ -53,8 +51,6 @@ def test_default_sort_on_miller_index(dials_data, tmpdir):
     )
     assert not result.returncode and not result.stderr
     assert tmpdir.join("sorted3.refl").check(file=1)
-
-    from dials.array_family import flex
 
     data = flex.reflection_table.from_file(tmpdir.join("sorted3.refl").strpath)
     mi1 = data["miller_index"]

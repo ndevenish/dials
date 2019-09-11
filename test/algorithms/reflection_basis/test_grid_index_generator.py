@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function
 import math
 import random
 
+from scitbx import matrix
+
+from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem, transform
+from dials.model.serialize import load
+
 
 def test_run(dials_data):
-    from dials.algorithms.profile_model.gaussian_rs import transform
-    from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem
-    from scitbx import matrix
-    from dials.model.serialize import load
-
     sweep = load.sweep(dials_data("centroid_test_data").join("sweep.json").strpath)
 
     # Get the models

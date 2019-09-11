@@ -1,13 +1,18 @@
 from __future__ import absolute_import, division, print_function
 
+import math
+import sys
+
+import scitbx.math
+from cctbx.sgtbx import space_group, space_group_symbols
+from cctbx.uctbx import unit_cell
+from rstbx.diffraction import full_sphere_indices, rotation_angles
+from scitbx import matrix
+
+from dials.algorithms.spot_prediction.reeke import reeke_model
+
 # A class for producing efficient looping limits for reflection
 # prediction based on the Reeke algorithm (see Mosflm).
-
-import math
-
-from scitbx import matrix
-import scitbx.math
-from dials.algorithms.spot_prediction.reeke import reeke_model
 
 
 def visualize_with_rgl(reeke_model, rscript="reeke_vis.R", dat="reeke_hkl.dat"):
@@ -110,11 +115,6 @@ def test_regression():
     """Perform a regression test by comparing to indices generating
     by the brute force method used in the Use Case."""
 
-    from rstbx.diffraction import rotation_angles
-    from rstbx.diffraction import full_sphere_indices
-    from cctbx.sgtbx import space_group, space_group_symbols
-    from cctbx.uctbx import unit_cell
-
     # cubic, 50A cell, 1A radiation, 1 deg osciillation, everything ideal
 
     a = 50.0
@@ -158,8 +158,6 @@ def test_regression():
 
 
 if __name__ == "__main__":
-    import sys
-
     if len(sys.argv) < 3:
         sys.exit(
             "Expecting either 3 or 4 arguments: path/to/xparm.xds start_phi end_phi margin=3"

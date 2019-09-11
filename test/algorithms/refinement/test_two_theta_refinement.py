@@ -3,30 +3,35 @@ Test refinement of a crystal unit cell using a two theta target.
 """
 
 from __future__ import absolute_import, division, print_function
-import os
-from libtbx.test_utils import approx_equal
-from math import pi
-from copy import deepcopy
 
-from dxtbx.model.experiment_list import ExperimentList, Experiment
+import os
+from copy import deepcopy
+from math import pi
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from cctbx.uctbx import unit_cell
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
 from dials.algorithms.refinement.two_theta_refiner import (
-    TwoThetaTarget,
-    TwoThetaReflectionManager,
     TwoThetaExperimentsPredictor,
     TwoThetaPredictionParameterisation,
+    TwoThetaReflectionManager,
+    TwoThetaTarget,
 )
+from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+from dxtbx.model import GoniometerFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 
 def generate_reflections(experiments):
-
-    from dials.algorithms.spot_prediction import IndexGenerator
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        ScansExperimentsPredictor,
-    )
-    from dials.algorithms.spot_prediction import ray_intersection
-    from cctbx.sgtbx import space_group, space_group_symbols
-    from scitbx.array_family import flex
 
     detector = experiments[0].detector
     crystal = experiments[0].crystal
@@ -72,8 +77,6 @@ def generate_reflections(experiments):
 
 def test_fd_derivatives():
     """Test derivatives of the prediction equation"""
-
-    from libtbx.phil import parse
 
     # Import model builder
     from dials.test.algorithms.refinement.setup_geometry import Extract
@@ -216,8 +219,6 @@ def test_refinement(dials_regression):
     )
     orig_xl = deepcopy(crystal)
 
-    from dxtbx.model import GoniometerFactory
-
     goniometer = GoniometerFactory.known_axis((1.0, 0.0, 0.0))
 
     # Build a mock scan for a 180 degree sweep
@@ -261,9 +262,6 @@ def test_refinement(dials_regression):
     xluc_param = CrystalUnitCellParameterisation(crystal)
     cell_params = crystal.get_unit_cell().parameters()
     cell_params = [a + b for a, b in zip(cell_params, [0.1, -0.1, 0.1, 0.1, -0.1, 0.0])]
-    from cctbx.uctbx import unit_cell
-    from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
-    from scitbx import matrix
 
     new_uc = unit_cell(cell_params)
     newB = matrix.sqr(new_uc.fractionalization_matrix()).transpose()

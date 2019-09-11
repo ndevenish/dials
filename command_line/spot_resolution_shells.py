@@ -1,6 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import libtbx.phil
+
+from dials.array_family import flex
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 help_message = """
 
@@ -24,8 +29,6 @@ def settings():
 
 
 def spot_resolution_shells(imagesets, reflections, params):
-    from dials.array_family import flex
-
     mapped_reflections = flex.reflection_table()
     for i, imageset in enumerate(imagesets):
         if "imageset_id" in reflections:
@@ -51,10 +54,6 @@ def spot_resolution_shells(imagesets, reflections, params):
 
 
 def run(args):
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    from dials.util.options import flatten_reflections
-
     usage = "dials.spot_resolution_shells [options] models.expt observations.refl"
 
     parser = OptionParser(
@@ -82,6 +81,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

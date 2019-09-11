@@ -3,8 +3,12 @@ from __future__ import absolute_import, division, print_function
 import binascii
 import os
 
-from dials.util.ext import scale_down_array
+from cbflib_adaptbx import compress
 from scitbx.array_family import flex
+from scitbx.random import uniform_distribution, variate
+
+from dials.util.ext import scale_down_array
+from dxtbx import load
 
 
 def scale_down_array_py(image, scale_factor):
@@ -12,8 +16,6 @@ def scale_down_array_py(image, scale_factor):
     of the input data. Input data type must be integers; negative values assumed
     to be flags of some kind (i.e. similar to Pilatus data) and hence preserved
     as input."""
-
-    from scitbx.random import variate, uniform_distribution
 
     assert scale_factor <= 1
     assert scale_factor >= 0
@@ -36,8 +38,6 @@ def scale_down_array_py(image, scale_factor):
 def read_image_to_flex_array(in_image):
     """Looks like this works *only* for CBF images from a Pilatus detector;
     oh well - should still do something useful."""
-    from dxtbx import load
-
     assert os.path.exists(in_image)
 
     start_tag = binascii.unhexlify("0c1a04d5")
@@ -54,8 +54,6 @@ def write_image_from_flex_array(out_image, pixel_values, header):
     """Write a scaled CBF image from an array of pixel values and a header to
     add at the top. N.B. clobbers the binary size of the compressed data &
     the MD5 hash of the data."""
-    from cbflib_adaptbx import compress
-
     assert not os.path.exists(out_image)
     start_tag = binascii.unhexlify("0c1a04d5")
 

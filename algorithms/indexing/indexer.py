@@ -4,19 +4,27 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import math
+
 import pkg_resources
 
 import iotbx.phil
 import libtbx
-from dials.array_family import flex
-from dials.algorithms.indexing import assign_indices
-from dials.algorithms.indexing import DialsIndexError, DialsIndexRefineError
+from cctbx import crystal, xray
+from libtbx import table_utils
+
+from dials.algorithms.indexing import (
+    DialsIndexError,
+    DialsIndexRefineError,
+    assign_indices,
+)
 from dials.algorithms.indexing.compare_orientation_matrices import (
     difference_rotation_matrix_axis_angle,
 )
-from dials.algorithms.indexing.symmetry import SymmetryHandler
 from dials.algorithms.indexing.max_cell import find_max_cell
+from dials.algorithms.indexing.refinement import refine
+from dials.algorithms.indexing.symmetry import SymmetryHandler
 from dials.algorithms.refinement import DialsRefineConfigError, DialsRefineRuntimeError
+from dials.array_family import flex
 from dials.util import Sorry
 from dxtbx.model import ExperimentList
 
@@ -876,7 +884,6 @@ class Indexer(object):
                     "{:.1%}".format(indexed_count / (indexed_count + unindexed_count)),
                 ]
             )
-        from libtbx import table_utils
 
         logger.info(
             table_utils.format(rows, has_header=True, prefix="| ", postfix=" |")
@@ -915,8 +922,6 @@ class Indexer(object):
             self.hkl_offset = None
 
     def refine(self, experiments, reflections):
-        from dials.algorithms.indexing.refinement import refine
-
         refiner, refined, outliers = refine(self.all_params, reflections, experiments)
         if outliers is not None:
             reflections["id"].set_selected(outliers, -1)
@@ -942,8 +947,6 @@ class Indexer(object):
     def _debug_write_reciprocal_lattice_points_as_pdb(
         self, file_name="reciprocal_lattice.pdb"
     ):
-        from cctbx import crystal, xray
-
         cs = crystal.symmetry(
             unit_cell=(1000, 1000, 1000, 90, 90, 90), space_group="P1"
         )

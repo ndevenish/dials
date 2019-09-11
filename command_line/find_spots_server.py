@@ -10,7 +10,11 @@ from multiprocessing import Process
 
 import libtbx.phil
 
+from dials.algorithms.spot_finding import per_image_analysis
+from dials.array_family import flex
+from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
 from dials.util import Sorry
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 logger = logging.getLogger("dials.command_line.find_spots_server")
 
@@ -96,10 +100,6 @@ indexing_min_spots = 10
     integrate = params.extract().integrate
     indexing_min_spots = params.extract().indexing_min_spots
 
-    from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from dials.array_family import flex
-
     interp = find_spots_phil_scope.command_line_argument_interpreter()
     phil_scope, unhandled = interp.process_and_fetch(
         unhandled, custom_processor="collect_remaining"
@@ -114,7 +114,6 @@ indexing_min_spots = 10
     reflections = flex.reflection_table.from_observations(experiments, params)
     t1 = time.time()
     logger.info("Spotfinding took %.2f seconds" % (t1 - t0))
-    from dials.algorithms.spot_finding import per_image_analysis
 
     imageset = experiments.imagesets()[0]
     scan = imageset.get_scan()

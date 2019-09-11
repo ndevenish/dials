@@ -2,11 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import random
 
+from dials.array_family import flex
+from dials.model.data import Shoebox
+
 
 def test_consistent():
-    from dials.model.data import Shoebox
-    from dials.array_family import flex
-
     shoebox = flex.shoebox(10)
 
     for i in range(10):
@@ -37,9 +37,6 @@ def test_consistent():
 
 
 def test_is_bbox_within_image_volume():
-    from dials.model.data import Shoebox
-    from dials.array_family import flex
-
     isize = (1000, 1000)
     srange = (0, 100)
 
@@ -58,9 +55,6 @@ def test_is_bbox_within_image_volume():
 
 
 def test_does_bbox_contain_bad_pixels():
-    from dials.array_family import flex
-    from dials.model.data import Shoebox
-
     mask = flex.bool(flex.grid(100, 100), True)
     for j in range(100):
         for i in range(40, 60):
@@ -95,9 +89,6 @@ def test_does_bbox_contain_bad_pixels():
 
 
 def test_count_mask_values():
-    from dials.model.data import Shoebox
-    from dials.array_family import flex
-
     shoebox = flex.shoebox(10)
     num = flex.int(10)
     value = 1 << 2
@@ -121,9 +112,6 @@ def test_count_mask_values():
 
 
 def test_bounding_boxes():
-    from dials.model.data import Shoebox
-    from dials.array_family import flex
-
     shoebox = flex.shoebox(10)
     bbox = flex.int6(10)
     for i in range(10):

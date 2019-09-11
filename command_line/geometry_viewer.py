@@ -3,16 +3,26 @@
 from __future__ import absolute_import, division, print_function
 
 import copy
+import os
+import sys
+import time
 
-import libtbx.phil
+import wx
+from wx.lib.agw import floatspin
+
 import gltbx
 import gltbx.gl as gl
-import wx
+import libtbx.phil
+import wxtbx.app
 import wxtbx.utils
-from dials.util import wx_viewer
-from dxtbx.model import MultiAxisGoniometer
-from scitbx.math import minimum_covering_sphere
+from scitbx import matrix
 from scitbx.array_family import flex
+from scitbx.math import minimum_covering_sphere
+
+from dials.util import wx_viewer
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.model import MultiAxisGoniometer
+from dxtbx.model.experiment_list import Experiment
 
 help_message = """
 """
@@ -184,8 +194,6 @@ class render_3d(object):
             self.set_reflection_points()
 
     def set_reflection_points(self):
-        import time
-
         t0 = time.time()
         predicted = self.predict()
         if predicted is None:
@@ -201,7 +209,6 @@ class render_3d(object):
 
     def predict(self):
         assert self.crystal is not None
-        from dxtbx.model.experiment_list import Experiment
 
         imageset = self.imageset
         scan = copy.deepcopy(imageset.get_scan())
@@ -340,8 +347,6 @@ class settings_window(wxtbx.utils.SettingsPanel):
         self.panel_sizer.Add(ctrls[0], 0, wx.ALL, 5)
 
     def add_goniometer_controls(self, goniometer):
-        from wx.lib.agw import floatspin
-
         self.distance_ctrl = floatspin.FloatSpin(parent=self, increment=1, digits=2)
         self.distance_ctrl.SetValue(self.settings.detector_distance)
         self.distance_ctrl.Bind(wx.EVT_SET_FOCUS, lambda evt: None)
@@ -474,8 +479,6 @@ class GeometryWindow(wx_viewer.show_points_and_lines_mixin):
                 self.draw_lab_axis(o.elems, s.elems, "SLOW")
                 self.draw_lab_axis(o.elems, n.elems, "NORM")
 
-        from scitbx import matrix
-
         if isinstance(gonio, MultiAxisGoniometer):
             R = matrix.identity(3)
             names = reversed(gonio.get_names())
@@ -575,10 +578,6 @@ class GeometryWindow(wx_viewer.show_points_and_lines_mixin):
 
 def run(args):
 
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    import os
-
     usage = "dials.geometry_viewer [options] models.expt"
 
     parser = OptionParser(
@@ -656,8 +655,6 @@ def run(args):
             for angle in gonio.get_angles():
                 params.angle.append(angle)
 
-    import wxtbx.app
-
     a = wxtbx.app.CCTBXApp(0)
     a.settings = params
     f = ExperimentViewer(None, -1, "Experiment viewer", size=(1024, 768))
@@ -668,6 +665,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

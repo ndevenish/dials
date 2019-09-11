@@ -1,11 +1,18 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
+
+import six
+
+from cctbx import crystal, miller
+
+from dials.algorithms.statistics import (
+    pearson_correlation_coefficient,
+    spearman_correlation_coefficient,
+)
 from dials.array_family import flex
 from dials.array_family.flex import Binner
 from dials.util.report import Array, Report, Table
-
-import six
 
 
 def flex_ios(val, var):
@@ -26,9 +33,6 @@ def generate_integration_report(experiment, reflections, n_resolution_bins=20):
     """
     Generate the integration report
     """
-    from dials.algorithms.statistics import pearson_correlation_coefficient
-    from dials.algorithms.statistics import spearman_correlation_coefficient
-    from cctbx import miller, crystal
 
     def overall_report(data):
 

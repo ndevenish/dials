@@ -3,10 +3,12 @@ Tools to run cluster processing using DRMAA
 """
 from __future__ import absolute_import, division, print_function
 
-import os
 import multiprocessing
+import os
 import sys
+import tempfile
 
+import drmaa
 import six.moves.cPickle as pickle
 
 
@@ -44,9 +46,6 @@ def cluster_map(func, iterable, callback=None, nslots=1, njobs=1, job_category="
     :param callback: A callback function when each job completes
     :param nslots: The number of processes to request per cluster node
     """
-    import tempfile
-    import drmaa
-
     # Set the working directory and make sure it exists
     # This will be where all the input/output files associated with the cluster
     # submission will go. For each job there will be a file:

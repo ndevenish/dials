@@ -9,14 +9,22 @@ from __future__ import absolute_import, division, print_function
 import imp
 import math
 import os
+
 import wx
 
-from . import pyslip
-from . import tile_generation
+from iotbx.detectors.detectorbase import DetectorImageBase
+from rstbx.slip_viewer.calibration_frame import SBSettingsFrame
+from rstbx.viewer import image as rv_image
+from rstbx.viewer import settings as rv_settings
+from rstbx.viewer.frame import SettingsFrame
+from wxtbx import bitmaps
+
 from ..rstbx_frame import EVT_EXTERNAL_UPDATE
 from ..rstbx_frame import XrayFrame as XFBaseClass
-from rstbx.viewer import settings as rv_settings, image as rv_image
-from wxtbx import bitmaps
+from . import pyslip, tile_generation
+from .ring_frame import RingSettingsFrame
+from .score_frame import ScoreSettingsFrame
+from .uc_frame import UCSettingsFrame
 
 pyslip._Tiles = tile_generation._Tiles
 
@@ -517,8 +525,6 @@ class XrayFrame(XFBaseClass):
         if it's an DetectorImageBase object.  Otherwise it returns the super class's
         key
         """
-        from iotbx.detectors.detectorbase import DetectorImageBase
-
         if isinstance(file_name_or_data, DetectorImageBase):
             return file_name_or_data.filename
         elif isinstance(file_name_or_data, chooser_wrapper):
@@ -593,8 +599,6 @@ class XrayFrame(XFBaseClass):
         self.pyslip.Update()  # triggers redraw
 
     def OnCalibration(self, event):
-        from rstbx.slip_viewer.calibration_frame import SBSettingsFrame
-
         if not self._calibration_frame:
             self._calibration_frame = SBSettingsFrame(
                 self, wx.ID_ANY, "Quadrant calibration", style=wx.CAPTION | wx.CLOSE_BOX
@@ -605,8 +609,6 @@ class XrayFrame(XFBaseClass):
             self._calibration_frame.Destroy()
 
     def OnRing(self, event):
-        from .ring_frame import RingSettingsFrame
-
         if not self._ring_frame:
             self._ring_frame = RingSettingsFrame(
                 self, wx.ID_ANY, "Ring tool", style=wx.CAPTION | wx.CLOSE_BOX
@@ -617,8 +619,6 @@ class XrayFrame(XFBaseClass):
             self._ring_frame.Destroy()
 
     def OnUC(self, event):
-        from .uc_frame import UCSettingsFrame
-
         if not self._uc_frame:
             self._uc_frame = UCSettingsFrame(
                 self, wx.ID_ANY, "Unit cell tool", style=wx.CAPTION | wx.CLOSE_BOX
@@ -629,8 +629,6 @@ class XrayFrame(XFBaseClass):
             self._uc_frame.Destroy()
 
     def OnScore(self, event):
-        from .score_frame import ScoreSettingsFrame
-
         if not self._score_frame:
             self._score_frame = ScoreSettingsFrame(
                 self, wx.ID_ANY, "Score tool", style=wx.CAPTION | wx.CLOSE_BOX
@@ -1134,9 +1132,6 @@ class XrayFrame(XFBaseClass):
             pdf_canvas.save()
 
         self.update_statusbar("Writing " + file_name + "..." + " Done.")
-
-
-from rstbx.viewer.frame import SettingsFrame
 
 
 def override_SF_set_image(self, image):

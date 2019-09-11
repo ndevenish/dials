@@ -1,12 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+from os.path import join
+
+from dials.array_family import flex
+from dials.util.nexus import dump, load
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 
 def test_run(dials_regression, run_in_tmpdir):
-    from dials.util.nexus import dump, load
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from dials.array_family import flex
-    from os.path import join
-
     path = join(dials_regression, "nexus_test_data")
 
     # Read the experiments

@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.profile_model.gaussian_rs import Model, phil_scope
+
 
 class GaussianRSProfileModelExt(object):
     """ An extension class implementing a reciprocal space gaussian profile model. """
@@ -10,14 +12,10 @@ class GaussianRSProfileModelExt(object):
 
     @classmethod
     def phil(cls):
-        from dials.algorithms.profile_model.gaussian_rs import phil_scope
-
         return phil_scope
 
     @classmethod
     def algorithm(cls):
-        from dials.algorithms.profile_model.gaussian_rs import Model
-
         return Model
 
     @classmethod

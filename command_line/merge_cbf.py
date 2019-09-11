@@ -4,6 +4,10 @@ import binascii
 import sys
 
 import iotbx.phil
+from cbflib_adaptbx import compress, uncompress
+
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.format.FormatCBF import FormatCBF
 
 help_message = """
 
@@ -48,8 +52,6 @@ def get_raw_data_from_file(imageset, i):
     """Use cbflib_adaptbx directly to access the raw data array rather than
     through the imageset, in order to work for multi-panel detectors and other
     situations where the format class modifies the raw array"""
-    from cbflib_adaptbx import uncompress
-
     file_name = imageset.get_image_identifier(i)
     with open(file_name, "rb") as cbf:
         data = cbf.read()
@@ -71,13 +73,9 @@ def get_raw_data_from_file(imageset, i):
 
 
 def merge_cbf(imageset, n_images, out_prefix="sum_", get_raw_data_from_imageset=True):
-    from dxtbx.format.FormatCBF import FormatCBF
-
     assert issubclass(
         imageset.get_format_class(), FormatCBF
     ), "Only CBF format images supported"
-
-    from cbflib_adaptbx import compress
 
     assert len(imageset) >= n_images
 
@@ -209,9 +207,6 @@ def merge_cbf(imageset, n_images, out_prefix="sum_", get_raw_data_from_imageset=
 
 
 def run():
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-
     usage = "dials.merge_cbf [options] image_*.cbf"
 
     parser = OptionParser(

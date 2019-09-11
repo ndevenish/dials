@@ -1,14 +1,19 @@
 from __future__ import absolute_import, division, print_function
 
 import wx
-from wxtbx.phil_controls.floatctrl import FloatCtrl as _FloatCtrl
-
 from wx.lib.agw.floatspin import EVT_FLOATSPIN, FloatSpin
+
+import wxtbx
+from libtbx.utils import flat_list
+from scitbx import matrix
+from wxtbx import metallicbutton
 from wxtbx.phil_controls import EVT_PHIL_CONTROL
+from wxtbx.phil_controls.floatctrl import FloatCtrl as _FloatCtrl
 from wxtbx.phil_controls.intctrl import IntCtrl
 from wxtbx.phil_controls.strctrl import StrCtrl
-from wxtbx import metallicbutton
-import wxtbx
+
+from dials.util import masking
+from dials.util.masking import phil_scope
 
 # Temporary: Make a variable to allow dual API
 WX3 = wx.VERSION[0] == 3
@@ -587,8 +592,6 @@ class MaskSettingsPanel(wx.Panel):
             self._resolution_range_d_min = 0
             self._resolution_range_d_max = 0
 
-        from dials.util import masking
-
         untrusted_rectangle = self.untrusted_rectangle_ctrl.GetValue().strip()
         if len(untrusted_rectangle.strip()) > 0:
             rectangle = untrusted_rectangle.strip().replace(",", " ").split(" ")
@@ -668,8 +671,6 @@ class MaskSettingsPanel(wx.Panel):
         easy_pickle.dump(self.params.output.mask, mask)
 
     def OnSaveMaskParams(self, event):
-        from dials.util.masking import phil_scope
-
         file_name = self.params.output.mask_params
         with open(file_name, "wb") as f:
             print("Saving parameters to %s" % file_name)
@@ -785,8 +786,6 @@ class MaskSettingsPanel(wx.Panel):
         xc, yc = self._pyslip.ConvertView2Geo((xc, yc))
         xedge, yedge = self._pyslip.ConvertView2Geo((xedge, yedge))
 
-        from scitbx import matrix
-
         center = matrix.col((xc, yc))
         edge = matrix.col((xedge, yedge))
         r = (center - edge).length()
@@ -873,9 +872,6 @@ class MaskSettingsPanel(wx.Panel):
         else:
             panel_id = 0
 
-        from dials.util import masking
-        from libtbx.utils import flat_list
-
         region = masking.phil_scope.extract().untrusted[0]
         points = flat_list(vertices)
         region.polygon = [int(p) for p in points]
@@ -937,8 +933,6 @@ class MaskSettingsPanel(wx.Panel):
         x1 = min(panel.get_image_size()[0], x1)
         y1 = min(panel.get_image_size()[1], y1)
 
-        from dials.util import masking
-
         region = masking.phil_scope.extract().untrusted[0]
         region.rectangle = [int(x0), int(x1), int(y0), int(y1)]
         region.panel = panel_id
@@ -977,15 +971,11 @@ class MaskSettingsPanel(wx.Panel):
 
         (xc, yc), (xedge, yedge) = points
 
-        from scitbx import matrix
-
         center = matrix.col((xc, yc))
         edge = matrix.col((xedge, yedge))
         r = (center - edge).length()
         if r == 0:
             return
-
-        from dials.util import masking
 
         region = masking.phil_scope.extract().untrusted[0]
         region.circle = [int(xc), int(yc), int(r)]

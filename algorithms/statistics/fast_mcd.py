@@ -2,9 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+from scitbx.array_family import flex
+from scitbx.lstbx import normal_eqns
+
 from dials_refinement_helpers_ext import maha_dist_sq as maha_dist_sq_cpp
 from dials_refinement_helpers_ext import mcd_consistency
-from scitbx.array_family import flex
 
 
 def sample_covariance(a, b):
@@ -55,8 +57,6 @@ def mcd_finite_sample(p, n, alpha):
     Pison et al. Metrika (2002). doi.org/10.1007/s001840200191. Implementation
     based on 'rawcorfactor' in fastmcd.m from Continuous Sound and Vibration
     Analysis by Edward Zechmann"""
-
-    from scitbx.lstbx import normal_eqns
 
     if p > 2:
         coeffqpkwad500 = [

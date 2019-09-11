@@ -5,18 +5,18 @@ from __future__ import absolute_import, division, print_function
 import logging
 import token
 from operator import itemgetter
-from tokenize import generate_tokens, TokenError, untokenize
+from tokenize import TokenError, generate_tokens, untokenize
 
 from cctbx import uctbx
-from dials.util import Sorry, log, show_mail_on_error
-from dials.util.filter_reflections import SumAndPrfIntensityReducer, SumIntensityReducer
-from dials.util.options import OptionParser, flatten_reflections, flatten_experiments
-from dials.array_family import flex
-from dials.algorithms.integration import filtering
-from dials.algorithms.spot_finding.per_image_analysis import map_to_reciprocal_space
 from libtbx.phil import parse
 from libtbx.table_utils import simple_table
 
+from dials.algorithms.integration import filtering
+from dials.algorithms.spot_finding.per_image_analysis import map_to_reciprocal_space
+from dials.array_family import flex
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.filter_reflections import SumAndPrfIntensityReducer, SumIntensityReducer
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 logger = logging.getLogger("dials")
 

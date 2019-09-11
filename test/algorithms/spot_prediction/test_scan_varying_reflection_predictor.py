@@ -2,7 +2,18 @@ from __future__ import absolute_import, division, print_function
 
 import copy
 import os
+
 import pytest
+
+from dials.algorithms.spot_prediction import (
+    ScanStaticReflectionPredictor,
+    ScanVaryingReflectionPredictor,
+)
+from dials.array_family import flex
+from dials.test.algorithms.spot_prediction.test_scan_static_reflection_predictor import (
+    data as static_test,
+)  # noqa: F401, used as test fixture
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 class Data(object):
@@ -12,8 +23,6 @@ class Data(object):
             "prediction_test_data",
             "experiments_scan_varying_crystal.json",
         )
-
-        from dxtbx.model.experiment_list import ExperimentListFactory
 
         self.experiments = ExperimentListFactory.from_json_file(path)
         assert len(self.experiments) == 1
@@ -31,9 +40,6 @@ class Data(object):
         self.tst_vs_static()
 
     def _predict_new(self, hkl=None, frame=None, panel=None):
-        from dials.algorithms.spot_prediction import ScanVaryingReflectionPredictor
-        from dials.array_family import flex
-
         predict = ScanVaryingReflectionPredictor(self.experiments[0])
         # if hkl is None:
         A = [
@@ -198,11 +204,6 @@ def test_regression(data):
     # print 'OK'
 
 
-from dials.test.algorithms.spot_prediction.test_scan_static_reflection_predictor import (  # noqa: F401, used as test fixture
-    data as static_test,
-)
-
-
 def test_scan_varying_results_are_close_to_static_prediction_when_model_is_static(
     static_test  # noqa: F811, not a redefinition
 ):
@@ -221,7 +222,6 @@ def test_scan_varying_results_are_close_to_static_prediction_when_model_is_stati
 
     # Set up scan-varying predictor
     from dials.algorithms.spot_prediction import ScanVaryingReflectionPredictor
-    from dials.array_family import flex
 
     predict = ScanVaryingReflectionPredictor(static_test.experiments[0])
 
@@ -266,12 +266,6 @@ def test_scan_varying_results_are_close_to_static_prediction_when_model_is_stati
 
 
 def test_for_reflection_table(data):
-    from dials.algorithms.spot_prediction import (
-        ScanVaryingReflectionPredictor,
-        ScanStaticReflectionPredictor,
-    )
-    from dials.array_family import flex
-
     predict = ScanStaticReflectionPredictor(data.experiments[0])
     preds = predict.for_ub(data.experiments[0].crystal.get_A())
 

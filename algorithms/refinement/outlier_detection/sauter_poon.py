@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+import iotbx.phil
+from rstbx.indexing_api.outlier_procedure import OutlierPlotPDF
+from rstbx.phil.phil_preferences import indexing_api_defs
+
 from dials.algorithms.refinement.outlier_detection import CentroidOutlier
 
 
@@ -58,16 +62,11 @@ class SauterPoon(CentroidOutlier):
             m.x_calc = calc[0] * self._px_sz[0]
             m.y_calc = calc[1] * self._px_sz[1]
 
-        from rstbx.phil.phil_preferences import indexing_api_defs
-        import iotbx.phil
-
         hardcoded_phil = iotbx.phil.parse(input_string=indexing_api_defs).extract()
 
         # set params into the hardcoded_phil
         hardcoded_phil.indexing.outlier_detection.verbose = self._verbose
         hardcoded_phil.indexing.outlier_detection.pdf = self._pdf
-
-        from rstbx.indexing_api.outlier_procedure import OutlierPlotPDF
 
         if self._pdf is not None:
             ## new code for outlier rejection inline here

@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.centroid.simple.algorithm import Algorithm
+
 
 class SimpleCentroidExt(object):
     """ An extension class implementing a simple centroid algorithm. """
@@ -22,7 +24,5 @@ class SimpleCentroidExt(object):
 
         :param reflections: The list of reflections
         """
-        from dials.algorithms.centroid.simple.algorithm import Algorithm
-
         algorithm = Algorithm(self.experiments)
         return algorithm(reflections, image_volume=image_volume)

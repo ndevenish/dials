@@ -5,19 +5,21 @@ import os
 import random
 
 import pytest
+
 from cctbx import crystal, sgtbx
 from cctbx.sgtbx import bravais_types
 from scitbx import matrix
 from scitbx.math import euler_angles_as_matrix
-from dxtbx.serialize import load
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from dxtbx.model import Crystal
-from dials.array_family import flex
+
+from dials.algorithms.indexing import index_reflections
 from dials.algorithms.indexing.assign_indices import (
     AssignIndicesGlobal,
     AssignIndicesLocal,
 )
-from dials.algorithms.indexing import index_reflections
+from dials.array_family import flex
+from dxtbx.model import Crystal
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from dxtbx.serialize import load
 
 
 def random_rotation(angle_min=0, angle_max=360):

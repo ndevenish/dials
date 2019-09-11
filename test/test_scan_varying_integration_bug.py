@@ -1,8 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
 import procrunner
-from libtbx.test_utils import approx_equal
+
 from cctbx import uctbx
+from iotbx.reflection_file_reader import any_reflection_file
+from libtbx.test_utils import approx_equal
 
 
 def test_1(dials_data, tmpdir):
@@ -31,7 +33,6 @@ def test_1(dials_data, tmpdir):
 
     integrated_mtz = tmpdir.join("integrated.mtz")
     assert integrated_mtz.check(file=1)
-    from iotbx.reflection_file_reader import any_reflection_file
 
     reader = any_reflection_file(integrated_mtz.strpath)
     mtz_object = reader.file_content()

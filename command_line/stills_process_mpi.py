@@ -10,13 +10,14 @@ from time import time
 
 import libtbx.load_env
 from libtbx.utils import Abort, Sorry
-from dxtbx.model import Detector
-from dials.util import log
+
 from dials.command_line.dials_import import ManualGeometryUpdater
+from dials.command_line.stills_process import Processor
 from dials.command_line.stills_process import Script as base_script
 from dials.command_line.stills_process import do_import, phil_scope
-from dials.command_line.stills_process import Processor
+from dials.util import log
 from dials.util.options import OptionParser
+from dxtbx.model import Detector
 
 logger = logging.getLogger("dials.command_line.stills_process_mpi")
 

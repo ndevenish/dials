@@ -3,15 +3,17 @@ from __future__ import absolute_import, division, print_function
 from math import sqrt
 
 import pytest
+
+from cctbx.sgtbx import space_group_info
 from scitbx import matrix
+
+from dxtbx.model import DetectorFactory, GoniometerFactory
 
 
 class Model(object):
     def __init__(self, test_nave_model=False):
         # Set up experimental models with regular geometry
         from dxtbx.model import BeamFactory
-        from dxtbx.model import GoniometerFactory
-        from dxtbx.model import DetectorFactory
 
         # Beam along the Z axis
         self.beam = BeamFactory.make_beam(unit_s0=matrix.col((0, 0, 1)), wavelength=1.0)
@@ -73,8 +75,6 @@ class Model(object):
         """Use reeke_model to generate indices of reflections near to the Ewald
         sphere that might be observed on a still image. Build a reflection_table
         of these."""
-        from cctbx.sgtbx import space_group_info
-
         space_group_type = space_group_info("P 1").group().type()
 
         # create a ReekeIndexGenerator

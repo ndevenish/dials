@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+
+from dials.algorithms.background.simple import BackgroundAlgorithm
+
 
 class SimpleBackgroundExt(object):
     """ An extension class implementing simple background subtraction. """
@@ -8,8 +12,6 @@ class SimpleBackgroundExt(object):
 
     @classmethod
     def phil(cls):
-        from libtbx.phil import parse
-
         phil = parse(
             """
       outlier
@@ -104,9 +106,6 @@ class SimpleBackgroundExt(object):
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-        from dials.algorithms.background.simple import BackgroundAlgorithm
-
         # Create some default parameters
         if params is None:
             params = self.phil().fetch(parse("")).extract()

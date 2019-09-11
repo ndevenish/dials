@@ -1,5 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+import json
+from collections import OrderedDict
+from os.path import splitext
+from xml.dom import minidom
+
+from libtbx.table_utils import format as table
+
 
 class Array(object):
     """
@@ -20,8 +27,6 @@ class Array(object):
 
         :return: The dictionary
         """
-        from collections import OrderedDict
-
         result = OrderedDict()
         result["title"] = self.title
         result["shape"] = self.data.all()
@@ -57,8 +62,6 @@ class Table(object):
 
         :return: The dictionary
         """
-        from collections import OrderedDict
-
         cols = OrderedDict()
         for col in self.cols:
             assert len(col) == 2
@@ -83,8 +86,6 @@ class Table(object):
 
         :return: The string
         """
-        from libtbx.table_utils import format as table
-
         rows = [[col[1] for col in self.cols]]
         for i, row in enumerate(self.rows):
             rows.append([str(x) for x in row])
@@ -139,8 +140,6 @@ class Report(object):
 
         :return: The dictionary
         """
-        from collections import OrderedDict
-
         result = OrderedDict()
         result["tables"] = {table.name: table.as_dict() for table in self.tables}
         result["arrays"] = {array.name: array.as_dict() for array in self.arrays}
@@ -160,8 +159,6 @@ class Report(object):
 
         :return: The json string
         """
-        import json
-
         return json.dumps(self.as_dict(), indent=2)
 
     def as_xml(self):
@@ -170,8 +167,6 @@ class Report(object):
 
         :return: The XML string
         """
-        from xml.dom import minidom
-
         # Get the XML implementation
         impl = minidom.getDOMImplementation()
 
@@ -205,8 +200,6 @@ class Report(object):
 
         :param filename: The filename
         """
-        from os.path import splitext
-
         ext = splitext(filename)[1]
         with open(filename, "w") as outfile:
             if ext == ".json":

@@ -1,12 +1,15 @@
 from __future__ import absolute_import, division, print_function
 
-from cctbx import crystal, sgtbx
-from cctbx.sgtbx.subgroups import subgroups
+import random
+
 import scitbx.matrix
 import scitbx.random
+from cctbx import crystal, miller, sgtbx
+from cctbx.sgtbx.subgroups import subgroups
+from mmtbx.scaling.twin_analyses import twin_laws
 
-from dxtbx.model import Crystal, Experiment, ExperimentList
 from dials.array_family import flex
+from dxtbx.model import Crystal, Experiment, ExperimentList
 
 
 def generate_experiments_reflections(
@@ -68,8 +71,6 @@ def generate_test_data(
     map_to_p1=False,
     twin_fractions=None,
 ):
-
-    import random
 
     if seed is not None:
         flex.set_random_seed(seed)
@@ -144,8 +145,6 @@ def generate_test_data(
 
 
 def generate_intensities(crystal_symmetry, anomalous_flag=False, d_min=1):
-    from cctbx import miller
-
     indices = miller.index_generator(
         crystal_symmetry.unit_cell(),
         crystal_symmetry.space_group().type(),
@@ -161,7 +160,5 @@ def generate_intensities(crystal_symmetry, anomalous_flag=False, d_min=1):
 
 
 def generate_twin_operators(miller_array, verbose=True):
-    from mmtbx.scaling.twin_analyses import twin_laws
-
     TL = twin_laws(miller_array=miller_array)
     return TL.operators

@@ -7,6 +7,27 @@ import os
 import pytest
 import six
 import six.moves.cPickle as pickle
+
+from scitbx import matrix
+
+from dials.algorithms.background.glm.algorithm import GLMBackgroundCalculatorFactory
+from dials.algorithms.background.simple.algorithm import (
+    SimpleBackgroundCalculatorFactory,
+)
+from dials.algorithms.integration.parallel_integrator import (
+    GaussianRSMultiCrystalReferenceProfileData,
+    GaussianRSReferenceProfileData,
+    MaskCalculatorFactory,
+    ReferenceProfileData,
+    SimpleBlockList,
+    SimpleReflectionManager,
+)
+from dials.algorithms.profile_model.gaussian_rs.algorithm import (
+    GaussianRSIntensityCalculatorFactory,
+    GaussianRSReferenceCalculatorFactory,
+)
+from dials.algorithms.profile_model.gaussian_rs.transform import TransformSpec
+from dials.algorithms.profile_model.modeller import CircleSampler
 from dials.array_family import flex
 from dxtbx.model.experiment_list import ExperimentListFactory
 
@@ -33,8 +54,6 @@ def data(dials_regression):  # read experiments and reflections
 
 
 def test_gaussianrs_mask_calculator(data):
-    from dials.algorithms.integration.parallel_integrator import MaskCalculatorFactory
-
     algorithm = MaskCalculatorFactory.create(data.experiments)
     reflections = flex.reflection_table_to_list_of_reflections(data.reflections)
 
@@ -43,10 +62,6 @@ def test_gaussianrs_mask_calculator(data):
 
 
 def test_simple_background_calculator(data):
-    from dials.algorithms.background.simple.algorithm import (
-        SimpleBackgroundCalculatorFactory,
-    )
-
     algorithm = SimpleBackgroundCalculatorFactory.create(data.experiments)
     reflections = flex.reflection_table_to_list_of_reflections(data.reflections)
 
@@ -61,8 +76,6 @@ def test_simple_background_calculator(data):
 
 
 def test_glm_background_calculator(data):
-    from dials.algorithms.background.glm.algorithm import GLMBackgroundCalculatorFactory
-
     algorithm = GLMBackgroundCalculatorFactory.create(data.experiments)
     reflections = flex.reflection_table_to_list_of_reflections(data.reflections)
 
@@ -79,21 +92,6 @@ def test_glm_background_calculator(data):
 class IntensityCalculatorFactory(object):
     @classmethod
     def create(cls, data, detector_space=False, deconvolution=False):
-        from dials.algorithms.profile_model.gaussian_rs.algorithm import (
-            GaussianRSIntensityCalculatorFactory,
-        )
-        from dials.algorithms.integration.parallel_integrator import (
-            GaussianRSReferenceProfileData,
-        )
-        from dials.algorithms.integration.parallel_integrator import (
-            GaussianRSMultiCrystalReferenceProfileData,
-        )
-        from dials.algorithms.integration.parallel_integrator import (
-            ReferenceProfileData,
-        )
-        from dials.algorithms.profile_model.modeller import CircleSampler
-        from dials.algorithms.profile_model.gaussian_rs.transform import TransformSpec
-
         reference = data.reference[0]
         experiments = data.experiments
 
@@ -203,8 +201,6 @@ def test_gaussianrs_detector_space_with_deconvolution_intensity_calculator(data)
 
 
 def test_gaussianrs_detector_space_with_deconvolution_intensity_calculator2(data):
-    from scitbx import matrix
-
     reflections = flex.reflection_table_to_list_of_reflections(data.reflections)
 
     R = None
@@ -294,16 +290,6 @@ def test_gaussianrs_detector_space_with_deconvolution_intensity_calculator2(data
 
 
 def test_gaussianrs_profile_data_pickling(data):
-    from dials.algorithms.integration.parallel_integrator import (
-        GaussianRSReferenceProfileData,
-    )
-    from dials.algorithms.integration.parallel_integrator import (
-        GaussianRSMultiCrystalReferenceProfileData,
-    )
-    from dials.algorithms.integration.parallel_integrator import ReferenceProfileData
-    from dials.algorithms.profile_model.modeller import CircleSampler
-    from dials.algorithms.profile_model.gaussian_rs.transform import TransformSpec
-
     reference = data.reference[0]
     experiments = data.experiments
 
@@ -344,10 +330,6 @@ def test_gaussianrs_profile_data_pickling(data):
 
 
 def test_gaussianrs_reference_profile_calculator(data):
-    from dials.algorithms.profile_model.gaussian_rs.algorithm import (
-        GaussianRSReferenceCalculatorFactory,
-    )
-
     algorithm = GaussianRSReferenceCalculatorFactory.create(data.experiments)
     reflections = flex.reflection_table_to_list_of_reflections(data.reflections)
 
@@ -375,8 +357,6 @@ def test_gaussianrs_reference_profile_calculator(data):
 
 
 def test_job_list():
-    from dials.algorithms.integration.parallel_integrator import SimpleBlockList
-
     jobs = SimpleBlockList((0, 60), 20)
 
     assert jobs[0] == (0, 20)
@@ -398,9 +378,6 @@ def test_job_list():
 
 
 def test_reflection_manager(data):
-    from dials.algorithms.integration.parallel_integrator import SimpleBlockList
-    from dials.algorithms.integration.parallel_integrator import SimpleReflectionManager
-
     jobs = SimpleBlockList((0, 60), 20)
     reflections = data.reflections
 

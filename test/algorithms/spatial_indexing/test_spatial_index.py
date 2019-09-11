@@ -2,14 +2,15 @@ from __future__ import absolute_import, division, print_function
 
 import random
 
-from dials.algorithms.spatial_indexing import make_spatial_index
 import pytest
+
+from scitbx.array_family import flex
+
+from dials.algorithms.spatial_indexing import make_spatial_index
 
 
 @pytest.fixture
 def vec2_double():
-    from scitbx.array_family import flex
-
     num = 100
     x0, x1, y0, y1 = 0, 100, 0, 100
     result = flex.vec2_double(num)
@@ -20,8 +21,6 @@ def vec2_double():
 
 @pytest.fixture
 def vec3_double():
-    from scitbx.array_family import flex
-
     num = 100
     x0, x1, y0, y1, z0, z1 = 0, 100, 0, 100, 0, 100
     result = flex.vec3_double(num)

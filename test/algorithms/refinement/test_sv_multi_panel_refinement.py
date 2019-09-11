@@ -1,15 +1,16 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+
 import procrunner
+
 from dials.algorithms.refinement.engine import Journal
+from dials.array_family import flex
 
 
 def test_scan_varying_refinement_of_a_multiple_panel_detector(
     dials_regression, run_in_tmpdir
 ):
-    from dials.array_family import flex
-
     result = procrunner.run(
         [
             "dials.refine",

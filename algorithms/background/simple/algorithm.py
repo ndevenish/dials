@@ -1,5 +1,20 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.background.simple import (
+    Constant2dModeller,
+    Constant3dModeller,
+    Creator,
+    Linear2dModeller,
+    Linear3dModeller,
+    MosflmOutlierRejector,
+    NormalOutlierRejector,
+    NSigmaOutlierRejector,
+    TruncatedOutlierRejector,
+    TukeyOutlierRejector,
+)
+from dials.algorithms.integration.parallel_integrator import SimpleBackgroundCalculator
+from dials.array_family import flex
+
 
 class BackgroundAlgorithm(object):
     """ Class to do background subtraction. """
@@ -12,16 +27,6 @@ class BackgroundAlgorithm(object):
         :param outlier: The outlier rejection algorithm
         :param model: The background model algorithm
         """
-        from dials.algorithms.background.simple import Creator
-        from dials.algorithms.background.simple import TruncatedOutlierRejector
-        from dials.algorithms.background.simple import NSigmaOutlierRejector
-        from dials.algorithms.background.simple import NormalOutlierRejector
-        from dials.algorithms.background.simple import MosflmOutlierRejector
-        from dials.algorithms.background.simple import TukeyOutlierRejector
-        from dials.algorithms.background.simple import Constant2dModeller
-        from dials.algorithms.background.simple import Constant3dModeller
-        from dials.algorithms.background.simple import Linear2dModeller
-        from dials.algorithms.background.simple import Linear3dModeller
 
         def select_modeller():
             if model == "constant2d":
@@ -70,8 +75,6 @@ class BackgroundAlgorithm(object):
 
         :param reflections: The list of reflections
         """
-        from dials.array_family import flex
-
         # Do the background subtraction
         if image_volume is None:
             reflections["background.mse"] = flex.double(len(reflections))
@@ -100,18 +103,6 @@ class SimpleBackgroundCalculatorFactory(object):
         :param outlier: The outlier rejection algorithm
         :param model: The background model algorithm
         """
-        from dials.algorithms.integration.parallel_integrator import (
-            SimpleBackgroundCalculator,
-        )
-        from dials.algorithms.background.simple import TruncatedOutlierRejector
-        from dials.algorithms.background.simple import NSigmaOutlierRejector
-        from dials.algorithms.background.simple import NormalOutlierRejector
-        from dials.algorithms.background.simple import MosflmOutlierRejector
-        from dials.algorithms.background.simple import TukeyOutlierRejector
-        from dials.algorithms.background.simple import Constant2dModeller
-        from dials.algorithms.background.simple import Constant3dModeller
-        from dials.algorithms.background.simple import Linear2dModeller
-        from dials.algorithms.background.simple import Linear3dModeller
 
         def select_modeller():
             if model == "constant2d":

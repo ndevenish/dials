@@ -1,12 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
-import six.moves.cPickle as pickle
 import os
 
 import procrunner
 import pytest
+import six.moves.cPickle as pickle
 
 from dials.array_family import flex  # noqa: F401, import dependency
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test_find_spots_from_images(dials_data, tmpdir):
@@ -165,8 +166,6 @@ def test_find_spots_with_user_defined_mask(dials_data, tmpdir):
 
     with tmpdir.join("spotfinder.refl").open("rb") as f:
         reflections = pickle.load(f)
-
-    from dxtbx.model.experiment_list import ExperimentListFactory
 
     experiments = ExperimentListFactory.from_json_file(
         dials_data("centroid_test_data").join("experiments.json").strpath

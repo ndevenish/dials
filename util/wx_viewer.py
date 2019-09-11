@@ -1,27 +1,32 @@
 from __future__ import absolute_import, division, print_function
 
-# This code is based on:
-#   http://lists.wxwidgets.org/archive/wxPython-users/msg11078.html
-
 import math
 import os
 import time
 
-import gltbx.util
-import gltbx.gl as gl
-import gltbx.glu as glu
-import gltbx.gl_managed
+import wx.glcanvas
+
 import gltbx.fonts
+import gltbx.gl as gl
+import gltbx.gl_managed
+import gltbx.glu as glu
 import gltbx.images
-from scitbx.array_family import flex
+import gltbx.util
+import gltbx.viewer_utils
+import gltbx.wx_viewers_images as images
 import scitbx.math
+from libtbx.str_utils import show_string
 from scitbx import matrix
+from scitbx.array_family import flex
+
+# This code is based on:
+#   http://lists.wxwidgets.org/archive/wxPython-users/msg11078.html
+
 
 try:
     import wx
 except ImportError:
     exit()  # To pass through the "make" step (dials.geometry_viewer), for graphics-free HPC build
-import wx.glcanvas
 
 
 def animation_stepper(time_move=1.0, move_factor=1, frames_per_second=100):
@@ -726,9 +731,6 @@ class wxGLWindow(wx.glcanvas.GLCanvas):
     def save_screen_shot_via_pil(
         self, file_name="wx_viewer", extensions=["png", "jpg", "tiff", "eps", "pdf"]
     ):
-        import gltbx.viewer_utils
-        from libtbx.str_utils import show_string
-
         pil_image = gltbx.viewer_utils.read_pixels_to_pil_image(
             x=0, y=0, width=self.w, height=self.h
         )
@@ -767,8 +769,6 @@ class wxGLWindow(wx.glcanvas.GLCanvas):
         return n_written
 
     def save_screen_shot_via_gl2ps(self, file_name):
-        from libtbx.str_utils import show_string
-
         gl2ps = gltbx.util.gl2ps_interface
         if not gl2ps(file_name=None, draw_background=False, callback=None):
             print(
@@ -1062,8 +1062,6 @@ class App(wx.App):
         )
         isinstance(tb, wx.ToolBar)
         tb.SetToolBitmapSize((32, 32))
-
-        import gltbx.wx_viewers_images as images
 
         tb.Bind(wx.EVT_TOOL, self.OnToolClick)
 

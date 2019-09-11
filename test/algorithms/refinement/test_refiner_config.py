@@ -5,11 +5,13 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import pytest
-from dials.algorithms.refinement.refiner import phil_scope
+
+from libtbx import phil
+
 from dials.algorithms.refinement import DialsRefineConfigError, RefinerFactory
+from dials.algorithms.refinement.refiner import phil_scope
 from dials.array_family import flex
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import phil
 
 
 @pytest.mark.parametrize(

@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+from dials.algorithms.shoebox import MaskEmpirical, MaskOverlapping
+
 logger = logging.getLogger(__name__)
 
 
@@ -14,8 +16,6 @@ class MaskerBase(object):
         Params:
             experiment The experiment data
         """
-        from dials.algorithms.shoebox import MaskOverlapping
-
         # Construct the overlapping reflection mask
         self.mask_overlapping = MaskOverlapping()
 
@@ -92,8 +92,6 @@ class MaskerEmpirical(MaskerBase):
             experiment The experiment data
         """
         super(MaskerEmpirical, self).__init__(experiment)
-
-        from dials.algorithms.shoebox import MaskEmpirical
 
         # Construct the foreground pixel mask
         self.mask_empirical = MaskEmpirical(reference)

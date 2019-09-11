@@ -4,56 +4,63 @@ import logging
 import re
 
 import libtbx  # for libtbx.Auto
+
+# PHIL
+from libtbx.phil import parse
+
 from dials.algorithms.refinement import DialsRefineConfigError
+from dials.algorithms.refinement.constraints import phil_str as constr_phil_str
+from dials.algorithms.refinement.parameterisation.autoreduce import (
+    phil_str as autoreduce_phil_str,
+)
+from dials.algorithms.refinement.parameterisation.scan_varying_model_parameters import (
+    phil_str as sv_phil_str,
+)
 
 # Function to convert fix_lists into to_fix selections
 from dials.algorithms.refinement.refinement_helpers import string_sel
-
-# Import model parameterisations
-from .beam_parameters import BeamParameterisation
-from .scan_varying_beam_parameters import ScanVaryingBeamParameterisation
-from .crystal_parameters import CrystalOrientationParameterisation
-from .scan_varying_crystal_parameters import (
-    ScanVaryingCrystalOrientationParameterisation,
-)
-from .crystal_parameters import CrystalUnitCellParameterisation
-from .scan_varying_crystal_parameters import ScanVaryingCrystalUnitCellParameterisation
-from .detector_parameters import DetectorParameterisationHierarchical
-from .detector_parameters import DetectorParameterisationMultiPanel
-from .detector_parameters import DetectorParameterisationSinglePanel
-from .scan_varying_detector_parameters import (
-    ScanVaryingDetectorParameterisationSinglePanel,
-)
-from .goniometer_parameters import GoniometerParameterisation
-from .scan_varying_goniometer_parameters import ScanVaryingGoniometerParameterisation
-
-# Import parameterisations of the prediction equation
-from .prediction_parameters import XYPhiPredictionParameterisation
-from .prediction_parameters import XYPhiPredictionParameterisationSparse
-from .scan_varying_prediction_parameters import ScanVaryingPredictionParameterisation
-from .scan_varying_prediction_parameters import (
-    ScanVaryingPredictionParameterisationSparse,
-)
-from .prediction_parameters_stills import StillsPredictionParameterisation
-from .prediction_parameters_stills import StillsPredictionParameterisationSparse
-from .prediction_parameters_stills import SphericalRelpStillsPredictionParameterisation
-from .prediction_parameters_stills import (
-    SphericalRelpStillsPredictionParameterisationSparse,
+from dials.algorithms.refinement.restraints.restraints_parameterisation import (
+    uc_phil_str as uc_restraints_phil_str,
 )
 
 from .autoreduce import AutoReduce
 
-# PHIL
-from libtbx.phil import parse
-from dials.algorithms.refinement.parameterisation.autoreduce import (
-    phil_str as autoreduce_phil_str,
+# Import model parameterisations
+from .beam_parameters import BeamParameterisation
+from .crystal_parameters import (
+    CrystalOrientationParameterisation,
+    CrystalUnitCellParameterisation,
 )
-from dials.algorithms.refinement.restraints.restraints_parameterisation import (
-    uc_phil_str as uc_restraints_phil_str,
+from .detector_parameters import (
+    DetectorParameterisationHierarchical,
+    DetectorParameterisationMultiPanel,
+    DetectorParameterisationSinglePanel,
 )
-from dials.algorithms.refinement.constraints import phil_str as constr_phil_str
-from dials.algorithms.refinement.parameterisation.scan_varying_model_parameters import (
-    phil_str as sv_phil_str,
+from .goniometer_parameters import GoniometerParameterisation
+
+# Import parameterisations of the prediction equation
+from .prediction_parameters import (
+    XYPhiPredictionParameterisation,
+    XYPhiPredictionParameterisationSparse,
+)
+from .prediction_parameters_stills import (
+    SphericalRelpStillsPredictionParameterisation,
+    SphericalRelpStillsPredictionParameterisationSparse,
+    StillsPredictionParameterisation,
+    StillsPredictionParameterisationSparse,
+)
+from .scan_varying_beam_parameters import ScanVaryingBeamParameterisation
+from .scan_varying_crystal_parameters import (
+    ScanVaryingCrystalOrientationParameterisation,
+    ScanVaryingCrystalUnitCellParameterisation,
+)
+from .scan_varying_detector_parameters import (
+    ScanVaryingDetectorParameterisationSinglePanel,
+)
+from .scan_varying_goniometer_parameters import ScanVaryingGoniometerParameterisation
+from .scan_varying_prediction_parameters import (
+    ScanVaryingPredictionParameterisation,
+    ScanVaryingPredictionParameterisationSparse,
 )
 
 format_data = {

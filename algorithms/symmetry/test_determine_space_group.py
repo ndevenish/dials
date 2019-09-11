@@ -2,8 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
-from cctbx import miller
-from cctbx import sgtbx
+from cctbx import miller, sgtbx
+
 from dials.algorithms.symmetry.cosym._generate_test_data import generate_intensities
 from dials.algorithms.symmetry.determine_space_group import determine_space_group
 

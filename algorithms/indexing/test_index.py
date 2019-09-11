@@ -3,13 +3,23 @@ from __future__ import absolute_import, division, print_function
 import collections
 import glob
 import os
-import pytest
 
 import procrunner
-from scitbx import matrix
+import pytest
+
 from cctbx import uctbx
-from dxtbx.serialize import load
+from scitbx import matrix
+
+from dials.algorithms.indexing.stills_indexer import StillsIndexer
 from dials.array_family import flex
+from dials.command_line.stills_process import phil_scope as stills_process_phil_scope
+from dxtbx.model import Crystal
+from dxtbx.model.experiment_list import (
+    Experiment,
+    ExperimentList,
+    ExperimentListFactory,
+)
+from dxtbx.serialize import load
 
 
 def unit_cells_are_similar(
@@ -779,14 +789,6 @@ def test_stills_indexer_multi_lattice_bug_MosaicSauter2014(dials_regression, tmp
         actuality, all crystal models should be assigned mosaicity. This test only compares whether or not all crystal models
         have been assigned a MosaicSauter2014 model.  """
 
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-    from dials.array_family import flex
-    from dxtbx.model import Crystal
-    from dials.algorithms.indexing.stills_indexer import StillsIndexer
-    from dials.command_line.stills_process import (
-        phil_scope as stills_process_phil_scope,
-    )
     import dxtbx_model_ext  # needed for comparison of types
 
     experiment_data = os.path.join(

@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function
 
-# LIBTBX_PRE_DISPATCHER_INCLUDE_SH export PHENIX_GUI_ENVIRONMENT=1
-
 import cmath
 import copy
 import logging
@@ -9,24 +7,24 @@ import math
 import random
 import sys
 
-from libtbx import adopt_init_args
-from libtbx import easy_mp
+import iotbx.phil
+from libtbx import adopt_init_args, easy_mp
 from libtbx.test_utils import approx_equal
 from libtbx.utils import plural_s
-from scitbx import matrix
-from scitbx.simplex import simplex_opt
-from scitbx.array_family import flex
-import iotbx.phil
+from rstbx.dps_core import Direction, Directional_FFT
 from rstbx.indexing_api import dps_extended
 from rstbx.indexing_api.lattice import DPS_primitive_lattice
-from rstbx.dps_core import Direction, Directional_FFT
+from scitbx import matrix
+from scitbx.array_family import flex
+from scitbx.simplex import simplex_opt
 
 from dials.algorithms.indexing.indexer import find_max_cell
-from dials.util import log
-from dials.util import Sorry
-from dials.util.options import OptionParser
-from dials.util.options import flatten_experiments, flatten_reflections
+from dials.util import Sorry, log
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 from dials.util.slice import slice_reflections
+
+# LIBTBX_PRE_DISPATCHER_INCLUDE_SH export PHENIX_GUI_ENVIRONMENT=1
+
 
 logger = logging.getLogger("dials.command_line.search_beam_position")
 

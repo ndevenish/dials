@@ -1,6 +1,14 @@
 from __future__ import absolute_import, division, print_function
 
 from functools import reduce
+from math import sqrt
+from operator import mul
+
+import numpy
+
+from scitbx.array_family import flex
+
+from dials.algorithms.image.filter import index_of_dispersion_filter, mean_filter
 
 
 class ComputeBackgroundAndGain(object):
@@ -8,8 +16,6 @@ class ComputeBackgroundAndGain(object):
 
     def __init__(self, mask, kernel_size=(3, 3)):
         """Initialise the class with a mask of trusted regions"""
-        from scitbx.array_family import flex
-
         self._mask = mask.as_1d().as_int()
         self._mask.reshape(flex.grid(mask.all()))
         self._gain = None
@@ -19,9 +25,6 @@ class ComputeBackgroundAndGain(object):
 
     def add(self, image):
         """Add an image to calculation."""
-
-        from scitbx.array_family import flex
-        import numpy
 
         # Get the mask as an integer array
         mask = self._mask.deep_copy()
@@ -55,8 +58,6 @@ class ComputeBackgroundAndGain(object):
 
     def _compute_gain_map(self, image, mask):
         """Complete the gain map of a single image."""
-        from dials.algorithms.image.filter import index_of_dispersion_filter
-
         # Need double image
         image = image.as_double()
 
@@ -71,11 +72,6 @@ class ComputeBackgroundAndGain(object):
 
     def _remove_strong_pixels(self, gain_map, mask):
         """Remove strong pixels from the gain map."""
-        from scitbx.array_family import flex
-        from operator import mul
-        from math import sqrt
-        import numpy
-
         # Elements in kernel
         n = reduce(mul, self._kernel_size)
 
@@ -91,8 +87,6 @@ class ComputeBackgroundAndGain(object):
 
     def gain(self):
         """Compute the full gain map."""
-        from dials.algorithms.image.filter import mean_filter
-
         # Divide all gain values by count and smooth the gain
         self._gain /= self._count
         self._gain *= self._mask.as_double()
@@ -100,8 +94,6 @@ class ComputeBackgroundAndGain(object):
 
     def background(self):
         """Compute the full background map."""
-        from dials.algorithms.image.filter import mean_filter
-
         self._background /= self._count
         self._gain *= self._mask.as_double()
         return mean_filter(self._background, self._mask, self._kernel_size, 0)

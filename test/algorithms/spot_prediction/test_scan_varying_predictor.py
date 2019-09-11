@@ -7,25 +7,29 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
-from scitbx.array_family import flex
+from cctbx.sgtbx import space_group, space_group_symbols
 from libtbx.phil import parse
 from libtbx.test_utils import approx_equal
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
+
+# Reflection prediction
+from dials.algorithms.spot_prediction import (
+    IndexGenerator,
+    ScanVaryingReflectionPredictor,
+    ray_intersection,
+)
 
 # Get modules to build models and minimiser using PHIL
 from dials.test.algorithms.refinement import setup_geometry
 
 # We will set up a mock scan and a mock experiment list
 from dxtbx.model import ScanFactory
-from dxtbx.model.experiment_list import ExperimentList, Experiment
-
-# Reflection prediction
-from dials.algorithms.spot_prediction import IndexGenerator
-from dials.algorithms.spot_prediction import ray_intersection
-from dials.algorithms.refinement.prediction.managed_predictors import (
-    ScansRayPredictor,
-    ScansExperimentsPredictor,
-)
-from cctbx.sgtbx import space_group, space_group_symbols
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 
 def setup_models(args):
@@ -122,8 +126,6 @@ def ref_gen_varying(experiments):
     ar_range = scan.get_array_range()
     UBlist = [crystal.get_A() for t in range(ar_range[0], ar_range[1] + 1)]
     dmin = detector.get_max_resolution(beam.get_s0())
-
-    from dials.algorithms.spot_prediction import ScanVaryingReflectionPredictor
 
     sv_predictor = ScanVaryingReflectionPredictor(experiments[0], dmin=dmin)
     refs = sv_predictor.for_ub(flex.mat3_double(UBlist))

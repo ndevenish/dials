@@ -3,8 +3,9 @@ prediction based on the Reeke algorithm (see Mosflm)"""
 
 from __future__ import absolute_import, division, print_function
 
-from past.builtins import cmp
 import math
+
+from past.builtins import cmp
 
 from scitbx import matrix
 

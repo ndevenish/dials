@@ -1,10 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+import wx
+from wx.lib.agw.floatspin import EVT_FLOATSPIN, FloatSpin
+
 # -*- Mode: Python; c-basic-offset: 2; indent-tabs-mode: nil; tab-width: 8 -*-
 #
 # $Id: ring_frame.py 18950 2013-12-20 20:23:08Z phyy-nx $
 
-import wx
 
 ### Enable the plugin by renaming to end in "_frame_plugin.py"
 
@@ -36,8 +38,6 @@ class ExampleSettingsPanel(wx.Panel):
 
         # Number of decimal digits
         self.digits = 2
-
-        from wx.lib.agw.floatspin import EVT_FLOATSPIN, FloatSpin
 
         # Set initial values
         self._radius = 100

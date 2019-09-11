@@ -1,19 +1,21 @@
 from __future__ import absolute_import, division, print_function
 
 import binascii
+import gzip
 import os
 import random
 
+from cbflib_adaptbx import compress
+from scitbx.array_family import flex
+
+from dxtbx import load
+
 
 def gz_open(filename, mode):
-    import gzip
-
     return gzip.GzipFile(filename, mode)
 
 
 def split_counts(image, split):
-    from scitbx.array_family import flex
-
     new_images = [flex.int(flex.grid(image.focus()), 0) for k in range(split)]
 
     negative = image.as_1d() < 0
@@ -31,8 +33,6 @@ def split_counts(image, split):
 
 
 def merge_counts(images):
-    from scitbx.array_family import flex
-
     image = flex.int(flex.grid(images[0].focus()), 0)
     negative = images[0].as_1d() < 0
     for i in images:
@@ -42,8 +42,6 @@ def merge_counts(images):
 
 
 def read_image(in_image):
-    from dxtbx import load
-
     assert os.path.exists(in_image)
 
     start_tag = binascii.unhexlify("0c1a04d5")
@@ -57,8 +55,6 @@ def read_image(in_image):
 
 
 def write_image(out_image, pixel_values, header):
-    from cbflib_adaptbx import compress
-
     assert not os.path.exists(out_image)
     start_tag = binascii.unhexlify("0c1a04d5")
 

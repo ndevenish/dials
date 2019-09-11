@@ -1,10 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
 import six
-from dials.util import show_mail_on_error
-from dxtbx.format.image import ImageBool
-from iotbx.phil import parse
 from six.moves import cPickle as pickle
+
+from iotbx.phil import parse
+
+from dials.util import Sorry, show_mail_on_error
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.format.image import ImageBool
 
 help_message = """
 
@@ -46,8 +49,6 @@ class Script(object):
 
     def __init__(self):
         """ Initialise the script. """
-        from dials.util.options import OptionParser
-
         # Create the parser
         usage = "dials.apply_mask models.expt input.mask=pixels.mask"
         self.parser = OptionParser(
@@ -56,9 +57,6 @@ class Script(object):
 
     def run(self):
         """ Run the script. """
-        from dials.util.options import flatten_experiments
-        from dials.util import Sorry
-
         # Parse the command line arguments
         params, options = self.parser.parse_args(show_diff_phil=True)
         experiments = flatten_experiments(params.input.experiments)

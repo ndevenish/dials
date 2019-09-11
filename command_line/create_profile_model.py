@@ -1,9 +1,15 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from time import time
 
-from dials.util import show_mail_on_error
 from libtbx.phil import parse
+
+from dials.algorithms.profile_model.factory import ProfileModelFactory
+from dials.array_family import flex
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.command_line import Command
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 logger = logging.getLogger("dials.command_line.create_profile_model")
 
@@ -41,8 +47,6 @@ class Script(object):
 
     def __init__(self):
         """ Initialise the script. """
-        from dials.util.options import OptionParser
-
         usage = "usage: dials.create_profile_model [options] models.expt spots.refl"
         self.parser = OptionParser(
             usage=usage,
@@ -55,13 +59,6 @@ class Script(object):
 
     def run(self):
         """ Run the script. """
-        from dials.algorithms.profile_model.factory import ProfileModelFactory
-        from dials.util.command_line import Command
-        from dials.array_family import flex
-        from dials.util.options import flatten_reflections, flatten_experiments
-        from dials.util import Sorry
-        from dials.util import log
-
         log.config()
 
         # Parse the command line
@@ -140,9 +137,6 @@ class Script(object):
 
     def process_reference(self, reference, params):
         """ Load the reference spots. """
-        from time import time
-        from dials.util import Sorry
-
         if reference is None:
             return None, None
         st = time()

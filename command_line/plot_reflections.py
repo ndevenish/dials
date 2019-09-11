@@ -1,7 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import iotbx.phil
+from scitbx import matrix
+from scitbx.array_family import flex
+
 from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 master_phil_scope = iotbx.phil.parse(
     """
@@ -34,11 +40,6 @@ output {
 
 def run(args):
     usage = "dials.plot_reflections models.expt observations.refl [options]"
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-    from dials.util.options import flatten_reflections
-    from scitbx.array_family import flex
-    from scitbx import matrix
 
     parser = OptionParser(
         usage=usage,
@@ -204,6 +205,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

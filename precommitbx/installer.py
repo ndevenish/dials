@@ -8,13 +8,16 @@ import sys
 import time
 from distutils.version import LooseVersion as parse_version
 
-import dials.precommitbx._precommitbx
-import libtbx.introspection
-import libtbx.load_env
+import pkg_resources
 import procrunner
 import py
-from future.moves.urllib.request import urlopen, Request
+from future.moves.urllib.request import Request, urlopen
 from tqdm import tqdm, trange
+
+import libtbx.introspection
+import libtbx.load_env
+
+import dials.precommitbx._precommitbx
 
 BOLD = "\033[1m"
 GREEN = "\033[32m"
@@ -616,7 +619,6 @@ def list_all_repository_candidates():
         else:
             for path in module_paths:
                 repositories[module + ":" + str(path)] = path
-    import pkg_resources
 
     for ep in pkg_resources.iter_entry_points("libtbx.precommit"):
         path = py.path.local(ep.load().__path__[0])

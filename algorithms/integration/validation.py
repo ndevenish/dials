@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.array_family import flex
+
 
 class ValidatedMultiExpProfileModeller(object):
     """
@@ -29,8 +31,6 @@ class ValidatedMultiExpProfileModeller(object):
         """
         Do the modelling for all modellers
         """
-        from dials.array_family import flex
-
         if "profile.index" not in reflections:
             assert len(self.modellers) == 1
             self.modellers[0].model(reflections)
@@ -47,8 +47,6 @@ class ValidatedMultiExpProfileModeller(object):
         """
         Do the validation.
         """
-        from dials.array_family import flex
-
         results = []
         for i, modeller in enumerate(self.modellers):
             mask = reflections["profile.index"] != i

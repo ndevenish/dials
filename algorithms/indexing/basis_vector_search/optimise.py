@@ -1,10 +1,9 @@
-from __future__ import absolute_import, division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import math
 
-from scitbx.array_family import flex
 from scitbx import lbfgs
+from scitbx.array_family import flex
 
 
 def optimise_basis_vectors(reciprocal_lattice_points, vectors):

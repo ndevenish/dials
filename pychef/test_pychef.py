@@ -1,10 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-import dials.pychef
 import pytest
+
 from cctbx import sgtbx
 from cctbx.array_family import flex
 from iotbx.reflection_file_reader import any_reflection_file
+
+import dials.pychef
 
 
 def test_observations():

@@ -2,8 +2,10 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
-import dials.util.log
 import iotbx.phil
+
+import dials.util.log
+from dials.util.image_viewer.spotfinder_wrap import spot_wrapper
 
 # LIBTBX_PRE_DISPATCHER_INCLUDE_SH export PHENIX_GUI_ENVIRONMENT=1
 
@@ -131,8 +133,6 @@ class Script(object):
         self.view()
 
     def view(self):
-        from dials.util.image_viewer.spotfinder_wrap import spot_wrapper
-
         self.wrapper = spot_wrapper(params=self.params)
         self.wrapper.display(experiments=self.experiments, reflections=self.reflections)
 

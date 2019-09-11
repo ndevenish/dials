@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.centroid.simple import Centroider
+
 
 class Algorithm(object):
     """
@@ -12,8 +14,6 @@ class Algorithm(object):
 
         :param experiments: The experiment list
         """
-        from dials.algorithms.centroid.simple import Centroider
-
         # Create the centroider
         self.centroider = Centroider()
 

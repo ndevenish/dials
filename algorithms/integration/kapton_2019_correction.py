@@ -1,12 +1,15 @@
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 
 import logging
 import math
 
-from dials.array_family import flex
+from scitbx.matrix import col
+
+from dials.algorithms.integration import get_kapton_path_cpp
 from dials.algorithms.integration.kapton_correction import get_absorption_correction
 from dials.algorithms.shoebox import MaskCode
-from scitbx.matrix import col
+from dials.array_family import flex
+from dxtbx.model import Detector
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -39,8 +42,6 @@ class KaptonTape_2019(object):
 
         def create_kapton_face(ori, fast, slow, image_size, pixel_size, name):
             """ Create a face of the kapton as a dxtbx detector object """
-            from dxtbx.model import Detector
-
             d = Detector()
             p = d.add_panel()
             p.set_local_frame(fast.elems, slow.elems, ori.elems)
@@ -192,7 +193,6 @@ class KaptonTape_2019(object):
         """ Compute the absorption correction using beers law. Takes in a flex array of s1 vectors, determines path lengths for each
             and then determines absorption correction for each s1 vector """
         kapton_faces = self.faces
-        from dials.algorithms.integration import get_kapton_path_cpp
 
         # new style, much faster
         kapton_path_mm = get_kapton_path_cpp(kapton_faces, s1_flex)

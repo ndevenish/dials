@@ -9,8 +9,18 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import math
+from collections import defaultdict
+from copy import deepcopy
 
 import six
+
+import scitbx.math
+from scitbx import simplex
+from scitbx.array_family import flex
+
+from dials.algorithms.shoebox import MaskCode
+from dials.array_family import flex
+from dxtbx.model.experiment_list import Experiment
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +36,6 @@ class ComputeEsdBeamDivergence(object):
             reflections The reflections
             centroid_definition ENUM com or s1
         """
-        from scitbx.array_family import flex
-
         # Calculate the beam direction variances
         variance = self._beam_direction_variance_list(
             detector, reflections, centroid_definition
@@ -53,8 +61,6 @@ class ComputeEsdBeamDivergence(object):
         Returns:
             The list of variances
         """
-        from scitbx.array_family import flex
-
         # Get the reflection columns
         shoebox = reflections["shoebox"]
         xyz = reflections["xyzobs.px.value"]
@@ -101,8 +107,6 @@ class FractionOfObservedIntensity(object):
             reflections The list of reflections
             experiment The experiment object
         """
-        from dials.array_family import flex
-
         # Get the oscillation width
         dphi2 = scan.get_oscillation(deg=False)[1] / 2.0
 
@@ -127,9 +131,6 @@ class FractionOfObservedIntensity(object):
         Returns:
             (list of tau, list of zeta)
         """
-        from scitbx.array_family import flex
-        from dials.algorithms.shoebox import MaskCode
-
         mask_code = MaskCode.Valid | MaskCode.Foreground
 
         # Calculate the list of frames and z coords
@@ -164,9 +165,6 @@ class FractionOfObservedIntensity(object):
         Returns:
             A list of log intensity fractions
         """
-        from scitbx.array_family import flex
-        import scitbx.math
-
         # Tiny value
         TINY = 1e-10
         assert sigma_m > TINY
@@ -197,9 +195,6 @@ class ComputeEsdReflectingRange(object):
 
         def __init__(self, crystal, beam, detector, goniometer, scan, reflections):
             """Initialise the optmization."""
-            from scitbx import simplex
-            from scitbx.array_family import flex
-
             # FIXME in here this code is very unstable or actually broken if
             # we pass in a few lone images i.e. screening shots - propose need
             # for alternative algorithm, in meantime can avoid code death if
@@ -234,16 +229,12 @@ class ComputeEsdReflectingRange(object):
 
         def target(self, log_sigma):
             """ The target for minimization. """
-            from scitbx.array_family import flex
-
             return -flex.sum(self._R(math.exp(log_sigma[0])))
 
     class CrudeEstimator(object):
         """ If the main estimator failed make a crude estimate """
 
         def __init__(self, crystal, beam, detector, goniometer, scan, reflections):
-
-            from dials.array_family import flex
 
             # Calculate a list of angles and zeta's
             tau, zeta = self._calculate_tau_and_zeta(
@@ -267,9 +258,6 @@ class ComputeEsdReflectingRange(object):
             Returns:
                 (list of tau, list of zeta)
             """
-            from scitbx.array_family import flex
-            from dials.algorithms.shoebox import MaskCode
-
             mask_code = MaskCode.Valid | MaskCode.Foreground
 
             # Calculate the list of frames and z coords
@@ -308,9 +296,6 @@ class ComputeEsdReflectingRange(object):
             reflections,
             n_macro_cycles=10,
         ):
-
-            from dials.array_family import flex
-            from scitbx import simplex
 
             # Get the oscillation width
             dphi2 = scan.get_oscillation(deg=False)[1] / 2.0
@@ -355,9 +340,6 @@ class ComputeEsdReflectingRange(object):
 
         def target(self, log_sigma):
             """ The target for minimization. """
-            from scitbx.array_family import flex
-            import scitbx.math
-
             sigma_m = math.exp(log_sigma[0])
 
             # Tiny value
@@ -424,9 +406,6 @@ class ComputeEsdReflectingRange(object):
             Returns:
                 (list of tau, list of zeta)
             """
-            from scitbx.array_family import flex
-            from dials.algorithms.shoebox import MaskCode
-
             mask_code = MaskCode.Valid | MaskCode.Foreground
 
             # Calculate the list of frames and z coords
@@ -515,9 +494,6 @@ class ProfileModelCalculator(object):
         centroid_definition="s1",
     ):
         """ Calculate the profile model. """
-        from dxtbx.model.experiment_list import Experiment
-        from dials.array_family import flex
-
         # Check input has what we want
         assert reflections is not None
         assert "miller_index" in reflections
@@ -599,11 +575,6 @@ class ScanVaryingProfileModelCalculator(object):
         centroid_definition="s1",
     ):
         """ Calculate the profile model. """
-        from copy import deepcopy
-        from collections import defaultdict
-        from dials.array_family import flex
-        from dxtbx.model.experiment_list import Experiment
-
         # Check input has what we want
         assert reflections is not None
         assert "miller_index" in reflections

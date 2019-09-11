@@ -1,13 +1,17 @@
 from __future__ import absolute_import, division, print_function
 
+import numpy
+
+from scitbx import matrix
+
+from dials.algorithms import shoebox
+from dials.algorithms.profile_model.gaussian_rs import Model
+from dials.array_family import flex
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from dxtbx.serialize import load
+
 
 def predict_reflections(sweep, crystal):
-    from dials.algorithms import shoebox
-    from dials.array_family import flex
-    from dxtbx.model.experiment_list import ExperimentList
-    from dxtbx.model.experiment_list import Experiment
-    from dials.algorithms.profile_model.gaussian_rs import Model
-
     # Get models from the sweep
     beam = sweep.get_beam()
     detector = sweep.get_detector()
@@ -42,10 +46,6 @@ def predict_reflections(sweep, crystal):
 
 
 def test(dials_data):
-    from dxtbx.serialize import load
-    from dials.algorithms import shoebox
-    from dials.array_family import flex
-
     # Load the sweep and crystal
     sweep = load.imageset(dials_data("centroid_test_data").join("sweep.json").strpath)
     crystal = load.crystal(
@@ -92,8 +92,6 @@ def test(dials_data):
 
 def tst_non_overlapping(reflections, non_overlapping, image_size):
     """Ensure non-overlapping reflections have all their values 1."""
-    from dials.algorithms import shoebox
-
     # Check that all elements in non_overlapping masks are 1
     shoeboxes = reflections["shoebox"]
     for i in non_overlapping:
@@ -103,10 +101,6 @@ def tst_non_overlapping(reflections, non_overlapping, image_size):
 
 def tst_overlapping(reflections, overlapping, adjacency_list, image_size):
     """Ensure masks for overlapping reflections are set properly."""
-    import numpy
-    from scitbx import matrix
-    from dials.algorithms import shoebox
-
     # Loop through all overlaps
     shoeboxes = reflections["shoebox"]
     coord = reflections["xyzcal.px"]

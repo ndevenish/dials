@@ -3,9 +3,21 @@ from __future__ import absolute_import, division, print_function
 import os
 import random
 
+import libtbx.load_env
+from libtbx.phil import parse
+
 import dials.util
 from dials.util import Sorry
-from libtbx.phil import parse
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.command_line.image_average import splitit
+from dxtbx.datablock import BeamDiff, DetectorDiff, GoniometerDiff
+from dxtbx.model.experiment_list import (
+    BeamComparison,
+    DetectorComparison,
+    Experiment,
+    ExperimentList,
+    GoniometerComparison,
+)
 
 help_message = """
 
@@ -217,13 +229,6 @@ class CombineWithReference(object):
             self.average_detector = False
 
     def __call__(self, experiment):
-        from dxtbx.model.experiment_list import BeamComparison
-        from dxtbx.model.experiment_list import DetectorComparison
-        from dxtbx.model.experiment_list import GoniometerComparison
-        from dxtbx.datablock import BeamDiff
-        from dxtbx.datablock import DetectorDiff
-        from dxtbx.datablock import GoniometerDiff
-
         if self.tolerance:
             compare_beam = BeamComparison(
                 wavelength_tolerance=self.tolerance.beam.wavelength,
@@ -311,8 +316,6 @@ class CombineWithReference(object):
             imageset = experiment.imageset
             self._last_imageset = imageset
 
-        from dxtbx.model.experiment_list import Experiment
-
         return Experiment(
             beam=beam,
             detector=detector,
@@ -357,9 +360,6 @@ class Cluster(object):
 class Script(object):
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-        import libtbx.load_env
-
         # The script usage
         usage = (
             "usage: %s [options] [param.phil] "
@@ -384,8 +384,6 @@ class Script(object):
 
     def run_with_preparsed(self, params, options):
         """Run combine_experiments, but allow passing in of parameters"""
-        from dials.util.options import flatten_experiments
-
         # Try to load the models and data
         if len(params.input.experiments) == 0:
             print("No Experiments found in the input")
@@ -501,7 +499,6 @@ class Script(object):
         reflections = flex.reflection_table()
         global_id = 0
         skipped_expts = 0
-        from dxtbx.model.experiment_list import ExperimentList
 
         experiments = ExperimentList()
 
@@ -633,8 +630,6 @@ class Script(object):
         def save_in_batches(
             experiments, reflections, exp_name, refl_name, batch_size=1000
         ):
-            from dxtbx.command_line.image_average import splitit
-
             for i, indices in enumerate(
                 splitit(
                     list(range(len(experiments))), (len(experiments) // batch_size) + 1

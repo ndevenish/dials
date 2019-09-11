@@ -5,7 +5,10 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import wx
+
 from scitbx.matrix import col
+
+import pycbf
 
 
 class SBSettingsFrame(wx.MiniFrame):
@@ -118,8 +121,6 @@ class SBSettingsPanel(wx.Panel):
         print("Not implemented")
 
     def OnSaveMetrology(self, event):
-        import pycbf
-
         dialog = wx.FileDialog(
             self,
             defaultDir=os.curdir,

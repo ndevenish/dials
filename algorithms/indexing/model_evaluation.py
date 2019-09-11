@@ -6,16 +6,16 @@ import logging
 import math
 
 import libtbx
-from libtbx import group_args
+from libtbx import group_args, table_utils
 from scitbx import matrix
 from scitbx.array_family import flex
-from dxtbx.model import Crystal
+
 from dials.algorithms.indexing.compare_orientation_matrices import (
     difference_rotation_matrix_axis_angle,
 )
 from dials.algorithms.refinement import RefinerFactory
 from dials.util.log import LoggingContext
-
+from dxtbx.model import Crystal
 
 logger = logging.getLogger(__name__)
 
@@ -195,8 +195,6 @@ class ModelRankFilter(ModelRank):
                 ]
             )
 
-        from libtbx import table_utils
-
         return table_utils.format(rows=rows, has_header=True)
 
 
@@ -296,8 +294,6 @@ class ModelRankWeighted(ModelRank):
                     "%.2f" % combined_scores[i],
                 ]
             )
-
-        from libtbx import table_utils
 
         return table_utils.format(rows=rows, has_header=True)
 

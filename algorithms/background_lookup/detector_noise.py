@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from scitbx.array_family import flex
+
 
 class ComputeDetectorNoise(object):
     """Calculate the detector noise. Estimate this by calculating the mean
@@ -7,8 +9,6 @@ class ComputeDetectorNoise(object):
 
     def __init__(self):
         """Initialise the algorithm."""
-        from scitbx.array_family import flex
-
         self._pixels = flex.int()
 
     def add(self, image):
@@ -40,6 +40,4 @@ class ComputeDetectorNoise(object):
         Returns:
             The calculated detector noise
         """
-        from scitbx.array_family import flex
-
         return flex.mean(self._pixels.as_double())

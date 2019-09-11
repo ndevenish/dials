@@ -1,11 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.profile_model.modeller import (
+    MultiExpProfileModeller,
+    ProfileModellerIface,
+)
+from dials.array_family import flex
+
 
 def test():
-    from dials.algorithms.profile_model.modeller import ProfileModellerIface
-    from dials.algorithms.profile_model.modeller import MultiExpProfileModeller
-    from dials.array_family import flex
-
     class Modeller(ProfileModellerIface):
         def __init__(self, index, expected):
             self.index = index

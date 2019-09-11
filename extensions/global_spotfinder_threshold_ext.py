@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+from libtbx.phil import parse
+
 logger = logging.getLogger("dials.extensions.global_spotfinder_threshold_ext")
 
 
@@ -12,8 +14,6 @@ class GlobalSpotFinderThresholdExt(object):
 
     @classmethod
     def phil(cls):
-        from libtbx.phil import parse
-
         phil = parse(
             """
       global_threshold = 0

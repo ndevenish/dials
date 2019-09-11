@@ -6,16 +6,33 @@ import copy
 import logging
 import operator
 import os
+from itertools import groupby
+from time import time
+
+import six
+import six.moves.cPickle as pickle
 
 import boost.python
 import cctbx.array_family.flex
 import cctbx.miller
-import dials_array_family_flex_ext
 import libtbx.smart_open
-import six
-import six.moves.cPickle as pickle
-from dials.util import Sorry
+from libtbx import Auto
 from scitbx import matrix
+
+import dials_array_family_flex_ext
+from dials.algorithms.centroid import centroid_px_to_mm_panel
+from dials.algorithms.integration import Corrections, CorrectionsMulti
+from dials.algorithms.integration.sum import IntegrationAlgorithm
+from dials.algorithms.profile_model.gaussian_rs import zeta_factor
+from dials.algorithms.shoebox import MaskCode, OverlapFinder, OverloadChecker
+from dials.algorithms.spot_finding.factory import SpotFinderFactory
+from dials.algorithms.spot_finding.spot_matcher import SpotMatcher
+from dials.algorithms.spot_prediction.reflection_predictor import ReflectionPredictor
+from dials.extensions.glm_background_ext import GLMBackgroundExt
+from dials.extensions.simple_centroid_ext import SimpleCentroidExt
+from dials.model.data import make_image
+from dials.util import Sorry
+from dials.util.nexus_old import NexusFile
 
 # Note: Right at the end of this file all names from
 #         cctbx.array_family.flex and
@@ -54,8 +71,6 @@ def default_background_algorithm():
 
     :return: The default background algorithm
     """
-    from dials.extensions.glm_background_ext import GLMBackgroundExt
-
     return strategy(GLMBackgroundExt)
 
 
@@ -65,8 +80,6 @@ def default_centroid_algorithm():
 
     :return: The default centroid algorithm
     """
-    from dials.extensions.simple_centroid_ext import SimpleCentroidExt
-
     return strategy(SimpleCentroidExt)
 
 
@@ -113,9 +126,6 @@ class _(object):
                 force_static=force_static,
                 padding=padding,
             )
-        from dials.algorithms.spot_prediction.reflection_predictor import (
-            ReflectionPredictor,
-        )
 
         predict = ReflectionPredictor(
             experiment,
@@ -165,9 +175,6 @@ class _(object):
         :param params: The input parameters
         :return: The reflection table of observations
         """
-        from dials.algorithms.spot_finding.factory import SpotFinderFactory
-        from libtbx import Auto
-
         if params is None:
             from dials.command_line.find_spots import phil_scope
             from dials.util.phil import parse
@@ -242,8 +249,6 @@ class _(object):
         :param filename: The hdf5 filename
         :return: The reflection table
         """
-        from dials.util.nexus_old import NexusFile
-
         handle = NexusFile(filename, "r")
         self = handle.get_reflections()
         handle.close()
@@ -392,8 +397,6 @@ class _(object):
 
         :param filename: The output filename
         """
-        from dials.util.nexus_old import NexusFile
-
         handle = NexusFile(filename, "w")
         # Clean up any removed experiments from the identifiers map
         self.clean_experiment_identifiers_map()
@@ -518,8 +521,6 @@ class _(object):
         :return: A tuple containing the matches in the reflection table and the
                  other reflection table
         """
-        from dials.algorithms.spot_finding.spot_matcher import SpotMatcher
-
         match = SpotMatcher(max_separation=2)
         oind, sind = match(other, self)
         return sind, oind
@@ -767,8 +768,6 @@ class _(object):
         :param experiment: The experimental models
         :return: Zeta for each reflection
         """
-        from dials.algorithms.profile_model.gaussian_rs import zeta_factor
-
         m2 = experiment.goniometer.get_rotation_axis()
         s0 = experiment.beam.get_s0()
         self["zeta"] = zeta_factor(m2, s0, self["s1"])
@@ -781,8 +780,6 @@ class _(object):
         :param experiments: The list of experiments
         :return: Zeta for each reflection
         """
-        from dials.algorithms.profile_model.gaussian_rs import zeta_factor
-
         m2 = cctbx.array_family.flex.vec3_double(len(experiments))
         s0 = cctbx.array_family.flex.vec3_double(len(experiments))
         for i, e in enumerate(experiments):
@@ -931,8 +928,6 @@ class _(object):
         """
         Compute intensity via summation integration.
         """
-        from dials.algorithms.integration.sum import IntegrationAlgorithm
-
         algorithm = IntegrationAlgorithm()
         success = algorithm(self, image_volume=image_volume)
         self.set_flags(~success, self.flags.failed_during_summation)
@@ -954,8 +949,6 @@ class _(object):
         :param experiments: The list of experiments
         :return: The LP correction for each reflection
         """
-        from dials.algorithms.integration import Corrections, CorrectionsMulti
-
         compute = CorrectionsMulti()
         for experiment in experiments:
             if experiment.goniometer is not None:
@@ -998,9 +991,6 @@ class _(object):
         :param verbose: The verbosity
         :return: A tuple containing read time and extract time
         """
-        from dials.model.data import make_image
-        from time import time
-
         assert "shoebox" in self
         detector = imageset.get_detector()
         try:
@@ -1040,8 +1030,6 @@ class _(object):
         :param experiments: The experiment list
         :return: True/False overloaded for each reflection
         """
-        from dials.algorithms.shoebox import OverloadChecker
-
         assert "shoebox" in self
         assert "id" in self
         detectors = [expr.detector for expr in experiments]
@@ -1062,8 +1050,6 @@ class _(object):
 
         :return: True/False invalid for each reflection
         """
-        from dials.algorithms.shoebox import MaskCode
-
         assert "shoebox" in self
         x0, x1, y0, y1, z0, z1 = self["bbox"].parts()
         ntotal = (x1 - x0) * (y1 - y0) * (z1 - z0)
@@ -1090,9 +1076,6 @@ class _(object):
         :param tolerance: A positive integer specifying border around shoebox
         :return: The overlap list
         """
-        from dials.algorithms.shoebox import OverlapFinder
-        from itertools import groupby
-
         # Expand the bbox if necessary
         if border > 0:
             x0, x1, y0, y1, z0, z1 = self["bbox"].parts()
@@ -1346,8 +1329,6 @@ Found %s"""
           scan (dxtbx.model.scan.Scan): a dxtbx scan object. May be None, e.g. for
             a still image.
         """
-
-        from dials.algorithms.centroid import centroid_px_to_mm_panel
 
         self["xyzobs.mm.value"] = cctbx.array_family.flex.vec3_double(len(self))
         self["xyzobs.mm.variance"] = cctbx.array_family.flex.vec3_double(len(self))

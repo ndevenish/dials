@@ -6,13 +6,17 @@ from __future__ import absolute_import, division, print_function
 import math
 
 import pytest
+
+from cctbx import crystal
+from cctbx.sgtbx import space_group
 from libtbx.test_utils import approx_equal
+from scitbx.random import poisson_distribution, variate
+
 from dials.algorithms.scaling.error_model.error_model import get_error_model
 from dials.algorithms.scaling.error_model.error_model_target import ErrorModelTarget
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.scaling_refiner import error_model_refinery
 from dials.array_family import flex
-from cctbx.sgtbx import space_group
 
 
 @pytest.fixture()
@@ -53,7 +57,6 @@ def data_for_error_model_test(background_variance=1, multiplicity=100, b=0.05):
 
     ## First create a miller array of observations (in asu)
     from cctbx import miller
-    from cctbx import crystal
 
     ms = miller.build_set(
         crystal_symmetry=crystal.symmetry(
@@ -73,7 +76,6 @@ def data_for_error_model_test(background_variance=1, multiplicity=100, b=0.05):
     # deviations of I-Imean and keep the same 'poisson' sigmas, such that the
     # sigmas need to be inflated by the error model with the given b.
     import scitbx
-    from scitbx.random import variate, poisson_distribution
 
     scitbx.random.set_random_seed(0)
     intensities = flex.int()

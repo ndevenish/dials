@@ -2,21 +2,28 @@
 
 from __future__ import absolute_import, division, print_function
 
-# DIALS_ENABLE_COMMAND_LINE_COMPLETION
-
-import os
 import copy
-from libtbx import easy_pickle
+import os
+import sys
+
 import iotbx.phil
+import libtbx.load_env
 from cctbx import sgtbx
-from dxtbx.model import Crystal
+from libtbx import easy_pickle
+from scitbx import matrix
+from scitbx.lstbx import normal_eqns
+from scitbx.math import continued_fraction
 
 # from dials.util.command_line import Importer
 from dials.algorithms.indexing.assign_indices import AssignIndicesGlobal
 from dials.array_family import flex
-from dials.util.options import OptionParser
-from dials.util.options import flatten_reflections, flatten_experiments
+from dials.util import Sorry
 from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dxtbx.model import Crystal
+
+# DIALS_ENABLE_COMMAND_LINE_COMPLETION
+
 
 help_message = """
 
@@ -89,7 +96,6 @@ def derive_change_of_basis_op(from_hkl, to_hkl):
     h, k, l = to_hkl.as_vec3_double().parts()
 
     r = []
-    from scitbx.lstbx import normal_eqns
 
     for i in range(3):
         eqns = normal_eqns.linear_ls(3)
@@ -99,9 +105,6 @@ def derive_change_of_basis_op(from_hkl, to_hkl):
             )
         eqns.solve()
         r.extend(eqns.solution())
-
-    from scitbx.math import continued_fraction
-    from scitbx import matrix
 
     denom = 12
     r = [
@@ -124,9 +127,6 @@ def derive_change_of_basis_op(from_hkl, to_hkl):
 
 
 def run(args):
-    import libtbx.load_env
-    from dials.util import Sorry
-
     usage = "dials.reindex [options] indexed.expt indexed.refl"
 
     parser = OptionParser(
@@ -345,6 +345,4 @@ experiments file must also be specified with the option: reference= """
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

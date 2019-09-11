@@ -4,6 +4,12 @@ import logging
 import os
 import sys
 
+# Intercept easy_mp exceptions to extract stack traces before they are lost at
+# the libtbx process boundary/the easy_mp API. In the case of a subprocess
+# crash we print the subprocess stack trace, which will be most useful for
+# debugging parallelized sections of DIALS code.
+import libtbx.scheduling.stacktrace as _lss
+
 logging.getLogger("dials").addHandler(logging.NullHandler())
 
 # Invert FPE trap defaults, https://github.com/cctbx/cctbx_project/pull/324
@@ -19,12 +25,6 @@ elif not os.getenv("BOOST_ADAPTBX_TRAP_FPE") and not os.getenv(
     "BOOST_ADAPTBX_TRAP_OVERFLOW"
 ):
     os.environ["BOOST_ADAPTBX_FPE_DEFAULT"] = "1"
-
-# Intercept easy_mp exceptions to extract stack traces before they are lost at
-# the libtbx process boundary/the easy_mp API. In the case of a subprocess
-# crash we print the subprocess stack trace, which will be most useful for
-# debugging parallelized sections of DIALS code.
-import libtbx.scheduling.stacktrace as _lss
 
 
 def _stacktrace_tracer(error, trace, intercepted_call=_lss.set_last_exception):

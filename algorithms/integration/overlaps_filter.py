@@ -1,7 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
-from dials.array_family import flex
 from libtbx.phil import parse
+
+from dials.algorithms.shoebox import MaskCode
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentList
 
 phil_scope = parse(
     """
@@ -25,8 +28,6 @@ overlaps_filter {
 
 
 class OverlapsFilter(object):
-    from dials.algorithms.shoebox import MaskCode
-
     code_fgd = MaskCode.Foreground | MaskCode.Valid
     code_bgd = MaskCode.Background | MaskCode.Valid
 
@@ -175,7 +176,6 @@ class OverlapsFilterMultiExpt(object):
     @property
     def expt(self):
         elist = [f.expt for f in self.filters]
-        from dxtbx.model.experiment_list import ExperimentList
 
         e0 = ExperimentList()
         for e in elist:

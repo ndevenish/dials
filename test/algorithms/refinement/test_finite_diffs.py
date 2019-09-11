@@ -3,42 +3,46 @@ difference calculations"""
 
 from __future__ import absolute_import, division, print_function
 
+import random
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement.parameterisation.beam_parameters import (
+    BeamParameterisation,
+)
+from dials.algorithms.refinement.parameterisation.crystal_parameters import (
+    CrystalOrientationParameterisation,
+    CrystalUnitCellParameterisation,
+)
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
+from dials.algorithms.refinement.reflection_manager import ReflectionManager
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+
 
 def test(args=[]):
     # Python and cctbx imports
     from math import pi
-    import random
-    from scitbx import matrix
-    from scitbx.array_family import flex
-    from libtbx.phil import parse
-    from libtbx.test_utils import approx_equal
 
     # Experimental model builder
     from dials.test.algorithms.refinement.setup_geometry import Extract
 
     # We will set up a mock scan and a mock experiment list
     from dxtbx.model import ScanFactory
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
 
     # Model parameterisations
     from dials.algorithms.refinement.parameterisation.detector_parameters import (
         DetectorParameterisationSinglePanel,
     )
-    from dials.algorithms.refinement.parameterisation.beam_parameters import (
-        BeamParameterisation,
-    )
-    from dials.algorithms.refinement.parameterisation.crystal_parameters import (
-        CrystalOrientationParameterisation,
-        CrystalUnitCellParameterisation,
-    )
 
     # Reflection prediction
     from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        ScansExperimentsPredictor,
-    )
-    from cctbx.sgtbx import space_group, space_group_symbols
 
     # Parameterisation of the prediction equation
     from dials.algorithms.refinement.parameterisation.prediction_parameters import (
@@ -49,7 +53,6 @@ def test(args=[]):
     from dials.algorithms.refinement.target import (
         LeastSquaresPositionalResidualWithRmsdCutoff,
     )
-    from dials.algorithms.refinement.reflection_manager import ReflectionManager
 
     # Local functions
     def random_direction_close_to(vector, sd=0.5):

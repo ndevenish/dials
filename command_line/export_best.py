@@ -5,6 +5,8 @@ import sys
 
 from libtbx.phil import parse
 
+from dials.util import best
+
 logger = logging.getLogger("dials.command_line.export_best")
 
 help_message = """
@@ -64,8 +66,6 @@ class BestExporter(object):
         """
         Export the files
         """
-        from dials.util import best
-
         experiment = self.experiments[0]
         reflections = self.reflections[0]
         partiality = reflections["partiality"]

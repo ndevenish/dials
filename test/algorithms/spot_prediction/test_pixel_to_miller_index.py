@@ -2,12 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
+from dials.algorithms.spot_prediction import PixelToMillerIndex
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 
 def test(dials_data):
-    from dials.algorithms.spot_prediction import PixelToMillerIndex
-    from dials.array_family import flex
-    from dxtbx.model.experiment_list import ExperimentListFactory
-
     filename = dials_data("centroid_test_data").join("experiments.json").strpath
 
     experiments = ExperimentListFactory.from_json_file(filename)

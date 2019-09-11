@@ -2,12 +2,10 @@ import copy
 import glob
 import os
 
-from dxtbx.model import Experiment, ExperimentList
-from dxtbx.model import Scan
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from dials.array_family import flex
 from dials.util.slice import slice_experiments, slice_reflections
+from dxtbx.model import Experiment, ExperimentList, Scan
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test_slice_experiments():

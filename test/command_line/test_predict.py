@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
-import six.moves.cPickle as pickle
 import os
 
 import procrunner
+import six.moves.cPickle as pickle
 
 
 def plausible(table):

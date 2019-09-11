@@ -2,15 +2,16 @@ from __future__ import absolute_import, division, print_function
 
 import json
 import os
+
 import pytest
 
 import libtbx
 from libtbx.easy_run import fully_buffered
+
+from dials.algorithms.shadowing.filter import filter_shadowed_reflections
+from dials.array_family import flex
 from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.serialize import load
-
-from dials.array_family import flex
-from dials.algorithms.shadowing.filter import filter_shadowed_reflections
 
 
 @pytest.mark.parametrize(

@@ -1,19 +1,17 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.integration import Corrections, CorrectionsMulti
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 
 def test_run(dials_data):
     filename = dials_data("centroid_test_data").join("experiments.json").strpath
 
-    from dxtbx.model.experiment_list import ExperimentListFactory
-
     exlist = ExperimentListFactory.from_json_file(filename)
     assert len(exlist) == 1
 
-    from dials.array_family import flex
-
     rlist = flex.reflection_table.from_predictions_multi(exlist)
-
-    from dials.algorithms.integration import CorrectionsMulti, Corrections
 
     corrector = CorrectionsMulti()
     for experiment in exlist:

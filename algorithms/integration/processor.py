@@ -2,10 +2,19 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import math
+import platform
+from itertools import groupby
 from time import time
 
 import boost.python
 import libtbx
+from libtbx.introspection import machine_memory_info
+from libtbx.table_utils import format as table
+
+from dials.array_family import flex
+from dials.model.data import make_image
+from dials.util import log
+from dials.util.mp import multi_node_parallel_map
 from dials_algorithms_integration_integrator_ext import (
     Executor,
     Group,
@@ -193,8 +202,6 @@ class TimingInfo(object):
 
     def __str__(self):
         """ Convert to string. """
-        from libtbx.table_utils import format as table
-
         rows = [
             ["Read time", "%.2f seconds" % (self.read)],
             ["Extract time", "%.2f seconds" % (self.extract)],
@@ -213,8 +220,6 @@ class ExecuteParallelTask(object):
     """
 
     def __call__(self, task):
-        from dials.util import log
-
         log.config_simple_cached()
         result = task()
         handlers = logging.getLogger("dials").handlers
@@ -262,9 +267,6 @@ class Processor(object):
 
         :return: The processing results
         """
-        from dials.util.mp import multi_node_parallel_map
-        import platform
-
         start_time = time()
         self.manager.initialize()
         mp_method = self.manager.params.mp.method
@@ -408,10 +410,6 @@ class Task(object):
 
         :return: The processed data
         """
-        from dials.array_family import flex
-        from dials.model.data import make_image
-        from libtbx.introspection import machine_memory_info
-
         # Get the start time
         start_time = time()
 
@@ -726,8 +724,6 @@ class Manager(object):
         """
         Compute the jobs
         """
-        from itertools import groupby
-
         groups = groupby(
             range(len(self.experiments)),
             lambda x: (id(self.experiments[x].imageset), id(self.experiments[x].scan)),
@@ -796,9 +792,6 @@ class Manager(object):
         """
         Compute the number of processors
         """
-        from libtbx.introspection import machine_memory_info
-        from dials.array_family import flex
-
         # Set the memory usage per processor
         if self.params.mp.method == "multiprocessing" and self.params.mp.nproc > 1:
 
@@ -836,8 +829,6 @@ class Manager(object):
         """
         Get a summary of the processing
         """
-        from libtbx.table_utils import format as table
-
         # Compute the task table
         if self.experiments.all_stills():
             rows = [["#", "Group", "Frame From", "Frame To", "# Reflections"]]

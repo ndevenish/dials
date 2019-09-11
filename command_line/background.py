@@ -7,11 +7,17 @@ import math
 import sys
 
 import iotbx.phil
+from libtbx.phil import parse
+from scitbx import matrix
+from scitbx.array_family import flex
+
 from dials.algorithms.spot_finding.factory import SpotFinderFactory
 from dials.algorithms.spot_finding.factory import phil_scope as spot_phil
+from dials.array_family import flex
 from dials.util import Sorry
-from dxtbx.model.experiment_list import ExperimentList, Experiment
-from scitbx.array_family import flex
+from dials.util.masking import MaskGenerator
+from dials.util.options import OptionParser, flatten_experiments
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 help_message = """
 
@@ -43,9 +49,6 @@ def main():
 
 
 def run(args):
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-
     usage = "dials.background [options] image_*.cbf"
 
     parser = OptionParser(
@@ -114,15 +117,9 @@ def run(args):
 
 
 def background(imageset, indx, n_bins, mask_params=None):
-    from dials.array_family import flex
-    from libtbx.phil import parse
-    from scitbx import matrix
-
     if mask_params is None:
         # Default mask params for trusted range
         mask_params = phil_scope.fetch(parse("")).extract().masking
-
-    from dials.util.masking import MaskGenerator
 
     mask_generator = MaskGenerator(mask_params)
     mask = mask_generator.generate(imageset)

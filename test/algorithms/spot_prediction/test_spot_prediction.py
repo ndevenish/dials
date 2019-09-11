@@ -1,21 +1,25 @@
 from __future__ import absolute_import, division, print_function
 
-import os
 import math
+import os
+
 import pytest
+
+from iotbx.xds import integrate_hkl, xparm
+from rstbx.cftbx.coordinate_frame_converter import coordinate_frame_converter
+from scitbx import matrix
+
+import dxtbx
+from dials.algorithms.spot_prediction import (
+    IndexGenerator,
+    ScanStaticRayPredictor,
+    ray_intersection,
+)
+from dials.util import ioutil
 
 
 class SpotPredictor:
     def __init__(self, dials_regression):
-        from dials.algorithms.spot_prediction import IndexGenerator
-        from dials.algorithms.spot_prediction import ScanStaticRayPredictor
-        from dials.algorithms.spot_prediction import ray_intersection
-        from iotbx.xds import xparm, integrate_hkl
-        from dials.util import ioutil
-        import dxtbx
-        from rstbx.cftbx.coordinate_frame_converter import coordinate_frame_converter
-        from scitbx import matrix
-
         # The XDS files to read from
         integrate_filename = os.path.join(
             dials_regression, "data", "sim_mx", "INTEGRATE.HKL"
@@ -151,8 +155,6 @@ def test_rotation_angles(spotpredictor):
 
 def test_beam_vectors(spotpredictor):
     """Ensure |s1| == |s0|"""
-    from scitbx import matrix
-
     s0_length = matrix.col(spotpredictor.beam.get_s0()).length()
     for r in spotpredictor.reflections:
         s1 = r["s1"]
@@ -162,8 +164,6 @@ def test_beam_vectors(spotpredictor):
 
 def test_image_coordinates(spotpredictor):
     """Ensure the image coordinates agree with XDS"""
-    from scitbx import matrix
-
     # Create a dict of lists of xy for each hkl
     gen_xy = {}
     for r in spotpredictor.reflections:

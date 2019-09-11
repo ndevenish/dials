@@ -1,11 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-"""Tests for dials.split_experiments when experiment ids are set"""
-
 import procrunner
+
 from dials.array_family import flex
 from dxtbx.model import Beam, Experiment, ExperimentList
 from dxtbx.model.experiment_list import ExperimentListFactory
+
+"""Tests for dials.split_experiments when experiment ids are set"""
 
 
 def generate_exp(wavelength=1):

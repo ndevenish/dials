@@ -10,30 +10,31 @@ import itertools
 import logging
 from collections import OrderedDict
 
+import pkg_resources
+import six
+
 from libtbx import phil
-from dials.array_family import flex
+
 from dials.algorithms.scaling.model.components.scale_components import (
-    SingleScaleFactor,
-    SingleBScaleFactor,
     SHScaleComponent,
+    SingleBScaleFactor,
+    SingleScaleFactor,
 )
 from dials.algorithms.scaling.model.components.smooth_scale_components import (
-    SmoothScaleComponent1D,
     SmoothBScaleComponent1D,
+    SmoothScaleComponent1D,
     SmoothScaleComponent2D,
     SmoothScaleComponent3D,
 )
 from dials.algorithms.scaling.scaling_utilities import sph_harm_table
+from dials.array_family import flex
 from dials_scaling_ext import (
-    calc_theta_phi,
     calc_lookup_index,
+    calc_theta_phi,
     create_sph_harm_lookup_table,
 )
-import six
 
 logger = logging.getLogger("dials")
-
-import pkg_resources
 
 
 kb_model_phil_str = """\

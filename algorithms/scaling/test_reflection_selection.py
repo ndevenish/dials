@@ -2,21 +2,24 @@
 Tests for the reflection selection algorithm.
 """
 from __future__ import absolute_import, division, print_function
-import os
+
 import itertools
-from libtbx import phil
+import os
+
 from cctbx import sgtbx
-from dxtbx.serialize import load
-from dials.array_family import flex
+from libtbx import phil
+
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.reflection_selection import (
-    select_highly_connected_reflections,
-    select_connected_reflections_across_datasets,
-    select_highly_connected_reflections_in_bin,
-    calculate_scaling_subset_ranges_with_E2,
     calculate_scaling_subset_ranges,
+    calculate_scaling_subset_ranges_with_E2,
+    select_connected_reflections_across_datasets,
+    select_highly_connected_reflections,
+    select_highly_connected_reflections_in_bin,
 )
 from dials.algorithms.scaling.scaling_utilities import calc_crystal_frame_vectors
+from dials.array_family import flex
+from dxtbx.serialize import load
 
 
 def test_select_highly_connected_reflections_in_bin():

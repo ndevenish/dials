@@ -5,9 +5,10 @@ from __future__ import absolute_import, division, print_function
 import math
 from collections import OrderedDict
 
-from dials.report.plots import ResolutionPlotterMixin
 from libtbx import phil
 from scitbx.array_family import flex
+
+from dials.report.plots import ResolutionPlotterMixin
 
 phil_scope = phil.parse(
     """

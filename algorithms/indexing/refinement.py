@@ -2,8 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 import logging
+
+from dials.algorithms.refinement import RefinerFactory
 
 logger = logging.getLogger(__name__)
 
@@ -14,8 +15,6 @@ def refine(params, reflections, experiments):
             "scan_varying=True not supported in indexing: setting scan_varying=False"
         )
         params.refinement.parameterisation.scan_varying = False
-
-    from dials.algorithms.refinement import RefinerFactory
 
     refiner = RefinerFactory.from_parameters_data_experiments(
         params, reflections, experiments

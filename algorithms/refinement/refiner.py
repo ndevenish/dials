@@ -7,13 +7,21 @@ import copy
 import logging
 import math
 
-from dxtbx.model.experiment_list import ExperimentList
-from dials.array_family import flex
-from dials.algorithms.refinement.refinement_helpers import ordinal_number
-from libtbx.phil import parse
-from dials.algorithms.refinement import DialsRefineConfigError
 import libtbx
 from libtbx.introspection import machine_memory_info
+from libtbx.phil import parse
+from libtbx.table_utils import simple_table
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement import DialsRefineConfigError
+from dials.algorithms.refinement.engine import AdaptLstbx, refinery_phil_str
+from dials.algorithms.refinement.parameterisation import (
+    build_prediction_parameterisation,
+)
+from dials.algorithms.refinement.parameterisation import (
+    phil_str as parameterisation_phil_str,
+)
+from dials.algorithms.refinement.refinement_helpers import ordinal_number, string_sel
 
 # The include scope directive does not work here. For example:
 #
@@ -27,11 +35,11 @@ from libtbx.introspection import machine_memory_info
 from dials.algorithms.refinement.reflection_manager import (
     phil_str as reflections_phil_str,
 )
+from dials.algorithms.refinement.restraints import RestraintsParameterisation
+from dials.algorithms.refinement.target import TargetFactory
 from dials.algorithms.refinement.target import phil_str as target_phil_str
-from dials.algorithms.refinement.parameterisation import (
-    phil_str as parameterisation_phil_str,
-)
-from dials.algorithms.refinement.engine import refinery_phil_str
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentList
 
 logger = logging.getLogger(__name__)
 
@@ -352,7 +360,6 @@ class RefinerFactory(object):
                 nparam, nref, ndim
             )
         )
-        from dials.algorithms.refinement.engine import AdaptLstbx
 
         if not params.refinement.parameterisation.sparse and isinstance(
             refinery, AdaptLstbx
@@ -413,10 +420,6 @@ class RefinerFactory(object):
 
     @staticmethod
     def config_parameterisation(params, experiments, refman, do_stills=False):
-        from dials.algorithms.refinement.parameterisation import (
-            build_prediction_parameterisation,
-        )
-
         pred_param = build_prediction_parameterisation(
             params, experiments, refman, do_stills
         )
@@ -465,8 +468,6 @@ class RefinerFactory(object):
         xl_ori_params = pred_param.get_crystal_orientation_parameterisations()
         xl_uc_params = pred_param.get_crystal_unit_cell_parameterisations()
         gon_params = pred_param.get_goniometer_parameterisations()
-
-        from dials.algorithms.refinement.restraints import RestraintsParameterisation
 
         rp = RestraintsParameterisation(
             detector_parameterisations=det_params,
@@ -589,8 +590,6 @@ class RefinerFactory(object):
         do_sparse,
     ):
 
-        from dials.algorithms.refinement.target import TargetFactory
-
         target = TargetFactory.from_parameters_and_experiments(
             params,
             experiments,
@@ -707,7 +706,6 @@ class Refiner(object):
             return None, None
 
         all_labels = self._pred_param.get_param_names()
-        from dials.algorithms.refinement.refinement_helpers import string_sel
 
         if col_select is None:
             col_select = list(range(len(all_labels)))
@@ -739,8 +737,6 @@ class Refiner(object):
 
     def print_step_table(self):
         """print useful output about refinement steps in the form of a simple table"""
-
-        from libtbx.table_utils import simple_table
 
         logger.info("\nRefinement steps:")
 
@@ -775,8 +771,6 @@ class Refiner(object):
 
     def print_out_of_sample_rmsd_table(self):
         """print out-of-sample RSMDs per step, if these were tracked"""
-
-        from libtbx.table_utils import simple_table
 
         # check if it makes sense to proceed
         if "out_of_sample_rmsd" not in self._refinery.history:
@@ -816,8 +810,6 @@ class Refiner(object):
 
     def print_exp_rmsd_table(self):
         """print useful output about refinement steps in the form of a simple table"""
-
-        from libtbx.table_utils import simple_table
 
         logger.info("\nRMSDs by experiment:")
 
@@ -882,8 +874,6 @@ class Refiner(object):
 
     def print_panel_rmsd_table(self):
         """print useful output about refinement steps in the form of a simple table"""
-
-        from libtbx.table_utils import simple_table
 
         if len(self._experiments.scans()) > 1:
             logger.warning(
@@ -1016,8 +1006,6 @@ class Refiner(object):
         """Return a selection as a flex.bool in terms of the input reflection
         data of those reflections that were used in the final step of
         refinement."""
-
-        from scitbx.array_family import flex
 
         matches = self._refman.get_matches()
         selection = flex.bool(len(self._refman.get_indexed()), False)

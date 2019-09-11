@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+from scitbx.array_family import flex
+
 
 class NeighborAnalysis(object):
     def __init__(
@@ -15,7 +17,6 @@ class NeighborAnalysis(object):
         nn_per_bin=5,
     ):
         self.tolerance = tolerance  # Margin of error for max unit cell estimate
-        from scitbx.array_family import flex
 
         NEAR = 10
         self.NNBIN = nn_per_bin  # target number of neighbors per histogram bin

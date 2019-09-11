@@ -3,8 +3,11 @@ from __future__ import absolute_import, division, print_function
 import random
 
 import pytest
-from dials.algorithms.profile_model.gaussian_rs.transform import beam_vector_map
+
 from scitbx import matrix
+
+from dials.algorithms.profile_model.gaussian_rs.transform import beam_vector_map
+from dials.model.serialize import load
 
 
 @pytest.fixture
@@ -13,8 +16,6 @@ def sweep_and_model(dials_data):
         pass
 
     storage_class = Test()
-
-    from dials.model.serialize import load
 
     storage_class.sweep = load.sweep(
         dials_data("centroid_test_data").join("sweep.json").strpath

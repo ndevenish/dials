@@ -1,5 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+import h5py
+
+from dials.array_family import flex
+
 
 class H5PYEncoder(object):
     """Encoder base class."""
@@ -33,8 +37,6 @@ class ReflectionListEncoder(H5PYEncoder):
 
     def encode_column(self, group, key, data):
         """ Encode a column of data. """
-        from dials.array_family import flex
-
         if isinstance(data, flex.shoebox):
             self.encode_shoebox(group, key, data)
         else:
@@ -59,8 +61,6 @@ class ReflectionListDecoder(H5PYDecoder):
 
     def decode(self, handle):
         """Decode the reflection data."""
-        from dials.array_family import flex
-
         # Get the group containing the reflection data
         g = handle["entry/data_processing"]
 
@@ -92,8 +92,6 @@ class ReflectionListDecoder(H5PYDecoder):
 
     def decode_column(self, flex_type, data):
         """ Decode a column for various flex types. """
-        from dials.array_family import flex
-
         if flex_type == flex.int:
             return flex_type(int(d) for d in list(data))
         elif flex_type == flex.double:
@@ -119,8 +117,6 @@ class NexusFile(object):
 
     def __init__(self, filename, mode="a"):
         """Open the file with the given mode."""
-        import h5py
-
         self._handle = h5py.File(filename, mode)
 
     def close(self):

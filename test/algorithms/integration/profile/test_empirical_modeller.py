@@ -1,8 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-from dials.algorithms.profile_model.modeller import EmpiricalProfileModeller
-
 import math
+from random import uniform
+
+from scitbx.array_family import flex
+
+from dials.algorithms.profile_model.modeller import EmpiricalProfileModeller
+from dials.array_family import flex
 
 
 def evaluate_gaussian(x, a, x0, sx):
@@ -17,8 +21,6 @@ def evaluate_gaussian(x, a, x0, sx):
 
 
 def gaussian(size, a, x0, sx):
-    from scitbx.array_family import flex
-
     result = flex.double(flex.grid(size))
 
     index = [0] * len(size)
@@ -35,8 +37,6 @@ def gaussian(size, a, x0, sx):
 
 class Modeller(EmpiricalProfileModeller):
     def model(self, reflections, profiles):
-        from dials.array_family import flex
-
         indices = flex.size_t(range(len(self)))
         weights = flex.double([1.0] * len(self))
         for profile in profiles:
@@ -50,8 +50,6 @@ class Test(object):
         self.threshold = 0.0
 
     def test_with_identical_non_negative_profiles(self):
-        from scitbx.array_family import flex
-
         # Generate identical non-negative profiles
         reflections, profiles, profile = self.generate_identical_non_negative_profiles()
 
@@ -76,8 +74,6 @@ class Test(object):
             assert abs(flex.sum(reference) - 1.0) <= eps
 
     def test_with_systematically_offset_profiles(self):
-        from scitbx.array_family import flex
-
         # Generate identical non-negative profiles
         reflections, profiles = self.generate_systematically_offset_profiles()
 
@@ -103,8 +99,6 @@ class Test(object):
             assert abs(flex.sum(reference) - 1.0) <= eps
 
     def normalize_profile(self, profile):
-        from scitbx.array_family import flex
-
         max_profile = flex.max(profile)
         threshold = self.threshold * max_profile
         sum_profile = 0.0
@@ -121,8 +115,6 @@ class Test(object):
         return result
 
     def generate_single_central_non_negative_profiles(self):
-        from dials.array_family import flex
-
         rlist = flex.reflection_table(1)
 
         profile = gaussian(self.grid_size, 1000, (4, 4, 4), (1.5, 1.5, 1.5))
@@ -138,9 +130,6 @@ class Test(object):
         return rlist, profiles, profile
 
     def generate_identical_non_negative_profiles(self):
-        from dials.array_family import flex
-        from random import uniform
-
         rlist = flex.reflection_table(1000)
 
         profile = gaussian(self.grid_size, 1000, (4, 4, 4), (1.5, 1.5, 1.5))
@@ -158,9 +147,6 @@ class Test(object):
         return rlist, profiles, profile
 
     def generate_systematically_offset_profiles(self):
-        from dials.array_family import flex
-        from random import uniform
-
         rlist = flex.reflection_table(1000)
 
         xyz = flex.vec3_double(1000)

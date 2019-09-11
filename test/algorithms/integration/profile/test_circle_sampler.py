@@ -3,10 +3,15 @@ from __future__ import absolute_import, division, print_function
 import math
 import random
 
+import six.moves.cPickle as pickle
+
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.profile_model.modeller import CircleSampler
+
 
 def test_getters():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -30,9 +35,6 @@ def test_getters():
 
 
 def test_detector_area():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-    from scitbx.array_family import flex
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -60,8 +62,6 @@ def test_detector_area():
 
 
 def test_indexing():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -88,8 +88,6 @@ def test_indexing():
 
 
 def test_nearest():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -124,8 +122,6 @@ def test_nearest():
 
 
 def test_nearest_n():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -175,9 +171,6 @@ def test_nearest_n():
 
 
 def test_weights():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-    from scitbx import matrix
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -218,8 +211,6 @@ def test_weights():
 
 
 def test_self_consistent():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -233,8 +224,6 @@ def test_self_consistent():
 
 
 def test_z_index():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-
     width = 1000
     height = 1000
     scan_range = (2, 12)
@@ -256,9 +245,6 @@ def test_z_index():
 
 
 def test_pickle():
-    from dials.algorithms.profile_model.modeller import CircleSampler
-    import six.moves.cPickle as pickle
-
     width = 1000
     height = 1000
     scan_range = (2, 12)

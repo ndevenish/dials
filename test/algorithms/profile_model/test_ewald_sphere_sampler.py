@@ -1,14 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.profile_model.modeller import EwaldSphereSampler
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 
 def test_run(dials_data):
     experiments = dials_data("centroid_test_data").join("experiments.json")
 
-    from dxtbx.model.experiment_list import ExperimentListFactory
-
     experiments = ExperimentListFactory.from_json_file(experiments.strpath)
-
-    from dials.algorithms.profile_model.modeller import EwaldSphereSampler
 
     beam = experiments[0].beam
     detector = experiments[0].detector

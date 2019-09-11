@@ -8,11 +8,12 @@ import math
 import operator
 
 import cctbx.miller
-from dials.array_family import flex
-from dxtbx.model import Crystal
 from libtbx import phil
 from scitbx import matrix
-from scitbx.math import superpose, least_squares_plane
+from scitbx.math import least_squares_plane, superpose
+
+from dials.array_family import flex
+from dxtbx.model import Crystal
 
 TWO_PI = 2.0 * math.pi
 FIVE_DEG = TWO_PI * 5.0 / 360.0

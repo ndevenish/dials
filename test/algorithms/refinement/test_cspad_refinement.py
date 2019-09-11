@@ -2,8 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
-from dxtbx.model.experiment_list import ExperimentListFactory
 import procrunner
+
+from scitbx import matrix
+
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test1(dials_regression, run_in_tmpdir):
@@ -12,8 +15,6 @@ def test1(dials_regression, run_in_tmpdir):
     fixing, constraints, SparseLevMar, and sauter_poon outlier rejection. See
     README in the regression folder for more details.
     """
-    from scitbx import matrix
-
     data_dir = os.path.join(
         dials_regression, "refinement_test_data", "cspad_refinement"
     )

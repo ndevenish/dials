@@ -1,6 +1,12 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
+import datetime
+import os
+import sys
+
+import alabaster
+
 # DIALS documentation build configuration file, created by
 # sphinx-quickstart on Thu Jul 24 15:08:40 2014.
 #
@@ -13,9 +19,6 @@ from __future__ import absolute_import, division, print_function
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import datetime
-import sys
-import os
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -120,7 +123,6 @@ suppress_warnings = ["image.nonlocal_uri"]
 
 # -- Options for HTML output ----------------------------------------------
 
-import alabaster
 
 html_theme_path = [alabaster.get_path()]
 extensions.append("alabaster")

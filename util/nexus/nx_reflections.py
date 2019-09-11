@@ -1,7 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
+import h5py
 import numpy as np
+
 from dials.array_family import flex
+from dxtbx.format.nexus import convert_units
 
 schema_url = "https://github.com/nexusformat/definitions/blob/master/contributed_definitions/NXreflections.nxdl.xml"
 
@@ -33,8 +36,6 @@ def make_float(handle, name, data, description, units=None):
 
 
 def make_vlen_uint(handle, name, data, description, units=None):
-    import h5py
-
     dtype = h5py.special_dtype(vlen=np.dtype("uint64"))
     dset = handle.create_dataset(name, (len(data),), dtype=dtype)
     for i, d in enumerate(data):
@@ -191,8 +192,6 @@ def write(handle, key, data):
 
 
 def read(handle, key):
-    from dxtbx.format.nexus import convert_units
-
     if key == "miller_index":
         h = flex.int(handle["h"][:].astype(np.int32))
         k = flex.int(handle["k"][:].astype(np.int32))

@@ -1,6 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+import json
+import sys
+
 import six
+
+from dials.array_family import flex
 
 
 def spot_counts_per_image_plot(reflections, **kwargs):
@@ -12,17 +17,12 @@ def spot_counts_per_image_plot(reflections, **kwargs):
 
 
 def histogram_from_json(filename):
-    from dials.array_family import flex
-    import json
-
     with open(filename, "r") as fh:
         z = json.load(fh)
     return flex_histogram(flex.double(z))
 
 
 def flex_histogram(z, char="*", width=60, height=10):
-    from dials.array_family import flex
-
     assert isinstance(char, six.string_types)
     assert len(char) == 1
 
@@ -97,7 +97,6 @@ def flex_histogram(z, char="*", width=60, height=10):
 
 
 if __name__ == "__main__":
-    import sys
     from libtbx import easy_pickle
 
     for arg in sys.argv[1:]:

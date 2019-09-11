@@ -5,8 +5,14 @@ import random
 
 import six
 import six.moves.cPickle as pickle
-from dials.model.data import Shoebox
+
 from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.shoebox import MaskCode
+from dials.array_family import flex
+from dials.model.data import Shoebox
+from dials.test.model.data.all_foreground_valid_data import data
 
 
 def random_shoeboxes(num, mask=False):
@@ -31,8 +37,6 @@ def random_shoeboxes(num, mask=False):
 
 
 def generate_shoebox(bbox, centre, intensity, mask=False):
-    from dials.algorithms.shoebox import MaskCode
-
     shoebox = Shoebox()
     shoebox.bbox = bbox
     shoebox.allocate()
@@ -61,8 +65,6 @@ def generate_shoebox(bbox, centre, intensity, mask=False):
 
 
 def create_mask(size, x0, value):
-    from scitbx.array_family import flex
-
     mask = flex.int(flex.grid(size), 0)
     rad = min(s - c for s, c in zip(size, x0))
     for k in range(size[0]):
@@ -86,8 +88,6 @@ def evaluate_gaussian(x, a, x0, sx):
 
 
 def gaussian(size, a, x0, sx):
-    from dials.array_family import flex
-
     result = flex.real(flex.grid(size))
 
     index = [0] * len(size)
@@ -153,8 +153,6 @@ def test_size():
 
 
 def test_consistent():
-    from dials.array_family import flex
-
     for i in range(1000):
         x0 = random.randint(0, 1000)
         y0 = random.randint(0, 1000)
@@ -197,8 +195,6 @@ def test_is_bbox_within_image_volume():
 
 
 def test_does_bbox_contain_bad_pixels():
-    from scitbx.array_family import flex
-
     mask = flex.bool(flex.grid(100, 100), True)
     for j in range(100):
         for i in range(40, 60):
@@ -272,9 +268,6 @@ def test_summed_intensity():
 
 
 def test_flatten():
-    from dials.array_family import flex
-    from dials.algorithms.shoebox import MaskCode
-
     for shoebox, (XC, I) in random_shoeboxes(10, mask=True):
         assert not shoebox.flat
         zs = shoebox.zsize()
@@ -301,8 +294,6 @@ def test_flatten():
 
 
 def test_all_foreground_valid():
-    from dials.test.model.data.all_foreground_valid_data import data
-
     if six.PY3:
         shoeboxes = pickle.loads(bytes(data, encoding="latin-1"), encoding="bytes")
     else:

@@ -3,8 +3,18 @@ from __future__ import absolute_import, division, print_function
 import itertools
 import math
 import random
+import sys
+
+import six.moves.cPickle as pickle
 
 from libtbx.phil import parse
+from scitbx import matrix
+from scitbx.random import poisson_distribution, variate
+
+from dials.algorithms.background import InclinedSubtractor
+from dials.algorithms.integration.sum import IntegrationAlgorithm
+from dials.array_family import flex
+from dials.util.command_line import ProgressBar
 
 master_phil = parse(
     """
@@ -93,8 +103,6 @@ def random_background_plane2(sbox, a, b, c, d):
     floating point values and i, j, k are the shoebox indices in directions x, y
     and z respectively."""
 
-    from scitbx.random import variate, poisson_distribution
-
     dz, dy, dx = sbox.focus()
 
     if b == c == d == 0.0:
@@ -119,8 +127,6 @@ def random_background_plane(sbox, a, b, c, d):
     floating point values and i, j, k are the shoebox indices in directions x, y
     and z respectively."""
 
-    from scitbx.random import variate, poisson_distribution
-
     dz, dy, dx = sbox.focus()
 
     if b == c == d == 0.0:
@@ -140,9 +146,6 @@ def random_background_plane(sbox, a, b, c, d):
 
 
 def simple_gaussian_spots(params):
-    from dials.array_family import flex
-    from scitbx import matrix
-
     r = params.rotation
     axis = matrix.col((r.axis.x, r.axis.y, r.axis.z))
     if axis.length() > 0:
@@ -156,8 +159,6 @@ def simple_gaussian_spots(params):
 
     mask_peak = MaskCode.Valid | MaskCode.Foreground
     mask_back = MaskCode.Valid | MaskCode.Background
-
-    from dials.util.command_line import ProgressBar
 
     p = ProgressBar(title="Generating reflections")
 
@@ -349,15 +350,11 @@ def background_xds(rlist):
 
 
 def background_inclined(rlist):
-    from dials.algorithms.background import InclinedSubtractor
-
     background = InclinedSubtractor()
     background(None, rlist)
 
 
 def integrate_3d_summation(rlist):
-    from dials.algorithms.integration.sum import IntegrationAlgorithm
-
     integration = IntegrationAlgorithm()
     integration(rlist)
 
@@ -405,8 +402,6 @@ def main(params):
     underestimates = rlist.select(flex.size_t(underestimates))
     # now pickle these, perhaps
 
-    import six.moves.cPickle as pickle
-
     if params.output.under:
         with open(params.output.under, "wb") as fh:
             pickle.dump(underestimates, fh, pickle.HIGHEST_PROTOCOL)
@@ -419,8 +414,6 @@ def main(params):
 
 
 if __name__ == "__main__":
-    import sys
-
     from libtbx.phil import command_line
 
     cmd = command_line.argument_interpreter(master_params=master_phil)

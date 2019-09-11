@@ -6,18 +6,17 @@ from __future__ import absolute_import, division, print_function
 
 import copy
 import logging
-from math import pi, acos
+from math import acos, pi
 from time import time
 
+from cctbx import miller, uctbx
+
 from dials.array_family import flex
-from cctbx import miller
-from cctbx import uctbx
 from dials_scaling_ext import (
-    create_sph_harm_table,
     calc_theta_phi,
+    create_sph_harm_table,
     rotate_vectors_about_axis,
 )
-
 
 logger = logging.getLogger("dials")
 

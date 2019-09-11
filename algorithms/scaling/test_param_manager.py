@@ -2,20 +2,23 @@
 Tests for the active parameter manager module.
 """
 from __future__ import absolute_import, division, print_function
+
 import pytest
 from mock import Mock
+
 from scitbx import sparse
-from dials.array_family import flex
+
 from dials.algorithms.scaling.active_parameter_managers import (
-    multi_active_parameter_manager,
-    active_parameter_manager,
     ConcurrentAPMFactory,
     ConsecutiveAPMFactory,
+    active_parameter_manager,
+    multi_active_parameter_manager,
 )
 from dials.algorithms.scaling.parameter_handler import (
-    scaling_active_parameter_manager,
     create_apm_factory,
+    scaling_active_parameter_manager,
 )
+from dials.array_family import flex
 
 
 def mock_component():

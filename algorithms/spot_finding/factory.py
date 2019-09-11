@@ -3,16 +3,25 @@ from __future__ import absolute_import, division, print_function
 import logging
 import time
 
+import numpy as np
 import six
 import six.moves.cPickle as pickle
+
+from iotbx.phil import parse
+from libtbx.phil import parse
+from scitbx.array_family import flex
+
+import dials.extensions
+from dials.algorithms.background.simple import Linear2dModeller
+from dials.algorithms.spot_finding.finder import SpotFinder
+from dials.array_family import flex
+from dials.util.masking import MaskGenerator
+from dxtbx.imageset import ImageSweep
 
 logger = logging.getLogger(__name__)
 
 
 def generate_phil_scope():
-    from iotbx.phil import parse
-    import dials.extensions
-
     phil_scope = parse(
         """
 
@@ -178,8 +187,6 @@ class FilterRunner(object):
         :param shoeboxes: The shoeboxes
         :return: The filtered flags
         """
-        from scitbx.array_family import flex
-
         # If flags are not set then create a list of Trues
         if flags is None:
             length = 0
@@ -242,9 +249,6 @@ class BackgroundGradientFilter(object):
         self.gradient_cutoff = gradient_cutoff
 
     def run(self, flags, sweep=None, shoeboxes=None, **kwargs):
-        from dials.array_family import flex
-        from dials.algorithms.background.simple import Linear2dModeller
-
         modeller = Linear2dModeller()
         detector = sweep.get_detector()
 
@@ -339,13 +343,9 @@ class SpotDensityFilter(object):
     def run(self, flags, sweep=None, observations=None, **kwargs):
         obs_x, obs_y = observations.centroids().px_position_xy().parts()
 
-        import numpy as np
-
         H, xedges, yedges = np.histogram2d(
             obs_x.as_numpy_array(), obs_y.as_numpy_array(), bins=self.nbins
         )
-
-        from scitbx.array_family import flex
 
         H_flex = flex.double(H.flatten().astype(np.float64))
         n_slots = min(int(flex.max(H_flex)), 30)
@@ -449,11 +449,6 @@ class SpotFinderFactory(object):
         :param params: The input parameters
         :returns: The spot finder instance
         """
-        from dials.util.masking import MaskGenerator
-        from dials.algorithms.spot_finding.finder import SpotFinder
-        from libtbx.phil import parse
-        from dxtbx.imageset import ImageSweep
-
         if params is None:
             params = phil_scope.fetch(source=parse("")).extract()
 
@@ -518,8 +513,6 @@ class SpotFinderFactory(object):
         :param params: The input parameters
         :return: The threshold algorithm
         """
-        import dials.extensions
-
         # Configure the algotihm
         Algorithm = dials.extensions.SpotFinderThreshold.load(
             params.spotfinder.threshold.algorithm

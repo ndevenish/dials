@@ -1,10 +1,17 @@
 from __future__ import absolute_import, division, print_function
 
 import math
+import sys
 
 import six
 import wx
 from six.moves import range
+
+from iotbx.detectors import generic_flex_image
+from libtbx.test_utils import approx_equal
+from scitbx.array_family import flex
+from scitbx.matrix import col, rec, sqr
+from xfel.cftbx.detector.metrology import get_projection_matrix
 
 ######
 # Base class for a tile object - handles access to tiles.
@@ -57,12 +64,6 @@ def _get_flex_image_multipanel(
     # class (or a superclass for multipanel images)?
 
     from math import ceil
-
-    from iotbx.detectors import generic_flex_image
-    from libtbx.test_utils import approx_equal
-    from scitbx.array_family import flex
-    from scitbx.matrix import col, rec, sqr
-    from xfel.cftbx.detector.metrology import get_projection_matrix
 
     assert len(panels) == len(raw_data), (len(panels), len(raw_data))
 
@@ -482,8 +483,6 @@ class _Tiles(object):
         )
 
     def get_initial_instrument_centering_within_picture_as_lon_lat(self):
-        import sys
-
         detector = self.raw_image.get_detector()
         if sys.platform.lower().find("linux") >= 0:
             if len(detector) > 1:
@@ -737,8 +736,6 @@ class _Tiles(object):
             return dist / math.cos(twotheta)
 
     def get_detector_2theta(self):
-        from scitbx.matrix import col
-
         detector = self.raw_image.get_detector()
         if len(detector) == 1:
             n = col(detector[0].get_normal())

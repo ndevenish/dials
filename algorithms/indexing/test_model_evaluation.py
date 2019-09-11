@@ -2,15 +2,18 @@ from __future__ import absolute_import, division, print_function
 
 import copy
 import os
+
 import pytest
 
+import scitbx.matrix
 from cctbx import sgtbx, uctbx
-from dxtbx.model import Crystal
-from dxtbx.serialize import load
-from dials.array_family import flex
+
 from dials.algorithms.indexing import model_evaluation
 from dials.algorithms.indexing.assign_indices import AssignIndicesGlobal
 from dials.algorithms.refinement.refiner import phil_scope as refine_phil
+from dials.array_family import flex
+from dxtbx.model import Crystal
+from dxtbx.serialize import load
 
 
 def test_Result():
@@ -256,8 +259,6 @@ def test_ModelEvaluation(dials_regression, tmpdir):
 
 
 def test_filter_doubled_cell():
-    import scitbx.matrix
-
     sgi = sgtbx.space_group_info("P1")
     uc1 = sgi.any_compatible_unit_cell(volume=1000)
     params = uc1.parameters()

@@ -1,20 +1,24 @@
 from __future__ import absolute_import, division, print_function
+
 import os
+
 import mock
+
 from cctbx import miller
-from dxtbx.model import Experiment, Crystal
-from dials.array_family import flex
+
 from dials.algorithms.scaling.model.model import KBScalingModel
-from dials.util.observer import Subject
 from dials.algorithms.scaling.observers import (
-    register_default_scaling_observers,
-    ScalingModelObserver,
-    ScalingOutlierObserver,
-    ScalingHTMLGenerator,
     ErrorModelObserver,
     MergingStatisticsObserver,
+    ScalingHTMLGenerator,
+    ScalingModelObserver,
+    ScalingOutlierObserver,
     ScalingSummaryGenerator,
+    register_default_scaling_observers,
 )
+from dials.array_family import flex
+from dials.util.observer import Subject
+from dxtbx.model import Crystal, Experiment
 
 
 def test_register_scaling_observers():

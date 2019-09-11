@@ -1,18 +1,20 @@
 from __future__ import absolute_import, division, print_function
+
 import logging
-
-logger = logging.getLogger(__name__)
-
-# Parameterisation auto reduction helpers
-from dials_refinement_helpers_ext import surpl_iter as surpl
-from dials_refinement_helpers_ext import uc_surpl_iter as uc_surpl
-from dials_refinement_helpers_ext import pg_surpl_iter as pg_surpl
-
-from scitbx.array_family import flex
-from dials.algorithms.refinement import DialsRefineConfigError
 
 # PHIL
 from libtbx.phil import parse
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement import DialsRefineConfigError
+
+# Parameterisation auto reduction helpers
+from dials_refinement_helpers_ext import pg_surpl_iter as pg_surpl
+from dials_refinement_helpers_ext import surpl_iter as surpl
+from dials_refinement_helpers_ext import uc_surpl_iter as uc_surpl
+
+logger = logging.getLogger(__name__)
+
 
 phil_str = """
       min_nref_per_parameter = 5

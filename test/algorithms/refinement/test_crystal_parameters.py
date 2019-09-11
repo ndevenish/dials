@@ -1,25 +1,26 @@
 from __future__ import absolute_import, division, print_function
 
-from dxtbx.model import Crystal
-from scitbx import matrix
-from dials.algorithms.refinement.refinement_helpers import (
-    get_fd_gradients,
-    random_param_shift,
-)
+import random
+import textwrap
 from math import pi
+
+from cctbx.uctbx import unit_cell
+from libtbx.test_utils import approx_equal
 from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
+
 from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalOrientationParameterisation,
     CrystalUnitCellParameterisation,
 )
+from dials.algorithms.refinement.refinement_helpers import (
+    get_fd_gradients,
+    random_param_shift,
+)
+from dxtbx.model import Crystal
 
 
 def test():
-    import random
-    import textwrap
-    from libtbx.test_utils import approx_equal
-    from cctbx.uctbx import unit_cell
-
     def random_direction_close_to(vector):
         return vector.rotate_around_origin(
             matrix.col((random.random(), random.random(), random.random())).normalize(),

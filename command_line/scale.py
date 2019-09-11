@@ -1,48 +1,21 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
-import time
-import logging
-import sys
+
 import gc
 import json
+import logging
+import sys
+import time
+
+from six.moves import cStringIO as StringIO
+
 import libtbx
 from libtbx import phil
-from six.moves import cStringIO as StringIO
-from dials.util import log, show_mail_on_error, Sorry
-from dials.array_family import flex
-from dials.util.options import OptionParser, flatten_reflections, flatten_experiments
-from dials.util.version import dials_version
-from dials.algorithms.scaling.scaling_library import (
-    create_scaling_model,
-    create_datastructures_for_structural_model,
-    create_datastructures_for_target_mtz,
-    create_auto_scaling_model,
-    set_image_ranges_in_scaling_models,
-    scaled_data_as_miller_array,
-    determine_best_unit_cell,
-    merging_stats_from_scaled_array,
-)
-from dials.algorithms.scaling.scaler_factory import create_scaler, MultiScalerFactory
-from dials.util.multi_dataset_handling import (
-    select_datasets_on_ids,
-    parse_multiple_datasets,
-    assign_unique_identifiers,
-)
-from dials.algorithms.scaling.scaling_utilities import (
-    save_experiments,
-    save_reflections,
-    log_memory_usage,
-    DialsMergingStatisticsError,
-)
-from dials.util.exclude_images import (
-    exclude_image_ranges_for_scaling,
-    get_valid_image_ranges,
-)
+
 from dials.algorithms.scaling.algorithm import (
-    targeted_scaling_algorithm,
     scaling_algorithm,
+    targeted_scaling_algorithm,
 )
-from dials.util.observer import Subject
 from dials.algorithms.scaling.observers import (
     register_default_scaling_observers,
     register_merging_stats_observers,
@@ -50,11 +23,45 @@ from dials.algorithms.scaling.observers import (
     register_scaler_observers,
 )
 from dials.algorithms.scaling.scale_and_filter import AnalysisResults, log_cycle_results
-from dials.report.analysis import make_merging_statistics_summary
-from dials.command_line.cosym import cosym
-from dials.command_line.cosym import phil_scope as cosym_phil_scope
+from dials.algorithms.scaling.scaler_factory import MultiScalerFactory, create_scaler
+from dials.algorithms.scaling.scaling_library import (
+    create_auto_scaling_model,
+    create_datastructures_for_structural_model,
+    create_datastructures_for_target_mtz,
+    create_scaling_model,
+    determine_best_unit_cell,
+    merging_stats_from_scaled_array,
+    scaled_data_as_miller_array,
+    set_image_ranges_in_scaling_models,
+)
+from dials.algorithms.scaling.scaling_utilities import (
+    DialsMergingStatisticsError,
+    log_memory_usage,
+    save_experiments,
+    save_reflections,
+)
+from dials.array_family import flex
 from dials.command_line.compute_delta_cchalf import Script as deltaccscript
 from dials.command_line.compute_delta_cchalf import phil_scope as deltacc_phil_scope
+from dials.command_line.cosym import cosym
+from dials.command_line.cosym import phil_scope as cosym_phil_scope
+from dials.command_line.export import MTZExporter
+from dials.command_line.export import phil_scope as export_phil_scope
+from dials.command_line.merge import phil_scope as merge_phil_scope
+from dials.report.analysis import make_merging_statistics_summary
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.exclude_images import (
+    exclude_image_ranges_for_scaling,
+    get_valid_image_ranges,
+)
+from dials.util.multi_dataset_handling import (
+    assign_unique_identifiers,
+    parse_multiple_datasets,
+    select_datasets_on_ids,
+)
+from dials.util.observer import Subject
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
 
 help_message = """
 This program performs scaling on integrated datasets, which attempts to improve
@@ -604,7 +611,6 @@ def _export_merged_mtz(params, experiments, joint_table):
     """Export merged data."""
     # call dials.merge
     from dials.command_line.merge import merge_data_to_mtz
-    from dials.command_line.merge import phil_scope as merge_phil_scope
 
     merge_params = merge_phil_scope.extract()
     merge_params.truncate = False
@@ -622,9 +628,6 @@ def _export_merged_mtz(params, experiments, joint_table):
 
 def _export_unmerged_mtz(params, experiments, reflection_table):
     """Export data to unmerged_mtz format."""
-    from dials.command_line.export import MTZExporter
-    from dials.command_line.export import phil_scope as export_phil_scope
-
     export_params = export_phil_scope.extract()
 
     export_params.intensity = ["scale"]

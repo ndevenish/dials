@@ -1,17 +1,19 @@
 """Algorithms for determination of Laue group symmetry."""
-from __future__ import division, absolute_import, print_function
+from __future__ import absolute_import, division, print_function
 
 import json
 import logging
 import math
 
-import libtbx
 import scipy.stats
+
+import libtbx
 from cctbx import crystal, sgtbx
-from dials.algorithms.symmetry import symmetry_base
 from libtbx import table_utils
 from scitbx.array_family import flex
 from scitbx.math import five_number_summary
+
+from dials.algorithms.symmetry import symmetry_base
 
 logger = logging.getLogger(__name__)
 

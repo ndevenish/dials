@@ -6,15 +6,18 @@ of a TargetScaler.
 from __future__ import absolute_import, division, print_function
 
 from math import log
+
 import pytest
+
 from libtbx import phil
 from libtbx.test_utils import approx_equal
-from dxtbx.model import Crystal, Experiment, ExperimentList
-from dials.array_family import flex
-from dials.util.options import OptionParser
+
+from dials.algorithms.scaling.model.model import KBScalingModel
 from dials.algorithms.scaling.scaler_factory import TargetScalerFactory
 from dials.algorithms.scaling.scaling_library import scale_against_target
-from dials.algorithms.scaling.model.model import KBScalingModel
+from dials.array_family import flex
+from dials.util.options import OptionParser
+from dxtbx.model import Crystal, Experiment, ExperimentList
 
 
 def generated_target_refl():

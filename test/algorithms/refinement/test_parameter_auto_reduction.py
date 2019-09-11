@@ -3,21 +3,27 @@ from __future__ import absolute_import, division, print_function
 import copy
 
 import pytest
-from dials.algorithms.refinement.reflection_manager import (
-    phil_scope as refman_phil_scope,
-)
-from dials.algorithms.refinement.reflection_manager import ReflectionManagerFactory
+
+from dials.algorithms.refinement import DialsRefineConfigError
+from dials.algorithms.refinement.parameterisation.autoreduce import AutoReduce
 from dials.algorithms.refinement.parameterisation.autoreduce import (
     phil_scope as ar_phil_scope,
 )
-from dials.algorithms.refinement.parameterisation.autoreduce import AutoReduce
-
-from dials.test.algorithms.refinement.test_stills_prediction_parameters import _Test
+from dials.algorithms.refinement.parameterisation.detector_parameters import (
+    DetectorParameterisationMultiPanel,
+)
 from dials.algorithms.refinement.prediction.managed_predictors import (
     StillsExperimentsPredictor,
 )
+from dials.algorithms.refinement.reflection_manager import ReflectionManagerFactory
+from dials.algorithms.refinement.reflection_manager import (
+    phil_scope as refman_phil_scope,
+)
 from dials.array_family import flex
-from dials.algorithms.refinement import DialsRefineConfigError
+from dials.test.algorithms.refinement.test_multi_panel_detector_parameterisation import (
+    make_panel_in_array,
+)
+from dials.test.algorithms.refinement.test_stills_prediction_parameters import _Test
 
 
 @pytest.fixture(scope="session")
@@ -133,12 +139,6 @@ def test_check_and_remove():
     # exercises the code for non-hierarchical multi-panel detectors. The
     # hierarchical detector version is tested via test_cspad_refinement.py
     from dxtbx.model import Detector
-    from dials.algorithms.refinement.parameterisation.detector_parameters import (
-        DetectorParameterisationMultiPanel,
-    )
-    from dials.test.algorithms.refinement.test_multi_panel_detector_parameterisation import (
-        make_panel_in_array,
-    )
 
     multi_panel_detector = Detector()
     for x in range(3):

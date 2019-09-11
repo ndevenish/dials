@@ -1,9 +1,10 @@
 from __future__ import absolute_import, division
 
 import logging
+
 import pytest
 
-from dials.util.log import config_simple_stdout, LoggingContext
+from dials.util.log import LoggingContext, config_simple_stdout
 
 
 def test_LoggingContext():

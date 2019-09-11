@@ -6,13 +6,14 @@ Currently only tests axial absences to determine which of the 65 MX space
 groups is most likely.
 """
 from __future__ import absolute_import, division, print_function
+
 import logging
 import sys
-from dials.util import log, show_mail_on_error, Sorry
-from dials.util.options import OptionParser, flatten_reflections, flatten_experiments
-from dials.util.version import dials_version
-from dials.util.filter_reflections import filter_reflection_table
-from dials.array_family import flex
+
+from cctbx import sgtbx
+from libtbx import phil
+from libtbx.table_utils import simple_table
+
 from dials.algorithms.scaling.Ih_table import (
     _reflection_table_to_iobs,
     map_indices_to_asu,
@@ -23,9 +24,11 @@ from dials.algorithms.symmetry.absences.laue_groups_info import (
     score_space_groups,
 )
 from dials.algorithms.symmetry.absences.screw_axes import ScrewAxisObserver
-from cctbx import sgtbx
-from libtbx import phil
-from libtbx.table_utils import simple_table
+from dials.array_family import flex
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.filter_reflections import filter_reflection_table
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
 
 help_message = """Program to assess space group symmetry (for MX datasets)."""
 

@@ -7,8 +7,9 @@ from __future__ import absolute_import, division, print_function
 import logging
 from collections import OrderedDict
 
-from dials.array_family import flex
 import six
+
+from dials.array_family import flex
 
 logger = logging.getLogger("dials")
 

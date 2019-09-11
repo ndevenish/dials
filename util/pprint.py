@@ -1,10 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+import string
+
+from dials.array_family import flex
+
 
 def profile2d(p, vmin=None, vmax=None):
-    from dials.array_family import flex
-    import string
-
     if vmin is None:
         vmin = flex.min(p)
     if vmax is None:
@@ -35,8 +36,6 @@ def profile2d(p, vmin=None, vmax=None):
 
 def profile3d(p, vmin=None, vmax=None):
     """ Print a 3D profile. """
-    from dials.array_family import flex
-
     if vmin is None:
         vmin = flex.min(p)
     if vmax is None:

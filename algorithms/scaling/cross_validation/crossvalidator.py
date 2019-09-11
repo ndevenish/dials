@@ -6,13 +6,16 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 from copy import deepcopy
+
 import pkg_resources
+import six
+
+from libtbx import phil
+from libtbx.table_utils import simple_table
+from scitbx.array_family import flex
 
 from dials.algorithms.scaling.observers import register_merging_stats_observers
-from libtbx.table_utils import simple_table
-from libtbx import phil
-from scitbx.array_family import flex
-import six
+from dials.command_line.scale import Script
 
 
 class CrossValidator(object):
@@ -217,8 +220,6 @@ is provided. For example, physical.decay_correction rather than decay_correction
     def run_script(self, params, config_no):
         """Run the scaling script with the params, get the free/work set results
         and add to the results dict"""
-        from dials.command_line.scale import Script
-
         params.scaling_options.__setattr__("use_free_set", True)
         script = Script(
             params,

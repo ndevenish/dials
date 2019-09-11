@@ -3,7 +3,14 @@ from __future__ import absolute_import, division, print_function
 import sys
 
 import iotbx.phil
+from iotbx import cif
+from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 from scitbx import matrix
+
+from dials.algorithms.indexing.compare_orientation_matrices import (
+    difference_rotation_matrix_axis_angle,
+)
+from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 dials.goniometer_calibration is a tool to aid calibration of multi-axis
@@ -38,9 +45,6 @@ output {
 
 
 def run(args):
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_experiments
-
     usage = "dials.goniometer_calibration [options] models.expt"
 
     parser = OptionParser(
@@ -61,10 +65,6 @@ def run(args):
         parser.print_help()
         return
 
-    from dials.algorithms.indexing.compare_orientation_matrices import (
-        difference_rotation_matrix_axis_angle,
-    )
-
     for experiment in experiments:
         crystal = experiment.crystal
         gonio = experiment.goniometer
@@ -83,8 +83,6 @@ def run(args):
             crystal.set_space_group(params.space_group.group())
 
     rows = []
-
-    from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 
     R_to_mosflm = align_reference_frame(
         experiments[0].beam.get_s0(),
@@ -151,7 +149,6 @@ def run(args):
 
     print()
     print("ImgCIF _axis loop template:")
-    from iotbx import cif
 
     loop = cif.model.loop(
         header=[

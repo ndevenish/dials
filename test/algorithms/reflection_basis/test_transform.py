@@ -3,12 +3,16 @@ from __future__ import absolute_import, division, print_function
 import math
 import random
 
-from dials.algorithms.profile_model.gaussian_rs import BBoxCalculator3D
-from dials.algorithms.profile_model.gaussian_rs import CoordinateSystem
-from dials.algorithms.profile_model.gaussian_rs import transform
+from scitbx import matrix
+
+from dials.algorithms.profile_model.gaussian_rs import (
+    BBoxCalculator3D,
+    CoordinateSystem,
+    transform,
+)
+from dials.algorithms.statistics import pearson_correlation_coefficient
 from dials.array_family import flex
 from dials.model.serialize import load
-from scitbx import matrix
 
 
 def evaluate_gaussian(x, a, x0, sx):
@@ -359,8 +363,6 @@ def test_forward_no_model(dials_data):
         # Do the reverse transform
         transformed = transform.TransformReverseNoModel(spec, cs, bbox, 0, grid)
         image2 = transformed.profile()
-
-        from dials.algorithms.statistics import pearson_correlation_coefficient
 
         cc = pearson_correlation_coefficient(image.as_1d().as_double(), image2.as_1d())
         assert cc >= 0.99

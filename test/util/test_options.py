@@ -4,8 +4,9 @@ Tests for the functions in dials.util.options
 from __future__ import absolute_import, division, print_function
 
 from mock import Mock
-from dials.util.options import flatten_reflections, flatten_experiments, OptionParser
+
 from dials.array_family import flex
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 
 def test_can_read_headerless_h5_and_no_detector_is_present(dials_data):

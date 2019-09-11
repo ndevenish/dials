@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import dials.extensions
+
 
 def generate_phil_scope():
     """
@@ -7,8 +9,6 @@ def generate_phil_scope():
 
     :return: The phil scope
     """
-    import dials.extensions
-
     phil_scope = dials.extensions.ProfileModel.phil_scope()
     return phil_scope
 
@@ -31,8 +31,6 @@ class ProfileModelFactory(object):
         :param reflections: The reflection table
         :return: The profile model
         """
-        import dials.extensions
-
         Extension = dials.extensions.ProfileModel.load(params.profile.algorithm)
         Algorithm = Extension().algorithm()
         create_profile_model = True

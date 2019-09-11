@@ -1,13 +1,30 @@
 from __future__ import absolute_import, division, print_function
-from numpy.random import poisson
-from random import randint
+
 from math import exp
+from random import randint
+
+from numpy.random import poisson
+
+from scitbx.array_family import flex
+
+from dials.algorithms.image.threshold import (
+    DispersionExtendedThreshold,
+    DispersionExtendedThresholdDebug,
+    DispersionThreshold,
+    DispersionThresholdDebug,
+    dispersion,
+    dispersion_w_gain,
+    gain,
+    index_of_dispersion,
+    index_of_dispersion_masked,
+    niblack,
+    sauvola,
+)
+from dials.array_family import flex
 
 
 class Test:
     def setup_class(self):
-        from scitbx.array_family import flex
-
         spot = flex.double(flex.grid(11, 11))
         for j in range(11):
             for i in range(11):
@@ -38,48 +55,34 @@ class Test:
         self.min_count = 2
 
     def test_niblack(self):
-        from dials.algorithms.image.threshold import niblack
-
         n_sigma = 3
         niblack(self.image, self.size, n_sigma)
 
     def test_sauvola(self):
-        from dials.algorithms.image.threshold import sauvola
-
         k = 3
         r = 3
         sauvola(self.image, self.size, k, r)
 
     def test_index_of_dispersion(self):
-        from dials.algorithms.image.threshold import index_of_dispersion
-
         n_sigma = 3
         index_of_dispersion(self.image, self.size, n_sigma)
 
     def test_index_of_dispersion_masked(self):
-        from dials.algorithms.image.threshold import index_of_dispersion_masked
-
         n_sigma = 3
         index_of_dispersion_masked(
             self.image, self.mask, self.size, self.min_count, n_sigma
         )
 
     def test_gain(self):
-        from dials.algorithms.image.threshold import gain
-
         n_sigma = 3
         gain(self.image, self.mask, self.gain, self.size, self.min_count, n_sigma)
 
     def test_dispersion(self):
-        from dials.algorithms.image.threshold import dispersion
-
         nsig_b = 3
         nsig_s = 3
         dispersion(self.image, self.mask, self.size, nsig_b, nsig_s, self.min_count)
 
     def test_dispersion_w_gain(self):
-        from dials.algorithms.image.threshold import dispersion_w_gain
-
         nsig_b = 3
         nsig_s = 3
         result1 = dispersion_w_gain(
@@ -116,10 +119,6 @@ class Test:
         assert result3 == result4
 
     def test_dispersion_debug(self):
-        from dials.algorithms.image.threshold import dispersion
-        from dials.algorithms.image.threshold import dispersion_w_gain
-        from dials.algorithms.image.threshold import DispersionThresholdDebug
-
         nsig_b = 3
         nsig_s = 3
         result1 = dispersion(
@@ -148,10 +147,6 @@ class Test:
         assert result3 == result4
 
     def test_dispersion_threshold(self):
-        from dials.algorithms.image.threshold import dispersion, dispersion_w_gain
-        from dials.algorithms.image.threshold import DispersionThreshold
-        from dials.array_family import flex
-
         nsig_b = 3
         nsig_s = 3
         algorithm = DispersionThreshold(
@@ -174,10 +169,6 @@ class Test:
         assert result2 == result4
 
     def test_dispersion_extended_threshold(self):
-        from dials.algorithms.image.threshold import DispersionExtendedThreshold
-        from dials.algorithms.image.threshold import DispersionExtendedThresholdDebug
-        from dials.array_family import flex
-
         nsig_b = 3
         nsig_s = 3
         algorithm = DispersionExtendedThreshold(

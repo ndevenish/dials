@@ -1,13 +1,15 @@
 from __future__ import absolute_import, division, print_function
+
 from scitbx import matrix
-from dials.algorithms.refinement.parameterisation.scan_varying_model_parameters import (
-    ScanVaryingParameterSet,
-    ScanVaryingModelParameterisation,
-    GaussianSmoother,
-)
+
 from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalOrientationMixin,
     CrystalUnitCellMixin,
+)
+from dials.algorithms.refinement.parameterisation.scan_varying_model_parameters import (
+    GaussianSmoother,
+    ScanVaryingModelParameterisation,
+    ScanVaryingParameterSet,
 )
 from dials.algorithms.refinement.refinement_helpers import CrystalOrientationCompose
 
@@ -127,8 +129,6 @@ class ScanVaryingCrystalUnitCellParameterisation(
     ):
 
         self._set_state_uncertainties = set_state_uncertainties
-
-        from scitbx import matrix
 
         if experiment_ids is None:
             experiment_ids = [0]

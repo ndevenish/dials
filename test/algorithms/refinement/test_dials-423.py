@@ -2,6 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+from libtbx import phil
+
+from dials.algorithms.refinement import RefinerFactory
+from dials.algorithms.refinement.refiner import phil_scope
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentListFactory
+
+
 """ Test the situation that led to https://github.com/dials/dials/issues/423.
 In that case instantiating a Refiner for an experiment list with an I23
 detector model caused the panel origins to move before any refinement took
@@ -13,12 +21,6 @@ of the offsets of all panels from the root frame.
 
 
 def test_run(dials_regression):
-    from dials.array_family import flex
-    from dials.algorithms.refinement import RefinerFactory
-    from dials.algorithms.refinement.refiner import phil_scope
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from libtbx import phil
-
     data_dir = os.path.join(dials_regression, "refinement_test_data", "dials-423")
     exp_file = os.path.join(data_dir, "experiments.json")
     ref_file = os.path.join(data_dir, "subset.pickle")

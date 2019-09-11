@@ -1,9 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-from dials_pychef_ext import ChefStatistics, Observations
 from cctbx.array_family import flex
 from iotbx.data_plots import table_data
+from iotbx.reflection_file_reader import any_reflection_file
 from libtbx import phil
+
+from dials_pychef_ext import ChefStatistics, Observations
+from xia2.Modules.Resolutionizer import phil_defaults, resolutionizer
 
 __all__ = [
     "ChefStatistics",
@@ -440,8 +443,6 @@ class Statistics(object):
 
 
 def run(args):
-    from iotbx.reflection_file_reader import any_reflection_file
-
     interp = phil_scope.command_line_argument_interpreter()
     params, unhandled = interp.process_and_fetch(
         args, custom_processor="collect_remaining"
@@ -552,8 +553,6 @@ def remove_batch_gaps(batches):
 
 
 def resolution_limit(mtz_file, min_completeness, n_bins):
-    from xia2.Modules.Resolutionizer import resolutionizer, phil_defaults
-
     params = phil_defaults.extract().resolutionizer
     params.nbins = n_bins
     r = resolutionizer(mtz_file, params)

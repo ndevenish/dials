@@ -1,10 +1,12 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
-### build documentation with: phenix.python `which sphinx-build` -b html source build/html
-
+import datetime
 
 import sphinx_bootstrap_theme
+
+### build documentation with: phenix.python `which sphinx-build` -b html source build/html
+
 
 # ...
 
@@ -22,7 +24,6 @@ import sphinx_bootstrap_theme
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the

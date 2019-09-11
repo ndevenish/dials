@@ -1,17 +1,22 @@
 from __future__ import absolute_import, division, print_function
 
 import copy
-import math
 import logging
+import math
 
+import iotbx.phil
 import libtbx
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from dials.array_family import flex
+from rstbx.indexing_api.outlier_procedure import OutlierPlotPDF
+from rstbx.phil.phil_preferences import indexing_api_defs
+
+from dials.algorithms.indexing import DialsIndexError, DialsIndexRefineError
 from dials.algorithms.indexing.indexer import Indexer
 from dials.algorithms.indexing.known_orientation import IndexerKnownOrientation
 from dials.algorithms.indexing.lattice_search import BasisVectorSearch, LatticeSearch
 from dials.algorithms.indexing.nave_parameters import NaveParameters
-from dials.algorithms.indexing import DialsIndexError, DialsIndexRefineError
+from dials.algorithms.refinement.refiner import RefinerFactory
+from dials.array_family import flex
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 logger = logging.getLogger(__name__)
 
@@ -68,8 +73,6 @@ def e_refine(params, experiments, reflections, graph_verbose=False):
     ), (
         "Cannot index, set refinement.reflections.outlier.algorithm=null"
     )  # we do our own outlier rejection
-
-    from dials.algorithms.refinement.refiner import RefinerFactory
 
     refiner = RefinerFactory.from_parameters_data_experiments(
         params, reflections, experiments
@@ -697,12 +700,7 @@ class StillsIndexer(Indexer):
             m.miller_index = item["miller_index"]
             matches.append(m)
 
-        from rstbx.phil.phil_preferences import indexing_api_defs
-        import iotbx.phil
-
         hardcoded_phil = iotbx.phil.parse(input_string=indexing_api_defs).extract()
-
-        from rstbx.indexing_api.outlier_procedure import OutlierPlotPDF
 
         # comment this in if PDF graph is desired:
         # hardcoded_phil.indexing.outlier_detection.pdf = "outlier.pdf"

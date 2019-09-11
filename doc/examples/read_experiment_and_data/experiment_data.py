@@ -3,9 +3,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+from scitbx import matrix
+
 import dials.util.options
 from dials.util import show_mail_on_error
-from libtbx.phil import parse
 
 help_message = """
 
@@ -38,8 +40,6 @@ class Script(object):
         )
 
     def run(self):
-        from scitbx import matrix
-
         params, options = self.parser.parse_args(show_diff_phil=True)
 
         experiments = dials.util.options.flatten_experiments(params.input.experiments)

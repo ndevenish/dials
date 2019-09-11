@@ -1,12 +1,15 @@
 from __future__ import absolute_import, division, print_function
 
 import contextlib
+import multiprocessing
 import sys
+import threading
 import warnings
-
-from ._progress import progress  # noqa: F401, exported symbol
+from datetime import datetime
 
 from libtbx.utils import Sorry
+
+from ._progress import progress  # noqa: F401, exported symbol
 
 
 def debug_console():
@@ -57,10 +60,6 @@ def debug_context_manager(original_context_manager, name="", log_func=None):
         def log_func(output):
             sys.stderr.write(output)
             sys.stderr.flush()
-
-    from datetime import datetime
-    import threading
-    import multiprocessing
 
     class DCM(object):
         def __init__(self, name, log_func):

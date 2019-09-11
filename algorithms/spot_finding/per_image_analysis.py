@@ -4,11 +4,12 @@ import math
 import sys
 
 from cctbx import sgtbx, uctbx
-from dials.algorithms.integration import filtering
-from dials.array_family import flex
 from libtbx import group_args, table_utils
 from libtbx.math_utils import nearest_integer as nint
 from scitbx import matrix
+
+from dials.algorithms.integration import filtering
+from dials.array_family import flex
 
 
 class slot(object):

@@ -2,11 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+from scitbx.array_family import flex
+
+from dials.algorithms.image.filter import chebyshev_distance, manhattan_distance
+
 
 def test_manhattan():
-    from dials.algorithms.image.filter import manhattan_distance
-    from scitbx.array_family import flex
-
     data = flex.bool(flex.grid(100, 100), True)
 
     for j in range(100):
@@ -45,9 +46,6 @@ def test_manhattan():
 
 
 def test_chebyshev():
-    from dials.algorithms.image.filter import chebyshev_distance
-    from scitbx.array_family import flex
-
     data = flex.bool(flex.grid(100, 100), True)
 
     for j in range(100):

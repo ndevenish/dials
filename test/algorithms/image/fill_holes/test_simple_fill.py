@@ -2,11 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+from scitbx.array_family import flex
+
+from dials.algorithms.image.fill_holes import simple_fill
+
 
 def test():
-    from dials.algorithms.image.fill_holes import simple_fill
-    from scitbx.array_family import flex
-
     mask = flex.bool(flex.grid(100, 100), True)
     data = flex.double(flex.grid(100, 100), True)
 

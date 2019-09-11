@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import datetime
+import math
 
 # needs_sphinx = '1.1'
 
@@ -76,7 +77,6 @@ plot_include_source = True
 plot_formats = [("png", 96), "pdf"]
 plot_html_show_formats = False
 
-import math
 
 phi = (math.sqrt(5) + 1) / 2
 

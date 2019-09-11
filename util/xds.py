@@ -2,14 +2,16 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+from iotbx.xds import spot_xds
+from scitbx import matrix
+
+from dxtbx.serialize import xds
+
 
 def dump(experiments, reflections, directory):
     """
     Dump the files in XDS format
     """
-    from dxtbx.serialize import xds
-    from scitbx import matrix
-
     if len(experiments) > 0:
 
         for i, experiment in enumerate(experiments):
@@ -75,8 +77,6 @@ def dump(experiments, reflections, directory):
 
 
 def export_spot_xds(reflections, filename):
-    from iotbx.xds import spot_xds
-
     if reflections is not None and len(reflections) > 0:
         centroids = reflections["xyzobs.px.value"]
         intensities = reflections["intensity.sum.value"]

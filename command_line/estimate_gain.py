@@ -2,10 +2,15 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
+import six.moves.cPickle as pickle
+
 import iotbx.phil
+from libtbx.math_utils import nearest_integer as nint
+from scitbx.array_family import flex
+
+from dials.algorithms.image.threshold import DispersionThresholdDebug
 from dials.util import Sorry
 from dials.util.options import OptionParser, flatten_experiments
-from scitbx.array_family import flex
 
 help_message = """
 
@@ -41,8 +46,6 @@ phil_scope = iotbx.phil.parse(
 
 def estimate_gain(imageset, kernel_size=(10, 10), output_gain_map=None, max_images=1):
     detector = imageset.get_detector()
-
-    from dials.algorithms.image.threshold import DispersionThresholdDebug
 
     gains = flex.double()
 
@@ -83,7 +86,6 @@ def estimate_gain(imageset, kernel_size=(10, 10), output_gain_map=None, max_imag
             dispersion.extend(kabsch.index_of_dispersion().as_1d())
 
         sorted_dispersion = flex.sorted(dispersion)
-        from libtbx.math_utils import nearest_integer as nint
 
         q1 = sorted_dispersion[nint(len(sorted_dispersion) / 4)]
         q2 = sorted_dispersion[nint(len(sorted_dispersion) / 2)]
@@ -118,7 +120,6 @@ def estimate_gain(imageset, kernel_size=(10, 10), output_gain_map=None, max_imag
         if len(gains) > 1:
             raw_data = imageset.get_raw_data(0)
         # write the gain map
-        import six.moves.cPickle as pickle
 
         gain_map = flex.double(flex.grid(raw_data[0].all()), gain0)
         with open(output_gain_map, "wb") as fh:

@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import absolute_import, division, print_function
 
+import numpy
+
 from scitbx.array_family import flex
 
 
@@ -19,7 +21,6 @@ def plot_coords(coords, labels=None, key="cosym_coordinates"):
 
     # XXX should avoid relying on matplotlib here to determine colours
     from matplotlib import pyplot as plt
-    import numpy
 
     colours = plt.cm.Spectral(numpy.linspace(0, 1, n_clusters)).tolist()
 

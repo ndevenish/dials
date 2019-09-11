@@ -2,13 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
-from dxtbx.model.experiment_list import ExperimentListFactory
 import procrunner
+
+from scitbx import matrix
+
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test1(dials_regression, run_in_tmpdir):
-    from scitbx import matrix
-
     data_dir = os.path.join(dials_regression, "refinement_test_data", "multi_stills")
 
     result = procrunner.run(

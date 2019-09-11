@@ -1,10 +1,20 @@
 from __future__ import absolute_import, division, print_function
+
 import logging
+
+from libtbx.phil import parse
+
+from dials.algorithms.spot_prediction import (
+    ScanStaticReflectionPredictor,
+    ScanVaryingReflectionPredictor,
+    StillsReflectionPredictor,
+)
+from dials.array_family import flex
+from dials.util import Sorry
+from dxtbx.imageset import ImageSweep
 
 logger = logging.getLogger(__name__)
 
-from libtbx.phil import parse
-from dials.util import Sorry
 
 # The phil parameters
 phil_scope = parse(
@@ -54,11 +64,6 @@ class ReflectionPredictor(object):
         :param margin: The margin of hkl to predict
         :param force_static: force scan varying prediction to be static
         """
-        from dials.algorithms.spot_prediction import ScanStaticReflectionPredictor
-        from dials.algorithms.spot_prediction import ScanVaryingReflectionPredictor
-        from dials.algorithms.spot_prediction import StillsReflectionPredictor
-        from dxtbx.imageset import ImageSweep
-        from dials.array_family import flex
 
         class Predictor(object):
             def __init__(self, name, func):

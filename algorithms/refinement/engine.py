@@ -5,16 +5,20 @@ are the current concrete implementations"""
 from __future__ import absolute_import, division, print_function
 
 import copy
-import logging
 import json
+import logging
+
+from six.moves import cStringIO as StringIO
 
 import libtbx
-from dials.algorithms.refinement import DialsRefineRuntimeError
 from libtbx import easy_mp
 from libtbx.phil import parse
 from scitbx import lbfgs
 from scitbx.array_family import flex
+from scitbx.linalg.svd import real as svd_real
 from scitbx.lstbx import normal_eqns, normal_eqns_solving
+
+from dials.algorithms.refinement import DialsRefineRuntimeError
 
 logger = logging.getLogger(__name__)
 
@@ -394,8 +398,6 @@ class Refinery(object):
         except AttributeError:
             j = self._jacobian.deep_copy()
 
-        from scitbx.linalg.svd import real as svd_real
-
         svd = svd_real(j, False, False)
 
         # The condition number is the ratio of the largest to the smallest singular
@@ -479,8 +481,6 @@ class AdaptLbfgs(Refinery):
         self._termination_params = lbfgs.termination_parameters(
             max_iterations=self._max_iterations
         )
-
-        from six.moves import cStringIO as StringIO
 
         self._log_string = StringIO
 

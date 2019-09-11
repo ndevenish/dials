@@ -1,8 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
-import future.moves.itertools as itertools
-import libtbx.easy_mp
 import warnings
+
+import future.moves.itertools as itertools
+
+import libtbx.easy_mp
+
+from dials.util.cluster_map import cluster_map as drmaa_parallel_map
 
 
 def parallel_map(
@@ -22,8 +26,6 @@ def parallel_map(
     calculation. This function is setup so that in each case we can select
     the number of cores on a machine
     """
-    from dials.util.cluster_map import cluster_map as drmaa_parallel_map
-
     if method == "drmaa":
         return drmaa_parallel_map(
             func=func,

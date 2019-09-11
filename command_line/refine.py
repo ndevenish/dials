@@ -15,17 +15,27 @@ Examples::
 """
 
 from __future__ import absolute_import, division, print_function
-import sys
+
 import logging
+import sys
 from time import time
-import dials.util
+
+import libtbx.load_env
 import libtbx.phil
 from libtbx import Auto
-from dials.array_family import flex
-from dials.algorithms.refinement import RefinerFactory
-from dials.algorithms.refinement import DialsRefineConfigError, DialsRefineRuntimeError
+
+import dials.util
+import dials.util.log
+from dials.algorithms.refinement import (
+    DialsRefineConfigError,
+    DialsRefineRuntimeError,
+    RefinerFactory,
+)
 from dials.algorithms.refinement.corrgram import create_correlation_plots
+from dials.array_family import flex
 from dials.util import Sorry
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.refine")
 
@@ -312,12 +322,6 @@ def run(args=None, phil=working_phil):
         None
     """
 
-    import dials.util.log
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_reflections
-    from dials.util.options import flatten_experiments
-    import libtbx.load_env
-
     start_time = time()
 
     # The script usage
@@ -362,8 +366,6 @@ def run(args=None, phil=working_phil):
         if key not in reflections:
             msg = msg.format(key)
             raise dials.util.Sorry(msg)
-
-    from dials.util.version import dials_version
 
     logger.info(dials_version())
 

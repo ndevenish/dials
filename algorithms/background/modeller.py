@@ -2,6 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+from dials.algorithms.background.gmodel import PolarTransform
+from dials.algorithms.image.fill_holes import diffusion_fill, simple_fill
+from dials.algorithms.image.filter import mean_filter, median_filter
+from dials.algorithms.integration.image_integrator import ProcessorImage
+from dials.algorithms.integration.processor import job
+from dials.array_family import flex
+from dials.util.command_line import heading
 from dials_algorithms_background_modeller_ext import (
     BackgroundStatistics,
     MultiPanelBackgroundStatistics,
@@ -32,8 +39,6 @@ class FinalizeModel(object):
         :param kernel_size: The median filter kernel size
         :param niter: The number of iterations for filling holes
         """
-        from dials.algorithms.background.gmodel import PolarTransform
-
         # Set some parameters
         self.filter_type = filter_type
         self.kernel_size = kernel_size
@@ -59,11 +64,6 @@ class FinalizeModel(object):
         :param data: The data array
         :param mask: The mask array
         """
-        from dials.algorithms.image.filter import median_filter, mean_filter
-        from dials.algorithms.image.fill_holes import diffusion_fill
-        from dials.algorithms.image.fill_holes import simple_fill
-        from dials.array_family import flex
-
         # Print some image properties
         sub_data = data.as_1d().select(mask.as_1d())
         logger.info("Raw image statistics:")
@@ -193,8 +193,6 @@ class BackgroundModellerExecutor(object):
         self.result = None
 
     def process(self, image_volume, experiments, reflections):
-        from dials.algorithms.integration.processor import job
-
         # Write some output
         logger.info(
             " Background modelling; job: %d; frames: %d -> %d; # Reflections: %d"
@@ -288,9 +286,6 @@ class BackgroundModeller(object):
         """
         Integrate the data
         """
-        from dials.algorithms.integration.image_integrator import ProcessorImage
-        from dials.util.command_line import heading
-
         # Init the report
         self.profile_model_report = None
         self.integration_report = None

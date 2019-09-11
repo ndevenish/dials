@@ -1,19 +1,25 @@
 from __future__ import absolute_import, division, print_function
+
 import collections
 import logging
 from math import sqrt
+
 import matplotlib
+from matplotlib import pylab
+
 from iotbx.reflection_file_reader import any_reflection_file
 from libtbx.phil import parse
+
 import dials.util
+import dials.util.log
 from dials.algorithms.statistics.delta_cchalf import PerImageCChalfStatistics
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.exclude_images import exclude_image_ranges_for_scaling
 from dials.util.multi_dataset_handling import select_datasets_on_ids
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 matplotlib.use("Agg")
-from matplotlib import pylab
 
 logger = logging.getLogger("dials.command_line.compute_delta_cchalf")
 
@@ -517,11 +523,6 @@ class Script(object):
 
 def run(args=None, phil=phil_scope):
     """Run the command-line script."""
-    import dials.util.log
-    from dials.util.options import OptionParser
-    from dials.util.options import flatten_reflections
-    from dials.util.options import flatten_experiments
-
     usage = "dials.compute_delta_cchalf [options] scaled.expt scaled.refl"
 
     parser = OptionParser(

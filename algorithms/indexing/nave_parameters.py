@@ -5,9 +5,13 @@ from __future__ import absolute_import, division, print_function
 import logging
 import math
 
-from dials.array_family import flex
 from scitbx.matrix import col, sqr
+from xfel.mono_simulation.max_like import minimizer
+from xfel.mono_simulation.util import green_curve_area
+
 from dials.algorithms.indexing import DialsIndexError
+from dials.array_family import flex
+from dxtbx.model import MosaicCrystalSauter2014
 
 logger = logging.getLogger(__name__)
 """
@@ -32,7 +36,6 @@ class NaveParameters(object):
 
         all_crystals = []
         self.nv_acceptance_flags = flex.bool(len(self.reflections["id"]))
-        from dxtbx.model import MosaicCrystalSauter2014
 
         for iid, experiment in enumerate(self.experiments):
             excursion_rad = RR["delpsical.rad"].select(RR["id"] == iid)
@@ -96,8 +99,6 @@ class NaveParameters(object):
                 k_degrees,
             )
 
-            from xfel.mono_simulation.max_like import minimizer
-
             # coerce the estimates to be positive for max-likelihood
             lower_limit_domain_size = (
                 math.pow(crystal.get_unit_cell().volume(), 1.0 / 3.0) * 3
@@ -152,8 +153,6 @@ class NaveParameters(object):
                 plt.ylim([-AD1TF7B_MAXDP, AD1TF7B_MAXDP])
                 plt.show()
                 plt.close()
-
-            from xfel.mono_simulation.util import green_curve_area
 
             self.green_curve_area = green_curve_area(two_thetas, tan_outer_deg_ML)
             logger.info("The green curve area is %s", self.green_curve_area)

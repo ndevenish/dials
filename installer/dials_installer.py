@@ -5,11 +5,12 @@ import shutil
 import sys
 import traceback
 
+from libtbx.auto_build import install_distribution
+
 installer_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 libtbx_path = os.path.join(installer_path, "lib")
 if libtbx_path not in sys.path:
     sys.path.append(libtbx_path)
-from libtbx.auto_build import install_distribution
 
 
 class installer(install_distribution.installer):

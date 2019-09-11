@@ -2,7 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+from libtbx.phil import parse
+
+import dials.extensions
 from dials.util import show_mail_on_error
+from dials.util.options import OptionParser
 
 
 class Script(object):
@@ -10,9 +14,6 @@ class Script(object):
 
     def __init__(self):
         """ Initialise the script. """
-        from dials.util.options import OptionParser
-        from libtbx.phil import parse
-
         # Create the phil parameters
         phil_scope = parse(
             """
@@ -28,8 +29,6 @@ class Script(object):
 
     def run(self):
         """ Run the script. """
-        import dials.extensions
-
         # Parse the command line arguments
         params, options = self.parser.parse_args()
 

@@ -5,18 +5,22 @@ import sys
 
 import iotbx.phil
 from cctbx import sgtbx
+from xfel.clustering.cluster_groups import unit_cell_info
+
+from dials.algorithms.clustering.unit_cell import UnitCellCluster
+from dials.algorithms.symmetry.cosym import CosymAnalysis
+from dials.algorithms.symmetry.cosym.observers import register_default_cosym_observers
 from dials.array_family import flex
-from dials.util import show_mail_on_error, Sorry
-from dials.util.options import flatten_experiments, flatten_reflections
+from dials.util import Sorry, log, show_mail_on_error
+from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
 from dials.util.multi_dataset_handling import (
     assign_unique_identifiers,
     parse_multiple_datasets,
     select_datasets_on_ids,
 )
 from dials.util.observer import Subject
-from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
-from dials.algorithms.symmetry.cosym.observers import register_default_cosym_observers
-from dials.algorithms.symmetry.cosym import CosymAnalysis
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
+from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.cosym")
 
@@ -247,8 +251,6 @@ class cosym(Subject):
             expt.crystal.get_crystal_symmetry() for expt in experiments
         ]
         lattice_ids = experiments.identifiers()
-        from dials.algorithms.clustering.unit_cell import UnitCellCluster
-        from xfel.clustering.cluster_groups import unit_cell_info
 
         ucs = UnitCellCluster.from_crystal_symmetries(
             crystal_symmetries, lattice_ids=lattice_ids
@@ -298,9 +300,6 @@ Examples::
 
 
 def run(args):
-    from dials.util import log
-    from dials.util.options import OptionParser
-
     usage = "dials.cosym [options] models.expt observations.refl"
 
     parser = OptionParser(
@@ -320,8 +319,6 @@ def run(args):
     log.config(
         verbosity=options.verbose, info=params.output.log, debug=params.output.debug_log
     )
-
-    from dials.util.version import dials_version
 
     logger.info(dials_version())
 

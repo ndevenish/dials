@@ -1,14 +1,14 @@
-from __future__ import absolute_import, division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import copy
 
-from cctbx import sgtbx
 import scitbx.matrix
+from cctbx import sgtbx
 from scitbx.math import euler_angles_as_matrix
+
 from dxtbx.model import Crystal
 
-from . import combinations, FFT1D
+from . import FFT1D, combinations
 
 
 def test_combinations(setup_rlp):

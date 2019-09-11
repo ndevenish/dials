@@ -3,9 +3,10 @@ from __future__ import absolute_import, division, print_function
 import sys
 
 import iotbx.phil
-from dials.util.options import OptionParser
-from dials.util.options import flatten_reflections, flatten_experiments
+from libtbx import table_utils
+
 from dials.algorithms.spot_finding import per_image_analysis
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 help_message = """
 
@@ -97,7 +98,6 @@ def run(args):
             getattr(e, k).extend(getattr(s, k))
 
     per_image_analysis.print_table(e)
-    from libtbx import table_utils
 
     # FIXME this is now probably nonsense...
     overall_stats = per_image_analysis.stats_single_image(

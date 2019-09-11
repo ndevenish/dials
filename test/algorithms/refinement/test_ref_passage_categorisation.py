@@ -4,25 +4,27 @@ entering the Ewald sphere is done the right way round"""
 from __future__ import absolute_import, division, print_function
 
 import math
+
 import pytest
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from libtbx.phil import parse
+from scitbx import matrix
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansExperimentsPredictor,
+    ScansRayPredictor,
+)
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 
 def test():
-    from libtbx.phil import parse
-    from scitbx import matrix
-    from scitbx.array_family import flex
-
     # Building experimental models
     from dials.test.algorithms.refinement.setup_geometry import Extract
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
 
     # Reflection prediction
     from dials.algorithms.spot_prediction import IndexGenerator
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        ScansExperimentsPredictor,
-    )
-    from cctbx.sgtbx import space_group, space_group_symbols
 
     # We will set up a mock scan
     from dxtbx.model import ScanFactory

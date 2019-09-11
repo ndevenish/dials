@@ -2,11 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
+from dials.algorithms.profile_model.gaussian_rs import Model, PartialityCalculator3D
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentList, ExperimentListFactory
+
 
 def test(dials_data):
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from dxtbx.model.experiment_list import ExperimentList
-
     exlist = ExperimentListFactory.from_json_file(
         dials_data("centroid_test_data").join("fake_long_experiments.json").strpath
     )
@@ -19,15 +20,10 @@ def test(dials_data):
     sigma_b = 0.060 * math.pi / 180
     sigma_m = 0.154 * math.pi / 180
 
-    from dials.algorithms.profile_model.gaussian_rs import Model
-
     profile_model = Model(None, n_sigma, sigma_b, sigma_m)
     experiment.profile = profile_model
     experiments = ExperimentList()
     experiments.append(experiment)
-
-    from dials.algorithms.profile_model.gaussian_rs import PartialityCalculator3D
-    from dials.array_family import flex
 
     calculator = PartialityCalculator3D(
         experiment.beam, experiment.goniometer, experiment.scan, sigma_m

@@ -1,14 +1,17 @@
 from __future__ import absolute_import, division, print_function
 
+from scitbx.array_family import flex
+
+from dials.algorithms.image.connected_components import (
+    LabelImageStack2d,
+    LabelImageStack3d,
+)
+
 
 class Test2d:
     def setup_class(self):
-        from dials.algorithms.image.connected_components import LabelImageStack2d
-
         self.size = (500, 500)
         self.label_images = LabelImageStack2d(self.size)
-
-        from scitbx.array_family import flex
 
         self.data_list = []
         self.mask_list = []
@@ -60,8 +63,6 @@ class Test2d:
                     assert v1 == v2
 
     def test_labels_are_valid(self):
-        from scitbx.array_family import flex
-
         # Create a map of labels
         label_map = flex.int(flex.grid(10, self.size[0], self.size[1]))
         for c, l in zip(self.coords, self.labels):
@@ -92,12 +93,8 @@ class Test2d:
 
 class Test3d:
     def setup_class(self):
-        from dials.algorithms.image.connected_components import LabelImageStack3d
-
         self.size = (500, 500)
         self.label_images = LabelImageStack3d(self.size)
-
-        from scitbx.array_family import flex
 
         self.data_list = []
         self.mask_list = []
@@ -149,8 +146,6 @@ class Test3d:
                     assert v1 == v2
 
     def test_labels_are_valid(self):
-        from scitbx.array_family import flex
-
         # Create a map of labels
         label_map = flex.int(flex.grid(10, self.size[0], self.size[1]))
         for c, l in zip(self.coords, self.labels):

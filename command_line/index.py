@@ -1,20 +1,20 @@
 from __future__ import absolute_import, division, print_function
 
-# DIALS_ENABLE_COMMAND_LINE_COMPLETION
-
 import copy
 import logging
 
 import iotbx.phil
-from dxtbx.model.experiment_list import ExperimentList
-from dials.algorithms.indexing import indexer
-from dials.algorithms.indexing import DialsIndexError
+
+from dials.algorithms.indexing import DialsIndexError, indexer
 from dials.array_family import flex
+from dials.util import Sorry, log
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 from dials.util.slice import slice_reflections
-from dials.util.options import OptionParser
-from dials.util.options import flatten_reflections
-from dials.util.options import flatten_experiments
-from dials.util import Sorry
+from dials.util.version import dials_version
+from dxtbx.model.experiment_list import ExperimentList
+
+# DIALS_ENABLE_COMMAND_LINE_COMPLETION
+
 
 logger = logging.getLogger("dials.command_line.index")
 
@@ -235,12 +235,8 @@ def run(phil=working_phil, args=None):
 
     params, options = parser.parse_args(args=args, show_diff_phil=False)
 
-    from dials.util import log
-
     # Configure the logging
     log.config(verbosity=options.verbose, logfile=params.output.log)
-
-    from dials.util.version import dials_version
 
     logger.info(dials_version())
 

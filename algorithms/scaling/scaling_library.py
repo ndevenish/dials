@@ -11,24 +11,31 @@ ExperimentLists.
 from __future__ import absolute_import, division, print_function
 
 import logging
-import pkg_resources
 from copy import deepcopy
 
+import pkg_resources
+from mock import Mock
+
 import iotbx.merging_statistics
-from cctbx import miller, crystal, uctbx
-from dxtbx.model import Experiment
-from dials.array_family import flex
-from dials.util.options import OptionParser
-from dials.algorithms.scaling.Ih_table import IhTable
-from dials.algorithms.scaling.model.model import KBScalingModel
-from dials.algorithms.scaling.scaling_utilities import (
-    calculate_prescaling_correction,
-    DialsMergingStatisticsError,
-)
-from dials.util.multi_dataset_handling import get_next_unique_id
+from cctbx import crystal, miller, uctbx
 from iotbx import cif, mtz
 from libtbx import phil
-from mock import Mock
+
+from dials.algorithms.scaling.algorithm import scaling_algorithm
+from dials.algorithms.scaling.Ih_table import IhTable
+from dials.algorithms.scaling.model.model import KBScalingModel
+from dials.algorithms.scaling.scaler_factory import (
+    SingleScalerFactory,
+    TargetScalerFactory,
+)
+from dials.algorithms.scaling.scaling_utilities import (
+    DialsMergingStatisticsError,
+    calculate_prescaling_correction,
+)
+from dials.array_family import flex
+from dials.util.multi_dataset_handling import get_next_unique_id
+from dials.util.options import OptionParser
+from dxtbx.model import Experiment
 
 logger = logging.getLogger("dials")
 
@@ -149,8 +156,6 @@ def scale_against_target(
         params, _ = optionparser.parse_args(args=[], quick_parse=True)
         params.model = model
 
-    from dials.algorithms.scaling.scaler_factory import TargetScalerFactory
-
     reflections = [reflection_table, target_reflection_table]
     experiment.append(target_experiment[0])
     experiments = create_scaling_model(params, experiment, reflections)
@@ -185,11 +190,8 @@ def scale_single_dataset(reflection_table, experiment, params=None, model="physi
 
     params.model = model
 
-    from dials.algorithms.scaling.scaler_factory import SingleScalerFactory
-
     experiments = create_scaling_model(params, experiment, [reflection_table])
     scaler = SingleScalerFactory.create(params, experiments[0], reflection_table)
-    from dials.algorithms.scaling.algorithm import scaling_algorithm
 
     scaler = scaling_algorithm(scaler)
     return scaler.reflection_table

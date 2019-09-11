@@ -5,7 +5,9 @@ import os
 
 import procrunner
 import pytest
+
 from cctbx import uctbx
+
 from dxtbx.serialize import load
 
 

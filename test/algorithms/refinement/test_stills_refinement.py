@@ -5,13 +5,24 @@ Only the crystal is perturbed while the beam and detector are known.
 
 from __future__ import absolute_import, division, print_function
 
+from cctbx.sgtbx import space_group, space_group_symbols
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
+
+from dials.algorithms.refinement.prediction.managed_predictors import (
+    ScansRayPredictor,
+    StillsExperimentsPredictor,
+)
+from dials.algorithms.refinement.refiner import RefinerFactory
+from dials.algorithms.spot_prediction import ray_intersection
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+
 
 def test(args=[]):
     # Python and cctbx imports
     from math import pi
-    from scitbx import matrix
-    from libtbx.phil import parse
-    from libtbx.test_utils import approx_equal
 
     # Import for surgery on reflection_tables
     from dials.array_family import flex
@@ -21,7 +32,6 @@ def test(args=[]):
 
     # We will set up a mock scan and a mock experiment list
     from dxtbx.model import ScanFactory
-    from dxtbx.model.experiment_list import ExperimentList, Experiment
 
     # Crystal parameterisations
     from dials.algorithms.refinement.parameterisation.crystal_parameters import (
@@ -31,16 +41,9 @@ def test(args=[]):
 
     # Symmetry constrained parameterisation for the unit cell
     from cctbx.uctbx import unit_cell
-    from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
 
     # Reflection prediction
     from dials.algorithms.spot_prediction import IndexGenerator
-    from dials.algorithms.refinement.prediction.managed_predictors import (
-        ScansRayPredictor,
-        StillsExperimentsPredictor,
-    )
-    from dials.algorithms.spot_prediction import ray_intersection
-    from cctbx.sgtbx import space_group, space_group_symbols
 
     #############################
     # Setup experimental models #
@@ -196,8 +199,6 @@ def test(args=[]):
     do_plot = False
     if do_plot:
         params.refinement.refinery.journal.track_parameter_correlation = True
-
-    from dials.algorithms.refinement.refiner import RefinerFactory
 
     # decrease bin_size_fraction to terminate on RMSD convergence
     params.refinement.target.bin_size_fraction = 0.01

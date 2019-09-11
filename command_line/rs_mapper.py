@@ -2,11 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
-import dials.algorithms.rs_mapper as recviewer
-import dials.util
 from cctbx import sgtbx, uctbx
 from iotbx import ccp4_map, phil
 from scitbx.array_family import flex
+
+import dials.algorithms.rs_mapper as recviewer
+import dials.util
+from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 This program reconstructs reciprocal space from diffraction images. The orientation matrix is not necessary; only diffraction geometry is required.
@@ -51,8 +53,6 @@ rs_mapper
 class Script(object):
     def __init__(self):
         """Initialise the script."""
-        from dials.util.options import OptionParser
-
         # The script usage
         usage = (
             "usage: dials.rs_mapper map_file=output.ccp4 [max_resolution=6] [grid_size=192] "
@@ -66,8 +66,6 @@ class Script(object):
         )
 
     def run(self):
-        from dials.util.options import flatten_experiments
-
         # Parse the command line
         params, options = self.parser.parse_args(show_diff_phil=True)
 

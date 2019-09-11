@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from scitbx.math import five_number_summary
+
 from dials.algorithms.refinement.outlier_detection import CentroidOutlier
 from dials.array_family import flex
 
@@ -35,8 +37,6 @@ class Tukey(CentroidOutlier):
         return
 
     def _detect_outliers(self, cols):
-
-        from scitbx.math import five_number_summary
 
         outliers = flex.bool(len(cols[0]), False)
         for col in cols:

@@ -1,6 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+import json
 import logging
+
+import zmq
+
+from dxtbx.format.FormatEigerStream import FormatEigerStream
+from dxtbx.imageset import ImageSweep, MultiFileReader
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +32,6 @@ class ZMQStream:
 
         :return: receiver object
         """
-        import zmq
-
         # Set the URL
         url = "tcp://{0}:{1}".format(self.host, self.port)
         logger.info("Connecting to ZMQ stream at %s" % url)
@@ -92,8 +96,6 @@ class Header(Result):
         """
         Create a header object
         """
-        import json
-
         super(Header, self).__init__()
 
         # Load the header
@@ -133,9 +135,6 @@ class Header(Result):
         """
         Return as an imageset
         """
-        from dxtbx.format.FormatEigerStream import FormatEigerStream
-        from dxtbx.imageset import MultiFileReader, ImageSweep
-
         # Create the reader
         reader = MultiFileReader(FormatEigerStream, [filename])
 
@@ -152,8 +151,6 @@ class Image(Result):
         """
         Create the image object
         """
-        import json
-
         super(Image, self).__init__()
 
         # Load stuff
@@ -225,8 +222,6 @@ class Decoder(object):
         """
         Decode and process EIGER ZMQ stream frames
         """
-        import json
-
         header = json.loads(frames[0].bytes)
         if header["htype"].startswith("dheader-"):
             return self.decode_header(frames)

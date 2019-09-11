@@ -1,14 +1,26 @@
 from __future__ import absolute_import, division, print_function
 
 import random
+from math import pi
 
 import pytest
 
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from scitbx.array_family import shared
+
+from dials.algorithms.integration.integrator import (
+    Integrator3D,
+    IntegratorFactory,
+    JobList,
+)
+from dials.algorithms.integration.integrator import phil_scope as master_phil_scope
+from dials.algorithms.profile_model.gaussian_rs import Model
+from dials.array_family import flex
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 
 def test_split_blocks_1_frame():
-    from dials.array_family import flex
-    from dials.algorithms.integration.integrator import JobList
-
     r = flex.reflection_table()
     r["value1"] = flex.double()
     r["value2"] = flex.int()
@@ -62,10 +74,6 @@ def test_split_blocks_1_frame():
 
 
 def test_split_blocks_non_overlapping():
-    from dials.array_family import flex
-    from dials.algorithms.integration.integrator import JobList
-    from scitbx.array_family import shared
-
     blocks = shared.tiny_int_2(
         [
             (0, 10),
@@ -145,10 +153,6 @@ def test_split_blocks_non_overlapping():
 
 
 def test_split_blocks_overlapping():
-    from dials.array_family import flex
-    from dials.algorithms.integration.integrator import JobList
-    from scitbx.array_family import shared
-
     blocks = shared.tiny_int_2(
         [
             (0, 10),
@@ -247,8 +251,6 @@ def test_split_blocks_overlapping():
 
 
 def test_reflection_manager():
-    from dials.array_family import flex
-
     reflections = flex.reflection_table()
     reflections["panel"] = flex.size_t()
     reflections["bbox"] = flex.int6()
@@ -308,7 +310,6 @@ def test_reflection_manager():
         # })
 
     from dials.algorithms.integration.integrator import ReflectionManager
-    from dials.algorithms.integration.integrator import JobList
 
     jobs = JobList()
     jobs.add((0, 1), array_range, block_size)
@@ -402,11 +403,6 @@ def test_reflection_manager():
 
 @pytest.mark.parametrize("nproc", [1, 2])
 def test_integrator_3d(dials_data, nproc):
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from dials.algorithms.profile_model.gaussian_rs import Model
-    from dials.array_family import flex
-    from math import pi
-
     path = dials_data("centroid_test_data").join("experiments.json").strpath
 
     exlist = ExperimentListFactory.from_json_file(path)
@@ -419,10 +415,6 @@ def test_integrator_3d(dials_data, nproc):
     rlist.compute_bbox(exlist)
     rlist.compute_zeta_multi(exlist)
     rlist.compute_d(exlist)
-
-    from dials.algorithms.integration.integrator import Integrator3D
-    from dials.algorithms.integration.integrator import phil_scope
-    from libtbx.phil import parse
 
     params = phil_scope.fetch(
         parse(
@@ -440,11 +432,6 @@ def test_integrator_3d(dials_data, nproc):
 
 
 def test_summation(dials_data):
-    from dxtbx.model.experiment_list import ExperimentListFactory
-    from dials.algorithms.profile_model.gaussian_rs import Model
-    from dials.array_family import flex
-    from math import pi
-
     path = dials_data("centroid_test_data").join("experiments.json").strpath
 
     exlist = ExperimentListFactory.from_json_file(path)
@@ -456,12 +443,6 @@ def test_summation(dials_data):
     rlist["id"] = flex.int(len(rlist), 0)
 
     def integrate(integrator_type, rlist):
-        from dials.algorithms.integration.integrator import IntegratorFactory
-        from dials.algorithms.integration.integrator import (
-            phil_scope as master_phil_scope,
-        )
-        from libtbx.phil import parse
-
         rlist = rlist.copy()
 
         phil_scope = parse(
@@ -481,8 +462,6 @@ def test_summation(dials_data):
 
         result = integrator.integrate()
         return result
-
-    from libtbx.test_utils import approx_equal
 
     def approx_equal_dict(a, b, k):
         return approx_equal(a[k], b[k])

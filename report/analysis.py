@@ -1,16 +1,18 @@
 """Calculations relevant to reporting."""
 from __future__ import absolute_import, division, print_function
 
+from six.moves import cStringIO as StringIO
+
 from cctbx import miller
-from dials.algorithms.scaling.scaling_library import scaled_data_as_miller_array
-from dials.util.batch_handling import (
-    calculate_batch_offsets,
-    get_batch_ranges,
-    assign_batches_to_reflections,
-)
 from libtbx.str_utils import make_sub_header
 from scitbx.array_family import flex
-from six.moves import cStringIO as StringIO
+
+from dials.algorithms.scaling.scaling_library import scaled_data_as_miller_array
+from dials.util.batch_handling import (
+    assign_batches_to_reflections,
+    calculate_batch_offsets,
+    get_batch_ranges,
+)
 
 
 def batch_dependent_properties(batches, intensities, scales=None):

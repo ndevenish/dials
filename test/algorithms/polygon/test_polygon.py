@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from dials.algorithms.polygon import polygon
+
 
 def test_polygon():
-    from dials.algorithms.polygon import polygon
-
     x = 1
     y = 1
     vertices = [(0, 0), (2, 0), (2, 2), (0, 2)]

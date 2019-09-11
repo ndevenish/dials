@@ -7,18 +7,21 @@ Take into account any scan-varying models.
 Usage: dials.frame_orientations refined.expt
 """
 
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
 
 import sys
 
-import dials.util
-from dials.util.options import flatten_experiments, OptionParser
+import matplotlib
+import matplotlib.pyplot as plt
+
+from libtbx.phil import parse
 from libtbx.table_utils import simple_table
 from scitbx import matrix
-import matplotlib
+
+import dials.util
+from dials.util.options import OptionParser, flatten_experiments
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
 
 class Script(object):
@@ -26,8 +29,6 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
-
         # The phil scope
         phil_scope = parse(
             """

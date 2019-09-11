@@ -6,11 +6,13 @@ and experiment lists.
 from __future__ import absolute_import, division, print_function
 
 import logging
+
+import iotbx.phil
+
 from dials.array_family import flex
 
 logger = logging.getLogger("dials")
 
-import iotbx.phil
 
 phil_scope = iotbx.phil.parse(
     """

@@ -3,11 +3,16 @@ from __future__ import absolute_import, division, print_function
 import math
 import random
 
+import scitbx.math
+from cctbx.sgtbx import space_group_info
+from scitbx import matrix
+
+from dials.algorithms.spot_prediction import ReekeIndexGenerator
+from dials.algorithms.spot_prediction.reeke import reeke_model
+
 
 class Test:
     def setup_method(self):
-        from scitbx import matrix
-
         # cubic, 50A cell, 1A radiation, 1 deg osciillation, everything ideal
         a = 50.0
         self.ub = matrix.sqr((1.0 / a, 0.0, 0.0, 0.0, 1.0 / a, 0.0, 0.0, 0.0, 1.0 / a))
@@ -49,9 +54,6 @@ class Test:
             assert len(diff) <= 6
 
     def test_varying_s0(self):
-        from dials.algorithms.spot_prediction import ReekeIndexGenerator
-        from cctbx.sgtbx import space_group_info
-
         space_group_type = space_group_info("P 1").group().type()
         ub_beg, ub_end = self._get_ub(0)
 
@@ -98,9 +100,6 @@ class Test:
         assert len(common) >= 0.98 * min_set_len
 
     def _get_ub(self, frame):
-        from scitbx import matrix
-        import scitbx.math
-
         angle_beg = frame * 1
         angle_end = (frame + 1) * 1
 
@@ -121,8 +120,6 @@ class Test:
         return ub_beg, ub_end
 
     def _generate_python(self, frame):
-        from dials.algorithms.spot_prediction.reeke import reeke_model
-
         ub_beg, ub_end = self._get_ub(frame)
         r = reeke_model(ub_beg, ub_end, self.axis, self.s0, self.dmin, self.margin)
         hkl = r.generate_indices()
@@ -130,9 +127,6 @@ class Test:
         return sorted(hkl)
 
     def _generate_cpp(self, frame):
-        from dials.algorithms.spot_prediction import ReekeIndexGenerator
-        from cctbx.sgtbx import space_group_info
-
         space_group_type = space_group_info("P 1").group().type()
         ub_beg, ub_end = self._get_ub(frame)
         r = ReekeIndexGenerator(

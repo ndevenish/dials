@@ -2,11 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
+from dials.model.data import Observation
+
 
 @pytest.fixture
 def observation():
-    from dials.model.data import Observation
-
     obs = Observation()
     obs.panel = 1
     obs.centroid.px.position = (100, 200, 300)
@@ -54,8 +54,6 @@ def test_data(observation):
 
 
 def test_equality(observation):
-    from dials.model.data import Observation
-
     obs2 = Observation(observation)
     assert obs2 == observation
     obs2.panel += 1

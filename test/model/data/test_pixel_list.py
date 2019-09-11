@@ -2,11 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 import random
 
+import six.moves.cPickle as pickle
+
+from scitbx.array_family import flex
+
+from dials.model.data import PixelList, PixelListLabeller
+
 
 def test_pickle():
-    from dials.model.data import PixelList
-    from scitbx.array_family import flex
-
     size = (100, 100)
     sf = 10
     image = flex.double(flex.grid(size))
@@ -17,8 +20,6 @@ def test_pickle():
     pl = PixelList(sf, image, mask)
     assert pl.size() == size
     assert pl.frame() == sf
-
-    import six.moves.cPickle as pickle
 
     obj = pickle.dumps(pl)
     pl2 = pickle.loads(obj)
@@ -31,9 +32,6 @@ def test_pickle():
 
 
 def test_add_image():
-    from dials.model.data import PixelList, PixelListLabeller
-    from scitbx.array_family import flex
-
     size = (2000, 2000)
     sf = 10
     labeller = PixelListLabeller()
@@ -51,9 +49,6 @@ def test_add_image():
 
 
 def test_labels_3d():
-    from dials.model.data import PixelList, PixelListLabeller
-    from scitbx.array_family import flex
-
     size = (500, 500)
     sf = 0
     labeller = PixelListLabeller()
@@ -99,9 +94,6 @@ def test_labels_3d():
 
 
 def test_labels_2d():
-    from dials.model.data import PixelList, PixelListLabeller
-    from scitbx.array_family import flex
-
     size = (500, 500)
     sf = 0
     labeller = PixelListLabeller()
@@ -147,9 +139,6 @@ def test_labels_2d():
 
 
 def test_with_no_points():
-    from dials.model.data import PixelList, PixelListLabeller
-    from scitbx.array_family import flex
-
     size = (500, 500)
     sf = 0
     labeller = PixelListLabeller()

@@ -5,8 +5,10 @@ import copy
 import os
 
 import procrunner
-from dials.algorithms.statistics.delta_cchalf import PerImageCChalfStatistics
+
 from iotbx.reflection_file_reader import any_reflection_file
+
+from dials.algorithms.statistics.delta_cchalf import PerImageCChalfStatistics
 
 
 def test_compute_delta_cchalf_scaled_data(dials_data, tmpdir):

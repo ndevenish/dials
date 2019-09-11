@@ -3,32 +3,44 @@
 from __future__ import absolute_import, division, print_function
 
 import copy
+import errno
 import math
 from collections import OrderedDict
+from os import makedirs
 
 import numpy as np
-import dials.util.log
+
+import libtbx.phil
 from cctbx import uctbx
-from dials.array_family import flex
+from libtbx import Auto
+from scitbx import matrix
+
+import dials.util.log
+from dials.algorithms.refinement.rotation_decomposition import (
+    solve_r3_rotation_for_angles_given_axes,
+)
+from dials.algorithms.scaling.plots import plot_scaling_models
 from dials.algorithms.scaling.scaling_library import (
     merging_stats_from_scaled_array,
     scaled_data_as_miller_array,
 )
 from dials.algorithms.scaling.scaling_utilities import DialsMergingStatisticsError
-from dials.algorithms.scaling.plots import plot_scaling_models
+from dials.algorithms.spot_finding.per_image_analysis import binner_d_star_cubed
+from dials.array_family import flex
 from dials.report.analysis import combined_table_to_batch_dependent_properties
 from dials.report.plots import (
-    ResolutionPlotsAndStats,
-    IntensityStatisticsPlots,
     AnomalousPlotter,
-    scale_rmerge_vs_batch_plot,
+    IntensityStatisticsPlots,
+    ResolutionPlotsAndStats,
     i_over_sig_i_vs_batch_plot,
     i_over_sig_i_vs_i_plot,
+    scale_rmerge_vs_batch_plot,
 )
 from dials.util import show_mail_on_error
-from dials.util.command_line import Command
 from dials.util.batch_handling import batch_manager
-
+from dials.util.command_line import Command
+from dials.util.intensity_explorer import IntensityDist
+from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
 RAD2DEG = 180 / math.pi
 
@@ -52,7 +64,6 @@ Examples::
   dials.report integrated.refl integrated.expt
 """
 
-import libtbx.phil
 
 # Create the phil parameters
 phil_scope = libtbx.phil.parse(
@@ -107,9 +118,6 @@ phil_scope = libtbx.phil.parse(
 
 def ensure_directory(path):
     """ Make the directory if not already there. """
-    from os import makedirs
-    import errno
-
     try:
         makedirs(path)
     except OSError as e:
@@ -132,8 +140,6 @@ def ensure_required(rlist, required):
 
 
 def determine_grid_size(rlist, grid_size=None):
-    from libtbx import Auto
-
     panel_ids = rlist["panel"]
     n_panels = flex.max(panel_ids) + 1
     if grid_size is not None and grid_size is not Auto:
@@ -310,11 +316,6 @@ the refinement algorithm accounting for unmodelled features in the data.
         return d
 
     def plot_orientation(self, experiments):
-        from dials.algorithms.refinement.rotation_decomposition import (
-            solve_r3_rotation_for_angles_given_axes,
-        )
-        from scitbx import matrix
-
         # orientation plot
         dat = []
         for iexp, exp in enumerate(experiments):
@@ -1470,8 +1471,6 @@ class ZScoreAnalyser(object):
         :rtype:`dict`
         """
 
-        from dials.util.intensity_explorer import IntensityDist
-
         # Check we have the required fields
         print("Analysing reflection intensities")
         if not ensure_required(rlist, self.required):
@@ -1780,7 +1779,6 @@ class ReferenceProfileAnalyser(object):
         """ Analyse the distribution of reference profiles. """
 
         print(" Analysing reflection correlations vs resolution")
-        from dials.algorithms.spot_finding.per_image_analysis import binner_d_star_cubed
 
         profile_correlation = rlist["profile.correlation"]
         d_spacings = rlist["d"]
@@ -2410,8 +2408,6 @@ class Script(object):
 
     def __init__(self):
         """ Initialise the script. """
-        from dials.util.options import OptionParser
-
         # Create the parser
         usage = "usage: dials.report [options] observations.refl"
         self.parser = OptionParser(
@@ -2426,8 +2422,6 @@ class Script(object):
 
     def run(self):
         """ Run the script. """
-        from dials.util.options import flatten_reflections, flatten_experiments
-
         # Parse the command line arguments
         params, options = self.parser.parse_args(show_diff_phil=True)
 
