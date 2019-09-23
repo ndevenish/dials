@@ -4,9 +4,17 @@ import logging
 import math
 import os
 
-from dials.array_family import flex
-from dials.util import Sorry
+import six.moves.cPickle as pickle
+
 import libtbx
+
+from dxtbx.format.image import ImageBool
+from dxtbx.imageset import ImageSweep
+
+from dials.array_family import flex
+from dials.model.data import PixelList, PixelListLabeller
+from dials.util import Sorry, log
+from dials.util.mp import batch_multi_node_parallel_map
 
 logger = logging.getLogger(__name__)
 
@@ -78,9 +86,6 @@ class ExtractPixelsFromImage(object):
 
         :param index: The index of the image
         """
-        from dials.model.data import PixelList
-        from dxtbx.imageset import ImageSweep
-
         # Parallel reading of HDF5 from the same handle is not allowed. Python
         # multiprocessing is a bit messed up and used fork on linux so need to
         # close and reopen file.
@@ -225,8 +230,6 @@ class ExtractPixelsFromImage2DNoShoeboxes(ExtractPixelsFromImage):
 
         :param index: The index of the image
         """
-        from dials.model.data import PixelListLabeller
-
         # Initialise the pixel labeller
         num_panels = len(self.imageset.get_detector())
         pixel_labeller = [PixelListLabeller() for p in range(num_panels)]
@@ -269,8 +272,6 @@ class ExtractSpotsParallelTask(object):
         """
         Call the function with th task and save the IO
         """
-        from dials.util import log
-
         log.config_simple_cached()
         result = self.function(task)
         handlers = logging.getLogger("dials").handlers
@@ -295,8 +296,6 @@ class PixelListToShoeboxes(object):
         """
         Convert the pixel list to shoeboxes
         """
-        from dxtbx.imageset import ImageSweep
-
         # Extract the pixel lists into a list of reflections
         shoeboxes = flex.shoebox()
         spotsizes = flex.size_t()
@@ -488,9 +487,6 @@ class ExtractSpots(object):
         :param imageset: The imageset to process
         :return: The list of spot shoeboxes
         """
-        from dials.model.data import PixelListLabeller
-        from dials.util.mp import batch_multi_node_parallel_map
-
         # Change the number of processors if necessary
         mp_nproc = self.mp_nproc
         mp_njobs = self.mp_njobs
@@ -594,8 +590,6 @@ class ExtractSpots(object):
         :param imageset: The imageset to process
         :return: The list of spot shoeboxes
         """
-        from dials.util.mp import batch_multi_node_parallel_map
-
         # Change the number of processors if necessary
         mp_nproc = self.mp_nproc
         mp_njobs = self.mp_njobs
@@ -738,9 +732,6 @@ class SpotFinder(object):
         :param experiments: The experiments to process
         :return: The observed spots
         """
-        import six.moves.cPickle as pickle
-        from dxtbx.format.image import ImageBool
-
         # Loop through all the imagesets and find the strong spots
         reflections = flex.reflection_table()
         for i, experiment in enumerate(experiments):
@@ -791,8 +782,6 @@ class SpotFinder(object):
         :param imageset: The imageset to process
         :return: The observed spots
         """
-        from dxtbx.imageset import ImageSweep
-
         # The input mask
         mask = self.mask_generator.generate(imageset)
         if self.mask is not None:
