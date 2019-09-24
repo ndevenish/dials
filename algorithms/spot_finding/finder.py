@@ -407,6 +407,7 @@ class ExtractSpots(object):
         :param imageset: The imageset to process
         :return: The list of spot shoeboxes
         """
+        assert False, "This path not working yet"
         # # Change the number of processors if necessary
         # mp_nproc = self.mp_nproc
         # mp_njobs = self.mp_njobs
