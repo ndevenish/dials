@@ -3,9 +3,7 @@ Contains implementation interface for finding spots on one or many images
 """
 from __future__ import absolute_import, division, print_function
 
-import sys
 import logging
-import os
 import warnings
 from collections import namedtuple
 from concurrent.futures import as_completed
@@ -13,25 +11,18 @@ import time
 
 from tqdm import tqdm
 
-from dxtbx.format.image import ImageBool
-from dxtbx.imageset import ImageSweep
+from dxtbx.imageset import Image, ImageSet, ImageSweep
 from dxtbx.model import ExperimentList
 
 from dials.array_family import flex
 from dials.model.data import PixelList, PixelListLabeller
-from dials.util import Sorry, log
+from dials.util import Sorry
 from dials.util.mp import BatchExecutor, MPConfig
 
-
-# def do_multiple_processing(function, )
-
-# try:
-#     from typing import Tuple
-
-#     Region = Tuple[int, int, int, int]
-# except ImportError:
-#     pass
-
+try:
+    from typing import Callable, List
+except ImportError:
+    pass
 
 logger = logging.getLogger(__name__)
 
