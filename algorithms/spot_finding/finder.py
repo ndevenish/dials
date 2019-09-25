@@ -11,7 +11,7 @@ import time
 
 from tqdm import tqdm
 
-from dxtbx.imageset import Image, ImageSet, ImageSweep
+from dxtbx.imageset import ImageSet, ImageSweep
 from dxtbx.model import ExperimentList
 
 from dials.array_family import flex
@@ -713,7 +713,9 @@ def _do_spotfinding(
     # result = flex.reflection_table()
     # result["id"] = flex.int(result.nrows(), experiment_index)
     # return result
-    # return flex.reflection_table()
+
+    # Return empty for now - fix combination after parallelization
+    return flex.reflection_table()
     # return pixel_lists
 
 
