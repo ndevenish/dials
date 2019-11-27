@@ -2,13 +2,16 @@ from __future__ import absolute_import, division, print_function
 
 
 class _Extension(object):
-    """A base class for extension groups.
+    """
+    A base class for extension groups.
+
     This contains a common lookup mechanism and phil scope generator.
     """
 
     @classmethod
     def load(cls, name):
-        """Get the requested extension class by name.
+        """
+        Get the requested extension class by name.
 
         :param name: The name of the extension
         :returns: The extension class
@@ -19,7 +22,8 @@ class _Extension(object):
 
     @classmethod
     def phil_scope(cls):
-        """Get the phil scope for the interface or extension.
+        """
+        Get the phil scope for the interface or extension.
 
         :returns: The phil scope for the interface or extension
         """
@@ -97,9 +101,7 @@ class SpotFinderThreshold(_Extension):
 
 
 class ProfileModel(_Extension):
-    """
-    The interface definition for a profile model.
-    """
+    """The interface definition for a profile model."""
 
     scope = "profile"
     name = "profile"

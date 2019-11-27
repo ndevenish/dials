@@ -1,5 +1,8 @@
-"""Refiner is the refinement module public interface. RefinerFactory is
-what should usually be used to construct a Refiner."""
+"""
+Refiner is the refinement module public interface.
+
+RefinerFactory is what should usually be used to construct a Refiner.
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -153,8 +156,8 @@ def _copy_experiments_for_refining(experiments):
 
 
 def _trim_scans_to_observations(experiments, reflections):
-    """Check the range of each scan matches the range of observed data and
-    trim the scan to match if it is too wide"""
+    """Check the range of each scan matches the range of observed data and trim
+    the scan to match if it is too wide."""
 
     # Get observed image number (or at least observed phi)
     obs_phi = reflections["xyzobs.mm.value"].parts()[2]
@@ -220,12 +223,12 @@ def _trim_scans_to_observations(experiments, reflections):
 
 
 class RefinerFactory(object):
-    """Factory class to create refiners"""
+    """Factory class to create refiners."""
 
     @classmethod
     def _filter_reflections(cls, reflections):
-        """Return a copy of the input reflections filtered to keep only
-        those columns that are required by refinement"""
+        """Return a copy of the input reflections filtered to keep only those
+        columns that are required by refinement."""
 
         cols = [
             "id",
@@ -270,7 +273,7 @@ class RefinerFactory(object):
 
     @classmethod
     def _build_components(cls, params, reflections, experiments):
-        """low level build"""
+        """low level build."""
 
         # Currently a refinement job can only have one parameterisation of the
         # prediction equation. This can either be of the XYDelPsi (stills) type, the
@@ -472,7 +475,7 @@ class RefinerFactory(object):
 
     @staticmethod
     def config_sparse(params, experiments):
-        """Configure whether to use sparse datatypes"""
+        """Configure whether to use sparse datatypes."""
         # Automatic selection for sparse parameter
         if params.refinement.parameterisation.sparse == libtbx.Auto:
             if len(experiments) > 1:
@@ -502,8 +505,9 @@ class RefinerFactory(object):
 
     @staticmethod
     def config_restraints(params, pred_param):
-        """Given a set of user parameters plus a model parameterisation, create
-        restraints plus a parameterisation of these restraints
+        """
+        Given a set of user parameters plus a model parameterisation, create
+        restraints plus a parameterisation of these restraints.
 
         Params:
             params: The input PHIL parameters
@@ -578,9 +582,10 @@ class RefinerFactory(object):
 
     @staticmethod
     def config_refinery(params, target, pred_param, constraints_manager):
-        """Given a set of parameters, a target class, a prediction
+        """
+        Given a set of parameters, a target class, a prediction
         parameterisation class and a constraints_manager (which could be None),
-        build a refinery
+        build a refinery.
 
         Params:
             params The input parameters
@@ -665,7 +670,8 @@ class RefinerFactory(object):
 
 
 class Refiner(object):
-    """Public interface for performing DIALS refinement.
+    """
+    Public interface for performing DIALS refinement.
 
     Public methods:
       run
@@ -694,12 +700,13 @@ class Refiner(object):
     ):
         """
         Mandatory arguments:
-          experiments - a dxtbx ExperimentList object
-          pred_param - An object derived from the PredictionParameterisation class
-          param_reporter -A ParameterReporter object
-          refman - A ReflectionManager object
-          target - An object derived from the Target class
-          refinery - An object derived from the Refinery class
+
+        experiments - a dxtbx ExperimentList object
+        pred_param - An object derived from the PredictionParameterisation class
+        param_reporter -A ParameterReporter object
+        refman - A ReflectionManager object
+        target - An object derived from the Target class
+        refinery - An object derived from the Refinery class
         """
 
         # the experimental models
@@ -720,11 +727,11 @@ class Refiner(object):
         return
 
     def get_experiments(self):
-        """Return a copy of the current refiner experiments"""
+        """Return a copy of the current refiner experiments."""
         return _copy_experiments_for_refining(self._experiments)
 
     def rmsds(self):
-        """Return rmsds of the current model"""
+        """Return rmsds of the current model."""
 
         # ensure predictions for the matches are up to date
         self._refinery.prepare_for_step()
@@ -732,7 +739,7 @@ class Refiner(object):
         return self._target.rmsds()
 
     def rmsds_for_reflection_table(self, reflections):
-        """Calculate unweighted RMSDs for the specified reflections"""
+        """Calculate unweighted RMSDs for the specified reflections."""
 
         # ensure predictions for these reflections are up to date
         preds = self.predict_for_reflection_table(reflections)
@@ -740,27 +747,31 @@ class Refiner(object):
         return self._target.rmsds_for_reflection_table(preds)
 
     def get_matches(self):
-        """Delegated to the reflection manager"""
+        """Delegated to the reflection manager."""
 
         # FIXME Consider: Does this information really need to be exposed by the
         # public API (indexing code seems to use it, but is it necessary?)
         return self._refman.get_matches()
 
     def get_free_reflections(self):
-        """Delegated to the reflection manager"""
+        """Delegated to the reflection manager."""
 
         return self._refman.get_free_reflections()
 
     def get_param_reporter(self):
-        """Get the ParameterReport object linked to this Refiner"""
+        """Get the ParameterReport object linked to this Refiner."""
 
         return self._param_report
 
     def get_parameter_correlation_matrix(self, step, col_select=None):
-        """Return the correlation matrix between columns of the Jacobian at
-        the specified refinement step. The parameter col_select can be used
-        to select subsets of the full number of columns. The column labels
-        are also returned as a list of strings"""
+        """
+        Return the correlation matrix between columns of the Jacobian at the
+        specified refinement step.
+
+        The parameter col_select can be used to select subsets of the
+        full number of columns. The column labels are also returned as a
+        list of strings
+        """
 
         corrmats = self._refinery.get_correlation_matrix_for_step(step)
         if corrmats is None:
@@ -793,11 +804,12 @@ class Refiner(object):
 
     @property
     def history(self):
-        """Get the refinement engine's step history"""
+        """Get the refinement engine's step history."""
         return self._refinery.history
 
     def print_step_table(self):
-        """print useful output about refinement steps in the form of a simple table"""
+        """print useful output about refinement steps in the form of a simple
+        table."""
 
         logger.info("\nRefinement steps:")
 
@@ -830,7 +842,7 @@ class Refiner(object):
         return
 
     def print_out_of_sample_rmsd_table(self):
-        """print out-of-sample RSMDs per step, if these were tracked"""
+        """print out-of-sample RSMDs per step, if these were tracked."""
 
         # check if it makes sense to proceed
         if "out_of_sample_rmsd" not in self._refinery.history:
@@ -868,7 +880,8 @@ class Refiner(object):
         return
 
     def print_exp_rmsd_table(self):
-        """print useful output about refinement steps in the form of a simple table"""
+        """print useful output about refinement steps in the form of a simple
+        table."""
 
         logger.info("\nRMSDs by experiment:")
 
@@ -931,7 +944,8 @@ class Refiner(object):
         return
 
     def print_panel_rmsd_table(self):
-        """print useful output about refinement steps in the form of a simple table"""
+        """print useful output about refinement steps in the form of a simple
+        table."""
 
         if len(self._experiments.scans()) > 1:
             logger.warning(
@@ -995,7 +1009,7 @@ class Refiner(object):
         return
 
     def run(self):
-        """Run refinement"""
+        """Run refinement."""
 
         ####################################
         # Do refinement and return history #
@@ -1055,8 +1069,11 @@ class Refiner(object):
         return self._refinery.history
 
     def _update_models(self):
-        """Perform any extra tasks required to update the models after refinement.
-        Does nothing here, but used by subclasses"""
+        """
+        Perform any extra tasks required to update the models after refinement.
+
+        Does nothing here, but used by subclasses
+        """
         pass
 
     def selection_used_for_refinement(self):
@@ -1077,10 +1094,13 @@ class Refiner(object):
         return selection
 
     def predict_for_indexed(self):
-        """perform prediction for all the indexed reflections passed into
-        refinement and additionally set the used_in_refinement flag. Do not
-        compose the derivatives of states of the model as this is expensive and
-        they are not needed outside of a refinement run"""
+        """
+        perform prediction for all the indexed reflections passed into
+        refinement and additionally set the used_in_refinement flag.
+
+        Do not compose the derivatives of states of the model as this is
+        expensive and they are not needed outside of a refinement run
+        """
 
         reflections = self.predict_for_reflection_table(
             self._refman.get_indexed(), skip_derivatives=True
@@ -1091,15 +1111,15 @@ class Refiner(object):
         return reflections
 
     def predict_for_reflection_table(self, reflections, skip_derivatives=False):
-        """perform prediction for all reflections in the supplied table"""
+        """perform prediction for all reflections in the supplied table."""
 
         # delegate to the target object, which has access to the predictor
         return self._target.predict_for_reflection_table(reflections, skip_derivatives)
 
 
 class ScanVaryingRefiner(Refiner):
-    """Includes functionality to update the models with their states at
-    scan-points after scan-varying refinement"""
+    """Includes functionality to update the models with their states at scan-
+    points after scan-varying refinement."""
 
     def _update_models(self):
         for iexp, exp in enumerate(self._experiments):

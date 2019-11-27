@@ -34,9 +34,12 @@ def mock_error_model():
 
 
 def generate_refl_1():
-    """Generate a test reflection table. Note tha the variance values are chosen
-    as the 'True' Ih_values, which would be found if unity weights were chosen
-    in this example."""
+    """
+    Generate a test reflection table.
+
+    Note tha the variance values are chosen as the 'True' Ih_values,
+    which would be found if unity weights were chosen in this example.
+    """
     reflections = flex.reflection_table()
     reflections["intensity"] = flex.double([100.0, 100.0, 80.0, 60.0, 30.0, 40.0, 60.0])
     reflections["inverse_scale_factor"] = flex.double(7, 2.0)
@@ -132,7 +135,7 @@ def generated_refl_for_splitting_2():
 
 
 def test_IhTableblock_onedataset(large_reflection_table, test_sg):
-    """Test direct initialisation of Ih_table block"""
+    """Test direct initialisation of Ih_table block."""
     asu_indices = map_indices_to_asu(large_reflection_table["miller_index"], test_sg)
     large_reflection_table["asu_miller_index"] = asu_indices
     n_groups = len(set(asu_indices))
@@ -250,8 +253,12 @@ def test_IhTableblock_onedataset(large_reflection_table, test_sg):
 
 
 def test_IhTableblock_twodatasets(large_reflection_table, test_sg):
-    """Test direct initialisation of Ih_table block. Use the same reflection
-    table as previously to make comparions easier"""
+    """
+    Test direct initialisation of Ih_table block.
+
+    Use the same reflection table as previously to make comparions
+    easier
+    """
     asu_indices = map_indices_to_asu(large_reflection_table["miller_index"], test_sg)
     large_reflection_table["asu_miller_index"] = asu_indices
     n_groups = len(set(asu_indices))
@@ -318,8 +325,8 @@ def test_IhTableblock_twodatasets(large_reflection_table, test_sg):
 def test_IhTable_split_into_blocks(
     large_reflection_table, small_reflection_table, test_sg
 ):
-    """Test that the Ih_table datastructure correctly organises the data
-    from two reflection tables into two IhTableBlocks."""
+    """Test that the Ih_table datastructure correctly organises the data from
+    two reflection tables into two IhTableBlocks."""
 
     sel1 = flex.bool(7, True)
     sel1[6] = False

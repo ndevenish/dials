@@ -1,4 +1,4 @@
-"""Setup experimental geometry for refinement test cases"""
+"""Setup experimental geometry for refinement test cases."""
 
 # Python and cctbx imports
 from __future__ import absolute_import, division, print_function
@@ -27,7 +27,7 @@ def random_vector_close_to(vector, sd=0.5):
 
 
 class Extract(object):
-    """Parse and extract geometry model from PHIL"""
+    """Parse and extract geometry model from PHIL."""
 
     def __init__(
         self, master_phil, local_overrides="", cmdline_args=None, verbose=False

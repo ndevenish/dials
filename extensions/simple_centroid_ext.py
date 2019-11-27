@@ -9,7 +9,8 @@ class SimpleCentroidExt(object):
     default = True
 
     def __init__(self, params, experiments):
-        """Initialise the algorithm.
+        """
+        Initialise the algorithm.
 
         :param params: The input phil parameters
         :param experiments: The experiment list

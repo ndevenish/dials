@@ -1,6 +1,4 @@
-"""
-Collection of factories for creating the scalers.
-"""
+"""Collection of factories for creating the scalers."""
 from __future__ import absolute_import, division, print_function
 import logging
 from libtbx import Auto
@@ -23,9 +21,13 @@ logger = logging.getLogger("dials")
 
 
 def create_scaler(params, experiments, reflections):
-    """Read an experimentlist and list of reflection tables and return
-    an appropriate scaler. Requires experiment identifiers are correctly set in
-    the experiments and reflections."""
+    """
+    Read an experimentlist and list of reflection tables and return an
+    appropriate scaler.
+
+    Requires experiment identifiers are correctly set in the experiments
+    and reflections.
+    """
     if not reflections:
         raise ValueError("No reflection tables provided as input")
     if len(reflections) == 1:
@@ -48,7 +50,7 @@ def create_scaler(params, experiments, reflections):
 
 
 class ScalerFactory(object):
-    """Base class for Scaler Factories"""
+    """Base class for Scaler Factories."""
 
     @classmethod
     def filter_bad_reflections(cls, reflections):
@@ -65,8 +67,8 @@ class ScalerFactory(object):
 
     @classmethod
     def ensure_experiment_identifier(cls, experiment, reflection_table):
-        """Check for consistent experiment identifier, and if not set then set it
-        using scaled_id."""
+        """Check for consistent experiment identifier, and if not set then set
+        it using scaled_id."""
         id_vals = list(reflection_table.experiment_identifiers().values())
         assert experiment.identifier in id_vals, (experiment.identifier, list(id_vals))
         assert len(id_vals) == 1, list(id_vals)
@@ -153,7 +155,7 @@ class SingleScalerFactory(ScalerFactory):
 
 
 class NullScalerFactory(ScalerFactory):
-    "Factory for creating null scaler"
+    """Factory for creating null scaler."""
 
     @classmethod
     def create(cls, params, experiment, reflection_table):
@@ -177,7 +179,7 @@ class NullScalerFactory(ScalerFactory):
 
 
 class MultiScalerFactory(object):
-    "Factory for creating a scaler for multiple datasets"
+    """Factory for creating a scaler for multiple datasets."""
 
     @classmethod
     def create(cls, params, experiments, reflections):
@@ -207,7 +209,7 @@ class MultiScalerFactory(object):
 
     @classmethod
     def create_from_targetscaler(cls, targetscaler):
-        """method to pass scalers from TargetScaler to a MultiScaler"""
+        """method to pass scalers from TargetScaler to a MultiScaler."""
         single_scalers = []
         for scaler in targetscaler.unscaled_scalers:
             single_scalers.append(scaler)
@@ -218,11 +220,12 @@ class MultiScalerFactory(object):
 
 
 class TargetScalerFactory(object):
-    "Factory for creating a targeted scaler for multiple datasets"
+    """Factory for creating a targeted scaler for multiple datasets."""
 
     @classmethod
     def create_for_target_against_reference(cls, params, experiments, reflections):
-        """Create TargetScaler for case where have a target_mtz or target_model."""
+        """Create TargetScaler for case where have a target_mtz or
+        target_model."""
         scaled_scalers = []
         unscaled_scalers = []
         idx_to_remove = []
@@ -255,7 +258,7 @@ class TargetScalerFactory(object):
 
     @classmethod
     def create(cls, params, experiments, reflections):
-        """sort scaled and unscaled datasets to pass to TargetScaler"""
+        """sort scaled and unscaled datasets to pass to TargetScaler."""
         scaled_experiments = []
         scaled_scalers = []
         unscaled_scalers = []

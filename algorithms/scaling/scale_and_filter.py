@@ -129,7 +129,8 @@ class AnalysisResults(object):
         self.final_stats = self._parse_merging_stats(final_stats)
 
     def get_merging_stats(self):
-        """Get all merging stats, including additional final stats if present."""
+        """Get all merging stats, including additional final stats if
+        present."""
         stats = [res["merging_stats"] for res in self.cycle_results]
         if self.final_stats:
             stats += [self.final_stats]

@@ -1,6 +1,10 @@
-"""Test the use of BlockCalculator in ReflectionManager as used in preparation
-for scan-varying refinement. This exercises the issue originally flagged in
-https://github.com/dials/dials/issues/511"""
+"""
+Test the use of BlockCalculator in ReflectionManager as used in preparation for
+scan-varying refinement.
+
+This exercises the issue originally flagged in
+https://github.com/dials/dials/issues/511
+"""
 
 from __future__ import absolute_import, division, print_function
 

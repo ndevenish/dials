@@ -17,7 +17,11 @@ from dials.algorithms.symmetry.absences.screw_axes import (
 
 
 def score_screw_axes(laue_group_info, reflection_table, significance_level=0.95):
-    """Get the relevant screw axes and score them. Print pretty table."""
+    """
+    Get the relevant screw axes and score them.
+
+    Print pretty table.
+    """
     scores = []
     axes = []
     for axis in laue_group_info["unique_axes"]:

@@ -1,4 +1,5 @@
-"""Managed reflection prediction for refinement.
+"""
+Managed reflection prediction for refinement.
 
 * ScansRayPredictor adapts DIALS prediction for use in refinement, by keeping
   up to date with the current model geometry
@@ -22,14 +23,15 @@ TWO_PI = 2.0 * pi
 class ScansRayPredictor(object):
     """
     Predict for a relp based on the current states of models of the
-    experimental geometry. This is a wrapper for DIALS' C++
-    RayPredictor class, which does the real work. This class keeps track
-    of the experimental geometry, and instantiates a RayPredictor when
-    required.
+    experimental geometry.
+
+    This is a wrapper for DIALS' C++ RayPredictor class, which does the
+    real work. This class keeps track of the experimental geometry, and
+    instantiates a RayPredictor when required.
     """
 
     def __init__(self, experiments, sequence_range=(0, 2.0 * pi)):
-        """Construct by linking to instances of experimental model classes"""
+        """Construct by linking to instances of experimental model classes."""
 
         self._experiments = experiments
         self._sequence_range = sequence_range
@@ -61,17 +63,19 @@ class ScansRayPredictor(object):
 class ExperimentsPredictor(object):
     """
     Predict for relps based on the current states of models of the experimental
-    geometry. This version manages multiple experiments, selecting the correct
+    geometry.
+
+    This version manages multiple experiments, selecting the correct
     predictor in each case.
     """
 
     def __init__(self, experiments):
-        """Construct by linking to instances of experimental model classes"""
+        """Construct by linking to instances of experimental model classes."""
 
         self._experiments = experiments
 
     def __call__(self, reflections):
-        """Predict for all reflections at the current model geometry"""
+        """Predict for all reflections at the current model geometry."""
 
         for iexp, e in enumerate(self._experiments):
 
@@ -124,8 +128,9 @@ class ScansExperimentsPredictor(ExperimentsPredictor):
         return reflections
 
     def _match_full_turns(self, reflections):
-        """Modify the calculated phi values so that they match the full rotation
-        from zero taken from the the observations, rather than being modulo 2*pi."""
+        """Modify the calculated phi values so that they match the full
+        rotation from zero taken from the the observations, rather than being
+        modulo 2*pi."""
 
         x_obs, y_obs, phi_obs = reflections["xyzobs.mm.value"].parts()
         x_calc, y_calc, phi_calc = reflections["xyzcal.mm"].parts()

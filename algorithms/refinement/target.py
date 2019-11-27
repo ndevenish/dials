@@ -58,8 +58,9 @@ class TargetFactory(object):
         do_stills=False,
         do_sparse=False,
     ):
-        """Given a set of parameters, configure a factory to build a
-        target function
+        """
+        Given a set of parameters, configure a factory to build a target
+        function.
 
         Params:
             params The input parameters
@@ -112,7 +113,8 @@ class TargetFactory(object):
 
 
 class Target(object):
-    """Abstract interface for a target function class
+    """
+    Abstract interface for a target function class.
 
     A Target object will be used by a Refinery. It will refer to a Reflection
     Manager to get a list of observations. It will perform reflection prediction
@@ -162,11 +164,11 @@ class Target(object):
 
     @property
     def dim(self):
-        """Get the number of dimensions of the target function"""
+        """Get the number of dimensions of the target function."""
         return len(self._grad_names)
 
     def _predict_core(self, reflections, skip_derivatives=False):
-        """perform prediction for the specified reflections"""
+        """perform prediction for the specified reflections."""
 
         # If the prediction parameterisation has a compose method (true for the scan
         # varying case) then call it. Prefer hasattr to try-except duck typing to
@@ -193,8 +195,8 @@ class Target(object):
         return reflections
 
     def predict(self):
-        """perform reflection prediction for the working reflections and update the
-        reflection manager"""
+        """perform reflection prediction for the working reflections and update
+        the reflection manager."""
 
         # get the matches
         reflections = self._reflection_manager.get_obs()
@@ -213,7 +215,7 @@ class Target(object):
         self.update_matches(force=True)
 
     def predict_for_free_reflections(self):
-        """perform prediction for the reflections not used for refinement"""
+        """perform prediction for the reflections not used for refinement."""
 
         refs = self._reflection_manager.get_free_reflections()
         if len(refs) == 0:
@@ -222,7 +224,7 @@ class Target(object):
         return self._predict_core(refs)
 
     def predict_for_reflection_table(self, reflections, skip_derivatives=False):
-        """perform prediction for all reflections in the supplied table"""
+        """perform prediction for all reflections in the supplied table."""
 
         if "entering" not in reflections:
             reflections.calculate_entering_flags(self._experiments)
@@ -258,7 +260,8 @@ class Target(object):
 
     def calculate_gradients(self, reflections=None, callback=None):
         """delegate to the prediction_parameterisation object to calculate
-        gradients for all the matched reflections, or just for those specified"""
+        gradients for all the matched reflections, or just for those
+        specified."""
 
         self.update_matches()
 
@@ -274,34 +277,40 @@ class Target(object):
         return gradients
 
     def get_num_matches(self):
-        """return the number of reflections currently used in the calculation"""
+        """return the number of reflections currently used in the
+        calculation."""
 
         self.update_matches()
         return len(self._matches)
 
     def get_num_matches_for_experiment(self, iexp=0):
-        """return the number of reflections currently used in the calculation"""
+        """return the number of reflections currently used in the
+        calculation."""
 
         self.update_matches()
         sel = self._matches["id"] == iexp
         return sel.count(True)
 
     def get_num_matches_for_panel(self, ipanel=0):
-        """return the number of reflections currently used in the calculation"""
+        """return the number of reflections currently used in the
+        calculation."""
 
         self.update_matches()
         sel = self._matches["panel"] == ipanel
         return sel.count(True)
 
     def update_matches(self, force=False):
-        """ensure the observations matched to predictions are up to date"""
+        """ensure the observations matched to predictions are up to date."""
 
         if not self._matches or force:
             self._matches = self._reflection_manager.get_matches()
 
     def compute_functional_gradients_and_curvatures(self, block=None):
-        """calculate the value of the target function and its gradients. Set
-        approximate curvatures as a side-effect"""
+        """
+        calculate the value of the target function and its gradients.
+
+        Set approximate curvatures as a side-effect
+        """
 
         self.update_matches()
         if block is not None:
@@ -347,9 +356,9 @@ class Target(object):
         return (L, dL_dp, curvs)
 
     def compute_restraints_functional_gradients_and_curvatures(self):
-        """use the restraints_parameterisation object, if present, to
-        calculate the least squares restraints objective plus gradients and
-        approximate curvatures"""
+        """use the restraints_parameterisation object, if present, to calculate
+        the least squares restraints objective plus gradients and approximate
+        curvatures."""
 
         if not self._restraints_parameterisation:
             return None
@@ -375,16 +384,21 @@ class Target(object):
         return (L, dL_dp, curvs)
 
     def compute_residuals(self):
-        """return the vector of residuals plus their weights"""
+        """return the vector of residuals plus their weights."""
 
         self.update_matches()
         return self._extract_residuals_and_weights(self._matches)
 
     def split_matches_into_blocks(self, nproc=1):
-        """Return a list of the matches, split into blocks according to the
-        gradient_calculation_blocksize parameter and the number of processes (if relevant).
-        The number of blocks will be set such that the total number of reflections
-        being processed by concurrent processes does not exceed gradient_calculation_blocksize"""
+        """
+        Return a list of the matches, split into blocks according to the
+        gradient_calculation_blocksize parameter and the number of processes
+        (if relevant).
+
+        The number of blocks will be set such that the total number of
+        reflections being processed by concurrent processes does not
+        exceed gradient_calculation_blocksize
+        """
 
         self.update_matches()
 
@@ -417,7 +431,7 @@ class Target(object):
 
     def compute_residuals_and_gradients(self, block=None):
         """return the vector of residuals plus their gradients and weights for
-        non-linear least squares methods"""
+        non-linear least squares methods."""
 
         self.update_matches()
         if block is not None:
@@ -446,7 +460,7 @@ class Target(object):
     def compute_restraints_residuals_and_gradients(self):
         """delegate to the restraints_parameterisation object, if present, to
         calculate the vector of restraints residuals plus their gradients and
-        weights for non-linear least squares methods"""
+        weights for non-linear least squares methods."""
 
         if self._restraints_parameterisation:
             (
@@ -461,11 +475,15 @@ class Target(object):
 
     @staticmethod
     def _build_jacobian(grads_each_dim, nelem=None, nparam=None):
-        """construct Jacobian from lists of gradient vectors. The elements of
-        grads_each_dim refer to the gradients of each dimension of the problem
-        (e.g. dX, dY, dZ). The elements for a single dimension give the arrays
-        of gradients of the associated residual for each parameter. This method
-        may be overridden for the case where these vectors use sparse storage"""
+        """
+        construct Jacobian from lists of gradient vectors.
+
+        The elements of grads_each_dim refer to the gradients of each
+        dimension of the problem (e.g. dX, dY, dZ). The elements for a
+        single dimension give the arrays of gradients of the associated
+        residual for each parameter. This method may be overridden for
+        the case where these vectors use sparse storage
+        """
 
         jacobian = flex.double(flex.grid(nelem, nparam))
         # loop over parameters
@@ -479,8 +497,12 @@ class Target(object):
 
     @staticmethod
     def _concatenate_gradients(grads):
-        """concatenate gradient vectors and return a flex.double. This method
-        may be overriden for the case where these vectors use sparse storage"""
+        """
+        concatenate gradient vectors and return a flex.double.
+
+        This method may be overriden for the case where these vectors
+        use sparse storage
+        """
 
         result = grads[0]
         for g in grads[1:]:
@@ -490,21 +512,29 @@ class Target(object):
     @staticmethod
     @abc.abstractmethod
     def _extract_residuals_and_weights(matches):
-        """extract vector of residuals and corresponding weights. The space the
-        residuals are measured in (e.g. X, Y and Phi) and the order they are
-        returned is determined by a concrete implementation of a staticmethod"""
+        """
+        extract vector of residuals and corresponding weights.
+
+        The space the residuals are measured in (e.g. X, Y and Phi) and
+        the order they are returned is determined by a concrete
+        implementation of a staticmethod
+        """
         raise NotImplementedError()
 
     @staticmethod
     @abc.abstractmethod
     def _extract_squared_residuals(matches):
-        """extract vector of squared residuals. The space the residuals are measured
-        in (e.g. X, Y and Phi) and the order they are returned is determined by a
-        concrete implementation of a staticmethod"""
+        """
+        extract vector of squared residuals.
+
+        The space the residuals are measured in (e.g. X, Y and Phi) and
+        the order they are returned is determined by a concrete
+        implementation of a staticmethod
+        """
         raise NotImplementedError()
 
     def rmsds(self):
-        """calculate unweighted RMSDs for the matches"""
+        """calculate unweighted RMSDs for the matches."""
 
         self.update_matches()
 
@@ -514,8 +544,12 @@ class Target(object):
         return self._rmsds
 
     def rmsds_for_reflection_table(self, reflections):
-        """calculate unweighted RMSDs for the specified reflections. Caution: this
-        assumes that the table reflections has the keys expected by _rmsds_core"""
+        """
+        calculate unweighted RMSDs for the specified reflections.
+
+        Caution: this
+        assumes that the table reflections has the keys expected by _rmsds_core
+        """
 
         n = len(reflections)
         if n == 0:
@@ -623,7 +657,7 @@ class LeastSquaresPositionalResidualWithRmsdCutoff(Target):
         return residuals2
 
     def _rmsds_core(self, reflections):
-        """calculate unweighted RMSDs for the specified reflections"""
+        """calculate unweighted RMSDs for the specified reflections."""
 
         resid_x = flex.sum(reflections["x_resid2"])
         resid_y = flex.sum(reflections["y_resid2"])
@@ -638,7 +672,7 @@ class LeastSquaresPositionalResidualWithRmsdCutoff(Target):
         return rmsds
 
     def achieved(self):
-        """RMSD criterion for target achieved"""
+        """RMSD criterion for target achieved."""
         r = self._rmsds if self._rmsds else self.rmsds()
 
         # reset cached rmsds to avoid getting out of step
@@ -655,8 +689,8 @@ class LeastSquaresPositionalResidualWithRmsdCutoff(Target):
 
 class SparseGradientsMixin:
     """Mixin class to build a sparse Jacobian from gradients of the prediction
-    formula stored as sparse vectors, and allow concatenation of gradient vectors
-    that employed sparse storage."""
+    formula stored as sparse vectors, and allow concatenation of gradient
+    vectors that employed sparse storage."""
 
     @staticmethod
     def _build_jacobian(grads_each_dim, nelem=None, nparam=None):
@@ -691,8 +725,8 @@ class SparseGradientsMixin:
 class LeastSquaresPositionalResidualWithRmsdCutoffSparse(
     SparseGradientsMixin, LeastSquaresPositionalResidualWithRmsdCutoff
 ):
-    """A version of the LeastSquaresPositionalResidualWithRmsdCutoff Target that
-    uses a sparse matrix data structure for memory efficiency when there are a
-    large number of Experiments"""
+    """A version of the LeastSquaresPositionalResidualWithRmsdCutoff Target
+    that uses a sparse matrix data structure for memory efficiency when there
+    are a large number of Experiments."""
 
     pass

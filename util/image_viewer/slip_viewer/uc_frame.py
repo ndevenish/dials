@@ -323,13 +323,14 @@ class UCSettingsPanel(wx.Panel):
         self.DrawRings()
 
     def _draw_rings_layer(self, dc, data, map_rel):
-        """Draw a points layer.
+        """
+        Draw a points layer.
 
-        dc       the device context to draw on
-        data     an iterable of point tuples:
-                 (x, y, place, radius, colour, x_off, y_off, pdata)
-        map_rel  points relative to map if True, MUST BE TRUE for lightweight
-        Assumes all points are the same colour, saving 100's of ms.
+        dc       the device context to draw on data     an iterable of
+        point tuples:          (x, y, place, radius, colour, x_off,
+        y_off, pdata) map_rel  points relative to map if True, MUST BE
+        TRUE for lightweight Assumes all points are the same colour,
+        saving 100's of ms.
         """
 
         assert map_rel is True

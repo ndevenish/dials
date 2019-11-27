@@ -19,9 +19,7 @@ def uc_params_from_experiments(experiments):
 
 @singleton
 class UnitCellAnalysisObserver(Observer):
-    """
-    Observer to record unit cell clustering data and make plots.
-    """
+    """Observer to record unit cell clustering data and make plots."""
 
     def update(self, script):
         """Update the data in the observer."""

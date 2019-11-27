@@ -125,8 +125,8 @@ class IhTable(object):
         Update a given column across all blocks for a given dataset.
 
         Given an array of data (of the same size as the input reflection
-        table) and the name of the column, use the internal data to split
-        this up and set in individual blocks.
+        table) and the name of the column, use the internal data to
+        split this up and set in individual blocks.
         """
         assert column in ["intensity", "variance", "inverse_scale_factor"]
         assert dataset_id in range(0, self.n_datasets)
@@ -154,7 +154,8 @@ class IhTable(object):
 
     @property
     def size(self):
-        """Sum the sizes of all work blocks to give the total number of reflections."""
+        """Sum the sizes of all work blocks to give the total number of
+        reflections."""
         if self.free_Ih_table:
             return sum(block.size for block in self.Ih_table_blocks[:-1])
         return sum(block.size for block in self.Ih_table_blocks)
@@ -201,7 +202,8 @@ class IhTable(object):
         self.Ih_table_blocks[block_id].Ih_table["weights"] = 1.0 / new_variances
 
     def calc_Ih(self, block_id=None):
-        """Calculate the latest value of Ih, for a given block or for all blocks."""
+        """Calculate the latest value of Ih, for a given block or for all
+        blocks."""
         if block_id is not None:
             self.Ih_table_blocks[block_id].calc_Ih()
         else:
@@ -212,8 +214,8 @@ class IhTable(object):
         """
         Inspect the input to determine how to split into blocks.
 
-        Extract the asu miller indices from the reflection table and
-        add data to the asu_index_dict and properties dict.
+        Extract the asu miller indices from the reflection table and add
+        data to the asu_index_dict and properties dict.
         """
         joint_asu_indices = flex.miller_index()
         for table in reflection_tables:
@@ -409,7 +411,8 @@ class IhTable(object):
 
 class IhTableBlock(object):
     """
-    A datastructure for efficient summations over symmetry equivalent reflections.
+    A datastructure for efficient summations over symmetry equivalent
+    reflections.
 
     This contains a reflection table, sorted by dataset, called the Ih_table,
     a h_index_matrix (sparse) for efficiently calculating sums over symmetry
@@ -524,21 +527,24 @@ Not all rows of h_index_matrix appear to be filled in IhTableBlock setup."""
         return newtable
 
     def select_on_groups(self, sel):
-        """Select a subset of the unique groups, returning a new IhTableBlock."""
+        """Select a subset of the unique groups, returning a new
+        IhTableBlock."""
         reduced_h_idx = self.h_index_matrix.select_columns(sel.iselection())
         unity = flex.double(reduced_h_idx.n_cols, 1.0)
         nz_row_sel = (unity * reduced_h_idx.transpose()) > 0
         return self.select(nz_row_sel)
 
     def select_on_groups_isel(self, isel):
-        """Select a subset of the unique groups, returning a new IhTableBlock."""
+        """Select a subset of the unique groups, returning a new
+        IhTableBlock."""
         reduced_h_idx = self.h_index_matrix.select_columns(isel)
         unity = flex.double(reduced_h_idx.n_cols, 1.0)
         nz_row_sel = (unity * reduced_h_idx.transpose()) > 0
         return self.select(nz_row_sel)
 
     def calc_Ih(self):
-        """Calculate the current best estimate for Ih for each reflection group."""
+        """Calculate the current best estimate for Ih for each reflection
+        group."""
         scale_factors = self.Ih_table["inverse_scale_factor"]
         gsq = (scale_factors ** 2) * self.Ih_table["weights"]
         sumgsq = gsq * self.h_index_matrix
@@ -559,9 +565,12 @@ Not all rows of h_index_matrix appear to be filled in IhTableBlock setup."""
         self.Ih_table["weights"] = 1.0 / self.Ih_table["variance"]
 
     def calc_nh(self):
-        """Calculate the number of refls in the group to which the reflection belongs.
+        """
+        Calculate the number of refls in the group to which the reflection
+        belongs.
 
-        This is a vector of length n_refl."""
+        This is a vector of length n_refl.
+        """
         return (
             flex.double(self.size, 1.0) * self.h_index_matrix
         ) * self.h_expand_matrix
@@ -570,9 +579,10 @@ Not all rows of h_index_matrix appear to be filled in IhTableBlock setup."""
         """
         Use an Ih_table as a target to set Ih values in this table.
 
-        Given an Ih table as a target, the common reflections across the tables
-        are determined and the Ih_values are set to those of the target. If no
-        matching reflection is found, then the values are removed from the table.
+        Given an Ih table as a target, the common reflections across the
+        tables are determined and the Ih_values are set to those of the
+        target. If no matching reflection is found, then the values are
+        removed from the table.
         """
         assert target_Ih_table.n_work_blocks == 1
         target_asu_Ih_dict = dict(
@@ -632,7 +642,8 @@ Not all rows of h_index_matrix appear to be filled in IhTableBlock setup."""
 
     @property
     def Ih_values(self):
-        """The bset-estimated intensities of symmetry equivalent reflections."""
+        """The bset-estimated intensities of symmetry equivalent
+        reflections."""
         return self.Ih_table["Ih_values"]
 
     @property

@@ -1,8 +1,9 @@
 # XXX This is not a standalone installer!  It must be used as part of the
 # framework in libtbx/auto_build.
 """
-Installer script for DIALS, based on automatically generated template.  This
-must be moved to the proper location to work.
+Installer script for DIALS, based on automatically generated template.
+
+This must be moved to the proper location to work.
 """
 
 from __future__ import absolute_import, division, print_function

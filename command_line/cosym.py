@@ -162,9 +162,11 @@ class cosym(Subject):
         )
 
     def export(self):
-        """Output the datafiles for cosym.
+        """
+        Output the datafiles for cosym.
 
-        This includes the cosym.json, reflections and experiments files."""
+        This includes the cosym.json, reflections and experiments files.
+        """
 
         reindexed_reflections = flex.reflection_table()
         for refl in self._reflections:
@@ -181,7 +183,8 @@ class cosym(Subject):
         reindexed_reflections.as_file(self.params.output.reflections)
 
     def _apply_reindexing_operators(self, reindexing_ops, subgroup=None):
-        """Apply the reindexing operators to the reflections and experiments."""
+        """Apply the reindexing operators to the reflections and
+        experiments."""
         for cb_op, dataset_ids in reindexing_ops.items():
             cb_op = sgtbx.change_of_basis_op(cb_op)
             if subgroup is not None:

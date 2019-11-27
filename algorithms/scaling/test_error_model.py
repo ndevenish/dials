@@ -1,6 +1,4 @@
-"""
-Tests for the error model.
-"""
+"""Tests for the error model."""
 from __future__ import absolute_import, division, print_function
 
 import math
@@ -49,9 +47,12 @@ def generated_param():
 
 
 def generate_refl_1():
-    """Generate a test reflection table. Note tha the variance values are chosen
-    as the 'True' Ih_values, which would be found if unity weights were chosen
-    in this example."""
+    """
+    Generate a test reflection table.
+
+    Note tha the variance values are chosen as the 'True' Ih_values,
+    which would be found if unity weights were chosen in this example.
+    """
     reflections = flex.reflection_table()
     reflections["intensity"] = flex.double(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
@@ -141,7 +142,8 @@ no_bg_test_input = [
 def test_error_model_on_simulated_data(
     background_variance, multiplicity, abs_tolerances, model_a, model_b
 ):
-    """Test the refinement of the error model using simulated data.
+    """
+    Test the refinement of the error model using simulated data.
 
     The simulated data consists of 2150 unique reflections, with I = 5.0 * d^4,
     giving an intensity range from 122070.3 to 5.0, with a mean of 285.21 and a

@@ -36,7 +36,7 @@ from dials.algorithms.refinement.parameterisation.scan_varying_detector_paramete
 
 
 def test_gaussian_smoother(plots=False):
-    """Test a bare parameter set with the smoother"""
+    """Test a bare parameter set with the smoother."""
 
     # 7 values, all set to 1.0
     myparam = ScanVaryingParameterSet(1.0, 7)
@@ -103,12 +103,12 @@ class _TestOrientationModel(ScanVaryingCrystalOrientationParameterisation):
         self.compose()
 
     def _compose(self):
-        """override for compose to pass in the requested t"""
+        """override for compose to pass in the requested t."""
 
         ScanVaryingCrystalOrientationParameterisation.compose(self, self.image_number)
 
     def _get_state(self):
-        """override for get_state to do so only at the requested t"""
+        """override for get_state to do so only at the requested t."""
 
         # ensure the state is updated by re-composing
         self.compose()
@@ -130,12 +130,12 @@ class _TestUnitCellModel(ScanVaryingCrystalUnitCellParameterisation):
         self.compose()
 
     def _compose(self):
-        """override for compose to pass in the requested t"""
+        """override for compose to pass in the requested t."""
 
         ScanVaryingCrystalUnitCellParameterisation.compose(self, self.image_number)
 
     def _get_state(self):
-        """override for get_state to do so only at the requested t"""
+        """override for get_state to do so only at the requested t."""
 
         # ensure the state is updated by re-composing
         self.compose()
@@ -157,12 +157,12 @@ class _TestBeamModel(ScanVaryingBeamParameterisation):
         self.compose()
 
     def _compose(self):
-        """override for compose to pass in the requested t"""
+        """override for compose to pass in the requested t."""
 
         ScanVaryingBeamParameterisation.compose(self, self.image_number)
 
     def _get_state(self):
-        """override for get_state to do so only at the requested t"""
+        """override for get_state to do so only at the requested t."""
 
         # ensure the state is updated by re-composing
         self.compose()
@@ -184,12 +184,12 @@ class _TestDetectorModel(ScanVaryingDetectorParameterisationSinglePanel):
         self.compose()
 
     def _compose(self):
-        """override for compose to pass in the requested t"""
+        """override for compose to pass in the requested t."""
 
         ScanVaryingDetectorParameterisationSinglePanel.compose(self, self.image_number)
 
     def _get_state(self):
-        """override for get_state to do so only at the requested t"""
+        """override for get_state to do so only at the requested t."""
 
         # ensure the state is updated by re-composing
         self.compose()
@@ -253,8 +253,8 @@ class _TestScanVaryingModelParameterisation(object):
 def test_ScanVaryingCrystalOrientationParameterisation_intervals(
     nintervals, plots=False
 ):
-    """Test a ScanVaryingCrystalOrientationParameterisation with
-    a range of different numbers of intervals"""
+    """Test a ScanVaryingCrystalOrientationParameterisation with a range of
+    different numbers of intervals."""
 
     vmp = _TestScanVaryingModelParameterisation()
 
@@ -335,8 +335,8 @@ def test_ScanVaryingCrystalOrientationParameterisation_intervals(
 
 
 def test_ScanVaryingCrystalOrientationParameterisation_random(plots=False):
-    """Test a ScanVaryingCrystalOrientationParameterisation with
-    random initial orientations, random parameter shifts and random times"""
+    """Test a ScanVaryingCrystalOrientationParameterisation with random initial
+    orientations, random parameter shifts and random times."""
 
     vmp = _TestScanVaryingModelParameterisation()
 
@@ -402,8 +402,8 @@ def test_ScanVaryingCrystalOrientationParameterisation_random(plots=False):
 
 @pytest.mark.parametrize("nintervals", (1, 2, 3, 4, 5, 6, 7))
 def test_ScanVaryingCrystalUnitCellParameterisation_intervals(nintervals, plots=False):
-    """Basic test of a ScanVaryingCrystalUnitCellParameterisation
-    with a range of different numbers of intervals"""
+    """Basic test of a ScanVaryingCrystalUnitCellParameterisation with a range
+    of different numbers of intervals."""
 
     vmp = _TestScanVaryingModelParameterisation()
 
@@ -436,8 +436,8 @@ def test_ScanVaryingCrystalUnitCellParameterisation_intervals(nintervals, plots=
 
 @pytest.mark.parametrize("nintervals", (1, 2, 3, 4, 5, 6, 7))
 def test_ScanVaryingBeamParameterisation(nintervals, plots=False):
-    """Basic test of a ScanVaryingBeamParameterisation
-    with a range of different numbers of intervals"""
+    """Basic test of a ScanVaryingBeamParameterisation with a range of
+    different numbers of intervals."""
 
     vmp = _TestScanVaryingModelParameterisation()
 
@@ -470,8 +470,8 @@ def test_ScanVaryingBeamParameterisation(nintervals, plots=False):
 
 @pytest.mark.parametrize("nintervals", (1, 2, 3, 4, 5, 6, 7))
 def test_ScanVaryingDetectorParameterisation(nintervals, plots=False):
-    """Basic test of a ScanVaryingDetectorParameterisationSinglePanel
-    with a range of different numbers of intervals"""
+    """Basic test of a ScanVaryingDetectorParameterisationSinglePanel with a
+    range of different numbers of intervals."""
 
     vmp = _TestScanVaryingModelParameterisation()
 

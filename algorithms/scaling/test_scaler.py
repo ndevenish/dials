@@ -22,8 +22,8 @@ from dials.algorithms.scaling.parameter_handler import ScalingParameterManagerGe
 
 
 def side_effect_update_var(variances, intensities):
-    """Side effect to mock configure reflection table
-    call during initialisation."""
+    """Side effect to mock configure reflection table call during
+    initialisation."""
     return flex.double(range(1, len(variances) + 1))
 
 
@@ -253,7 +253,7 @@ def mock_apm():
 
 
 def test_SingleScaler_initialisation():
-    """Test that all attributes are correctly set upon initialisation"""
+    """Test that all attributes are correctly set upon initialisation."""
     p, e, r = (generated_param(), generated_exp(), generated_refl())
     exp = create_scaling_model(p, e, r)
     p.reflection_selection.method = "use_all"
@@ -600,7 +600,7 @@ def test_SingleScaler_update_for_minimisation():
 
 # @pytest.mark.xfail(reason='need to rework mcok error model')
 def test_update_error_model(mock_errormodel, mock_errormodel2):
-    """Test the update_error_model method"""
+    """Test the update_error_model method."""
     p, e, r = (generated_param(), generated_exp(), generated_refl())
     exp = create_scaling_model(p, e, r)
     p.reflection_selection.method = "use_all"
@@ -632,7 +632,7 @@ def test_update_error_model(mock_errormodel, mock_errormodel2):
 
 
 def test_SingleScaler_combine_intensities():
-    """test combine intensities method"""
+    """test combine intensities method."""
     p, e, r = (generated_param(), generated_exp(), generated_refl_for_comb())
     exp = create_scaling_model(p, e, r)
     p.reflection_selection.method = "use_all"

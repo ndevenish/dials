@@ -18,8 +18,10 @@ def parallel_map(
 ):
     """
     A wrapper function to call either drmaa or easy_mp to do a parallel map
-    calculation. This function is setup so that in each case we can select
-    the number of cores on a machine
+    calculation.
+
+    This function is setup so that in each case we can select the number
+    of cores on a machine
     """
     from dials.util.cluster_map import cluster_map as drmaa_parallel_map
 
@@ -49,8 +51,10 @@ def parallel_map(
 
 class MultiNodeClusterFunction(object):
     """
-    A function called by the multi node parallel map. On each cluster node, a
-    nested parallel map using the multi processing method will be used.
+    A function called by the multi node parallel map.
+
+    On each cluster node, a nested parallel map using the multi
+    processing method will be used.
     """
 
     def __init__(
@@ -61,9 +65,7 @@ class MultiNodeClusterFunction(object):
         preserve_order=True,
         preserve_exception_message=True,
     ):
-        """
-        Init the function
-        """
+        """Init the function."""
         self.func = func
         self.nproc = nproc
         self.asynchronous = asynchronous
@@ -71,9 +73,7 @@ class MultiNodeClusterFunction(object):
         self.preserve_exception_message = preserve_exception_message
 
     def __call__(self, iterable):
-        """
-        Call the function
-        """
+        """Call the function."""
         return libtbx.easy_mp.parallel_map(
             func=self.func,
             iterable=iterable,
@@ -86,9 +86,7 @@ class MultiNodeClusterFunction(object):
 
 
 def _iterable_grouper(iterable, chunk_size):
-    """
-    Group the iterable into chunks of up to chunk_size items
-    """
+    """Group the iterable into chunks of up to chunk_size items."""
     args = [iter(iterable)] * chunk_size
     for group in itertools.zip_longest(*args):
         group = tuple(item for item in group if item is not None)
@@ -96,10 +94,8 @@ def _iterable_grouper(iterable, chunk_size):
 
 
 def _create_iterable_wrapper(function):
-    """
-    Wraps a function so that it takes iterables and when called is applied to
-    each element of the iterable and returns a list of the return values.
-    """
+    """Wraps a function so that it takes iterables and when called is applied
+    to each element of the iterable and returns a list of the return values."""
 
     def run_function(iterable):
         return [function(item) for item in iterable]
@@ -118,10 +114,8 @@ def multi_node_parallel_map(
     preserve_order=True,
     preserve_exception_message=True,
 ):
-    """
-    A wrapper function to call a function using multiple cluster nodes and with
-    multiple processors on each node
-    """
+    """A wrapper function to call a function using multiple cluster nodes and
+    with multiple processors on each node."""
 
     # The function to all on the cluster
     cluster_func = MultiNodeClusterFunction(
@@ -167,9 +161,7 @@ def batch_multi_node_parallel_map(
     cluster_method=None,
     chunksize=1,
 ):
-    """
-    A function to run jobs in batches in each process
-    """
+    """A function to run jobs in batches in each process."""
     # Call the batches in parallel
     return multi_node_parallel_map(
         func=_create_iterable_wrapper(func),

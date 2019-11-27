@@ -100,10 +100,13 @@ def make_dx_dy_translate(imageset, dx, dy):
 
 
 def ellipse_matrix_form(phi, l1, l2):
-    """Return the matrix for the quadratic form describing the oblique ellipse
-    where the first axis makes an angle phi with the X axis and the scale factors
-    for the axes are l1 and l2.
-    See https://www.le.ac.uk/users/dsgp1/COURSES/TOPICS/quadrat.pdf"""
+    """
+    Return the matrix for the quadratic form describing the oblique ellipse
+    where the first axis makes an angle phi with the X axis and the scale
+    factors for the axes are l1 and l2.
+
+    See https://www.le.ac.uk/users/dsgp1/COURSES/TOPICS/quadrat.pdf
+    """
     deg2rad = math.pi / 180.0
     phi *= deg2rad
     cphi = math.cos(phi)

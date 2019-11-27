@@ -171,7 +171,7 @@ class XDSFileImporter(object):
     """Import a data block from xds."""
 
     def __init__(self, args):
-        """Initialise with the options"""
+        """Initialise with the options."""
         self.args = args
 
     def __call__(self, params, options):
@@ -278,10 +278,8 @@ class XDSFileImporter(object):
 
     @staticmethod
     def extract_varying_crystal(integrate_lp, experiments):
-        """Extract a varying crystal model from an INTEGRATE.LP file (static
-        in blocks with step changes) and write it to the provided
-        experiments
-        """
+        """Extract a varying crystal model from an INTEGRATE.LP file (static in
+        blocks with step changes) and write it to the provided experiments."""
 
         if len(experiments) > 1:
             print(

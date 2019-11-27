@@ -19,7 +19,8 @@ class ComputeEsdBeamDivergence(object):
     """Calculate the E.s.d of the beam divergence."""
 
     def __init__(self, detector, reflections, centroid_definition="s1"):
-        """Calculate the E.s.d of the beam divergence.
+        """
+        Calculate the E.s.d of the beam divergence.
 
         Params:
             detector The detector class
@@ -43,7 +44,8 @@ class ComputeEsdBeamDivergence(object):
     def _beam_direction_variance_list(
         self, detector, reflections, centroid_definition="s1"
     ):
-        """Calculate the variance in beam direction for each spot.
+        """
+        Calculate the variance in beam direction for each spot.
 
         Params:
             detector The detector model
@@ -95,7 +97,8 @@ class FractionOfObservedIntensity(object):
     """Calculate the fraction of observed intensity for different sigma_m."""
 
     def __init__(self, crystal, beam, detector, goniometer, scan, reflections):
-        """Initialise the algorithm. Calculate the list of tau and zetas.
+        """
+        Initialise the algorithm. Calculate the list of tau and zetas.
 
         Params:
             reflections The list of reflections
@@ -118,7 +121,8 @@ class FractionOfObservedIntensity(object):
     def _calculate_tau_and_zeta(
         self, crystal, beam, detector, goniometer, scan, reflections
     ):
-        """Calculate the list of tau and zeta needed for the calculation.
+        """
+        Calculate the list of tau and zeta needed for the calculation.
 
         Params:
             reflections The list of reflections
@@ -156,7 +160,8 @@ class FractionOfObservedIntensity(object):
         return flex.double(tau), flex.double(zeta2)
 
     def __call__(self, sigma_m):
-        """Calculate the fraction of observed intensity for each observation.
+        """
+        Calculate the fraction of observed intensity for each observation.
 
         Params:
             sigma_m The mosaicity
@@ -239,7 +244,7 @@ class ComputeEsdReflectingRange(object):
             return -flex.sum(self._R(math.exp(log_sigma[0])))
 
     class CrudeEstimator(object):
-        """If the main estimator failed make a crude estimate"""
+        """If the main estimator failed make a crude estimate."""
 
         def __init__(self, crystal, beam, detector, goniometer, scan, reflections):
 
@@ -258,7 +263,8 @@ class ComputeEsdReflectingRange(object):
         def _calculate_tau_and_zeta(
             self, crystal, beam, detector, goniometer, scan, reflections
         ):
-            """Calculate the list of tau and zeta needed for the calculation.
+            """
+            Calculate the list of tau and zeta needed for the calculation.
 
             Params:
                 reflections The list of reflections
@@ -296,7 +302,7 @@ class ComputeEsdReflectingRange(object):
             return flex.double(tau), flex.double(zeta2)
 
     class ExtendedEstimator(object):
-        """Try to estimate using knowledge of intensities"""
+        """Try to estimate using knowledge of intensities."""
 
         def __init__(
             self,
@@ -415,7 +421,8 @@ class ComputeEsdReflectingRange(object):
         def _calculate_tau_and_zeta(
             self, crystal, beam, detector, goniometer, scan, reflections
         ):
-            """Calculate the list of tau and zeta needed for the calculation.
+            """
+            Calculate the list of tau and zeta needed for the calculation.
 
             Params:
                 reflections The list of reflections
@@ -467,7 +474,8 @@ class ComputeEsdReflectingRange(object):
     def __init__(
         self, crystal, beam, detector, goniometer, scan, reflections, algorithm="basic"
     ):
-        """initialise the algorithm with the scan.
+        """
+        initialise the algorithm with the scan.
 
         params:
             scan the scan object

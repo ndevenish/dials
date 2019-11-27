@@ -109,8 +109,8 @@ class better_experimental_model_discovery(object):
         adopt_init_args(self, locals())
 
     def optimize_origin_offset_local_scope(self):
-        """Local scope: find the optimal origin-offset closest to the current overall detector position
-        (local minimum, simple minimization)"""
+        """Local scope: find the optimal origin-offset closest to the current
+        overall detector position (local minimum, simple minimization)"""
 
         beam = self.imagesets[0].get_beam()
         s0 = matrix.col(beam.get_s0())
@@ -305,11 +305,16 @@ class better_experimental_model_discovery(object):
     def sum_score_detail(
         self, reciprocal_space_vectors, solutions, granularity=None, amax=None
     ):
-        """Evaluates the probability that the trial value of (S0_vector | origin_offset) is correct,
-        given the current estimate and the observations.  The trial value comes through the
-        reciprocal space vectors, and the current estimate comes through the short list of
-        DPS solutions. Actual return value is a sum of NH terms, one for each DPS solution, each ranging
-        from -1.0 to 1.0"""
+        """
+        Evaluates the probability that the trial value of (S0_vector |
+        origin_offset) is correct, given the current estimate and the
+        observations.
+
+        The trial value comes through the reciprocal space vectors, and
+        the current estimate comes through the short list of DPS
+        solutions. Actual return value is a sum of NH terms, one for
+        each DPS solution, each ranging from -1.0 to 1.0
+        """
 
         nh = min(solutions.size(), 20)  # extended API
         sum_score = 0.0

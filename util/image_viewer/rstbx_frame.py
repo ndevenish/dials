@@ -20,9 +20,8 @@ EVT_EXTERNAL_UPDATE = wx.PyEventBinder(wx.NewEventType(), 0)
 
 
 class ExternalUpdateEvent(wx.PyCommandEvent):
-    """XXX This class, along with the EVT_EXTERNAL_UPDATE instance
-    should perhaps move into its own file?
-    """
+    """XXX This class, along with the EVT_EXTERNAL_UPDATE instance should
+    perhaps move into its own file?"""
 
     def __init__(self, eventType=EVT_EXTERNAL_UPDATE.evtType[0], id=0):
         wx.PyCommandEvent.__init__(self, eventType, id)
@@ -61,9 +60,8 @@ class XrayFrame(wx.Frame):
         self.Bind(EVT_EXTERNAL_UPDATE, self.OnExternalUpdate)
 
     def OnExternalUpdate(self, event):
-        """The OnExternalUpdate() function updates the image and the title
-        from @p event.
-        """
+        """The OnExternalUpdate() function updates the image and the title from
+        @p event."""
 
         # See self.load_image().
         self._img = event.img
@@ -140,10 +138,12 @@ class XrayFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnScreenShot, item)
 
     def get_key(self, file_name_or_data):
-        """The get_key() function returns the key of @p file_name_or_data.
+        """
+        The get_key() function returns the key of @p file_name_or_data.
+
         In the case of dictionaries, it is the timestamp of the image.
-        For file names, the key is an ASCII-encoded absolute path string.
-        Otherwise, get_key() returns @c None.
+        For file names, the key is an ASCII-encoded absolute path
+        string. Otherwise, get_key() returns @c None.
         """
 
         try:
@@ -169,8 +169,10 @@ class XrayFrame(wx.Frame):
         return None
 
     def load_image(self, file_name_or_data):
-        """The load_image() function displays the image from @p
-        file_name_or_data.  The chooser is updated appropriately.
+        """
+        The load_image() function displays the image from @p file_name_or_data.
+
+        The chooser is updated appropriately.
         """
 
         key = self.get_key(file_name_or_data)
@@ -214,14 +216,17 @@ class XrayFrame(wx.Frame):
         self.annotate_image(img_files[0])
 
     def add_file_name_or_data(self, file_name_or_data):
-        """The add_file_name_or_data() function appends @p
-        file_name_or_data to the image chooser, unless it is already
-        present.  For file-backed images, the base name is displayed in
-        the chooser.  If necessary, the number of entries in the chooser
-        is pruned.  The function returns the index of the recently added
-        entry.  XXX This is probably the place for heuristics to determine
-        if the viewer was given a pattern, or a plain list of files.  XXX
-        Rename this function, because it only deals with the chooser?
+        """
+        The add_file_name_or_data() function appends @p file_name_or_data to
+        the image chooser, unless it is already present.
+
+        For file-backed images, the base name is displayed in the
+        chooser.  If necessary, the number of entries in the chooser is
+        pruned.  The function returns the index of the recently added
+        entry.  XXX This is probably the place for heuristics to
+        determine if the viewer was given a pattern, or a plain list of
+        files.  XXX Rename this function, because it only deals with the
+        chooser?
         """
 
         key = self.get_key(file_name_or_data)

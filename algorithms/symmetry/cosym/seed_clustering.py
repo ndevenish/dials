@@ -19,7 +19,8 @@ from scitbx.array_family import flex
 
 
 class seed_clustering(object):
-    """Perform seed clustering of coordinates.
+    """
+    Perform seed clustering of coordinates.
 
     Labels points into clusters such that cluster contains exactly one copy
     of each dataset, then performs silhouettete analysis on the resulting
@@ -38,7 +39,8 @@ class seed_clustering(object):
     def __init__(
         self, coordinates, n_datasets, n_sym_ops, min_silhouette_score, n_clusters=Auto
     ):
-        """Initialise a seed_clustering object.
+        """
+        Initialise a seed_clustering object.
 
         Args:
           coordinates (scitbx.array_family.flex.double): The input array of coordinates
@@ -69,7 +71,8 @@ class seed_clustering(object):
         )
 
     def _label_clusters_first_pass(self, n_datasets, n_sym_ops):
-        """First pass labelling of clusters.
+        """
+        First pass labelling of clusters.
 
         Labels points into clusters such that cluster contains exactly one copy
         of each dataset.
@@ -139,7 +142,8 @@ class seed_clustering(object):
         return cluster_labels
 
     def _hierarchical_clustering(self):
-        """Perform hierarchical clustering on cluster centroids.
+        """
+        Perform hierarchical clustering on cluster centroids.
 
         Returns:
           Tuple[numpy.ndarray, numpy.ndarray]:
@@ -161,7 +165,8 @@ class seed_clustering(object):
     def _silhouette_analysis(
         self, cluster_labels, linkage_matrix, n_clusters, min_silhouette_score
     ):
-        """Compare valid equal-sized clustering using silhouette scores.
+        """
+        Compare valid equal-sized clustering using silhouette scores.
 
         Args:
           cluster_labels (scitbx.array_family.flex.int):

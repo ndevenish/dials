@@ -192,7 +192,8 @@ def sequence_to_stills(experiments, reflections, params):
 
 def run(args=None, phil=phil_scope):
     """
-    Validate the arguments and load experiments/reflections for sequence_to_stills
+    Validate the arguments and load experiments/reflections for
+    sequence_to_stills.
 
     Arguments:
         args: The command line arguments to use. Defaults to sys.argv[1:]

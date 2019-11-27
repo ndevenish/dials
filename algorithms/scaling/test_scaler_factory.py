@@ -1,6 +1,4 @@
-"""
-Tests for the scaler factory classes and helper functions.
-"""
+"""Tests for the scaler factory classes and helper functions."""
 from __future__ import absolute_import, division, print_function
 import pytest
 from libtbx import phil
@@ -59,7 +57,7 @@ def generated_refl(not_integrated=False, idval=0):
 
 @pytest.fixture
 def refl_to_filter():
-    """Generate a separate reflection table for filtering"""
+    """Generate a separate reflection table for filtering."""
     reflections = flex.reflection_table()
     reflections["partiality"] = flex.double([0.1, 1.0, 1.0, 1.0, 1.0, 1.0])
     reflections.set_flags(
@@ -130,8 +128,8 @@ def mock_exp(mock_scaling_component, idval=0):
     """Mock experiments object for initialising a scaler."""
 
     def side_effect_config_table(*args):
-        """Side effect to mock configure reflection table
-        call during initialisation."""
+        """Side effect to mock configure reflection table call during
+        initialisation."""
         return args[0]
 
     exp = MagicMock()

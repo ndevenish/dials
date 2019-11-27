@@ -10,10 +10,14 @@ TWO_PI = 2.0 * pi
 
 
 class LeastSquaresStillsResidualWithRmsdCutoff(Target):
-    """An implementation of the target class providing a least squares residual
-    in terms of detector impact position X, Y and minimum rotation to the Ewald
-    sphere, DeltaPsi. Terminates refinement on achieved rmsd (or on intrisic
-    convergence of the chosen minimiser)"""
+    """
+    An implementation of the target class providing a least squares residual in
+    terms of detector impact position X, Y and minimum rotation to the Ewald
+    sphere, DeltaPsi.
+
+    Terminates refinement on achieved rmsd (or on intrisic convergence
+    of the chosen minimiser)
+    """
 
     _grad_names = ["dX_dp", "dY_dp", "dDeltaPsi_dp"]
     rmsd_names = ["RMSD_X", "RMSD_Y", "RMSD_DeltaPsi"]
@@ -59,7 +63,7 @@ class LeastSquaresStillsResidualWithRmsdCutoff(Target):
         return
 
     def _predict_core(self, reflections):
-        """perform prediction for the specified reflections"""
+        """perform prediction for the specified reflections."""
 
         # do prediction (updates reflection table in situ).
         self._reflection_predictor(reflections)
@@ -77,7 +81,7 @@ class LeastSquaresStillsResidualWithRmsdCutoff(Target):
         return reflections
 
     def predict_for_reflection_table(self, reflections, skip_derivatives=False):
-        """perform prediction for all reflections in the supplied table"""
+        """perform prediction for all reflections in the supplied table."""
 
         # Just predict. The other preparation is irrelevant for stills, as is
         # skip_derivatives
@@ -106,7 +110,7 @@ class LeastSquaresStillsResidualWithRmsdCutoff(Target):
         return residuals2
 
     def _rmsds_core(self, reflections):
-        """calculate unweighted RMSDs"""
+        """calculate unweighted RMSDs."""
 
         resid_x = flex.sum(reflections["x_resid2"])
         resid_y = flex.sum(reflections["y_resid2"])
@@ -116,7 +120,7 @@ class LeastSquaresStillsResidualWithRmsdCutoff(Target):
         return rmsds
 
     def achieved(self):
-        """RMSD criterion for target achieved"""
+        """RMSD criterion for target achieved."""
         r = self._rmsds if self._rmsds else self.rmsds()
 
         # reset cached rmsds to avoid getting out of step
@@ -133,6 +137,6 @@ class LeastSquaresStillsResidualWithRmsdCutoffSparse(
 ):
     """A version of the LeastSquaresStillsResidualWithRmsdCutoff Target that
     uses a sparse matrix data structure for memory efficiency when there are a
-    large number of Experiments"""
+    large number of Experiments."""
 
     pass

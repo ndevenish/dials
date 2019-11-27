@@ -1,6 +1,4 @@
-"""
-Definition of the target function for error model minimisation.
-"""
+"""Definition of the target function for error model minimisation."""
 
 from __future__ import absolute_import, division, print_function
 from dials.array_family import flex
@@ -8,8 +6,11 @@ from dials.array_family import flex
 
 class ErrorModelTarget(object):
 
-    """Error model target for finding slope of norm distribution.
-    (i.e. the 'a' parameter of the basic errror model)"""
+    """
+    Error model target for finding slope of norm distribution.
+
+    (i.e. the 'a' parameter of the basic errror model)
+    """
 
     _grad_names = ["d(deltahl)_dp"]
     rmsd_names = ["RMSD_deltahl"]
@@ -31,7 +32,7 @@ class ErrorModelTarget(object):
         return self.error_model.n_refl
 
     def rmsds(self):
-        """calculate unweighted RMSDs for the matches"""
+        """calculate unweighted RMSDs for the matches."""
         # cache rmsd calculation for achieved test
         R = self.calculate_residuals()
         n = R.size()
@@ -68,13 +69,13 @@ class ErrorModelTargetA(ErrorModelTarget):
         pass
 
     def calculate_residuals(self):
-        """Return the residual vector"""
+        """Return the residual vector."""
         x = self.parameterisation.x
         R = (self.error_model.sortedy - (x[1] * self.error_model.sortedx) - x[0]) ** 2
         return R
 
     def calculate_gradients(self):
-        "calculate the gradient vector"
+        """calculate the gradient vector."""
         x = self.parameterisation.x
         R = self.error_model.sortedy - (x[1] * self.error_model.sortedx) - x[0]
         gradient = flex.double(
@@ -94,7 +95,7 @@ class ErrorModelTargetB(ErrorModelTarget):
         self.parameterisation.set_active_parameter("b")
 
     def calculate_residuals(self):
-        """Return the residual vector"""
+        """Return the residual vector."""
         bin_vars = self.error_model.bin_variances
         R = (
             (
@@ -108,7 +109,7 @@ class ErrorModelTargetB(ErrorModelTarget):
         return R
 
     def calculate_gradients(self):
-        "calculate the gradient vector"
+        """calculate the gradient vector."""
         a, b = self.parameterisation.a, self.parameterisation.x[0]
         Ih_table = self.error_model.Ih_table
         I_hl = Ih_table.intensities

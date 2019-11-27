@@ -1,7 +1,5 @@
-"""
-This module defines an abstract CrossValidator and an implementation of a
-cross validator for dials.scale
-"""
+"""This module defines an abstract CrossValidator and an implementation of a
+cross validator for dials.scale."""
 from __future__ import absolute_import, division, print_function
 
 import itertools
@@ -17,7 +15,7 @@ import six
 
 class CrossValidator(object):
     """Abstract class defining common methods for cross validation and methods
-    that must be implemented for concrete implementations"""
+    that must be implemented for concrete implementations."""
 
     # metadata needed when constructing the results table
     results_metadata = {
@@ -34,13 +32,17 @@ class CrossValidator(object):
         self.results_dict = {}
 
     def run_script(self, params, config_no):
-        """Run the appropriate command line script with the params, get the
-        free/work set results and add to the results dict. Indicate the
-        configuration number being run."""
+        """
+        Run the appropriate command line script with the params, get the
+        free/work set results and add to the results dict.
+
+        Indicate the configuration number being run.
+        """
         raise NotImplementedError()
 
     def get_results_from_script(self, script):
-        """Return the work/free results list from the command line script object"""
+        """Return the work/free results list from the command line script
+        object."""
         raise NotImplementedError()
 
     def get_parameter_type(self, name):
@@ -48,27 +50,28 @@ class CrossValidator(object):
         raise NotImplementedError()
 
     def set_parameter(self, params, name, val):
-        """Find the name in the params scope extract and set it to the val"""
+        """Find the name in the params scope extract and set it to the val."""
         raise NotImplementedError()
 
     def set_free_set_offset(self, params, n):
-        """Set the free set offset in the correct place in the scope"""
+        """Set the free set offset in the correct place in the scope."""
         raise NotImplementedError()
 
     def get_free_set_percentage(self, params):
-        """Inspect the free set percentage in the correct place in the scope"""
+        """Inspect the free set percentage in the correct place in the
+        scope."""
         raise NotImplementedError()
 
     @staticmethod
     def _avg_sd_from_list(lst):
-        """simple function to get average and standard deviation"""
+        """simple function to get average and standard deviation."""
         arr = flex.double(lst)
         avg = round(flex.mean(arr), 5)
         std = round(arr.standard_deviation_of_the_sample(), 5)
         return avg, std
 
     def create_results_dict(self, n_options):
-        """Create a results dict of the correct size for filling later"""
+        """Create a results dict of the correct size for filling later."""
         if n_options == 1:
             self.results_dict[0] = {"configuration": ["user"]}
             for name in self.results_metadata["names"]:
@@ -81,7 +84,7 @@ class CrossValidator(object):
                     self.results_dict[i][name] = []
 
     def set_results_dict_configuration(self, keys, values):
-        """Add configuration information to the results dict"""
+        """Add configuration information to the results dict."""
         assert len(keys) == len(values)
         for i, v in enumerate(itertools.product(*values)):
             e = dict(zip(keys, v))
@@ -89,14 +92,14 @@ class CrossValidator(object):
                 self.results_dict[i]["configuration"].append(str(k) + "=" + str(val))
 
     def add_results_to_results_dict(self, config_no, results):
-        """Add the results to the correct place in the dict"""
+        """Add the results to the correct place in the dict."""
         assert len(results) == len(self.results_metadata["names"])
         for name, result in zip(self.results_metadata["names"], results):
             self.results_dict[config_no][name].append(result)
 
     def interpret_results(self):
-        """Inspect the data in results_dict, make a nice table with the mean and
-        average over many attempts and indicate the 'best' option"""
+        """Inspect the data in results_dict, make a nice table with the mean
+        and average over many attempts and indicate the 'best' option."""
         rows = []
         headers = ["option", ""] + self.results_metadata["names"]
         monitored_values = []
@@ -129,7 +132,7 @@ class CrossValidator(object):
 
 
 class DialsScaleCrossValidator(CrossValidator):
-    """An implementation of the CrossValidator for running dials.scale"""
+    """An implementation of the CrossValidator for running dials.scale."""
 
     results_metadata = {  # metadata used when constructing the results table
         "names": [
@@ -146,7 +149,8 @@ class DialsScaleCrossValidator(CrossValidator):
     }
 
     def get_results_from_script(self, script):
-        """Return the work/free results list from the command line script object"""
+        """Return the work/free results list from the command line script
+        object."""
         result = script.scaler.work_free_stats
         return result
 
@@ -166,7 +170,7 @@ is provided. For example, physical.decay_correction rather than decay_correction
         return obj.type.phil_type  # a str: "int", "bool" etc
 
     def set_parameter(self, params, name, val):
-        """Find the name in the params scope extract and set it to the val"""
+        """Find the name in the params scope extract and set it to the val."""
         if name == "model":
             params.model = val
             return params
@@ -203,17 +207,18 @@ is provided. For example, physical.decay_correction rather than decay_correction
         raise ValueError("Unable to set chosen attribute " + str(name) + "=" + str(val))
 
     def set_free_set_offset(self, params, n):
-        """Set the free set offset in the correct place in the scope"""
+        """Set the free set offset in the correct place in the scope."""
         params.scaling_options.free_set_offset = n
         return params
 
     def get_free_set_percentage(self, params):
-        """Inspect the free set percentage in the correct place in the scope"""
+        """Inspect the free set percentage in the correct place in the
+        scope."""
         return params.scaling_options.free_set_percentage
 
     def run_script(self, params, config_no):
-        """Run the scaling script with the params, get the free/work set results
-        and add to the results dict"""
+        """Run the scaling script with the params, get the free/work set
+        results and add to the results dict."""
         from dials.command_line.scale import Script
 
         params.scaling_options.__setattr__("use_free_set", True)

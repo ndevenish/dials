@@ -59,7 +59,7 @@ logger = logging.getLogger(__name__)
 
 
 def _average_shoebox_size(reflections):
-    """Calculate the average shoebox size for debugging"""
+    """Calculate the average shoebox size for debugging."""
 
     shoebox = reflections["shoebox"]
     sel = flex.random_selection(len(shoebox), min(len(shoebox), 1000))
@@ -87,9 +87,7 @@ job = _Job()
 
 
 class MultiProcessing(object):
-    """
-    Multi processing parameters
-    """
+    """Multi processing parameters."""
 
     def __init__(self):
         self.method = "multiprocessing"
@@ -105,9 +103,7 @@ class MultiProcessing(object):
 
 
 class Lookup(object):
-    """
-    Lookup parameters
-    """
+    """Lookup parameters."""
 
     def __init__(self):
         self.mask = None
@@ -117,9 +113,7 @@ class Lookup(object):
 
 
 class Block(object):
-    """
-    Block parameters
-    """
+    """Block parameters."""
 
     def __init__(self):
         self.size = libtbx.Auto
@@ -137,9 +131,7 @@ class Block(object):
 
 
 class Shoebox(object):
-    """
-    Shoebox parameters
-    """
+    """Shoebox parameters."""
 
     def __init__(self):
         self.flatten = False
@@ -151,9 +143,7 @@ class Shoebox(object):
 
 
 class Debug(object):
-    """
-    Debug parameters
-    """
+    """Debug parameters."""
 
     def __init__(self):
         self.output = False
@@ -169,14 +159,10 @@ class Debug(object):
 
 
 class Parameters(object):
-    """
-    Class to handle parameters for the processor
-    """
+    """Class to handle parameters for the processor."""
 
     def __init__(self):
-        """
-        Initialize the parameters
-        """
+        """Initialize the parameters."""
         self.mp = MultiProcessing()
         self.lookup = Lookup()
         self.block = Block()
@@ -184,9 +170,7 @@ class Parameters(object):
         self.debug = Debug()
 
     def update(self, other):
-        """
-        Update the parameters
-        """
+        """Update the parameters."""
         self.mp.update(other.mp)
         self.lookup.update(other.lookup)
         self.block.update(other.block)
@@ -195,9 +179,7 @@ class Parameters(object):
 
 
 class ExecuteParallelTask(object):
-    """
-    Helper class to run things on cluster
-    """
+    """Helper class to run things on cluster."""
 
     def __call__(self, task):
         from dials.util import log
@@ -228,7 +210,7 @@ class Processor(object):
     @property
     def executor(self):
         """
-        Get the executor
+        Get the executor.
 
         :return: The executor
         """
@@ -237,7 +219,7 @@ class Processor(object):
     @executor.setter
     def executor(self, function):
         """
-        Set the executor
+        Set the executor.
 
         :param function: The executor
         """
@@ -313,9 +295,7 @@ class Processor(object):
 
 
 class Result(object):
-    """
-    A class representing a processing result.
-    """
+    """A class representing a processing result."""
 
     def __init__(self, index, reflections, data=None):
         """
@@ -331,13 +311,11 @@ class Result(object):
 
 
 class NullTask(object):
-    """
-    A class to perform a null task.
-    """
+    """A class to perform a null task."""
 
     def __init__(self, index, reflections):
         """
-        Initialise the task
+        Initialise the task.
 
         :param index: The index of the processing job
         :param experiments: The list of experiments
@@ -361,9 +339,7 @@ class NullTask(object):
 
 
 class Task(object):
-    """
-    A class to perform a processing task.
-    """
+    """A class to perform a processing task."""
 
     def __init__(self, index, job, experiments, reflections, params, executor=None):
         """
@@ -548,9 +524,7 @@ class Task(object):
 
 
 class Manager(object):
-    """
-    A class to manage processing book-keeping
-    """
+    """A class to manage processing book-keeping."""
 
     def __init__(self, experiments, reflections, params):
         """
@@ -581,9 +555,7 @@ class Manager(object):
         self.time = dials.algorithms.integration.TimingInfo()
 
     def initialize(self):
-        """
-        Initialise the processing
-        """
+        """Initialise the processing."""
         # Get the start time
         start_time = time()
 
@@ -610,9 +582,7 @@ class Manager(object):
         self.time.initialize = time() - start_time
 
     def task(self, index):
-        """
-        Get a task.
-        """
+        """Get a task."""
         job = self.manager.job(index)
         frames = job.frames()
         expr_id = job.expr()
@@ -636,9 +606,7 @@ class Manager(object):
         return task
 
     def tasks(self):
-        """
-        Iterate through the tasks.
-        """
+        """Iterate through the tasks."""
         for i in range(len(self)):
             yield self.task(i)
 
@@ -652,9 +620,7 @@ class Manager(object):
         self.time.total += result.total_time
 
     def finalize(self):
-        """
-        Finalize the processing and finish.
-        """
+        """Finalize the processing and finish."""
         # Get the start time
         start_time = time()
 
@@ -691,9 +657,7 @@ class Manager(object):
         return len(self.manager)
 
     def compute_blocks(self):
-        """
-        Compute the processing block size.
-        """
+        """Compute the processing block size."""
 
         if self.params.block.size == libtbx.Auto:
             if (
@@ -712,9 +676,7 @@ class Manager(object):
                 self.params.block.units = "frames"
 
     def compute_jobs(self):
-        """
-        Compute the jobs
-        """
+        """Compute the jobs."""
         groups = itertools.groupby(
             range(len(self.experiments)),
             lambda x: (id(self.experiments[x].imageset), id(self.experiments[x].scan)),
@@ -749,9 +711,7 @@ class Manager(object):
         assert len(self.jobs) > 0, "Invalid number of jobs"
 
     def split_reflections(self):
-        """
-        Split the reflections into partials or over job boundaries
-        """
+        """Split the reflections into partials or over job boundaries."""
 
         # Optionally split the reflection table into partials, otherwise,
         # split over job boundaries
@@ -780,9 +740,7 @@ class Manager(object):
         self.reflections.compute_partiality(self.experiments)
 
     def compute_processors(self):
-        """
-        Compute the number of processors
-        """
+        """Compute the number of processors."""
 
         # Set the memory usage per processor
         if self.params.mp.method == "multiprocessing" and self.params.mp.nproc > 1:
@@ -819,9 +777,7 @@ class Manager(object):
                 self.params.block.max_memory_usage /= self.params.mp.nproc
 
     def summary(self):
-        """
-        Get a summary of the processing
-        """
+        """Get a summary of the processing."""
         # Compute the task table
         if self.experiments.all_stills():
             rows = [["#", "Group", "Frame From", "Frame To", "# Reflections"]]
@@ -877,8 +833,8 @@ class Manager(object):
 
 
 class ManagerRot(Manager):
-    """Specialize the manager for oscillation data using the oscillation pre and
-    post processors."""
+    """Specialize the manager for oscillation data using the oscillation pre
+    and post processors."""
 
     def __init__(self, experiments, reflections, params):
         """Initialise the pre-processor, post-processor and manager."""
@@ -1007,13 +963,11 @@ class ProcessorStills(Processor):
 
 
 class ProcessorBuilder(object):
-    """
-    A class to simplify building the processor
-    """
+    """A class to simplify building the processor."""
 
     def __init__(self, Class, experiments, reflections, params=None):
         """
-        Initialize with the required input
+        Initialize with the required input.
 
         :param Class: The input class
         :param experiments: The input experiments
@@ -1029,7 +983,7 @@ class ProcessorBuilder(object):
 
     def build(self):
         """
-        Build the class
+        Build the class.
 
         :return: The processor class
         """

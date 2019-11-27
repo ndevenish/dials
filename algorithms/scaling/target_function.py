@@ -1,9 +1,8 @@
 """
 This file defines targets for scaling.
 
-These are initialised with a scaler and an active parameter manager,
-and have implementations of residual/gradient calculations for
-scaling.
+These are initialised with a scaler and an active parameter manager, and
+have implementations of residual/gradient calculations for scaling.
 """
 from __future__ import absolute_import, division, print_function
 from dials.array_family import flex
@@ -31,7 +30,11 @@ class ScalingTarget(object):
         # attempted for the remainder of the minimisation with this target function.
 
     def rmsds(self, Ih_table, apm):
-        """Calculate RMSDs for the matches. Also calculate R-factors."""
+        """
+        Calculate RMSDs for the matches.
+
+        Also calculate R-factors.
+        """
         R = flex.double([])
         n = 0
         for block in Ih_table.blocked_data_list:
@@ -86,7 +89,8 @@ class ScalingTarget(object):
 
     @staticmethod
     def calculate_jacobian(Ih_table):
-        """Calculate the jacobian matrix, size Ih_table.size by len(self.apm.x)."""
+        """Calculate the jacobian matrix, size Ih_table.size by
+        len(self.apm.x)."""
         gsq = Ih_table.inverse_scale_factors ** 2 * Ih_table.weights
         sumgsq = gsq * Ih_table.h_index_matrix
         dIh = (
@@ -155,9 +159,8 @@ class ScalingTarget(object):
 
 
 class ScalingTargetFixedIH(ScalingTarget):
-    """An implementation of scaling target for when the scaling is to be
-    done against a fixed reference Ih set (i.e scaler is a TargetScaler)
-    """
+    """An implementation of scaling target for when the scaling is to be done
+    against a fixed reference Ih set (i.e scaler is a TargetScaler)"""
 
     @staticmethod
     def calculate_gradients(Ih_table):
@@ -169,6 +172,7 @@ class ScalingTargetFixedIH(ScalingTarget):
 
     @staticmethod
     def calculate_jacobian(Ih_table):
-        """Calculate the jacobian matrix, size Ih_table.size by len(self.apm.x)."""
+        """Calculate the jacobian matrix, size Ih_table.size by
+        len(self.apm.x)."""
         jacobian = row_multiply(Ih_table.derivatives, -1.0 * Ih_table.Ih_values)
         return jacobian

@@ -15,7 +15,7 @@ import py
 def run(
     command, output_directory=None, store_command=None, store_output=None, **kwargs
 ):
-    """Run a command and write its output to a defined location"""
+    """Run a command and write its output to a defined location."""
     print(" ".join(str(e) for e in command))
     if output_directory and store_command is None:
         store_command = output_directory.join(command[0] + ".cmd")
@@ -177,7 +177,7 @@ def generate_multi_crystal_symmetry_and_scaling(options):
 
 
 def find_in_line(string, lines, start=0):
-    """Find the next line index containing a given string"""
+    """Find the next line index containing a given string."""
     for n, line in enumerate(lines[start:], start):
         if string in line:
             return n
@@ -185,10 +185,12 @@ def find_in_line(string, lines, start=0):
 
 
 def write_extract(destination, start, end, lines):
-    """Write lines to a file, in the correct line position, with markers.
+    """
+    Write lines to a file, in the correct line position, with markers.
 
-    This can be used to provide sphinx with an easily extractable literalinclude
-    block, that preserves the correct line numbers from the original file.
+    This can be used to provide sphinx with an easily extractable
+    literalinclude block, that preserves the correct line numbers from
+    the original file.
     """
     assert start > 0
     out_lines = []

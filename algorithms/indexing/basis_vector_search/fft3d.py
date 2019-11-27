@@ -48,7 +48,8 @@ reciprocal_space_grid {
 
 
 class FFT3D(Strategy):
-    """Basis vector search using a 3D FFT.
+    """
+    Basis vector search using a 3D FFT.
 
     See:
         Bricogne, G. (1986). Proceedings of the EEC Cooperative Workshop on Position-Sensitive Detector Software (Phase III), p. 28. Paris: LURE.
@@ -58,7 +59,8 @@ class FFT3D(Strategy):
     phil_scope = phil.parse(fft3d_phil_str)
 
     def __init__(self, max_cell, min_cell=3, params=None, *args, **kwargs):
-        """Construct an FFT3D object.
+        """
+        Construct an FFT3D object.
 
         Args:
             max_cell (float): An estimate of the maximum cell dimension of the primitive
@@ -87,7 +89,8 @@ class FFT3D(Strategy):
         self._min_cell = min_cell
 
     def find_basis_vectors(self, reciprocal_lattice_vectors):
-        """Find a list of likely basis vectors.
+        """
+        Find a list of likely basis vectors.
 
         Args:
             reciprocal_lattice_vectors (scitbx.array_family.flex.vec3_double):

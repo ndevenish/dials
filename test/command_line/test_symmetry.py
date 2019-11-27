@@ -17,7 +17,7 @@ from dials.command_line.symmetry import map_to_minimum_cell
 
 
 def test_symmetry_laue_only(dials_data, tmpdir):
-    """Simple test to check that dials.symmetry completes"""
+    """Simple test to check that dials.symmetry completes."""
 
     result = procrunner.run(
         [
@@ -40,10 +40,12 @@ def test_symmetry_laue_only(dials_data, tmpdir):
 
 
 def test_symmetry_basis_changes_for_C2(tmpdir):
-    """Test the correctness of change of basis operations in dials.symmetry
+    """
+    Test the correctness of change of basis operations in dials.symmetry.
 
     Supply the unit cell of beta-lactamase, which triggers a change of
-    basis from input to minimum during symmetry analysis."""
+    basis from input to minimum during symmetry analysis.
+    """
     os.chdir(tmpdir.strpath)
     unit_cell = (53.173, 61.245, 69.292, 90.0, 93.04675, 90.0)
     space_group = sgtbx.space_group_info("C 2").group()
@@ -86,7 +88,7 @@ def test_symmetry_basis_changes_for_C2(tmpdir):
 
 
 def test_symmetry_with_absences(dials_data, tmpdir):
-    """Simple test to check that dials.symmetry, with absences, completes"""
+    """Simple test to check that dials.symmetry, with absences, completes."""
 
     result = procrunner.run(
         [
@@ -108,7 +110,8 @@ def test_symmetry_with_absences(dials_data, tmpdir):
 
 
 def test_symmetry_with_laue_group_override(dials_data, tmpdir):
-    """Simple test to check that dials.symmetry, with overridden laue group, completes"""
+    """Simple test to check that dials.symmetry, with overridden laue group,
+    completes."""
 
     result = procrunner.run(
         [
@@ -136,7 +139,11 @@ def test_symmetry_with_laue_group_override(dials_data, tmpdir):
 
 
 def test_symmetry_absences_only(dials_data, tmpdir):
-    """Test the command line script with real data. Proteinase K in P41"""
+    """
+    Test the command line script with real data.
+
+    Proteinase K in P41
+    """
     location = dials_data("vmxi_proteinase_k_sweeps")
 
     command = ["dials.symmetry", "laue_group=None"]

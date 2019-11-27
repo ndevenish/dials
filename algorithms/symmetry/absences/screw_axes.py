@@ -188,7 +188,7 @@ evidence to rule out completely, possibly due to limited data.""",
 
 
 class ScrewAxis21c(ScrewAxis):
-    """Definition of a 21c screw axis"""
+    """Definition of a 21c screw axis."""
 
     axis_idx = 2
     axis_repeat = 2
@@ -196,7 +196,7 @@ class ScrewAxis21c(ScrewAxis):
 
 
 class ScrewAxis21b(ScrewAxis):
-    """Definition of a 21b screw axis"""
+    """Definition of a 21b screw axis."""
 
     axis_idx = 1
     axis_repeat = 2
@@ -204,7 +204,7 @@ class ScrewAxis21b(ScrewAxis):
 
 
 class ScrewAxis21a(ScrewAxis):
-    """Definition of a 21a screw axis"""
+    """Definition of a 21a screw axis."""
 
     axis_idx = 0
     axis_repeat = 2
@@ -212,7 +212,7 @@ class ScrewAxis21a(ScrewAxis):
 
 
 class ScrewAxis41c(ScrewAxis):
-    """Definition of a 41c screw axis"""
+    """Definition of a 41c screw axis."""
 
     axis_idx = 2
     axis_repeat = 4
@@ -220,7 +220,7 @@ class ScrewAxis41c(ScrewAxis):
 
 
 class ScrewAxis42c(ScrewAxis):
-    """Definition of a 42c screw axis"""
+    """Definition of a 42c screw axis."""
 
     axis_idx = 2
     axis_repeat = 2
@@ -228,7 +228,7 @@ class ScrewAxis42c(ScrewAxis):
 
 
 class ScrewAxis41b(ScrewAxis):
-    """Definition of a 41b screw axis"""
+    """Definition of a 41b screw axis."""
 
     axis_idx = 1
     axis_repeat = 4
@@ -236,7 +236,7 @@ class ScrewAxis41b(ScrewAxis):
 
 
 class ScrewAxis41a(ScrewAxis):
-    """Definition of a 41a screw axis"""
+    """Definition of a 41a screw axis."""
 
     axis_idx = 0
     axis_repeat = 4
@@ -244,7 +244,7 @@ class ScrewAxis41a(ScrewAxis):
 
 
 class ScrewAxis31c(ScrewAxis):
-    """Definition of a 31c screw axis"""
+    """Definition of a 31c screw axis."""
 
     axis_idx = 2
     axis_repeat = 3
@@ -252,7 +252,7 @@ class ScrewAxis31c(ScrewAxis):
 
 
 class ScrewAxis61c(ScrewAxis):
-    """Definition of a 61c screw axis"""
+    """Definition of a 61c screw axis."""
 
     axis_idx = 2
     axis_repeat = 6
@@ -260,7 +260,7 @@ class ScrewAxis61c(ScrewAxis):
 
 
 class ScrewAxis62c(ScrewAxis):
-    """Definition of a 62c screw axis"""
+    """Definition of a 62c screw axis."""
 
     axis_idx = 2
     axis_repeat = 3
@@ -268,7 +268,7 @@ class ScrewAxis62c(ScrewAxis):
 
 
 class ScrewAxis63c(ScrewAxis):
-    """Definition of a 63c screw axis"""
+    """Definition of a 63c screw axis."""
 
     axis_idx = 2
     axis_repeat = 2

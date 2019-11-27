@@ -2,13 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 
 class Algorithm(object):
-    """
-    A python class to wrap the centroid algorithm
-    """
+    """A python class to wrap the centroid algorithm."""
 
     def __init__(self, experiments):
         """
-        Initialize the centroider
+        Initialize the centroider.
 
         :param experiments: The experiment list
         """
@@ -26,7 +24,7 @@ class Algorithm(object):
 
     def __call__(self, reflections, image_volume=None):
         """
-        Do the centroiding
+        Do the centroiding.
 
         :param reflections: The reflection list
         """

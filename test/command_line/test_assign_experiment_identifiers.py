@@ -1,6 +1,4 @@
-"""
-Test for dials.assign_experiment_identifiers
-"""
+"""Test for dials.assign_experiment_identifiers."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -24,7 +22,7 @@ def run_assign_identifiers(pickle_path_list, sequence_path_list, extra_args):
 
 
 def test_assign_identifiers(dials_data, run_in_tmpdir):
-    """Test for dials.assign_experiment_identifiers"""
+    """Test for dials.assign_experiment_identifiers."""
     pickle_path_list = []
     sequence_path_list = []
     data_dir = dials_data("l_cysteine_dials_output")

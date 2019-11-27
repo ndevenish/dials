@@ -52,15 +52,13 @@ class CacheHandler(logging.Handler):
     """A simple class to store log messages."""
 
     def __init__(self):
-        """
-        Initialise the handler
-        """
+        """Initialise the handler."""
         super(CacheHandler, self).__init__()
         self._messages = []
 
     def emit(self, record):
         """
-        Emit the message to a list
+        Emit the message to a list.
 
         :param record: The log record
         """
@@ -71,9 +69,7 @@ class CacheHandler(logging.Handler):
 
 
 def config_simple_cached():
-    """
-    Configure the logging to use a cache.
-    """
+    """Configure the logging to use a cache."""
 
     # Configure the logging
     logging.config.dictConfig(

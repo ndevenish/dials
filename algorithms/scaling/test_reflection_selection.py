@@ -1,6 +1,4 @@
-"""
-Tests for the reflection selection algorithm.
-"""
+"""Tests for the reflection selection algorithm."""
 from __future__ import absolute_import, division, print_function
 import itertools
 from libtbx import phil
@@ -18,7 +16,8 @@ from dials.algorithms.scaling.reflection_selection import (
 
 
 def test_select_connected_reflections_across_datasets():
-    """Test the basic cross-dataset reflection selection algorithm.
+    """
+    Test the basic cross-dataset reflection selection algorithm.
 
     Make three reflection tables with the following reflections:
                symmetry groups
@@ -94,11 +93,11 @@ def test_select_connected_reflections_across_datasets():
 
 
 def test_loop_over_class_matrix():
-    """Test a few different limits of the method.
+    """
+    Test a few different limits of the method.
 
-    { 3, 1, 3, 2, 1, 1, 0 },
-    { 2, 2, 0, 0, 3, 1, 0 },
-    { 1, 4, 2, 1, 0, 0, 5 },
+    { 3, 1, 3, 2, 1, 1, 0 }, { 2, 2, 0, 0, 3, 1, 0 }, { 1, 4, 2, 1, 0,
+    0, 5 },
     """
     sorted_class_matrix = sparse.matrix(
         3,

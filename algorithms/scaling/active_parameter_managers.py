@@ -1,7 +1,5 @@
-"""
-Classes to initialise a 'parameter manager', to indicate to a
-refiner which components of the model are to be refined.
-"""
+"""Classes to initialise a 'parameter manager', to indicate to a refiner which
+components of the model are to be refined."""
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -57,7 +55,8 @@ class active_parameter_manager(object):
             self.components_list.extend([comp])
 
     def select_parameters(self, component):
-        """Select the subset of self.x corresponding to the component (a string)."""
+        """Select the subset of self.x corresponding to the component (a
+        string)."""
         start_idx = self.components[component]["start_idx"]
         end_idx = self.components[component]["end_idx"]
         return self.x[start_idx:end_idx]
@@ -94,11 +93,12 @@ class active_parameter_manager(object):
 
 class multi_active_parameter_manager(object):
     """
-    Parameter manager to manage the current active parameters during minimisation
-    for multiple datasets that are being minimised simultaneously.
+    Parameter manager to manage the current active parameters during
+    minimisation for multiple datasets that are being minimised simultaneously.
 
-    Initialise with two lists of components and selections, each item of which
-    is used to initialise an active parameter manager of type apm_class.
+    Initialise with two lists of components and selections, each item of
+    which is used to initialise an active parameter manager of type
+    apm_class.
     """
 
     def __init__(self, components_list, selection_lists, apm_class):
@@ -175,9 +175,10 @@ class ParameterManagerGenerator(object):
     Class to generate multi-dataset parameter managers for minimisation.
 
     Handles the case of concurrent parameter minimisation (one parameter
-    manager generated) and the case of consecutive parameter minimisation
-    (several parameter managers generated, one for each minimisation, depending
-    on the data_manager.consecutive_refinement_order property).
+    manager generated) and the case of consecutive parameter
+    minimisation (several parameter managers generated, one for each
+    minimisation, depending on the
+    data_manager.consecutive_refinement_order property).
     """
 
     def __init__(self, data_managers, apm_type, mode="concurrent"):

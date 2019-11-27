@@ -9,9 +9,7 @@ from dials.algorithms.integration.integrator_stills import *
 
 
 class TimingInfo(object):
-    """
-    A class to contain timing info.
-    """
+    """A class to contain timing info."""
 
     def __init__(self):
         self.read = 0

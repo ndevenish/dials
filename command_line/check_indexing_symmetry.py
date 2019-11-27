@@ -93,7 +93,8 @@ def dump_text(filename, set0, set1):
 
 
 def standard_error_of_pearson_cc(corr_coeffs, n):
-    """Calculate the standard error of Pearson's correlation coefficient.
+    """
+    Calculate the standard error of Pearson's correlation coefficient.
 
     This uses the formula SE = sqrt((1 - r^2) / (n - 2)), which is correct
     only if the data from which the CCs were calculated are normally

@@ -1,6 +1,4 @@
-"""
-Tests for scale components module.
-"""
+"""Tests for scale components module."""
 from __future__ import absolute_import, division, print_function
 from math import exp
 import pytest
@@ -194,7 +192,7 @@ def test_SmoothScaleFactor1D():
 
 
 def test_SmoothBScaleFactor1D():
-    "test for a gaussian smoothed 1D scalefactor object"
+    """test for a gaussian smoothed 1D scalefactor object."""
     SF = SmoothBScaleComponent1D(flex.double(5, 0.0))
     assert SF.n_params == 5
     assert list(SF.parameters) == [0.0] * 5

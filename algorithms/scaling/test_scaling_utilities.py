@@ -1,6 +1,4 @@
-"""
-Tests for scaling utilities module.
-"""
+"""Tests for scaling utilities module."""
 from __future__ import absolute_import, division, print_function
 
 from math import sqrt, pi
@@ -99,7 +97,7 @@ def generate_reflection_table():
 
 @pytest.fixture
 def simple_reflection_table():
-    """Create a small reflection table"""
+    """Create a small reflection table."""
     refl = flex.reflection_table()
     refl["intensity"] = flex.double([1.0, 2.0, 3.0])
     refl["d"] = flex.double([1.0, 2.0, 3.0])
@@ -157,8 +155,8 @@ def test_quasi_normalisation(simple_reflection_table, test_exp_E2, test_exp_P1):
 
 
 def test_calc_crystal_frame_vectors(test_reflection_table, mock_exp):
-    """Test the namesake function, to check that the vectors are correctly rotated
-    into the crystal frame."""
+    """Test the namesake function, to check that the vectors are correctly
+    rotated into the crystal frame."""
     rt, exp = test_reflection_table, mock_exp
     s0_vec = (1.0, 0.0, 0.0)
     s1_vec = (1.0 / sqrt(2.0), 0.0, 1.0 / sqrt(2.0))
@@ -179,9 +177,13 @@ def test_calc_crystal_frame_vectors(test_reflection_table, mock_exp):
 
 
 def test_align_rotation_axis_along_z():
-    """Test the function to rotate the coordinate system such that the rotation
-    axis is along z. In the test, the rotation axis is x, so we expect the
-    transformation to be: x > z, y > y, z > -x, x+z > -x+z."""
+    """
+    Test the function to rotate the coordinate system such that the rotation
+    axis is along z.
+
+    In the test, the rotation axis is x, so we expect the transformation
+    to be: x > z, y > y, z > -x, x+z > -x+z.
+    """
     rot_axis = flex.vec3_double([(1.0, 0.0, 0.0)])
     vectors = flex.vec3_double(
         [(1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0), (1.0, 0.0, 1.0)]
@@ -193,9 +195,12 @@ def test_align_rotation_axis_along_z():
 
 
 def test_create_sph_harm_table(test_reflection_table, mock_exp):
-    """Simple test for the spherical harmonic table, constructing the table step
+    """
+    Simple test for the spherical harmonic table, constructing the table step
     by step, and verifying the values of a few easy-to-calculate entries.
-    This also acts as a test for the calc_theta_phi function as well."""
+
+    This also acts as a test for the calc_theta_phi function as well.
+    """
 
     rt, exp = test_reflection_table, mock_exp
     reflection_table = calc_crystal_frame_vectors(rt, exp)
@@ -237,7 +242,8 @@ def test_calculate_wilson_outliers(wilson_test_reflection_table):
 
 
 def test_calculate_prescaling_correction():
-    """Test the helper function that applies the lp, dqe and partiality corr."""
+    """Test the helper function that applies the lp, dqe and partiality
+    corr."""
     reflection_table = flex.reflection_table()
     reflection_table["lp"] = flex.double([1.0, 0.9, 0.8])
     reflection_table["qe"] = flex.double([0.6, 0.5, 0.4])
@@ -262,7 +268,7 @@ def test_calculate_prescaling_correction():
 
 def test_reasons():
     """Test the reasons class, which is basically a dictionary with a nice
-    printed output"""
+    printed output."""
     reasons = Reasons()
     reasons.add_reason("test reason", 100)
     assert reasons.reasons["test reason"] == 100

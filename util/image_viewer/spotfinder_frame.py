@@ -53,10 +53,10 @@ EVT_LOADIMG = wx.PyEventBinder(myEVT_LOADIMG, 1)
 
 
 class LoadImageEvent(wx.PyCommandEvent):
-    """Event to signal that an image should be loaded"""
+    """Event to signal that an image should be loaded."""
 
     def __init__(self, etype, eid, filename=None):
-        """Creates the event object"""
+        """Creates the event object."""
         wx.PyCommandEvent.__init__(self, etype, eid)
         self._filename = filename
 
@@ -302,7 +302,8 @@ class SpotFrame(XrayFrame):
             self.reload_image()
 
     def GetBoxCorners(self, layer, p1, p2):
-        """Get list of points inside box.
+        """
+        Get list of points inside box.
 
         layer  reference to layer object we are working on
         p1     one corner point of selection box
@@ -506,7 +507,7 @@ class SpotFrame(XrayFrame):
         self.load_image(evt.get_filename())
 
     def reload_image(self):
-        """Re-load the currently displayed image"""
+        """Re-load the currently displayed image."""
         with wx.BusyCursor():
             self.load_image(self.images.selected, refresh=True)
 
@@ -1175,7 +1176,8 @@ class SpotFrame(XrayFrame):
 
     def __get_imageset_filter(self, reflections, imageset):
         # type: (flex.reflection_table, ImageSet) -> Optional[flex.bool]
-        """Get a filter to ensure only reflections from an imageset.
+        """
+        Get a filter to ensure only reflections from an imageset.
 
         This is not a well-defined problem because of unindexed reflections
         - any unindexed reflections never get assigned an experiment. Using the
@@ -1957,7 +1959,11 @@ class SpotSettingsPanel(wx.Panel):
         self.Bind(wx.EVT_UPDATE_UI, self.UpdateZoomCtrl)
 
     def OnDestroy(self, event):
-        "Handle any cleanup when the windows is being destroyed. Manually Called."
+        """
+        Handle any cleanup when the windows is being destroyed.
+
+        Manually Called.
+        """
         # If we don't remove this here, then we can get called after destroy
         self.brightness_txt_ctrl.Unbind(wx.EVT_KILL_FOCUS)
 
@@ -2005,12 +2011,12 @@ class SpotSettingsPanel(wx.Panel):
         self.zoom_ctrl.SetSelection(self.settings.zoom_level)
 
     def OnUpdate(self, event):
-        """Collects all settings from the GUI and forwards to the viewer"""
+        """Collects all settings from the GUI and forwards to the viewer."""
         self.collect_values()
         self.GetParent().GetParent().update_settings()
 
     def OnUpdateBrightness(self, event):
-        """Handle updates from the brightness-related controls"""
+        """Handle updates from the brightness-related controls."""
 
         # Don't update whilst dragging the slider
         if event.GetEventType() == wx.EVT_SLIDER.typeId:

@@ -1,6 +1,4 @@
-"""
-Test for the basis function module.
-"""
+"""Test for the basis function module."""
 from __future__ import absolute_import, division, print_function
 import pytest
 from dials.array_family import flex
@@ -25,8 +23,12 @@ def small_reflection_table():
 
 
 def test_RefinerCalculator(small_reflection_table):
-    """Test for the RefinerCalculator class. This calculates scale factors and
-    derivatives for reflections based on the model components."""
+    """
+    Test for the RefinerCalculator class.
+
+    This calculates scale factors and derivatives for reflections based
+    on the model components.
+    """
 
     # To test the basis function, need a scaling active parameter manager - to set
     # this up we need a components dictionary with some reflection data.

@@ -88,7 +88,7 @@ def e_refine(params, experiments, reflections, graph_verbose=False):
 
 
 class StillsIndexer(Indexer):
-    """Class for indexing stills"""
+    """Class for indexing stills."""
 
     def __init__(self, reflections, experiments, params=None):
         if params.refinement.reflections.outlier.algorithm in ("auto", libtbx.Auto):

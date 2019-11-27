@@ -493,7 +493,8 @@ def test_index_imosflm_tutorial(dials_regression, tmpdir, specify_unit_cell):
 
 @pytest.fixture(scope="session")
 def insulin_spotfinding(dials_data, tmpdir_factory):
-    """Return experiment and reflection files for 2 images of the insulin dataset"""
+    """Return experiment and reflection files for 2 images of the insulin
+    dataset."""
 
     data_dir = dials_data("insulin")
     tmpdir = tmpdir_factory.mktemp("insulin")
@@ -549,7 +550,7 @@ def test_index_insulin_multi_sequence(insulin_spotfinding, tmpdir, method):
 @pytest.fixture(scope="session")
 def insulin_spotfinding_stills(dials_data, tmpdir_factory):
     """Return experiment and reflection files for 1 image of the insulin
-    dataset treated as still image"""
+    dataset treated as still image."""
 
     data_dir = dials_data("insulin")
     tmpdir = tmpdir_factory.mktemp("insulin")

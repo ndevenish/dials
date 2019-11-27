@@ -7,8 +7,8 @@ from dials.algorithms.refinement import DialsRefineConfigError
 
 
 class StatisticalWeightingStrategy(object):
-    """Defines a single method that provides a ReflectionManager with a strategy
-    for calculating weights for refinement"""
+    """Defines a single method that provides a ReflectionManager with a
+    strategy for calculating weights for refinement."""
 
     @staticmethod
     def calculate_weights(reflections):
@@ -25,15 +25,19 @@ class StatisticalWeightingStrategy(object):
 
 
 class StillsWeightingStrategy(StatisticalWeightingStrategy):
-    """Defines a single method that provides a ReflectionManager with a strategy
-    for calculating weights for refinement. This version uses statistical weights
-    for X and Y and a fixed constant for the delta Psi part, defaulting to 1000000"""
+    """
+    Defines a single method that provides a ReflectionManager with a strategy
+    for calculating weights for refinement.
+
+    This version uses statistical weights for X and Y and a fixed
+    constant for the delta Psi part, defaulting to 1000000
+    """
 
     def __init__(self, delpsi_constant=1000000):
         self._delpsi_constant = delpsi_constant
 
     def calculate_weights(self, reflections):
-        """Include weights for DeltaPsi"""
+        """Include weights for DeltaPsi."""
 
         # call parent class method to set X and Y weights
         reflections = super(StillsWeightingStrategy, self).calculate_weights(
@@ -48,14 +52,21 @@ class StillsWeightingStrategy(StatisticalWeightingStrategy):
 
 
 class ExternalDelPsiWeightingStrategy(StatisticalWeightingStrategy):
-    """Defines a single method that provides a ReflectionManager with a strategy
-    for calculating weights for stills refinement. This version uses statistical
-    weights for X and Y and assume that the Delta Psi part is already provided in
-    the reflection table"""
+    """
+    Defines a single method that provides a ReflectionManager with a strategy
+    for calculating weights for stills refinement.
+
+    This version uses statistical weights for X and Y and assume that
+    the Delta Psi part is already provided in the reflection table
+    """
 
     def calculate_weights(self, reflections):
-        """Statistical weights for X, Y. Weights for DeltaPsi must be already
-        provided in the reflection table"""
+        """
+        Statistical weights for X, Y.
+
+        Weights for DeltaPsi must be already provided in the reflection
+        table
+        """
 
         # call parent class method to set X and Y weights
         reflections = super(ExternalDelPsiWeightingStrategy, self).calculate_weights(
@@ -79,9 +90,13 @@ class ConstantWeightingStrategy(object):
         self._stills = stills
 
     def calculate_weights(self, reflections):
-        """Set weights to constant terms. If stills, the z weights are
-        the 'delpsical.weights' attribute of the reflection table. Otherwise, use
-        the usual 'xyzobs.mm.weights'"""
+        """
+        Set weights to constant terms.
+
+        If stills, the z weights are the 'delpsical.weights' attribute
+        of the reflection table. Otherwise, use the usual
+        'xyzobs.mm.weights'
+        """
 
         wx = flex.double(len(reflections), self._wx)
         wy = flex.double(len(reflections), self._wy)

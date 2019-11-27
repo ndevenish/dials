@@ -57,7 +57,7 @@ class ScanVaryingBeamParameterisation(ScanVaryingModelParameterisation, BeamMixi
         return
 
     def compose(self, t):
-        """calculate state and derivatives for model at image number t"""
+        """calculate state and derivatives for model at image number t."""
 
         # extract direction from the initial state
         is0 = self._initial_state
@@ -97,7 +97,7 @@ class ScanVaryingBeamParameterisation(ScanVaryingModelParameterisation, BeamMixi
         return
 
     def get_state(self):
-        """Return beam vector [s0] at image number t"""
+        """Return beam vector [s0] at image number t."""
 
         # only a single beam is parameterised here, so no multi_state_elt
         # argument is allowed

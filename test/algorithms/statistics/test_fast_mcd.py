@@ -1,5 +1,5 @@
 """Testing functions for multivariate outlier rejection by the FAST-MCD
-algorithm"""
+algorithm."""
 from __future__ import absolute_import, division, print_function
 
 

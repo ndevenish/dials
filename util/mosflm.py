@@ -9,7 +9,7 @@ from scitbx import matrix
 
 def dump(experiments, directory):
     """
-    Dump the experiments in mosflm format
+    Dump the experiments in mosflm format.
 
     :param experiments: The experiments to dump
     :param directory: The directory to write to

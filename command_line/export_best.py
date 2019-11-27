@@ -42,7 +42,7 @@ phil_scope = parse(
 class BestExporter(object):
     def __init__(self, params, experiments, reflections):
         """
-        Initialise the exporter
+        Initialise the exporter.
 
         :param params: The phil parameters
         :param experiments: The experiment list
@@ -61,9 +61,7 @@ class BestExporter(object):
         self.reflections = reflections
 
     def export(self):
-        """
-        Export the files
-        """
+        """Export the files."""
         from dials.util import best
 
         experiment = self.experiments[0]

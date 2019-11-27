@@ -86,7 +86,7 @@ def test_crossvalidator():
 
 
 def test_dialsscalecrossvalidator():
-    """Test the methods of the dials.scale cross validator"""
+    """Test the methods of the dials.scale cross validator."""
     experiments = []
     reflections = []
 
@@ -138,7 +138,7 @@ def test_dialsscalecrossvalidator():
 
 
 def test_cross_validate_script():
-    """Test the script, mocking the run_script and interpret results calls"""
+    """Test the script, mocking the run_script and interpret results calls."""
 
     param = generated_param()
     crossvalidator = DialsScaleCrossValidator([], [])

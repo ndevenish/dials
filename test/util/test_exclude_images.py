@@ -1,6 +1,4 @@
-"""
-tests for functions in dials.util.exclude_images.py
-"""
+"""tests for functions in dials.util.exclude_images.py."""
 from __future__ import absolute_import, division, print_function
 import copy
 import pytest
@@ -18,17 +16,17 @@ from dials.util.exclude_images import (
 
 
 def make_scan_experiment(image_range=(1, 100), expid="0"):
-    """Make an experiment with a scan"""
+    """Make an experiment with a scan."""
     return Experiment(scan=Scan(image_range, (0.0, 1.0)), identifier=expid)
 
 
 def make_scanless_experiment(expid="1"):
-    """Make an experiment without a scan i.e. single-image dataset"""
+    """Make an experiment without a scan i.e. single-image dataset."""
     return Experiment(identifier=expid)
 
 
 def test_parse_exclude_images_commands():
-    """Test for namesake function"""
+    """Test for namesake function."""
     commands = [["1:101:200"], ["0:201:300"]]
     ranges = _parse_exclude_images_commands(commands, [])
     assert ranges == [("1", (101, 200)), ("0", (201, 300))]
@@ -47,7 +45,7 @@ def test_parse_exclude_images_commands():
 
 
 def test_set_get_initial_valid_image_ranges():
-    """Test for get/set valid_image_ranges functions"""
+    """Test for get/set valid_image_ranges functions."""
     explist = ExperimentList([make_scan_experiment(), make_scanless_experiment()])
     explist = set_initial_valid_image_ranges(explist)
     assert list(explist[0].scan.get_valid_image_ranges("0")) == [(1, 100)]
@@ -58,7 +56,7 @@ def test_set_get_initial_valid_image_ranges():
 
 
 def test_exclude_image_ranges_from_scans():
-    """Test for namesake function"""
+    """Test for namesake function."""
     explist = ExperimentList(
         [make_scan_experiment(expid="0"), make_scan_experiment(expid="1")]
     )
@@ -80,7 +78,7 @@ def test_exclude_image_ranges_from_scans():
 
 
 def test_get_selection_for_valid_image_ranges():
-    """Test for namesake function"""
+    """Test for namesake function."""
     exp = make_scan_experiment()
     exp.scan.set_valid_image_ranges("0", [(2, 10)])
     refl = flex.reflection_table()

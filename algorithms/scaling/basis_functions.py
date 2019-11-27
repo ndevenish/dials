@@ -1,6 +1,7 @@
 """
-Classes that take in a scaler and minimisation parameters and
-return the scale factors and derivatives of the scale factors w.r.t.
+Classes that take in a scaler and minimisation parameters and return the scale
+factors and derivatives of the scale factors w.r.t.
+
 the parameters
 """
 from __future__ import absolute_import, division, print_function
@@ -11,8 +12,8 @@ from scitbx import sparse
 
 
 class RefinerCalculator(object):
-    """Class that takes in a scaling_apm and calculates the scale factors
-    and derivatives for minimisation."""
+    """Class that takes in a scaling_apm and calculates the scale factors and
+    derivatives for minimisation."""
 
     @staticmethod
     def _calc_component_scales_derivatives(apm, block_id):
@@ -28,8 +29,8 @@ class RefinerCalculator(object):
 
     @staticmethod
     def _calculate_scale_factors(apm, block_id, scales):
-        """Calculate the overall scale factor for each reflection from individual
-        components."""
+        """Calculate the overall scale factor for each reflection from
+        individual components."""
         if not scales:
             return apm.constant_g_values[block_id]  # needs to return to set in Ih_table
         multiplied_scale_factors = flex.double(scales[0].size(), 1.0)

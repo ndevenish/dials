@@ -32,7 +32,11 @@ def test_run(dials_data):
 
 
 def LP_calculations(experiment, s1):
-    """See Kabsch, J. Appl. Cryst 1988 21 916-924."""
+    """
+    See Kabsch, J.
+
+    Appl. Cryst 1988 21 916-924.
+    """
 
     tpl_n = experiment.beam.get_polarization_normal()
     tpl_s0 = experiment.beam.get_s0()

@@ -6,10 +6,11 @@ logger = logging.getLogger(__name__)
 
 
 class MaskerBase(object):
-    """A root class to that does overlap masking"""
+    """A root class to that does overlap masking."""
 
     def __init__(self, experiment):
-        """Initialise the overlap masking algorithm
+        """
+        Initialise the overlap masking algorithm.
 
         Params:
             experiment The experiment data
@@ -20,7 +21,8 @@ class MaskerBase(object):
         self.mask_overlapping = MaskOverlapping()
 
     def __call__(self, reflections, adjacency_list=None):
-        """Mask the given reflections.
+        """
+        Mask the given reflections.
 
         Params:
             reflections The reflection list
@@ -43,10 +45,11 @@ class MaskerBase(object):
 
 
 class Masker3DProfile(MaskerBase):
-    """A class to perform 3D profile masking"""
+    """A class to perform 3D profile masking."""
 
     def __init__(self, experiments):
-        """Initialise the masking algorithms
+        """
+        Initialise the masking algorithms.
 
         Params:
             experiment The experiment data
@@ -57,7 +60,8 @@ class Masker3DProfile(MaskerBase):
         self._experiments = experiments
 
     def __call__(self, reflections, adjacency_list=None):
-        """Mask the given reflections.
+        """
+        Mask the given reflections.
 
         Params:
             reflections The reflection list
@@ -83,10 +87,11 @@ class Masker3DProfile(MaskerBase):
 
 
 class MaskerEmpirical(MaskerBase):
-    """A class to perform empirical masking"""
+    """A class to perform empirical masking."""
 
     def __init__(self, experiment, reference):
-        """Initialise the masking algorithms
+        """
+        Initialise the masking algorithms.
 
         Params:
             experiment The experiment data
@@ -100,7 +105,8 @@ class MaskerEmpirical(MaskerBase):
         self._reference = reference
 
     def __call__(self, reflections, adjacency_list=None):
-        """Mask the given reflections.
+        """
+        Mask the given reflections.
 
         Params:
             reflections The reflection list

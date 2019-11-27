@@ -1,6 +1,4 @@
-"""
-Tests for the dials.report.plots module.
-"""
+"""Tests for the dials.report.plots module."""
 from __future__ import absolute_import, division, print_function
 
 import itertools
@@ -42,7 +40,7 @@ def iobs():
 
 def test_AnomalousPlotter():
 
-    "Make a larger array to allow all plots to be made"
+    """Make a larger array to allow all plots to be made."""
     cs = crystal.symmetry(space_group_symbol="P1", unit_cell=(6, 6, 6, 90, 90, 90))
     ms = miller.build_set(cs, anomalous_flag=True, d_min=1.0)
     indices = ms.indices()
@@ -210,7 +208,7 @@ def test_ResolutionPlotsAndStats(iobs):
 
 @pytest.fixture
 def batch_manager_fix():
-    """Make a batch manager fixture"""
+    """Make a batch manager fixture."""
 
     batch_params = [{"id": 0, "range": [0, 10]}, {"id": 1, "range": [100, 110]}]
     batches = flex.int(itertools.chain(range(0, 10), range(100, 110)))
@@ -218,7 +216,7 @@ def batch_manager_fix():
 
 
 def test_i_over_sig_i_vs_batch_plot(batch_manager_fix):
-    """Test the IsigI batch plot"""
+    """Test the IsigI batch plot."""
     bm = batch_manager_fix
     isigi = flex.double(range(0, 20))
     d = i_over_sig_i_vs_batch_plot(bm, isigi)
@@ -227,8 +225,11 @@ def test_i_over_sig_i_vs_batch_plot(batch_manager_fix):
 
 
 def test_scale_rmerge_vs_batch_plot(batch_manager_fix):
-    """Test the scale and rmerge batch plot. Should have the option
-    to plot without scales (for xia2)."""
+    """
+    Test the scale and rmerge batch plot.
+
+    Should have the option to plot without scales (for xia2).
+    """
     bm = batch_manager_fix
     rmergevsb = flex.double(range(0, 20))
     scalesvsb = flex.double(range(1, 21))

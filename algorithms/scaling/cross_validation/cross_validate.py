@@ -1,8 +1,8 @@
 """
-This module defines a general cross validation function that can be used
-with any valid CrossValidator. To use in a command line program, the
-phil_scope should be included. Provided here is a description of the options,
-using the example of running cross_validation in dials.scale
+This module defines a general cross validation function that can be used with
+any valid CrossValidator. To use in a command line program, the phil_scope
+should be included. Provided here is a description of the options, using the
+example of running cross_validation in dials.scale.
 
 General description:
 cross_validate runs the script defined by the CrossValidator, running each

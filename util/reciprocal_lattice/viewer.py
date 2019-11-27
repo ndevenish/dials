@@ -43,7 +43,8 @@ model_view_matrix = None
 if not WX3:
     # WX4 compatibility
     def _rewrite_event(unbound):
-        """Decorator to intercept the event and add missing instance methods"""
+        """Decorator to intercept the event and add missing instance
+        methods."""
 
         def _wrapp(self, event):
             event.GetPositionTuple = event.GetPosition

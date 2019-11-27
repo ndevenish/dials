@@ -12,8 +12,9 @@ except ImportError:
 def nag():
     """
     Check if pre-commits should be installed for this repository.
-    If they are not and should be then annoy the developer.
-    To be called in libtbx_refresh.py
+
+    If they are not and should be then annoy the developer. To be called
+    in libtbx_refresh.py
     """
     if os.name == "nt" or not stat:  # unsupported
         return

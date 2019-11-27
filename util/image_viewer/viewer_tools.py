@@ -1,7 +1,5 @@
 # coding: utf-8
-"""
-Various tools/controls used by the image viewer
-"""
+"""Various tools/controls used by the image viewer."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,7 +10,7 @@ WX3 = wx.VERSION[0] == 3
 
 
 class ImageCollectionWithSelection(OrderedSet):
-    """A Ordered-like object that tracks a 'currently selected item'"""
+    """A Ordered-like object that tracks a 'currently selected item'."""
 
     def __init__(self, items=None):
         super(ImageCollectionWithSelection, self).__init__(items or [])
@@ -42,19 +40,21 @@ class ImageCollectionWithSelection(OrderedSet):
 
 
 class LegacyChooserAdapter(object):
-    """Fake wx.Choice replacement for legacy upstream code.
+    """
+    Fake wx.Choice replacement for legacy upstream code.
 
-    The design relies on a wx.Choice object being created by a subclass and
-    stored on a frame.image_chooser attribute. This wx.Choice object is then
-    used to control the current selected image and storing information about
-    all the 'loaded' images. This class replaces the API minimally so that
-    the upstream code still works, while letting us transition to something
-    a little saner in our implementation.
+    The design relies on a wx.Choice object being created by a subclass
+    and stored on a frame.image_chooser attribute. This wx.Choice object
+    is then used to control the current selected image and storing
+    information about all the 'loaded' images. This class replaces the
+    API minimally so that the upstream code still works, while letting
+    us transition to something a little saner in our implementation.
     """
 
     def __init__(self, images, loader):
         """
         Create the fake wx.Choice object.
+
         :param images: The list-like object containing the image data
         :param loader: A function to call to load a specific entry as current
         """
@@ -80,9 +80,7 @@ class LegacyChooserAdapter(object):
 
 
 class ImageChooserControl(wx.Control):
-    """
-    Convenience control to display a slider and accompanying label
-    """
+    """Convenience control to display a slider and accompanying label."""
 
     def __init__(self, *args, **kwargs):
         kwargs["style"] = kwargs.get("style", 0) | wx.BORDER_NONE
@@ -119,7 +117,7 @@ class ImageChooserControl(wx.Control):
         super(ImageChooserControl, self).Layout()
 
     def set_temporary_label(self, label):
-        """Set the display label to a 'temporary' styled entry"""
+        """Set the display label to a 'temporary' styled entry."""
         self._label.SetForegroundColour((100, 100, 100))
         self._label.SetLabel(label)
         self._label.SetFont(wx.NORMAL_FONT.Italic())
@@ -127,7 +125,7 @@ class ImageChooserControl(wx.Control):
         self.Layout()
 
     def set_label(self, label):
-        """Set the display label to a 'permanent' styled entry"""
+        """Set the display label to a 'permanent' styled entry."""
         self._label.SetForegroundColour((0, 0, 0))
         self._label.SetLabel(label)
         self._label.SetFont(wx.NORMAL_FONT)
@@ -141,7 +139,7 @@ class ImageChooserControl(wx.Control):
         self._slider.SetValue(value)
 
     def SetMax(self, value):
-        "Set maximum, and disable the slider if necessary"
+        """Set maximum, and disable the slider if necessary."""
         if value == 1:
             assert self._slider.GetValue() == 1
             self._slider.Disable()

@@ -8,8 +8,9 @@ from scitbx import matrix
 def solve_r3_rotation_for_angles_given_axes(
     R, e1, e2, e3, smaller_phi2_solution=True, return_both_solutions=False, deg=False
 ):
-    """decompose 3*3 rotation matrix R into three rotations about the axes
-    e1, e2 and e3
+    """
+    decompose 3*3 rotation matrix R into three rotations about the axes e1, e2
+    and e3.
 
     return angles given axes; return None if no solution
     smaller_phi2_solution = True or False for the two solutions
@@ -32,7 +33,8 @@ def solve_r3_rotation_for_angles_given_axes(
     R =  R(e1, phi1) R(e2, phi2) R(e3, phi3)
 
     where R(e, phi) is the rotation matrix for a rotation by angle phi around
-    axis e"""
+    axis e
+    """
 
     assert R.is_r3_rotation_matrix()
     e1 = matrix.col(e1).normalize()

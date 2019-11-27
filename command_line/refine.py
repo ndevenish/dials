@@ -2,10 +2,10 @@
 """
 Refine the diffraction geometry of input experiments against the input indexed
 reflections. For rotation scans, the model may be either static (the same for
-all reflections) or scan-varying (dependent on image number in the scan).
-Other basic parameters include control over output filenames, fixing of
-certain parameters of each model and options that control the number of
-reflections used in refinement.
+all reflections) or scan-varying (dependent on image number in the scan). Other
+basic parameters include control over output filenames, fixing of certain
+parameters of each model and options that control the number of reflections
+used in refinement.
 
 Examples::
 
@@ -105,7 +105,8 @@ working_phil = phil_scope.fetch(sources=[phil_overrides])
 
 
 def write_centroids_table(refiner, filename):
-    """Write a table of centroids from refinement for debugging.
+    """
+    Write a table of centroids from refinement for debugging.
 
     Args:
         refiner: A dials.algorithms.refinement.refiner.Refiner.
@@ -166,7 +167,8 @@ def write_centroids_table(refiner, filename):
 
 
 def run_macrocycle(params, reflections, experiments):
-    """Run one macrocycle of refinement.
+    """
+    Run one macrocycle of refinement.
 
     One macrocycle of refinement is run, as specified by the PHIL
     parameters, using the centroids from the supplied reflections
@@ -250,7 +252,8 @@ def run_macrocycle(params, reflections, experiments):
 
 
 def run_dials_refine(experiments, reflections, params):
-    """Functional interface to tasks performed by the program dials.refine.
+    """
+    Functional interface to tasks performed by the program dials.refine.
 
     This runs refinement according to the PHIL parameters in params, using
     taking the initial experimental geometry from experiments, and the
@@ -269,7 +272,6 @@ def run_dials_refine(experiments, reflections, params):
     Returns:
         tuple: The refined experiments, the updated reflection table, the
             Refiner object and the refinement history object.
-
     """
 
     # Modify options if necessary
@@ -305,8 +307,8 @@ def run_dials_refine(experiments, reflections, params):
 
 def run(args=None, phil=working_phil):
     """
-    Set up refinement from command line options, files and PHIL parameters.
-    Run refinement and save output files as specified.
+    Set up refinement from command line options, files and PHIL parameters. Run
+    refinement and save output files as specified.
 
     Called when running dials.refine as a command-line program
 

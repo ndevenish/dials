@@ -9,7 +9,8 @@ class Strategy(object):
     phil_scope = None
 
     def __init__(self, params=None, *args, **kwargs):
-        """Construct the strategy.
+        """
+        Construct the strategy.
 
         Args:
             params: an extracted PHIL scope containing the parameters
@@ -19,7 +20,8 @@ class Strategy(object):
             self._params = self.phil_scope.extract()
 
     def find_crystal_models(self, reflections, experiments):
-        """Find a list of likely crystal models.
+        """
+        Find a list of likely crystal models.
 
         Args:
             reflections (dials.array_family.flex.reflection_table):

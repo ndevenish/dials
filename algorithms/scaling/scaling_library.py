@@ -1,11 +1,13 @@
 """
 Module of library functions, to perform core scaling operations on reflection
-tables and experiment lists. Some functions, such as create_scaling_model and
-merging statistics calculations are called from the main dials.scale script,
-whereas others are provided as library functions for calling from custom
-scripts. The functions defined here should ideally only require reflection
-tables and ExperimentList objects (and sometimes phil_scope objects if
-necessary), and return common dials objects such as reflection tables and
+tables and experiment lists.
+
+Some functions, such as create_scaling_model and merging statistics
+calculations are called from the main dials.scale script, whereas others
+are provided as library functions for calling from custom scripts. The
+functions defined here should ideally only require reflection tables and
+ExperimentList objects (and sometimes phil_scope objects if necessary),
+and return common dials objects such as reflection tables and
 ExperimentLists.
 """
 from __future__ import absolute_import, division, print_function
@@ -54,10 +56,14 @@ def set_image_ranges_in_scaling_models(experiments):
 
 
 def choose_scaling_intensities(reflection_table, intensity_choice="profile"):
-    """Choose which intensities to use for scaling. The LP, QE and
-    partiality corrections are also applied. Two new columns are
-    added to the reflection table 'intensity' and 'variance', which have
-    all corrections applied except an inverse scale factor."""
+    """
+    Choose which intensities to use for scaling.
+
+    The LP, QE and partiality corrections are also applied. Two new
+    columns are added to the reflection table 'intensity' and
+    'variance', which have all corrections applied except an inverse
+    scale factor.
+    """
     if intensity_choice == "profile":
         intensity_choice = "prf"  # rename to allow string matching with refl table
     if intensity_choice == "prf":
@@ -128,14 +134,16 @@ def scale_against_target(
     params=None,
     model="KB",
 ):
-    """Determine scale factors for a single dataset, by scaling against a target
+    """
+    Determine scale factors for a single dataset, by scaling against a target
     reflection table. Requires a single reflection table for the reflections to
     scale and the target dataset, and an ExperimentList for both datasets. The
     params option can also be specified, if None then the default scaling
     configuration is used. The scaling model can be specified individually.
 
-    Returns the reflection table, with added columns 'inverse_scale_factor' and
-    'inverse_scale_factor_variance'."""
+    Returns the reflection table, with added columns
+    'inverse_scale_factor' and 'inverse_scale_factor_variance'.
+    """
 
     if not params:
         phil_scope = phil.parse(
@@ -163,13 +171,15 @@ def scale_against_target(
 
 
 def scale_single_dataset(reflection_table, experiment, params=None, model="physical"):
-    """Determine scale factors for a single dataset. Requires a reflection table
-    and an ExperimentList with a single experiment. A custom params option can be
-    specified, if not the default scaling params option will be used, with default
-    configuration options. The model can be individually specified.
+    """
+    Determine scale factors for a single dataset. Requires a reflection table
+    and an ExperimentList with a single experiment. A custom params option can
+    be specified, if not the default scaling params option will be used, with
+    default configuration options. The model can be individually specified.
 
-    Returns the reflection table, with added columns 'inverse_scale_factor' and
-    'inverse_scale_factor_variance'."""
+    Returns the reflection table, with added columns
+    'inverse_scale_factor' and 'inverse_scale_factor_variance'.
+    """
 
     if not params:
         phil_scope = phil.parse(
@@ -196,9 +206,11 @@ def scale_single_dataset(reflection_table, experiment, params=None, model="physi
 
 
 def create_auto_scaling_model(params, experiments, reflections):
-    """Create a scaling model with auto determined parameterisation.
+    """
+    Create a scaling model with auto determined parameterisation.
 
-    Assumes that only called when model parameter not specified by user."""
+    Assumes that only called when model parameter not specified by user.
+    """
     models = experiments.scaling_models()
     if None in models or params.overwrite_existing_models:
         phil_scope = phil.parse(
@@ -282,10 +294,14 @@ def create_scaling_model(params, experiments, reflection_tables):
 
 
 def create_Ih_table(experiments, reflections, selections=None, n_blocks=1):
-    """Create an Ih table from a list of experiments and reflections. Optionally,
-    a selection list can also be given, to select data from each reflection table.
-    Allow an unequal number of experiments and reflections, as only need to
-    extract one space group value (can optionally check all same if many)."""
+    """
+    Create an Ih table from a list of experiments and reflections.
+
+    Optionally, a selection list can also be given, to select data from
+    each reflection table. Allow an unequal number of experiments and
+    reflections, as only need to extract one space group value (can
+    optionally check all same if many).
+    """
     if selections:
         assert len(selections) == len(
             reflections
@@ -377,8 +393,8 @@ will not be used for calculating merging statistics""",
 
 
 def determine_best_unit_cell(experiments):
-    """Set the median unit cell as the best cell, for consistent d-values across
-    experiments."""
+    """Set the median unit cell as the best cell, for consistent d-values
+    across experiments."""
     uc_params = [flex.double() for i in range(6)]
     for exp in experiments:
         for i, p in enumerate(exp.crystal.get_unit_cell().parameters()):
@@ -523,9 +539,13 @@ def create_datastructures_for_target_mtz(experiments, mtz_file):
 
 
 def create_datastructures_for_structural_model(reflections, experiments, cif_file):
-    """Read a cif file, calculate intensities and scale them to the average
-    intensity of the reflections. Return an experiment and reflection table to
-    be used for the structural model in scaling."""
+    """
+    Read a cif file, calculate intensities and scale them to the average
+    intensity of the reflections.
+
+    Return an experiment and reflection table to be used for the
+    structural model in scaling.
+    """
 
     # read model, compute Fc, square to F^2
     ic = intensity_array_from_cif_file(cif_file)

@@ -2,7 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 
 def get_inverse_ub_matrix_from_xparm(handle):
-    """Get the inverse_ub_matrix from an xparm file handle
+    """
+    Get the inverse_ub_matrix from an xparm file handle.
 
     Params:
         handle The file handle
@@ -18,7 +19,8 @@ def get_inverse_ub_matrix_from_xparm(handle):
 
 
 def get_ub_matrix_from_xparm(handle):
-    """Get the ub_matrix from an xparm file handle
+    """
+    Get the ub_matrix from an xparm file handle.
 
     Params:
         handle The file handle
@@ -30,7 +32,8 @@ def get_ub_matrix_from_xparm(handle):
 
 
 def get_unit_cell_from_xparm(handle):
-    """Get the unit_cell object from an xparm file handle
+    """
+    Get the unit_cell object from an xparm file handle.
 
     Params:
         handle The file handle
@@ -44,7 +47,8 @@ def get_unit_cell_from_xparm(handle):
 
 
 def get_space_group_type_from_xparm(handle):
-    """Get the space group tyoe object from an xparm file handle
+    """
+    Get the space group tyoe object from an xparm file handle.
 
     Params:
         handle The file handle

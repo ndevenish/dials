@@ -2,10 +2,10 @@ from __future__ import absolute_import, division, print_function
 
 
 class reader:
-    """A class to read the CBF files used in DIALS"""
+    """A class to read the CBF files used in DIALS."""
 
     def read_file(self, filename):
-        """Read the CBF file"""
+        """Read the CBF file."""
         import pycbf
 
         self.cbf_handle = pycbf.cbf_handle_struct()
@@ -13,7 +13,7 @@ class reader:
         self.cbf_handle.rewind_datablock()
 
     def get_data(self):
-        """Get the gain array from the file"""
+        """Get the gain array from the file."""
         import numpy
         from scitbx.array_family import flex
 

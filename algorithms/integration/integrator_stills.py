@@ -48,7 +48,7 @@ class ReflectionBlockIntegratorStills(object):
 
 
 class IntegratorStills(object):
-    """Integrate reflections"""
+    """Integrate reflections."""
 
     def __init__(self, params, exlist, reference=None, predicted=None, shoeboxes=None):
         """Initialise the script."""

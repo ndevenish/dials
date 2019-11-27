@@ -113,10 +113,13 @@ phil_scope = parse(phil_str)
 
 
 class BlockCalculator(object):
-    """Utility class to calculate and set columns in the provided reflection
-    table, which will be used during scan-varying refinement. The columns are a
-    'block' number and an associated 'block_centre', giving the image number in
-    the centre of the block"""
+    """
+    Utility class to calculate and set columns in the provided reflection
+    table, which will be used during scan-varying refinement.
+
+    The columns are a 'block' number and an associated 'block_centre',
+    giving the image number in the centre of the block
+    """
 
     def __init__(self, experiments, reflections):
 
@@ -135,7 +138,7 @@ class BlockCalculator(object):
         self._reflections["block_centre"] = flex.double(len(self._reflections))
 
     def per_width(self, width, deg=True):
-        """Set blocks for all experiments according to a constant width"""
+        """Set blocks for all experiments according to a constant width."""
 
         if deg:
             width *= DEG2RAD
@@ -173,7 +176,7 @@ class BlockCalculator(object):
         return self._reflections
 
     def per_image(self):
-        """Set one block per image for all experiments"""
+        """Set one block per image for all experiments."""
 
         self._create_block_columns()
 
@@ -207,7 +210,8 @@ class ReflectionManagerFactory(object):
     def from_parameters_reflections_experiments(
         params, reflections, experiments, do_stills=False
     ):
-        """Given a set of parameters and models, build a reflection manager
+        """
+        Given a set of parameters and models, build a reflection manager.
 
         Params:
             params The input parameters
@@ -324,13 +328,16 @@ class ReflectionManagerFactory(object):
 
 
 class ReflectionManager(object):
-    """A class to maintain information about observed and predicted
-    reflections for refinement.
+    """
+    A class to maintain information about observed and predicted reflections
+    for refinement.
 
-    This new version keeps the reflections as a reflection table. Initialisation
-    is not complete until the ReflectionManager is paired with a target function.
-    Then, prediction can be done, followed by outlier rejection and any random
-    sampling to form the working subset."""
+    This new version keeps the reflections as a reflection table.
+    Initialisation is not complete until the ReflectionManager is paired
+    with a target function. Then, prediction can be done, followed by
+    outlier rejection and any random sampling to form the working
+    subset.
+    """
 
     _weighting_strategy = weighting_strategies.StatisticalWeightingStrategy()
     experiment_type = "scans"
@@ -430,15 +437,18 @@ class ReflectionManager(object):
         self._sample_size = None
 
     def get_centroid_analyser(self, debug=False):
-        """Create a CentroidAnalysis object for the current reflections"""
+        """Create a CentroidAnalysis object for the current reflections."""
 
         return CentroidAnalyser(self._reflections, debug=debug)
 
     def finalise(self, analysis=None):
-        """Complete initialisation by performing outlier rejection and any
-        requested subsetting. If a list of results from a CentroidAnalysis
-        object is provided, these may be used to determine outlier rejection
-        block widths"""
+        """
+        Complete initialisation by performing outlier rejection and any
+        requested subsetting.
+
+        If a list of results from a CentroidAnalysis object is provided,
+        these may be used to determine outlier rejection block widths
+        """
 
         logger.debug("Finalising the Reflection Manager")
 
@@ -507,12 +517,14 @@ class ReflectionManager(object):
         logger.debug("Working set size = %d observations", self.get_sample_size())
 
     def _id_refs_to_keep(self, obs_data):
-        """Create a selection of observations that pass certain conditions.
+        """
+        Create a selection of observations that pass certain conditions.
 
-        This step includes rejection of reflections too close to the spindle,
-        reflections measured outside the scan range, rejection of the (0,0,0)
-        Miller index and rejection of reflections with the overload flag set.
-        Outlier rejection is done later."""
+        This step includes rejection of reflections too close to the
+        spindle, reflections measured outside the scan range, rejection
+        of the (0,0,0) Miller index and rejection of reflections with
+        the overload flag set. Outlier rejection is done later.
+        """
 
         # first exclude reflections with miller index set to 0,0,0
         sel1 = obs_data["miller_index"] != (0, 0, 0)
@@ -590,7 +602,7 @@ class ReflectionManager(object):
         return inc
 
     def _create_working_set(self):
-        """Make a subset of the indices of reflections to use in refinement"""
+        """Make a subset of the indices of reflections to use in refinement."""
 
         working_isel = flex.size_t()
         for iexp, exp in enumerate(self._experiments):
@@ -634,20 +646,21 @@ class ReflectionManager(object):
 
     def get_accepted_refs_size(self):
         """Return the number of observations that pass inclusion criteria and
-        can potentially be used for refinement"""
+        can potentially be used for refinement."""
 
         return self._accepted_refs_size
 
     def get_sample_size(self):
-        """Return the number of observations in the working set to be
-        used for refinement"""
+        """Return the number of observations in the working set to be used for
+        refinement."""
 
         return len(self._reflections)
 
     def _sort_obs_by_residual(self, obs, angular=False):
-        """For diagnostic purposes, sort the obs-pred matches so that the
-        highest residuals are first. By default, sort by positional
-        residual, unless angular=True.
+        """
+        For diagnostic purposes, sort the obs-pred matches so that the highest
+        residuals are first. By default, sort by positional residual, unless
+        angular=True.
 
         The earliest entries in the return list may be those that are
         causing problems in refinement.
@@ -662,25 +675,26 @@ class ReflectionManager(object):
         return sort_obs
 
     def get_indexed(self):
-        """Return the reflections passed in as input"""
+        """Return the reflections passed in as input."""
 
         return self._indexed
 
     def get_matches(self):
-        """For every observation used in refinement return (a copy of) all data"""
+        """For every observation used in refinement return (a copy of) all
+        data."""
 
         return self._reflections.select(
             self._reflections.get_flags(self._reflections.flags.used_in_refinement)
         )
 
     def get_free_reflections(self):
-        """Return all reflections that were accepted for refinement but not chosen
-        in the working set"""
+        """Return all reflections that were accepted for refinement but not
+        chosen in the working set."""
 
         return self._free_reflections
 
     def print_stats_on_matches(self):
-        """Print some basic statistics on the matches"""
+        """Print some basic statistics on the matches."""
 
         l = self.get_matches()
         nref = len(l)
@@ -722,7 +736,7 @@ class ReflectionManager(object):
 
     def reset_accepted_reflections(self, reflections=None):
         """Reset use flags for all observations in preparation for a new set of
-        predictions"""
+        predictions."""
 
         # if not passing in reflections, take the internally managed table
         if reflections is None:
@@ -732,31 +746,34 @@ class ReflectionManager(object):
         reflections.unset_flags(mask, reflections.flags.used_in_refinement)
 
     def get_obs(self):
-        """Get the list of managed observations"""
+        """Get the list of managed observations."""
 
         return self._reflections
 
     def filter_obs(self, sel):
         """Perform a flex array selection on the managed observations, so that
-        external classes can filter according to criteria not available here"""
+        external classes can filter according to criteria not available
+        here."""
 
         self._reflections = self._reflections.select(sel)
         return self._reflections
 
 
 class StillsReflectionManager(ReflectionManager):
-    """Overloads for a Reflection Manager that does not exclude
-    reflections too close to the spindle, and reports only information
-    about X, Y, DelPsi residuals"""
+    """Overloads for a Reflection Manager that does not exclude reflections too
+    close to the spindle, and reports only information about X, Y, DelPsi
+    residuals."""
 
     _weighting_strategy = weighting_strategies.StillsWeightingStrategy()
     experiment_type = "stills"
 
     def _id_refs_to_keep(self, obs_data):
-        """Create a selection of observations that pass certain conditions.
+        """
+        Create a selection of observations that pass certain conditions.
 
-        Stills-specific version removes checks relevant only to experiments
-        with a rotation axis."""
+        Stills-specific version removes checks relevant only to
+        experiments with a rotation axis.
+        """
 
         # first exclude reflections with miller index set to 0,0,0
         sel1 = obs_data["miller_index"] != (0, 0, 0)
@@ -771,7 +788,7 @@ class StillsReflectionManager(ReflectionManager):
         return inc
 
     def print_stats_on_matches(self):
-        """Print some basic statistics on the matches"""
+        """Print some basic statistics on the matches."""
 
         l = self.get_matches()
         nref = len(l)

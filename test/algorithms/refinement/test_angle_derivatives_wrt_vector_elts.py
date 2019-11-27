@@ -1,5 +1,5 @@
-"""Test analytical expression for the partial derivatives of an angle
-between two vectors with respect to each element of the vectors"""
+"""Test analytical expression for the partial derivatives of an angle between
+two vectors with respect to each element of the vectors."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -14,7 +14,7 @@ from scitbx.math import angle_derivative_wrt_vectors
 class FDAngleDerivativeWrtVectorElts(object):
     """Given two vectors, u and v, calculate the derivative of the angle theta
     between them with respect to any of the elements u_1, u_2, u_3, v_1, v_2
-    and v_3 using a finite difference approximation"""
+    and v_3 using a finite difference approximation."""
 
     def __init__(self, u, v, delta=1.0e-7):
         self._vec_u = u
@@ -24,7 +24,8 @@ class FDAngleDerivativeWrtVectorElts(object):
         self._delta = delta
 
     def dtheta_du_elt(self, i):
-        """Return the derivative of theta with respect to the ith element of a"""
+        """Return the derivative of theta with respect to the ith element of
+        a."""
 
         half_delta_shift = [0.0, 0.0, 0.0]
         half_delta_shift[i] = self._delta / 2.0
@@ -39,7 +40,8 @@ class FDAngleDerivativeWrtVectorElts(object):
         return (theta_fwd - theta_rev) / self._delta
 
     def dtheta_dv_elt(self, i):
-        """Return the derivative of theta with respect to the ith element of b"""
+        """Return the derivative of theta with respect to the ith element of
+        b."""
 
         half_delta_shift = [0.0, 0.0, 0.0]
         half_delta_shift[i] = self._delta / 2.0

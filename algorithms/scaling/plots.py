@@ -1,7 +1,6 @@
 # coding: utf-8
-"""
-Make plotly plots for html output by dials.scale, dials.report or xia2.report.
-"""
+"""Make plotly plots for html output by dials.scale, dials.report or
+xia2.report."""
 from __future__ import absolute_import, division, print_function
 
 import math
@@ -13,8 +12,8 @@ from scitbx.math import distributions
 
 
 def _get_smooth_plotting_data_from_model(physical_model, component="scale"):
-    """Return a tuple of phis, parameters, parameter esds,
-    sample positions for plotting and sample scale values."""
+    """Return a tuple of phis, parameters, parameter esds, sample positions for
+    plotting and sample scale values."""
     configdict = physical_model.configdict
     valid_osc = configdict["valid_osc_range"]
     sample_values = flex.double(
@@ -319,7 +318,7 @@ def plot_absorption_surface(physical_model):
 
 
 def plot_outliers(data):
-    """plots positions of outliers"""
+    """plots positions of outliers."""
 
     if not data["z"]:
         return {"outlier_xy_positions": {}, "outliers_vs_z": {}}

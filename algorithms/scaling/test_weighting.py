@@ -1,6 +1,4 @@
-"""
-Test for the scaling weighting module.
-"""
+"""Test for the scaling weighting module."""
 from __future__ import absolute_import, division, print_function
 import pytest
 from mock import Mock

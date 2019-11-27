@@ -30,7 +30,7 @@ from dials.algorithms.refinement.engine import AdaptLstbx as AdaptLstbxBase
 
 
 class AdaptLstbxSparse(DisableMPmixin, AdaptLstbxBase, non_linear_ls_eigen_wrapper):
-    """Adapt the base class for Eigen"""
+    """Adapt the base class for Eigen."""
 
     def __init__(
         self,
@@ -61,7 +61,7 @@ from dials.algorithms.refinement.engine import (
 
 
 class GaussNewtonIterations(AdaptLstbxSparse, GaussNewtonIterationsBase):
-    """Refinery implementation, using lstbx Gauss Newton iterations"""
+    """Refinery implementation, using lstbx Gauss Newton iterations."""
 
     def __init__(
         self,
@@ -97,26 +97,29 @@ from dials.algorithms.refinement.engine import LevenbergMarquardtIterations
 class SparseLevenbergMarquardtIterations(
     GaussNewtonIterations, LevenbergMarquardtIterations
 ):
-    """Levenberg Marquardt with Sparse matrix algebra"""
+    """Levenberg Marquardt with Sparse matrix algebra."""
 
     def set_cholesky_factor(self):
-        """Override that disables this method of the base AdaptLstbx. For
-        sparse, large matrices this is numberically unstable; not to mention it
-        is not implemented for the Eigen wrapper"""
+        """
+        Override that disables this method of the base AdaptLstbx.
+
+        For sparse, large matrices this is numberically unstable; not to
+        mention it is not implemented for the Eigen wrapper
+        """
         pass
 
     def setup_mu(self):
-        """Override that works with the Eigen wrapper"""
+        """Override that works with the Eigen wrapper."""
         a_diag = self.get_normal_matrix_diagonal()
         self.mu = self.tau * flex.max(a_diag)
 
     def add_constant_to_diagonal(self, mu):
-        """Delegate to the method of non_linear_ls_eigen_wrapper"""
+        """Delegate to the method of non_linear_ls_eigen_wrapper."""
         non_linear_ls_eigen_wrapper.add_constant_to_diagonal(self, self.mu)
 
     def report_progress(self, objective):
         """Override for the Eigen wrapper to provide live feedback of progress
-        of the refinement"""
+        of the refinement."""
 
         logger.debug(
             "Iteration: %5d Objective: %18.4f Mu: %12.7f"

@@ -1,6 +1,4 @@
-"""
-Tests for the scaling restraints module.
-"""
+"""Tests for the scaling restraints module."""
 from __future__ import absolute_import, division, print_function
 from collections import OrderedDict
 import pytest
@@ -113,8 +111,11 @@ def mock_multi_unrestrained_apm(mock_unrestrained_apm):
 def test_unrestrained_ScalingRestraints(
     mock_unrestrained_apm, mock_multi_unrestrained_apm
 ):
-    """Test the case of unrestrained components. None should be returned in each
-    case."""
+    """
+    Test the case of unrestrained components.
+
+    None should be returned in each case.
+    """
 
     assert (
         SingleScalingRestraintsCalculator.calculate_restraints(mock_unrestrained_apm)

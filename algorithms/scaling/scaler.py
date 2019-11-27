@@ -1,5 +1,6 @@
 """
-This module defines classes which implement the stages of the scaling algorithm.
+This module defines classes which implement the stages of the scaling
+algorithm.
 
 These 'scalers' act to initialise and connect various parts of the scaling
 algorithm and datastructures such as the Ih_table etc, and
@@ -62,9 +63,7 @@ flex.set_random_seed(42)
 
 
 class ScalerBase(Subject):
-    """
-    Abstract base class for all scalers (single and multiple).
-    """
+    """Abstract base class for all scalers (single and multiple)."""
 
     def __init__(self, params):
         """Define the properties of a scaler."""
@@ -114,9 +113,9 @@ class ScalerBase(Subject):
         """
         An Ih_table datastructure containing all suitable reflections.
 
-        This includes reflections across all datasets being minimised, and there
-        should only be one instance, maintained by the highest level scaler, e.g.
-        a multiscaler in a multi-dataset case.
+        This includes reflections across all datasets being minimised,
+        and there should only be one instance, maintained by the highest
+        level scaler, e.g. a multiscaler in a multi-dataset case.
         """
         return self._global_Ih_table
 
@@ -128,7 +127,8 @@ class ScalerBase(Subject):
     ### Interface for scaling refiner
 
     def update_for_minimisation(self, apm, block_id):
-        """Update the scale factors and Ih for the next minimisation iteration."""
+        """Update the scale factors and Ih for the next minimisation
+        iteration."""
         raise NotImplementedError()
 
     def get_blocks_for_minimisation(self):
@@ -345,9 +345,9 @@ class SingleScaler(ScalerBase):
         """
         Initialise a single-dataset scaler.
 
-        The reflection table needs the columns 'inverse_scale_factor', 'Esq',
-        'intensity', 'variance', 'id', which are guaranteed if the scaler is
-        created using the SingleScalerFactory.
+        The reflection table needs the columns 'inverse_scale_factor',
+        'Esq', 'intensity', 'variance', 'id', which are guaranteed if
+        the scaler is created using the SingleScalerFactory.
         """
         assert all(
             i in reflection_table
@@ -437,7 +437,8 @@ class SingleScaler(ScalerBase):
 
     @staticmethod
     def _get_suitable_for_scaling_sel(reflections):
-        """Extract suitable reflections for scaling from the reflection table."""
+        """Extract suitable reflections for scaling from the reflection
+        table."""
         user_excl = reflections.get_flags(reflections.flags.user_excluded_in_scaling)
         excl_for_scale = reflections.get_flags(reflections.flags.excluded_for_scaling)
         suitable_refl_for_scaling_sel = ~(user_excl | excl_for_scale)
@@ -460,12 +461,14 @@ class SingleScaler(ScalerBase):
 
     def update_var_cov(self, apm):
         """
-        Update the full parameter variance covariance matrix after a refinement.
+        Update the full parameter variance covariance matrix after a
+        refinement.
 
-        If all parameters have been refined, then the full var_cov matrix can be set.
-        Else one must select subblocks for pairs of parameters and assign these into
-        the full var_cov matrix, taking care to out these in the correct position.
-        This is applicable if only some parameters have been refined in this cycle.
+        If all parameters have been refined, then the full var_cov
+        matrix can be set. Else one must select subblocks for pairs of
+        parameters and assign these into the full var_cov matrix, taking
+        care to out these in the correct position. This is applicable if
+        only some parameters have been refined in this cycle.
         """
         var_cov_list = apm.var_cov_matrix  # values are passed as a list from refinery
         if int(var_cov_list.size() ** 0.5) == self.var_cov_matrix.n_rows:
@@ -499,7 +502,8 @@ class SingleScaler(ScalerBase):
                     )
 
     def update_for_minimisation(self, apm, block_id):
-        """Update the scale factors and Ih for the next minimisation iteration."""
+        """Update the scale factors and Ih for the next minimisation
+        iteration."""
         apm_i = apm.apm_list[0]
         scales_i, derivs_i = RefinerCalculator.calculate_scales_and_derivatives(
             apm_i, block_id
@@ -564,10 +568,10 @@ class SingleScaler(ScalerBase):
         """
         Calculate scale factors for all suitable reflections.
 
-        Use the current model to calculate scale factors for all suitable
-        reflections, and set these in the reflection table. If caller=None,
-        the global_Ih_table is updated. If calc_cov, an error estimate on the
-        inverse scales is calculated.
+        Use the current model to calculate scale factors for all
+        suitable reflections, and set these in the reflection table. If
+        caller=None, the global_Ih_table is updated. If calc_cov, an
+        error estimate on the inverse scales is calculated.
         """
         self._reflection_table["inverse_scale_factor_variance"] = flex.double(
             self.reflection_table.size(), 0.0
@@ -720,7 +724,8 @@ attempting to use all reflections for minimisation."""
             component.update_reflection_data(block_selections=block_selections)
 
     def _create_Ih_table(self):
-        """Create an Ih_table from the reflection table using the scaling selection."""
+        """Create an Ih_table from the reflection table using the scaling
+        selection."""
         self._Ih_table = IhTable(
             [self.get_reflections_for_model_minimisation()],
             self.experiment.crystal.get_space_group(),
@@ -741,10 +746,11 @@ attempting to use all reflections for minimisation."""
         """
         Store the relevant data in the scaling model components.
 
-        This takes the columns from the 'suitable' part of the reflection table (
-        which will include outliers). Then a global_Ih_table is created, which can
-        be used for outlier rejection. When calculations are done with the model
-        components, the correct reflections should first be selected out of the
+        This takes the columns from the 'suitable' part of the
+        reflection table ( which will include outliers). Then a
+        global_Ih_table is created, which can be used for outlier
+        rejection. When calculations are done with the model components,
+        the correct reflections should first be selected out of the
         stored data.
         """
         sel_reflections = self.get_valid_reflections()
@@ -807,8 +813,8 @@ attempting to use all reflections for minimisation."""
         """
         Prepare the datastructures for a round of scaling.
 
-        Update the scaling selection, create a new Ih_table and update the model
-        data ready for minimisation.
+        Update the scaling selection, create a new Ih_table and update
+        the model data ready for minimisation.
         """
         if outlier:
             self.scaling_selection = self.scaling_subset_sel & ~self.outliers
@@ -849,10 +855,10 @@ class MultiScalerBase(ScalerBase):
         """
         Delete a scaler from the dataset.
 
-        Code in this module does not necessarily have access to all references of
-        experiments and reflections, so log the position in the list so that they
-        can be deleted later. Scaling algorithm code should only depends on the
-        scalers.
+        Code in this module does not necessarily have access to all
+        references of experiments and reflections, so log the position
+        in the list so that they can be deleted later. Scaling algorithm
+        code should only depends on the scalers.
         """
         initial_number = len(scalers)
         for n in n_list[::-1]:
@@ -885,7 +891,8 @@ class MultiScalerBase(ScalerBase):
         """
         Calculate scale factors for all suitable reflections in the datasets.
 
-        After the scale factors are updated, the global_Ih_table is updated also.
+        After the scale factors are updated, the global_Ih_table is
+        updated also.
         """
         if calc_cov:
             logger.info("Calculating error estimates of inverse scale factors. \n")
@@ -915,7 +922,8 @@ class MultiScalerBase(ScalerBase):
         )
 
     def update_for_minimisation(self, apm, block_id):
-        """Update the scale factors and Ih for the next iteration of minimisation."""
+        """Update the scale factors and Ih for the next iteration of
+        minimisation."""
         self._update_for_minimisation(apm, block_id, calc_Ih=True)
 
     def _update_for_minimisation(self, apm, block_id, calc_Ih=True):
@@ -1021,9 +1029,9 @@ class MultiScalerBase(ScalerBase):
         """
         Prepare the datastructures for a round of scaling.
 
-        Update the scaling selection, create a new Ih_table and update the model
-        data ready for minimisation. Also check to see if any datasets should be
-        removed.
+        Update the scaling selection, create a new Ih_table and update
+        the model data ready for minimisation. Also check to see if any
+        datasets should be removed.
         """
         datasets_to_remove = []
         for i, scaler in enumerate(self.active_scalers):
@@ -1046,7 +1054,8 @@ class MultiScalerBase(ScalerBase):
         """
         Perform a round of outlier rejection across all datasets.
 
-        After identifying outliers, set the outliers property in individual scalers.
+        After identifying outliers, set the outliers property in
+        individual scalers.
         """
         assert self.active_scalers is not None
         if not self.global_Ih_table:
@@ -1276,8 +1285,8 @@ class MultiScaler(MultiScalerBase):
         """
         Initialise a multiscaler from a list of single scalers.
 
-        Create a global_Ih_table, an Ih_table to use for minimisation and update
-        the data in the model components.
+        Create a global_Ih_table, an Ih_table to use for minimisation
+        and update the data in the model components.
         """
         logger.info("Configuring a MultiScaler to handle the individual Scalers. \n")
         super(MultiScaler, self).__init__(single_scalers)
@@ -1373,11 +1382,11 @@ class TargetScaler(MultiScalerBase):
         """
         Initialise a multiscaler from a list of single and unscaled scalers.
 
-        First, set the active scalers (the unscaled scalers) and use these to
-        create a global_Ih_table. Then, use the scaled_scalers to create a
-        target_Ih_table. Create an Ih_table to use for minimisation and use
-        the target_Ih_table to set the Ih_values. Finally, update the data in
-        the model components.
+        First, set the active scalers (the unscaled scalers) and use
+        these to create a global_Ih_table. Then, use the scaled_scalers
+        to create a target_Ih_table. Create an Ih_table to use for
+        minimisation and use the target_Ih_table to set the Ih_values.
+        Finally, update the data in the model components.
         """
         logger.info("\nInitialising a TargetScaler instance. \n")
         super(TargetScaler, self).__init__(scaled_scalers)
@@ -1434,12 +1443,14 @@ class TargetScaler(MultiScalerBase):
 
 
 class NullScaler(ScalerBase):
-    """A singlescaler to allow targeted scaling against calculated intensities."""
+    """A singlescaler to allow targeted scaling against calculated
+    intensities."""
 
     id_ = "null"
 
     def __init__(self, params, experiment, reflection):
-        """Set the required properties to use as a scaler for targeted scaling."""
+        """Set the required properties to use as a scaler for targeted
+        scaling."""
         super(NullScaler, self).__init__(params)
         self._experiment = experiment
         self._reflection_table = reflection
@@ -1464,12 +1475,12 @@ class NullScaler(ScalerBase):
 
     @property
     def experiment(self):
-        """Return the experiment object for the dataset"""
+        """Return the experiment object for the dataset."""
         return self._experiment
 
     @property
     def reflection_table(self):
-        """Return the reflection_table object for the dataset"""
+        """Return the reflection_table object for the dataset."""
         return self._reflection_table
 
     @property

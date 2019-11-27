@@ -1,6 +1,6 @@
 """
-Test refinement of beam, detector and crystal orientation parameters
-using generated reflection positions from ideal geometry.
+Test refinement of beam, detector and crystal orientation parameters using
+generated reflection positions from ideal geometry.
 
 Control of the experimental model and choice of minimiser is done via
 PHIL, which means we can do, for example:

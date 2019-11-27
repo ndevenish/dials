@@ -1,6 +1,5 @@
-"""
-Functions to help with calculating batch properties for experiments objects.
-"""
+"""Functions to help with calculating batch properties for experiments
+objects."""
 from __future__ import absolute_import, division, print_function
 import logging
 from dials.array_family import flex
@@ -89,7 +88,7 @@ class batch_manager(object):
 
 
 def assign_batches_to_reflections(reflections, batch_offsets):
-    """Assign a 'batch' column to the reflection table"""
+    """Assign a 'batch' column to the reflection table."""
     for batch_offset, refl in zip(batch_offsets, reflections):
         xdet, ydet, zdet = [flex.double(x) for x in refl["xyzobs.px.value"].parts()]
         # compute BATCH values - floor() to get (fortran) image captured within
@@ -100,7 +99,7 @@ def assign_batches_to_reflections(reflections, batch_offsets):
 
 
 def get_batch_ranges(experiments, batch_offsets):
-    """Get batch ranges for a list of experiments and offsets"""
+    """Get batch ranges for a list of experiments and offsets."""
     batch_ranges = []
     assert len(experiments) == len(batch_offsets)
     image_ranges = get_image_ranges(experiments)
@@ -119,23 +118,32 @@ def get_image_ranges(experiments):
 
 
 def calculate_batch_offsets(experiment_list):
-    """Take a list of experiments and resolve and return the batch offsets.
-    First adds an image_range property as not all experiments have scans."""
+    """
+    Take a list of experiments and resolve and return the batch offsets.
+
+    First adds an image_range property as not all experiments have
+    scans.
+    """
     image_ranges = get_image_ranges(experiment_list)
     offsets = _calculate_batch_offsets(image_ranges)
     return offsets
 
 
 def set_batch_offsets(experiment_list, batch_offsets):
-    """Set batch offsets in scan objects. Don't need to set anything for
-    scanless experiments, as these are not used with the batch system."""
+    """
+    Set batch offsets in scan objects.
+
+    Don't need to set anything for scanless experiments, as these are
+    not used with the batch system.
+    """
     for exp, offset in zip(experiment_list, batch_offsets):
         if exp.scan:
             exp.scan.set_batch_offset(offset)
 
 
 def _calculate_batch_offsets(image_ranges):
-    """Take a list of (modified) experiments and resolve and return the batch
+    """
+    Take a list of (modified) experiments and resolve and return the batch
     offsets.
 
     This is the number added to the image number to give the

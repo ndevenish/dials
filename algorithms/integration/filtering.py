@@ -31,9 +31,7 @@ phil_scope = parse(
 
 
 class PowderRingFilter:
-    """
-    A class to do powder ring filtering.
-    """
+    """A class to do powder ring filtering."""
 
     def __init__(self, unit_cell, space_group, d_min, width):
         """
@@ -91,14 +89,10 @@ class PowderRingFilter:
 
 
 class MultiPowderRingFilter:
-    """
-    A class to encapsulate multiple powder ring filters
-    """
+    """A class to encapsulate multiple powder ring filters."""
 
     def __init__(self):
-        """
-        Init the filter.
-        """
+        """Init the filter."""
         self._filters = []
 
     def append(self, filter):
@@ -139,9 +133,7 @@ class MultiPowderRingFilter:
         return len(self._filters)
 
     def __iter__(self):
-        """
-        Iterate through filters.
-        """
+        """Iterate through filters."""
         for i in range(len(self)):
             yield self[i]
 
@@ -161,9 +153,7 @@ class MultiPowderRingFilter:
 
 
 class IceRingFilter:
-    """
-    A class to do ice ring filtering
-    """
+    """A class to do ice ring filtering."""
 
     def __init__(self):
         """

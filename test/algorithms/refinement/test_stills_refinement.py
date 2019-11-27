@@ -1,5 +1,6 @@
 """
 A simple test of stills refinement using fake data.
+
 Only the crystal is perturbed while the beam and detector are known.
 """
 

@@ -1,6 +1,4 @@
-"""
-Observers for the cosym procedure.
-"""
+"""Observers for the cosym procedure."""
 from __future__ import absolute_import, division, print_function
 
 import json
@@ -32,9 +30,7 @@ def register_default_cosym_observers(script):
 
 @singleton
 class CosymHTMLGenerator(Observer):
-    """
-    Observer to make a html report
-    """
+    """Observer to make a html report."""
 
     def make_html(self, cosym_script):
         """Collect data from the individual observers and write the html."""
@@ -65,9 +61,7 @@ class CosymHTMLGenerator(Observer):
 
 @singleton
 class CosymJSONGenerator(Observer):
-    """
-    Observer to make a html report
-    """
+    """Observer to make a html report."""
 
     def make_json(self, cosym_script):
         """Collect data from the individual observers and write the html."""
@@ -84,9 +78,7 @@ class CosymJSONGenerator(Observer):
 
 @singleton
 class CosymClusterAnalysisObserver(Observer):
-    """
-    Observer to record cosym cluster analysis data and make model plots.
-    """
+    """Observer to record cosym cluster analysis data and make model plots."""
 
     def update(self, cosym):
         """Update the data in the observer."""
@@ -105,9 +97,7 @@ class CosymClusterAnalysisObserver(Observer):
 
 @singleton
 class SymmetryAnalysisObserver(Observer):
-    """
-    Observer to record symmetry analysis data and make tables.
-    """
+    """Observer to record symmetry analysis data and make tables."""
 
     def update(self, cosym):
         if cosym._symmetry_analysis is not None:

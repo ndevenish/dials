@@ -42,7 +42,8 @@ def test_search_i04_weak_data_image_range(run_in_tmpdir, dials_regression):
 
 
 def test_search_multiple(run_in_tmpdir, dials_regression):
-    """Perform a beam-centre search and check that the output is sane.
+    """
+    Perform a beam-centre search and check that the output is sane.
 
     Do the following:
     1. Run dials.search_beam_centre on two datablocks and two pickled
@@ -84,7 +85,8 @@ def test_search_multiple(run_in_tmpdir, dials_regression):
 
 
 def test_index_after_search(dials_data, tmpdir):
-    """Integrate the beam centre search with the rest of the toolchain
+    """
+    Integrate the beam centre search with the rest of the toolchain.
 
     Do the following:
     1. Run dials.import with a specified beam centre, check for expected output;
@@ -93,7 +95,8 @@ def test_index_after_search(dials_data, tmpdir):
     reflection table, check for expected output;
     4. Run dials.index, using the datablock from the beam centre search,
     and check that the expected unit ecll is obtained and that the RMSDs are
-    smaller than or equal to some expected values."""
+    smaller than or equal to some expected values.
+    """
 
     dials_data = dials_data("thaumatin_i04").listdir(sort=True)
     g = [f.strpath for f in dials_data if f.ext == ".cbf"]
@@ -175,7 +178,8 @@ def test_index_after_search(dials_data, tmpdir):
 
 
 def test_search_single(run_in_tmpdir, dials_regression):
-    """Perform a beam-centre search and check that the output is sane.
+    """
+    Perform a beam-centre search and check that the output is sane.
 
     Do the following:
     1. Run dials.search_beam_centre on a single datablock and pickled
@@ -210,7 +214,8 @@ def test_search_single(run_in_tmpdir, dials_regression):
 
 
 def test_search_small_molecule(dials_data, run_in_tmpdir):
-    """Perform a beam-centre search on a multi-sequence data set..
+    """
+    Perform a beam-centre search on a multi-sequence data set..
 
     Do the following:
     1. Run dials.search_beam_centre on a single datablock and pickled

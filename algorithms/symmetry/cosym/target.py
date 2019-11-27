@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class Target(object):
-    """Target function for cosym analysis.
+    """
+    Target function for cosym analysis.
 
     Attributes:
       dim (int): The number of dimensions used in the analysis.
@@ -106,7 +107,8 @@ class Target(object):
         self._compute_rij_wij()
 
     def set_dimensions(self, dimensions):
-        """Set the number of dimensions for analysis.
+        """
+        Set the number of dimensions for analysis.
 
         Args:
           dimensions (int): The number of dimensions to be used.
@@ -305,7 +307,8 @@ class Target(object):
         return self.rij_matrix, self.wij_matrix
 
     def compute_functional(self, x):
-        """Compute the target function at coordinates `x`.
+        """
+        Compute the target function at coordinates `x`.
 
         Args:
           x (scitbx.array_family.flex.double):
@@ -330,7 +333,8 @@ class Target(object):
         return f
 
     def compute_gradients_fd(self, x, eps=1e-6):
-        """Compute the gradients at coordinates `x` using finite differences.
+        """
+        Compute the gradients at coordinates `x` using finite differences.
 
         Args:
           x (scitbx.array_family.flex.double):
@@ -355,7 +359,8 @@ class Target(object):
         return grad
 
     def compute_functional_and_gradients(self, x):
-        """Compute the target function and gradients at coordinates `x`.
+        """
+        Compute the target function and gradients at coordinates `x`.
 
         Args:
           x (scitbx.array_family.flex.double):
@@ -400,7 +405,8 @@ class Target(object):
         return f, grad
 
     def curvatures(self, x):
-        """Compute the curvature of the target function.
+        """
+        Compute the curvature of the target function.
 
         Args:
           x (scitbx.array_family.flex.double):
@@ -429,7 +435,8 @@ class Target(object):
         return curvs
 
     def curvatures_fd(self, x, eps=1e-6):
-        """Compute the curvatures at coordinates `x` using finite differences.
+        """
+        Compute the curvatures at coordinates `x` using finite differences.
 
         Args:
           x (scitbx.array_family.flex.double):
@@ -455,7 +462,8 @@ class Target(object):
         return curvs
 
     def get_sym_ops(self):
-        """Get the list of symmetry operations used in the analysis.
+        """
+        Get the list of symmetry operations used in the analysis.
 
         Returns:
           List[cctbx.sgtbx.rt_mx]: The list of symmetry operations.

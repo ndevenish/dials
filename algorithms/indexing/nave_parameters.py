@@ -189,9 +189,14 @@ class NaveParameters(object):
         return all_crystals
 
     def ewald_proximal_volume(self, expt_id=0):
-        """computes the volume of reciprocal space (actually, half the volume, in this implementation) in which
-        reciprocal lattice centroids will fall under the green curve.  In other words, this is proportional to the
-        number of predicted reflections."""
+        """
+        computes the volume of reciprocal space (actually, half the volume, in
+        this implementation) in which reciprocal lattice centroids will fall
+        under the green curve.
+
+        In other words, this is proportional to the number of predicted
+        reflections.
+        """
 
         R_L = (
             1.0 / self.experiments[expt_id].beam.get_wavelength()

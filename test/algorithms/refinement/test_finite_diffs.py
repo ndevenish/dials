@@ -1,5 +1,5 @@
-"""Test analytical calculation of gradients of the target function versus finite
-difference calculations"""
+"""Test analytical calculation of gradients of the target function versus
+finite difference calculations."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -219,11 +219,13 @@ def test(args=[]):
 
     # function for calculating finite difference gradients of the target function
     def get_fd_gradients(target, pred_param, deltas):
-        """Calculate centered finite difference gradients for each of the
+        """
+        Calculate centered finite difference gradients for each of the
         parameters of the target function.
 
-        "deltas" must be a sequence of the same length as the parameter list, and
-        contains the step size for the difference calculations for each parameter.
+        "deltas" must be a sequence of the same length as the parameter
+        list, and contains the step size for the difference calculations
+        for each parameter.
         """
 
         p_vals = pred_param.get_param_vals()

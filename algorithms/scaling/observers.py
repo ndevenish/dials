@@ -1,6 +1,4 @@
-"""
-Observers for the scaling algorithm.
-"""
+"""Observers for the scaling algorithm."""
 from __future__ import absolute_import, division, print_function
 
 import json
@@ -99,9 +97,7 @@ def register_scale_and_filter_observers(script):
 
 @singleton
 class ScalingSummaryGenerator(Observer):
-    """
-    Observer to summarise data
-    """
+    """Observer to summarise data."""
 
     def print_scaling_summary(self, scaling_script):
         """Log summary information after scaling."""
@@ -164,9 +160,7 @@ were considered for use when refining the scaling model.
 
 @singleton
 class ScalingHTMLGenerator(Observer):
-    """
-    Observer to make a html report
-    """
+    """Observer to make a html report."""
 
     def make_scaling_html(self, scaling_script):
         """Collect data from the individual observers and write the html."""
@@ -211,9 +205,7 @@ class ScalingHTMLGenerator(Observer):
 
 @singleton
 class ScalingModelObserver(Observer):
-    """
-    Observer to record scaling model data and make model plots.
-    """
+    """Observer to record scaling model data and make model plots."""
 
     def update(self, scaler):
         """Update the data in the observer."""
@@ -272,9 +264,7 @@ class ScalingModelObserver(Observer):
 
 @singleton
 class ScalingOutlierObserver(Observer):
-    """
-    Observer to record scaling outliers and make outlier plots.
-    """
+    """Observer to record scaling outliers and make outlier plots."""
 
     def update(self, scaler):
         active_scalers = getattr(scaler, "active_scalers")
@@ -315,9 +305,7 @@ class ScalingOutlierObserver(Observer):
 
 @singleton
 class ErrorModelObserver(Observer):
-    """
-    Observer to record scaling error model data and make a plot.
-    """
+    """Observer to record scaling error model data and make a plot."""
 
     def update(self, scaler):
         if scaler.error_model.filtered_Ih_table:
@@ -344,9 +332,7 @@ class ErrorModelObserver(Observer):
 
 @singleton
 class FilteringObserver(Observer):
-    """
-    Observer to record data from the scaling and filtering algorithm.
-    """
+    """Observer to record data from the scaling and filtering algorithm."""
 
     def update(self, scaling_script):
         if scaling_script.filtering_results:
@@ -369,9 +355,7 @@ class FilteringObserver(Observer):
 
 @singleton
 class MergingStatisticsObserver(Observer):
-    """
-    Observer to record merging statistics data and make tables.
-    """
+    """Observer to record merging statistics data and make tables."""
 
     def update(self, scaling_script):
         if scaling_script.merging_statistics_result:
@@ -399,7 +383,8 @@ class MergingStatisticsObserver(Observer):
             self.data["isigivsbatch"] = isigivb
 
     def make_plots(self):
-        """Generate tables of overall and resolution-binned merging statistics."""
+        """Generate tables of overall and resolution-binned merging
+        statistics."""
         d = {
             "scaling_tables": ([], []),
             "resolution_plots": OrderedDict(),

@@ -1,6 +1,4 @@
-"""
-Definitions of the scaling algorithm.
-"""
+"""Definitions of the scaling algorithm."""
 from __future__ import absolute_import, division, print_function
 
 
@@ -15,7 +13,8 @@ def do_intensity_combination(scaler, reselect=True):
     """
     Do prf/sum intensity combination.
 
-    Optionally reselect reflections to prepare for another minimisation round.
+    Optionally reselect reflections to prepare for another minimisation
+    round.
     """
     if scaler.params.reflection_selection.intensity_choice == "combine":
         scaler.combine_intensities()
@@ -29,7 +28,8 @@ def do_error_analysis(scaler, reselect=True):
     """
     Do error model analysis.
 
-    Optionally reselect reflections to prepare for another minimisation round.
+    Optionally reselect reflections to prepare for another minimisation
+    round.
     """
     if scaler.params.weighting.error_model.error_model:
         scaler.perform_error_optimisation()

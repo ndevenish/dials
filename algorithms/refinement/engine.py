@@ -1,6 +1,10 @@
-"""Contains classes for refinement engines. Refinery is the shared interface,
-LevenbergMarquardtIterations, GaussNewtonIterations, SimpleLBFGS and LBFGScurvs
-are the current concrete implementations"""
+"""
+Contains classes for refinement engines.
+
+Refinery is the shared interface, LevenbergMarquardtIterations,
+GaussNewtonIterations, SimpleLBFGS and LBFGScurvs are the current
+concrete implementations
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -82,13 +86,15 @@ refinery_phil_scope = parse(refinery_phil_str)
 
 
 class Journal(dict):
-    """Container in which to store information about refinement history.
+    """
+    Container in which to store information about refinement history.
 
-    This is simply a dict but provides some extra methods for access that
-    maintain values as columns in a table. Refinery classes will use these methods
-    while entering data to ensure the table remains consistent. Methods inherited
-    from dict are not hidden for ease of use of this object when returned to the
-    user."""
+    This is simply a dict but provides some extra methods for access
+    that maintain values as columns in a table. Refinery classes will
+    use these methods while entering data to ensure the table remains
+    consistent. Methods inherited from dict are not hidden for ease of
+    use of this object when returned to the user.
+    """
 
     reason_for_termination = None
     _nrows = 0
@@ -97,12 +103,15 @@ class Journal(dict):
         return self._nrows
 
     def add_column(self, key):
-        """Add a new column named by key"""
+        """Add a new column named by key."""
         self[key] = [None] * self._nrows
 
     def add_row(self):
-        """Add an element to the end of each of the columns. Fail if any columns
-        are the wrong length"""
+        """
+        Add an element to the end of each of the columns.
+
+        Fail if any columns are the wrong length
+        """
 
         for k in self:
             assert len(self[k]) == self._nrows
@@ -110,8 +119,11 @@ class Journal(dict):
         self._nrows += 1
 
     def del_last_row(self):
-        """Delete the last element from the each of the columns. Fail if any columns
-        are the wrong length"""
+        """
+        Delete the last element from the each of the columns.
+
+        Fail if any columns are the wrong length
+        """
 
         if self._nrows == 0:
             return None
@@ -121,8 +133,11 @@ class Journal(dict):
         self._nrows -= 1
 
     def set_last_cell(self, key, value):
-        """Set last cell in column given by key to value. Fail if the column is the
-        wrong length"""
+        """
+        Set last cell in column given by key to value.
+
+        Fail if the column is the wrong length
+        """
 
         assert len(self[key]) == self._nrows
         self[key][-1] = value
@@ -144,8 +159,11 @@ class Journal(dict):
 
 
 class Refinery(object):
-    """Interface for Refinery objects. This should be subclassed and the run
-    method implemented."""
+    """
+    Interface for Refinery objects.
+
+    This should be subclassed and the run method implemented.
+    """
 
     # NOTES. A Refinery is initialised with a Target function. The target
     # function already contains a ReflectionManager (which holds the data) so
@@ -231,7 +249,7 @@ class Refinery(object):
         return self.history.get_nrows() - 1
 
     def prepare_for_step(self):
-        """Update the parameterisation and prepare the target function"""
+        """Update the parameterisation and prepare the target function."""
 
         x = self.x
         if self._constr_manager is not None:
@@ -244,7 +262,7 @@ class Refinery(object):
         self._target.predict()
 
     def update_journal(self):
-        """Append latest step information to the journal attributes"""
+        """Append latest step information to the journal attributes."""
 
         # add step quantities to journal
         self.history.add_row()
@@ -276,7 +294,7 @@ class Refinery(object):
 
     def split_jacobian_into_blocks(self):
         """Split the Jacobian into blocks each corresponding to a separate
-        residual"""
+        residual."""
 
         nblocks = len(self._target.rmsd_names)
 
@@ -296,7 +314,7 @@ class Refinery(object):
     @staticmethod
     def _packed_corr_mat(m):
         """Return a 1D flex array containing the upper diagonal values of the
-        correlation matrix calculated between columns of 2D matrix m"""
+        correlation matrix calculated between columns of 2D matrix m."""
 
         nr, nc = m.all()
 
@@ -331,10 +349,13 @@ class Refinery(object):
         return tmp
 
     def get_correlation_matrix_for_step(self, step):
-        """For each type of residual (e.g. X, Y, Phi), decompress and return the
+        """
+        For each type of residual (e.g. X, Y, Phi), decompress and return the
         full 2D correlation matrix between columns of the Jacobian that was
-        stored in the journal at the given step number. If not available, return
-        None"""
+        stored in the journal at the given step number.
+
+        If not available, return None
+        """
 
         if "parameter_correlation" not in self.history:
             return None
@@ -403,7 +424,7 @@ class Refinery(object):
         return max(svd.sigma) / min(svd.sigma)
 
     def test_for_termination(self):
-        """Return True if refinement should be terminated"""
+        """Return True if refinement should be terminated."""
 
         # Basic version delegate to the Target class. Derived classes may
         # implement other termination criteria
@@ -412,7 +433,7 @@ class Refinery(object):
         return self._target_achieved
 
     def test_rmsd_convergence(self):
-        """Test for convergence of RMSDs"""
+        """Test for convergence of RMSDs."""
 
         # http://en.wikipedia.org/wiki/
         # Non-linear_least_squares#Convergence_criteria
@@ -430,10 +451,13 @@ class Refinery(object):
         return all(tests)
 
     def test_objective_increasing_but_not_nref(self):
-        """Test for an increase in the objective value between steps. This
-        could be caused simply by the number of matches between observations
-        and predictions increasing. However, if the number of matches stayed
-        the same or reduced then this is a bad sign."""
+        """
+        Test for an increase in the objective value between steps.
+
+        This could be caused simply by the number of matches between
+        observations and predictions increasing. However, if the number
+        of matches stayed the same or reduced then this is a bad sign.
+        """
 
         try:
             l1 = self.history["objective"][-1]
@@ -446,15 +470,21 @@ class Refinery(object):
         return l1 > l2 and n1 <= n2
 
     def set_nproc(self, nproc):
-        """Set number of processors for multiprocessing. Override in derived classes
-        if a policy dictates that this must not be user-controlled"""
+        """
+        Set number of processors for multiprocessing.
+
+        Override in derived classes if a policy dictates that this must
+        not be user-controlled
+        """
         self._nproc = nproc
 
     def run(self):
         """
-        To be implemented by derived class. It is expected that each step of
-        refinement be preceeded by a call to prepare_for_step and followed by
-        calls to update_journal and test_for_termination (in that order).
+        To be implemented by derived class.
+
+        It is expected that each step of refinement be preceeded by a
+        call to prepare_for_step and followed by calls to update_journal
+        and test_for_termination (in that order).
         """
 
         # Specify a minimizer and its parameters, and run
@@ -462,7 +492,7 @@ class Refinery(object):
 
 
 class DisableMPmixin(object):
-    """A mixin class that disables setting of nproc for multiprocessing"""
+    """A mixin class that disables setting of nproc for multiprocessing."""
 
     def set_nproc(self, nproc):
         if nproc != 1:
@@ -470,7 +500,7 @@ class DisableMPmixin(object):
 
 
 class AdaptLbfgs(Refinery):
-    """Adapt Refinery for L-BFGS minimiser"""
+    """Adapt Refinery for L-BFGS minimiser."""
 
     def __init__(self, *args, **kwargs):
 
@@ -535,10 +565,8 @@ class AdaptLbfgs(Refinery):
         return f, flex.double(g), flex.double(c)
 
     def callback_after_step(self, minimizer):
-        """
-        Do journalling, evaluate rmsds and return True if the target is
-        reached to terminate the refinement.
-        """
+        """Do journalling, evaluate rmsds and return True if the target is
+        reached to terminate the refinement."""
 
         self.update_journal()
         logger.debug("Step %d", self.history.get_nrows() - 1)
@@ -554,9 +582,7 @@ class AdaptLbfgs(Refinery):
         return False
 
     def run_lbfgs(self, curvatures=False):
-        """
-        Run the minimiser, keeping track of its log.
-        """
+        """Run the minimiser, keeping track of its log."""
 
         ref_log = self._log_string()
         if curvatures:
@@ -587,14 +613,14 @@ class AdaptLbfgs(Refinery):
 
 
 class SimpleLBFGS(AdaptLbfgs):
-    """Refinery implementation, using cctbx LBFGS with basic settings"""
+    """Refinery implementation, using cctbx LBFGS with basic settings."""
 
     def run(self):
         return self.run_lbfgs(curvatures=False)
 
 
 class LBFGScurvs(AdaptLbfgs):
-    """Refinery implementation using cctbx LBFGS with curvatures"""
+    """Refinery implementation using cctbx LBFGS with curvatures."""
 
     def run(self):
         return self.run_lbfgs(curvatures=True)
@@ -617,7 +643,7 @@ class LBFGScurvs(AdaptLbfgs):
 
 
 class AdaptLstbx(Refinery, normal_eqns.non_linear_ls, normal_eqns.non_linear_ls_mixin):
-    """Adapt Refinery for lstbx"""
+    """Adapt Refinery for lstbx."""
 
     def __init__(
         self,
@@ -745,13 +771,16 @@ class AdaptLstbx(Refinery, normal_eqns.non_linear_ls, normal_eqns.non_linear_ls_
             return True
 
     def set_cholesky_factor(self):
-        """Set the Cholesky factor required for ESD calculation. This method is
-        valid only for the LSTBX dense matrix interface"""
+        """
+        Set the Cholesky factor required for ESD calculation.
+
+        This method is valid only for the LSTBX dense matrix interface
+        """
 
         self.cf = self.step_equations().cholesky_factor_packed_u().deep_copy()
 
     def calculate_esds(self):
-        """Calculate ESDs of parameters"""
+        """Calculate ESDs of parameters."""
 
         # it is possible to get here with zero steps taken by the minimiser. For
         # example by failing for the MAX_TRIAL_ITERATIONS reason before any forward
@@ -787,7 +816,11 @@ class AdaptLstbx(Refinery, normal_eqns.non_linear_ls, normal_eqns.non_linear_ls_
         self._parameters.set_param_esds(s)
 
     def _print_normal_matrix(self):
-        """Print the full normal matrix at the current step. For debugging only"""
+        """
+        Print the full normal matrix at the current step.
+
+        For debugging only
+        """
         logger.debug("The normal matrix for the current step is:")
         logger.debug(
             self.normal_matrix_packed_u()
@@ -799,7 +832,7 @@ class AdaptLstbx(Refinery, normal_eqns.non_linear_ls, normal_eqns.non_linear_ls_
 
 
 class GaussNewtonIterations(AdaptLstbx, normal_eqns_solving.iterations):
-    """Refinery implementation, using lstbx Gauss Newton iterations"""
+    """Refinery implementation, using lstbx Gauss Newton iterations."""
 
     # defaults that may be overridden
     gradient_threshold = 1.0e-10
@@ -910,7 +943,7 @@ class GaussNewtonIterations(AdaptLstbx, normal_eqns_solving.iterations):
 
 class LevenbergMarquardtIterations(GaussNewtonIterations):
     """Refinery implementation, employing lstbx Levenberg Marquadt
-    iterations"""
+    iterations."""
 
     tau = 1e-3
 
@@ -923,19 +956,19 @@ class LevenbergMarquardtIterations(GaussNewtonIterations):
         self._mu = value
 
     def setup_mu(self):
-        """Setup initial value for mu"""
+        """Setup initial value for mu."""
         a = self.normal_matrix_packed_u()
         self.mu = self.tau * flex.max(a.matrix_packed_u_diagonal())
 
     def add_constant_to_diagonal(self, mu):
-        """Add the constant value mu to the diagonal of the normal matrix"""
+        """Add the constant value mu to the diagonal of the normal matrix."""
         a = self.normal_matrix_packed_u()
         a.matrix_packed_u_diagonal_add_in_place(self.mu)
 
     def report_progress(self, objective):
         """Callback within the refinement main loop that can be overridden to
-        report the value of the objective function (and possibly) other details for
-        long-running methods"""
+        report the value of the objective function (and possibly) other details
+        for long-running methods."""
         pass
 
     def _run_core(self):

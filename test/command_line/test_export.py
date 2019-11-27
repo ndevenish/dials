@@ -71,7 +71,7 @@ def test_multi_sequence_integrated_mtz(dials_data, tmpdir):
 
 
 def test_mtz_multi_wavelength(dials_data, run_in_tmpdir):
-    """Test multi-wavelength mtz export"""
+    """Test multi-wavelength mtz export."""
     # First make suitable input - multi datasets experiment list and reflection
     # table with different wavelengths
     mcp = dials_data("multi_crystal_proteinase_k")

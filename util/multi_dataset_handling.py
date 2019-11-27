@@ -1,7 +1,5 @@
-"""
-Module of functions for handling operations on lists of reflection tables
-and experiment lists.
-"""
+"""Module of functions for handling operations on lists of reflection tables
+and experiment lists."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -32,7 +30,7 @@ phil_scope = iotbx.phil.parse(
 
 def parse_multiple_datasets(reflections):
     """
-    Split a list of multi-dataset reflection tables, selecting on id
+    Split a list of multi-dataset reflection tables, selecting on id.
 
     If duplicate id values are found, the id columns are renumbered from 0..n-1,
     taking care of experiment identifiers if these are set.

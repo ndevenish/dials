@@ -18,12 +18,14 @@ from scitbx.array_family import flex
 
 class DetectorMixin(object):
     """Mix-in class defining some functionality unique to detector
-    parameterisations that can be shared by static and scan-varying versions"""
+    parameterisations that can be shared by static and scan-varying
+    versions."""
 
     @staticmethod
     def _init_core(detector, parameter_type=Parameter):
-        """Calculate initial state and list of parameters, using the parameter_type
-        callback to select between versions of the Parameter class"""
+        """Calculate initial state and list of parameters, using the
+        parameter_type callback to select between versions of the Parameter
+        class."""
 
         # get some vectors we need from the Panel
         panel = detector[0]
@@ -289,15 +291,17 @@ class DetectorMixin(object):
 
 
 class DetectorParameterisationSinglePanel(ModelParameterisation, DetectorMixin):
-    """A parameterisation for a Detector model with a single abstract panel plane.
+    """
+    A parameterisation for a Detector model with a single abstract panel plane.
 
-    A single panel has 6 parameters: three translations (detector distance and
-    two in-plane shifts) and three rotations (around the initial normal, fast and
-    slow axes) with angles expressed in mrad.
+    A single panel has 6 parameters: three translations (detector
+    distance and two in-plane shifts) and three rotations (around the
+    initial normal, fast and slow axes) with angles expressed in mrad.
     """
 
     def __init__(self, detector, experiment_ids=None):
-        """Initialise the DetectorParameterisationSinglePanel object
+        """
+        Initialise the DetectorParameterisationSinglePanel object.
 
         Args:
             detector: A dxtbx Detector object to be parameterised.
@@ -373,16 +377,18 @@ class DetectorParameterisationSinglePanel(ModelParameterisation, DetectorMixin):
 
 
 class DetectorParameterisationMultiPanel(ModelParameterisation):
-    """A parameterisation for a Detector model with multiple panels.
+    """
+    A parameterisation for a Detector model with multiple panels.
 
-    The whole detector is treated as a single rigid block with 6 degrees of
-    freedom (see DetectorParameterisationSinglePanel). The axes of the
-    translations and rotations are taken from the 'middle panel' of the detector
-    (the one closest to the direct beam).
+    The whole detector is treated as a single rigid block with 6 degrees
+    of freedom (see DetectorParameterisationSinglePanel). The axes of
+    the translations and rotations are taken from the 'middle panel' of
+    the detector (the one closest to the direct beam).
     """
 
     def __init__(self, detector, beam, experiment_ids=None):
-        """Initialise the DetectorParameterisationMultiPanel object
+        """
+        Initialise the DetectorParameterisationMultiPanel object.
 
         Args:
             detector: A dxtbx Detector object to be parameterised.
@@ -553,10 +559,12 @@ class DetectorParameterisationMultiPanel(ModelParameterisation):
 
 
 class PyDetectorParameterisationMultiPanel(DetectorParameterisationMultiPanel):
-    """A python only version of DetectorParameterisationMultiPanel
+    """
+    A python only version of DetectorParameterisationMultiPanel.
 
-    This version uses an older python-only compose method for comparison. See
-    the base class for more details"""
+    This version uses an older python-only compose method for
+    comparison. See the base class for more details
+    """
 
     def compose(self):
 
@@ -904,15 +912,17 @@ class PyDetectorParameterisationMultiPanel(DetectorParameterisationMultiPanel):
 
 
 class DetectorParameterisationHierarchical(DetectorParameterisationMultiPanel):
-    """A parameterisation for a hierarchical Detector model with multiple panels.
+    """
+    A parameterisation for a hierarchical Detector model with multiple panels.
 
-    The detector hierarchy is used to determine panel groups, each of which will
-    be treated as a single rigid block with 6 degrees of freedom (see
-    DetectorParameterisationSinglePanel).
+    The detector hierarchy is used to determine panel groups, each of
+    which will be treated as a single rigid block with 6 degrees of
+    freedom (see DetectorParameterisationSinglePanel).
     """
 
     def __init__(self, detector, experiment_ids=None, level=0):
-        """Initialise the DetectorParameterisationHierarchical object
+        """
+        Initialise the DetectorParameterisationHierarchical object.
 
         Args:
             detector: A dxtbx Detector object to be parameterised.
@@ -1064,7 +1074,8 @@ class DetectorParameterisationHierarchical(DetectorParameterisationMultiPanel):
         self.compose()
 
     def get_panel_ids_by_group(self):
-        """Return the panel IDs for each panel group of the detector.
+        """
+        Return the panel IDs for each panel group of the detector.
 
         Provides access to a result calculated once during initialisation of the
         class, for use during parameterisation auto reduction tasks.
@@ -1076,7 +1087,8 @@ class DetectorParameterisationHierarchical(DetectorParameterisationMultiPanel):
         return self._panel_ids_by_group
 
     def get_param_panel_groups(self):
-        """Return the panel group ID for each parameter of the parameterisation.
+        """
+        Return the panel group ID for each parameter of the parameterisation.
 
         Provides access to a result calculated once during initialisation of the
         class, for use during parameterisation auto reduction tasks.

@@ -768,9 +768,9 @@ class Indexer(object):
         """
         Checks for similar crystal models.
 
-        Checks whether the most recently added crystal model is similar to previously
-        found crystal models, and if so, deletes the last crystal model from the
-        experiment list.
+        Checks whether the most recently added crystal model is similar
+        to previously found crystal models, and if so, deletes the last
+        crystal model from the experiment list.
         """
         have_similar_crystal_models = False
         cryst_b = experiments.crystals()[-1]

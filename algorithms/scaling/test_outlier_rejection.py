@@ -1,6 +1,4 @@
-"""
-Tests for outlier rejection.
-"""
+"""Tests for outlier rejection."""
 from __future__ import absolute_import, division, print_function
 import pytest
 from mock import Mock
@@ -24,7 +22,7 @@ def test_sg():
 
 @pytest.fixture
 def mock_exp_with_sg(test_sg):
-    """Create a mock experiment with a space group"""
+    """Create a mock experiment with a space group."""
     exp = Mock()
     exp.crystal.get_space_group.return_value = test_sg
     return exp
@@ -32,7 +30,7 @@ def mock_exp_with_sg(test_sg):
 
 @pytest.fixture
 def generated_Ih_table(test_sg):
-    """Generate an Ih_table"""
+    """Generate an Ih_table."""
     rt = generate_outlier_table()
     Ih_table = IhTable([rt], test_sg, nblocks=1)
     return Ih_table
@@ -40,14 +38,14 @@ def generated_Ih_table(test_sg):
 
 @pytest.fixture
 def outlier_target_table(test_sg):
-    """Generate an Ih_table for targeted outlier rejection"""
+    """Generate an Ih_table for targeted outlier rejection."""
     target = generate_target_table()
     target_Ih = IhTable([target], test_sg, nblocks=1)
     return target_Ih
 
 
 def generate_target_table():
-    """Reflection table defining target reflections"""
+    """Reflection table defining target reflections."""
     target = flex.reflection_table()
     target["intensity"] = flex.double([500])
     target["variance"] = flex.double([1.0])
@@ -277,7 +275,7 @@ def test_simple_outlier_rejection(generated_Ih_table):
 
 
 def test_reject_outliers(mock_exp_with_sg):
-    """Test the reject outliers function"""
+    """Test the reject outliers function."""
     refls = generate_outlier_table_2()
     exp = mock_exp_with_sg
     refls = reject_outliers(refls, exp)

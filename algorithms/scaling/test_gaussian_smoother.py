@@ -9,7 +9,7 @@ from dials.algorithms.scaling.model.components.smooth_scale_components import (
 
 
 def test_2DGaussianSmoother():
-    """Test the behvaiour of the 2D Gaussian Smoother"""
+    """Test the behvaiour of the 2D Gaussian Smoother."""
     GS2D = GaussianSmoother2D([0, 1], 1, [0, 4], 4)
     assert GS2D.num_x_values() == 2
     assert GS2D.num_y_values() == 6
@@ -54,7 +54,7 @@ def test_2DGaussianSmoother():
 
 
 def test_3DGaussianSmoother():
-    """Test the behvaiour of the 2D Gaussian Smoother"""
+    """Test the behvaiour of the 2D Gaussian Smoother."""
     GS3D = GaussianSmoother3D([0, 1], 1, [0, 3], 3, [0, 1], 1)
     assert GS3D.num_x_values() == 2
     assert GS3D.num_y_values() == 5

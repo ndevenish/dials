@@ -272,7 +272,7 @@ Goniometer:
 
 
 def test_dials_show_reflection_table(dials_data):
-    """Test the output of dials.show on a reflection_table pickle file"""
+    """Test the output of dials.show on a reflection_table pickle file."""
     result = procrunner.run(
         ["dials.show", dials_data("centroid_test_data").join("integrated.pickle")],
         environment_override={"DIALS_NOBANNER": "1"},

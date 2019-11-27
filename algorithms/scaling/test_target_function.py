@@ -1,6 +1,4 @@
-"""
-Test for the target function module.
-"""
+"""Test for the target function module."""
 from __future__ import absolute_import, division, print_function
 import copy
 from collections import OrderedDict
@@ -191,13 +189,13 @@ def _single_to_multi_apm(single_apm):
 
 @pytest.fixture
 def mock_apm_restrained(mock_restrained_component):
-    """Make a parameter manager with a restrained component"""
+    """Make a parameter manager with a restrained component."""
     return _single_to_multi_apm(_component_to_apm(mock_restrained_component))
 
 
 @pytest.fixture
 def mock_apm_unrestrained(mock_unrestrained_component):
-    """Make a parameter manager with an unrestrained component"""
+    """Make a parameter manager with an unrestrained component."""
     return _single_to_multi_apm(_component_to_apm(mock_unrestrained_component))
 
 
@@ -221,7 +219,8 @@ def test_target_function_methods():
 
 
 def test_target_function_restraints_methods(mock_apm_restrained, mock_apm_unrestrained):
-    """Test for the target restraints methods required for the refinement engine."""
+    """Test for the target restraints methods required for the refinement
+    engine."""
     target = ScalingTarget()
 
     restraints = target.compute_restraints_residuals_and_gradients(mock_apm_restrained)
@@ -309,7 +308,8 @@ def test_target_fixedIh():
 def test_target_gradient_calculation_finite_difference(
     small_reflection_table, single_exp, physical_param
 ):
-    """Test the calculated gradients against a finite difference calculation."""
+    """Test the calculated gradients against a finite difference
+    calculation."""
     model = PhysicalScalingModel.from_data(
         physical_param, single_exp, small_reflection_table
     )

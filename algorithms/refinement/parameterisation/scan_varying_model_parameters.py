@@ -27,11 +27,13 @@ smoother
 
 
 class ScanVaryingParameterSet(Parameter):
-    """Testing a class for a scan-varying parameter, in which values at rotation
+    """
+    Testing a class for a scan-varying parameter, in which values at rotation
     angle phi may be derived using smoothed interpolation between checkpoint
     values stored here. Externally, this is presented as a set of parameters.
 
-    num_samples is the number of checkpoints. Other arguments are as Parameter.
+    num_samples is the number of checkpoints. Other arguments are as
+    Parameter.
     """
 
     def __init__(
@@ -100,7 +102,7 @@ class ScanVaryingParameterSet(Parameter):
 # wrap the C++ GaussianSmoother, modifying return values to emulate the
 # old Python version.
 class GaussianSmoother(GS):
-    """A Gaussian smoother for ScanVaryingModelParameterisations"""
+    """A Gaussian smoother for ScanVaryingModelParameterisations."""
 
     def value_weight(self, x, param):
         result = super(GaussianSmoother, self).value_weight(x, flex.double(param.value))
@@ -117,13 +119,15 @@ class GaussianSmoother(GS):
 
 
 class ScanVaryingModelParameterisation(ModelParameterisation):
-    """Extending ModelParameterisation to deal with ScanVaryingParameterSets.
+    """
+    Extending ModelParameterisation to deal with ScanVaryingParameterSets.
 
     For simplicity at this stage it is decreed that a
-    ScanVaryingModelParameterisation consists only of ScanVaryingParameterSets.
-    There is no combination with normal Parameters. This could be changed later,
-    but there may be no reason to do so, hence starting with this simpler
-    design"""
+    ScanVaryingModelParameterisation consists only of
+    ScanVaryingParameterSets. There is no combination with normal
+    Parameters. This could be changed later, but there may be no reason
+    to do so, hence starting with this simpler design
+    """
 
     # The initial state is here equivalent to the initial state of the
     # time static version of the parameterisation, as it is assumed that we
@@ -164,11 +168,11 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
         return
 
     def num_samples(self):
-        """the number of samples of each parameter"""
+        """the number of samples of each parameter."""
         return self._num_samples
 
     def num_free(self):
-        """the number of free parameters"""
+        """the number of free parameters."""
 
         if self._num_free is None:
             self._num_free = (
@@ -179,26 +183,31 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
     # def num_total(self): inherited unchanged from ModelParameterisation
 
     def num_sets(self):
-        """the number of parameter sets"""
+        """the number of parameter sets."""
         return self._num_sets
 
     @abc.abstractmethod
     def compose(self, t):
-        """compose the model state at image number t from its initial state and
+        """
+        compose the model state at image number t from its initial state and
         its parameter list. Also calculate the derivatives of the state wrt
         each parameter in the list.
 
-        Unlike ModelParameterisation, does not automatically update the actual
-        model class. This should be done once refinement is complete."""
+        Unlike ModelParameterisation, does not automatically update the
+        actual model class. This should be done once refinement is
+        complete.
+        """
 
         pass
 
     def get_param_vals(self, only_free=True):
-        """export the values of the internal list of parameters as a
-        sequence of floats.
+        """
+        export the values of the internal list of parameters as a sequence of
+        floats.
 
-        If only_free, the values of fixed parameters are filtered from the
-        returned list. Otherwise all parameter values are returned"""
+        If only_free, the values of fixed parameters are filtered from
+        the returned list. Otherwise all parameter values are returned
+        """
 
         if only_free:
             return [x for e in self._param if not e.get_fixed() for x in e.value]
@@ -207,10 +216,12 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
             return [x for e in self._param for x in e.value]
 
     def get_param_names(self, only_free=True):
-        """export the names of the internal list of parameters
+        """
+        export the names of the internal list of parameters.
 
-        If only_free, the names of fixed parameters are filtered from the
-        returned list. Otherwise all parameter names are returned"""
+        If only_free, the names of fixed parameters are filtered from
+        the returned list. Otherwise all parameter names are returned
+        """
 
         # FIXME combine functionality with get_param_vals by returning a named,
         # ordered list?
@@ -221,14 +232,16 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
             return [x for e in self._param for x in e.name]
 
     def set_param_vals(self, vals):
-        """set the values of the internal list of parameters from a
-        sequence of floats.
+        """
+        set the values of the internal list of parameters from a sequence of
+        floats.
 
         First break the sequence into sub sequences of the same length
         as the _num_samples.
 
         Only free parameter sets can have values assigned, therefore the
-        length of vals must equal the value of num_free"""
+        length of vals must equal the value of num_free
+        """
 
         assert len(vals) == self.num_free()
         i = 0
@@ -244,14 +257,16 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
         return
 
     def set_param_esds(self, esds):
-        """set the estimated standard deviations of the internal list of parameters
-        from a sequence of floats.
+        """
+        set the estimated standard deviations of the internal list of
+        parameters from a sequence of floats.
 
         First break the sequence into sub sequences of the same length
         as the _num_samples.
 
         Only free parameters can be set, therefore the length of esds must equal
-        the value of num_free"""
+        the value of num_free
+        """
 
         assert len(esds) == self.num_free()
         i = 0
@@ -270,12 +285,13 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
     # def get_state(self): inherited unchanged from ModelParameterisation
 
     def get_ds_dp(self, only_free=True, use_none_as_null=False):
-        """get a list of derivatives of the state wrt each parameter, as
-        a list in the same order as the internal list of parameters. Requires
-        compose to be called first at scan coordinate 't' so that each
-        scan-dependent parameter is evaluated at coordinate t, corresponding to
-        the original, unnormalised coordinates used to set up the smoother
-        (t will most likely be along the dimension of image number).
+        """
+        get a list of derivatives of the state wrt each parameter, as a list in
+        the same order as the internal list of parameters. Requires compose to
+        be called first at scan coordinate 't' so that each scan-dependent
+        parameter is evaluated at coordinate t, corresponding to the original,
+        unnormalised coordinates used to set up the smoother (t will most
+        likely be along the dimension of image number).
 
         If only_free, the derivatives with respect to fixed parameters are
         omitted from the returned list. Otherwise a list for all parameters is
@@ -315,8 +331,8 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
 
     def calculate_state_uncertainties(self, var_cov=None):
         """Given a variance-covariance array for the parameters of this model,
-        propagate those estimated errors into the uncertainties of the model state
-        at every scan point"""
+        propagate those estimated errors into the uncertainties of the model
+        state at every scan point."""
 
         if var_cov is not None:
             # first call, just cache the variance-covariance matrix
@@ -336,8 +352,8 @@ class ScanVaryingModelParameterisation(ModelParameterisation):
         ).calculate_state_uncertainties(self._var_cov)
 
     def set_state_uncertainties(self, var_cov_list):
-        """Send the calculated variance-covariance matrices for model state elements
-        for all scan points back to the model for storage alongside the model state
-        """
+        """Send the calculated variance-covariance matrices for model state
+        elements for all scan points back to the model for storage alongside
+        the model state."""
 
         pass

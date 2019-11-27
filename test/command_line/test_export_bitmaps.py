@@ -126,7 +126,7 @@ def test_export_multi_panel(dials_regression, tmpdir):
 
 
 def test_export_restricted_multiimage(dials_data, tmpdir):
-    "Test exporting a subset of an imageset"
+    """Test exporting a subset of an imageset."""
     result = procrunner.run(
         [
             "dials.export_bitmaps",

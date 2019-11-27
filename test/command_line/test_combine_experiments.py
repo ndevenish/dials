@@ -1,6 +1,4 @@
-"""
-Test combination of multiple experiments and reflections files.
-"""
+"""Test combination of multiple experiments and reflections files."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -197,7 +195,7 @@ def test(dials_regression, run_in_tmpdir):
 
 
 def test_failed_tolerance_error(dials_regression, monkeypatch):
-    """Test that we get a sensible error message on tolerance failures"""
+    """Test that we get a sensible error message on tolerance failures."""
     # Select some experiments to use for combining
     jsons = os.path.join(
         dials_regression,

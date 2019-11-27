@@ -1,6 +1,4 @@
-"""
-Test the command line script dials.scale, for successful completion.
-"""
+"""Test the command line script dials.scale, for successful completion."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -280,7 +278,8 @@ def test_targeted_scaling_against_mtz(dials_data, tmpdir):
     ],
 )
 def test_scale_single_dataset_with_options(dials_data, tmpdir, option):
-    """Test different non-default command-line options with a single dataset."""
+    """Test different non-default command-line options with a single
+    dataset."""
     data_dir = dials_data("l_cysteine_dials_output")
     refl_1 = data_dir / "20_integrated.pickle"
     expt_1 = data_dir / "20_integrated_experiments.json"
@@ -322,9 +321,11 @@ def vmxi_protk_reindexed(dials_data, tmpdir):
 def test_error_model_options(
     vmxi_protk_reindexed, tmpdir, options, expected, tolerances
 ):
-    """Test different non-default command-line options with a single dataset.
+    """
+    Test different non-default command-line options with a single dataset.
 
-    Current values taken at 14.11.19"""
+    Current values taken at 14.11.19
+    """
     expt_1, refl_1 = vmxi_protk_reindexed
     args = [refl_1, expt_1] + [o for o in options]
     run_one_scaling(tmpdir, args)
@@ -350,7 +351,8 @@ def test_error_model_options(
     ],
 )
 def test_scale_multiple_datasets_with_options(dials_data, tmpdir, option):
-    """Test different non-defaul command-line options with multiple datasets."""
+    """Test different non-defaul command-line options with multiple
+    datasets."""
     data_dir = dials_data("l_cysteine_dials_output")
     refl_1 = data_dir / "20_integrated.pickle"
     expt_1 = data_dir / "20_integrated_experiments.json"

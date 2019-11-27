@@ -39,8 +39,8 @@ class IntensityDist(object):
     ):
         """
         Generate z-scores and a normal probability plot from a DIALS
-        reflection_table and a dxtbx ExperimentList, containing the observations
-        and the corresponding experiments, respectively.
+        reflection_table and a dxtbx ExperimentList, containing the
+        observations and the corresponding experiments, respectively.
 
         :param rtable: A reflection table object, containing at least the columns
           * ``miller_index``
@@ -116,8 +116,9 @@ class IntensityDist(object):
     def _multiplicity_mean_error_stddev(
         self, calculate_variances=False, keep_singles=False
     ):
-        """"
-        Calculate aggregate properties of grouped symmetry-equivalent reflections.
+        """
+        " Calculate aggregate properties of grouped symmetry-equivalent
+        reflections.
 
         Populate the reflection table of observations with the following
         properties:
@@ -283,8 +284,8 @@ class IntensityDist(object):
             self.rtables[key] = rtable
 
     def _make_z(self, uncertainty="sigma"):
-        """"
-        Generate reflection z-scores.
+        """
+        " Generate reflection z-scores.
 
         Calculate z-scores from reflection intensities, weighted mean
         intensities and a chosen measure of uncertainty in the intensity

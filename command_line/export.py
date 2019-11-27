@@ -224,7 +224,7 @@ def _check_input(experiments, reflections, params=None, check_intensities=False)
 
 def export_mtz(params, experiments, reflections):
     """
-    Export reflections in MTZ format
+    Export reflections in MTZ format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -249,7 +249,7 @@ def export_mtz(params, experiments, reflections):
 
 def export_sadabs(params, experiments, reflections):
     """
-    Export data in HKL format
+    Export data in HKL format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -268,7 +268,7 @@ def export_sadabs(params, experiments, reflections):
 
 def export_xdsascii(params, experiments, reflections):
     """
-    Export data in XDS_ASCII format
+    Export data in XDS_ASCII format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -287,7 +287,7 @@ def export_xdsascii(params, experiments, reflections):
 
 def export_nexus(params, experiments, reflections):
     """
-    Export data in Nexus format
+    Export data in Nexus format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -303,7 +303,7 @@ def export_nexus(params, experiments, reflections):
 
 def export_mmcif(params, experiments, reflections):
     """
-    Export data in CIF format
+    Export data in CIF format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -323,7 +323,7 @@ def export_mmcif(params, experiments, reflections):
 
 def export_mosflm(params, experiments, reflections):
     """
-    Export stuff in mosflm format
+    Export stuff in mosflm format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -342,7 +342,7 @@ def export_mosflm(params, experiments, reflections):
 
 def export_xds(params, experiments, reflections):
     """
-    Export stuff in xds format
+    Export stuff in xds format.
 
     :param params: The phil parameters
     :param experiments: The experiment list
@@ -363,7 +363,7 @@ def export_xds(params, experiments, reflections):
 
 def export_json(params, experiments, reflections):
     """
-    Export reflections in json format
+    Export reflections in json format.
 
     :param params: The phil parameters
     :param experiments: The experiment list

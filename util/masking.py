@@ -95,9 +95,7 @@ phil_scope = parse(
 
 
 def generate_ice_ring_resolution_ranges(beam, panel, params):
-    """
-    Generate a set of resolution ranges from the ice ring parameters
-    """
+    """Generate a set of resolution ranges from the ice ring parameters."""
     if params.filter is True:
 
         # Get the crystal symmetry

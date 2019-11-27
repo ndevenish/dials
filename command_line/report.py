@@ -758,7 +758,7 @@ class CentroidAnalyser(object):
         return d
 
     def centroid_diff_xy(self, rlist, threshold):
-        """Look at the centroid difference in x, y"""
+        """Look at the centroid difference in x, y."""
         I = rlist["intensity.sum.value"]
         I_sig = flex.sqrt(rlist["intensity.sum.variance"])
         I_over_S = I / I_sig
@@ -850,7 +850,7 @@ class CentroidAnalyser(object):
         return d
 
     def centroid_diff_z(self, rlist, threshold):
-        """Look at the centroid difference in z"""
+        """Look at the centroid difference in z."""
         I = rlist["intensity.sum.value"]
         I_sig = flex.sqrt(rlist["intensity.sum.variance"])
         I_over_S = I / I_sig
@@ -1324,7 +1324,7 @@ class IntensityAnalyser(object):
         }
 
     def i_over_s_vs_xy(self, rlist, intensity_type):
-        """Plot I/Sigma vs X/Y"""
+        """Plot I/Sigma vs X/Y."""
 
         I_sig = flex.sqrt(rlist["intensity.%s.variance" % intensity_type])
         I = rlist["intensity.%s.value" % intensity_type]

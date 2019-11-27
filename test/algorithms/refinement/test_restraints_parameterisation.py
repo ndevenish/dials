@@ -14,7 +14,8 @@ import pytest
 
 
 def test_single_crystal_restraints_gradients():
-    """Simple test with a single triclinic crystal restrained to a target unit cell"""
+    """Simple test with a single triclinic crystal restrained to a target unit
+    cell."""
 
     from dials.test.algorithms.refinement.setup_geometry import Extract
     from dxtbx.model.experiment_list import ExperimentList, Experiment
@@ -150,7 +151,8 @@ def test_single_crystal_restraints_gradients():
 
 
 def test_two_triclinic_crystals():
-    """Simple test with two triclinic crystals restrained to a target unit cell"""
+    """Simple test with two triclinic crystals restrained to a target unit
+    cell."""
 
     from dials.test.algorithms.refinement.setup_geometry import Extract
     from dxtbx.model.experiment_list import ExperimentList, Experiment
@@ -303,7 +305,7 @@ def test_two_triclinic_crystals():
 
 
 def test_10_crystals_with_stills_parameterisation(dials_regression):
-    """Test with multiple crystals, and a stills refiner"""
+    """Test with multiple crystals, and a stills refiner."""
 
     # The phil scope
     from dials.algorithms.refinement.refiner import phil_scope

@@ -1,6 +1,4 @@
-"""
-Tests for the dials.algorithms.scaling.plots module
-"""
+"""Tests for the dials.algorithms.scaling.plots module."""
 from __future__ import absolute_import, division, print_function
 
 from dials.algorithms.scaling.model.model import plot_scaling_models, ArrayScalingModel
@@ -14,7 +12,7 @@ from dials.algorithms.scaling.plots import (
 
 
 def test_plot_array_absorption_plot():
-    """Test plot generation for array absorption_correction"""
+    """Test plot generation for array absorption_correction."""
     array_dict = {
         "__id__": "array",
         "is_scaled": True,
@@ -45,7 +43,7 @@ def test_plot_array_absorption_plot():
 
 
 def test_plot_array_decay_plot():
-    """Test plot generation for array decay correction"""
+    """Test plot generation for array decay correction."""
     array_dict = {
         "__id__": "array",
         "is_scaled": True,
@@ -72,7 +70,7 @@ def test_plot_array_decay_plot():
 
 
 def test_plot_array_modulation_plot():
-    """Test plot generation for array modulation correction"""
+    """Test plot generation for array modulation correction."""
     array_dict = {
         "__id__": "array",
         "is_scaled": True,

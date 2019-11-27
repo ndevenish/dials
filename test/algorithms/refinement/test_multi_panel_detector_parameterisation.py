@@ -1,8 +1,9 @@
 """
 Using code copied from tst_orientation_refinement.py, test refinement of beam,
-detector and crystal orientation parameters using generated reflection positions
-from ideal geometry, repeating tests with both a single panel detector, and a
-geometrically identical 3x3 panel detector, ensuring the results are the same.
+detector and crystal orientation parameters using generated reflection
+positions from ideal geometry, repeating tests with both a single panel
+detector, and a geometrically identical 3x3 panel detector, ensuring the
+results are the same.
 
 Control of the experimental model and choice of minimiser is done via
 PHIL, which means we can do, for example:
@@ -73,7 +74,7 @@ from dials.algorithms.refinement.reflection_manager import ReflectionManager
 
 def make_panel_in_array(array_elt, reference_panel):
     """Helper function to make a panel in a coplanar array with each panel size
-    1/3 that of a reference panel"""
+    1/3 that of a reference panel."""
 
     px_size = tuple((e / 3.0) for e in reference_panel.get_pixel_size())
     ref_panel_size = reference_panel.get_image_size_mm()

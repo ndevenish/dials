@@ -313,7 +313,8 @@ def show_experiments(experiments, show_scan_varying=False, show_image_statistics
 
 
 def _create_flag_count_table(table):
-    """Generate a summary table of flag values in a reflection table.
+    """
+    Generate a summary table of flag values in a reflection table.
 
     :param table: A reflection table
     :returns:     A string of the formatted flags table

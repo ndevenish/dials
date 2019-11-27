@@ -1,22 +1,27 @@
-"""
-Restraints manager classes for scaling.
-"""
+"""Restraints manager classes for scaling."""
 from __future__ import absolute_import, division, print_function
 from scitbx import sparse
 from dials.array_family import flex
 
 
 class ScalingRestraintsCalculator(object):
-    """A class to calculate restraints for scaling for one or more datasets,
-    by composition of the restraints of the individual datasets. The methods
-    require a multi active_parameter_manager."""
+    """
+    A class to calculate restraints for scaling for one or more datasets, by
+    composition of the restraints of the individual datasets.
+
+    The methods require a multi active_parameter_manager.
+    """
 
     @staticmethod
     def calculate_restraints(multi_parameter_manager):
-        """Calculate restraints for multi-dataset scaling, using a
-        multi active_parameter_manager. Return None if no restraints, else return
-        a restraints vector of length n_restrained_parameters and a gradient vector
-        of length n_total_parameters."""
+        """
+        Calculate restraints for multi-dataset scaling, using a multi
+        active_parameter_manager.
+
+        Return None if no restraints, else return a restraints vector of
+        length n_restrained_parameters and a gradient vector of length
+        n_total_parameters.
+        """
         R = flex.double([])
         G = flex.double([])
         for single_apm in multi_parameter_manager.apm_list:
@@ -32,13 +37,16 @@ class ScalingRestraintsCalculator(object):
 
     @classmethod
     def calculate_jacobian_restraints(cls, multi_parameter_manager):
-        """Calculate jacobian restraints for multi-dataset scaling, using a
+        """
+        Calculate jacobian restraints for multi-dataset scaling, using a.
+
         multi active_parameter_manager. First, the restraints are calculated - if
         not None is returned, then one restraints vector, jacobian matrix and
         weights vector is composed for the multiple datasets, else None is returned.
         The jacobian restraints matrix is of size n_restrained_parameters x
         n_parameters (across all datasets), while the residuals and weights vector
-        are of length n_restrainted_parameters."""
+        are of length n_restrainted_parameters.
+        """
         residual_restraints = cls.calculate_restraints(multi_parameter_manager)
         if residual_restraints:
             n_restraints = residual_restraints[0].size()
@@ -66,15 +74,19 @@ class ScalingRestraintsCalculator(object):
 
 
 class SingleScalingRestraintsCalculator(object):
-    """A class to calculate restraints for scaling for an individual dataset, by
-    using a single active_parameter_manager."""
+    """A class to calculate restraints for scaling for an individual dataset,
+    by using a single active_parameter_manager."""
 
     @classmethod
     def calculate_jacobian_restraints(cls, single_parameter_manager):
-        """Calculate jacobian restraints for a single dataset from the scaling model
-        components, using a single active_parameter_manager. Return None if no
-        restraints, else return a residuals vector and a matrix of size
-        n_restrained_parameters x n_parameters, and a weights vector."""
+        """
+        Calculate jacobian restraints for a single dataset from the scaling
+        model components, using a single active_parameter_manager.
+
+        Return None if no restraints, else return a residuals vector and
+        a matrix of size n_restrained_parameters x n_parameters, and a
+        weights vector.
+        """
         residual_restraints = cls.calculate_restraints(single_parameter_manager)
         if residual_restraints:
             n_restraints = residual_restraints[0].size()
@@ -100,10 +112,14 @@ class SingleScalingRestraintsCalculator(object):
 
     @staticmethod
     def calculate_restraints(single_parameter_manager):
-        """Calculate restraints for a single dataset from the scaling model
-        components. Return None if no restraints, else return a residuals vector
-        length n_restrained_parameters and a gradient vector of length n_parameters
-        (of the scaling model for the individual dataset)."""
+        """
+        Calculate restraints for a single dataset from the scaling model
+        components.
+
+        Return None if no restraints, else return a residuals vector
+        length n_restrained_parameters and a gradient vector of length
+        n_parameters (of the scaling model for the individual dataset).
+        """
         residuals = flex.double([])
         gradient_vector = flex.double([])
         for comp in single_parameter_manager.components.values():

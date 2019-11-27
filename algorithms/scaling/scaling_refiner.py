@@ -1,7 +1,9 @@
-""" Classes for scaling refinement engines.
+"""
+Classes for scaling refinement engines.
 
 Classes are inherited from the dials.refinement engine with a few
-methods overwritten to use them with scaling code."""
+methods overwritten to use them with scaling code.
+"""
 
 from __future__ import absolute_import, division, print_function
 import logging
@@ -134,18 +136,21 @@ def scaling_refinery(
 
 
 def error_model_refinery(engine, model, max_iterations):
-    """Return the correct engine based on phil parameters.
+    """
+    Return the correct engine based on phil parameters.
 
     Note that here the target also takes the role of the predication
-    parameterisation by implementing the set_param_vals and get_param_vals
-    methods (the code is organised in this way to allow the use of the
-    dials.refinement engines)."""
+    parameterisation by implementing the set_param_vals and
+    get_param_vals methods (the code is organised in this way to allow
+    the use of the dials.refinement engines).
+    """
     if engine == "SimpleLBFGS":
         return ErrorModelRefinery(model=model, max_iterations=max_iterations)
 
 
 def print_step_table(refinery):
-    """print useful output about refinement steps in the form of a simple table"""
+    """print useful output about refinement steps in the form of a simple
+    table."""
 
     logger.info("\nRefinement steps:")
 
@@ -166,7 +171,7 @@ def print_step_table(refinery):
 
 
 class ScalingRefinery(object):
-    "mixin class to add extra return method"
+    """mixin class to add extra return method."""
 
     def __init__(self, scaler, target, prediction_parameterisation, *args, **kwargs):
         self._target = target
@@ -186,7 +191,7 @@ class ScalingRefinery(object):
         self._rmsd_tolerance = tolerance
 
     def test_rmsd_convergence(self):
-        """Test for convergence of RMSDs"""
+        """Test for convergence of RMSDs."""
 
         # http://en.wikipedia.org/wiki/
         # Non-linear_least_squares#Convergence_criteria
@@ -203,9 +208,13 @@ class ScalingRefinery(object):
         return all(tests)
 
     def prepare_for_step(self):
-        """Update the parameterisation and prepare the target function. Overwrites
-        the prepare_for_step method from refinery to direct the updating away from
-        the target function to the update_for_minimisation method."""
+        """
+        Update the parameterisation and prepare the target function.
+
+        Overwrites the prepare_for_step method from refinery to direct
+        the updating away from the target function to the
+        update_for_minimisation method.
+        """
 
         x = self.x
 
@@ -215,7 +224,7 @@ class ScalingRefinery(object):
         return
 
     def update_journal(self):
-        """Append latest step information to the journal attributes"""
+        """Append latest step information to the journal attributes."""
 
         # add step quantities to journal
         self.history.add_row()
@@ -233,7 +242,7 @@ class ScalingRefinery(object):
 
 
 class ScalingSimpleLBFGS(ScalingRefinery, SimpleLBFGS):
-    """Adapt Refinery for L-BFGS minimiser"""
+    """Adapt Refinery for L-BFGS minimiser."""
 
     def __init__(self, scaler, *args, **kwargs):
         logger.info("Performing a round of scaling with an LBFGS minimizer. \n")
@@ -241,7 +250,7 @@ class ScalingSimpleLBFGS(ScalingRefinery, SimpleLBFGS):
         SimpleLBFGS.__init__(self, *args, **kwargs)
 
     def compute_functional_gradients_and_curvatures(self):
-        """overwrite method to avoid calls to 'blocks' methods of target"""
+        """overwrite method to avoid calls to 'blocks' methods of target."""
         self.prepare_for_step()
 
         work_blocks = self._scaler.get_blocks_for_minimisation()
@@ -290,9 +299,13 @@ class ErrorModelComponentRefiner(SimpleLBFGS):
         SimpleLBFGS.__init__(self, *args, **kwargs)
 
     def prepare_for_step(self):
-        """Update the parameterisation and prepare the target function. Overwrites
-        the prepare_for_step method from refinery to direct the updating away from
-        the target function to the update_for_minimisation method."""
+        """
+        Update the parameterisation and prepare the target function.
+
+        Overwrites the prepare_for_step method from refinery to direct
+        the updating away from the target function to the
+        update_for_minimisation method.
+        """
 
         x = self.x
 
@@ -302,7 +315,7 @@ class ErrorModelComponentRefiner(SimpleLBFGS):
         return
 
     def compute_functional_gradients_and_curvatures(self):
-        """overwrite method to avoid calls to 'blocks' methods of target"""
+        """overwrite method to avoid calls to 'blocks' methods of target."""
         logger.debug("Current parameters %s", ["%.6f" % i for i in self.x])
         self.prepare_for_step()
         self._target.predict()
@@ -337,7 +350,7 @@ class ErrorModelRefinery(object):
         self.converged = False
 
     def test_value_convergence(self):
-        """Test for convergence of RMSDs"""
+        """Test for convergence of RMSDs."""
 
         # http://en.wikipedia.org/wiki/
         # Non-linear_least_squares#Convergence_criteria
@@ -417,10 +430,10 @@ Performing error model refinement with fixed a=1.0
 
 
 class ScalingLstbxBuildUpMixin(ScalingRefinery):
-    """Mixin class to overwrite the build_up method in AdaptLstbx"""
+    """Mixin class to overwrite the build_up method in AdaptLstbx."""
 
     def build_up(self, objective_only=False):
-        "overwrite method from Adaptlstbx"
+        """overwrite method from Adaptlstbx."""
         # set current parameter values
         self.prepare_for_step()
 
@@ -469,7 +482,7 @@ class ScalingLstbxBuildUpMixin(ScalingRefinery):
 
 
 class ScalingGaussNewtonIterations(ScalingLstbxBuildUpMixin, GaussNewtonIterations):
-    """Refinery implementation, using lstbx Gauss Newton iterations"""
+    """Refinery implementation, using lstbx Gauss Newton iterations."""
 
     # defaults that may be overridden
     gradient_threshold = 1.0e-10
@@ -507,7 +520,7 @@ class ScalingLevenbergMarquardtIterations(
     ScalingLstbxBuildUpMixin, LevenbergMarquardtIterations
 ):
     """Refinery implementation, employing lstbx Levenberg Marquadt
-    iterations"""
+    iterations."""
 
     def __init__(
         self,

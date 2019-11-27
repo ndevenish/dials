@@ -160,7 +160,8 @@ def scales_vs_batch(scales, batches):
 
 
 def _batch_bins_and_data(batches, values, function_to_apply):
-    """Apply function to the data from each batch.
+    """
+    Apply function to the data from each batch.
 
     Return the list of the batch bins and the value for each bin.
     """

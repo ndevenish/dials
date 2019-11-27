@@ -1,6 +1,4 @@
-"""
-Tools to run cluster processing using DRMAA
-"""
+"""Tools to run cluster processing using DRMAA."""
 from __future__ import absolute_import, division, print_function
 
 import os
@@ -11,22 +9,16 @@ import six.moves.cPickle as pickle
 
 
 class InputWriter(object):
-    """
-    A class to write the input files
-    """
+    """A class to write the input files."""
 
     def __init__(self, directory, function, iterable):
-        """
-        Save the function and iterable
-        """
+        """Save the function and iterable."""
         self.directory = directory
         self.function = function
         self.iterable = iterable
 
     def __call__(self):
-        """
-        Call this to write input files
-        """
+        """Call this to write input files."""
 
         for i, item in enumerate(self.iterable, start=1):
             with open(os.path.join(self.directory, "%d.input" % i), "wb") as outfile:
@@ -37,7 +29,7 @@ class InputWriter(object):
 
 def cluster_map(func, iterable, callback=None, nslots=1, njobs=1, job_category="low"):
     """
-    A function to map stuff on cluster using drmaa
+    A function to map stuff on cluster using drmaa.
 
     :param func: The function to call
     :param iterable: The iterable to pass to each function call

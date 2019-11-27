@@ -30,15 +30,15 @@ class ScaleComponentBase(object):
     """
     Base scale component class.
 
-    This defines an interface to access the parameters, the component
-    of the inverse scale factor and it's derivatives with respect to
-    the parameters. Scale components derived from the base class are
-    designed to be instantiated by a ScalingModel class, by supplying
-    an initial array of parameters and optionally the current estimated
+    This defines an interface to access the parameters, the component of
+    the inverse scale factor and it's derivatives with respect to the
+    parameters. Scale components derived from the base class are
+    designed to be instantiated by a ScalingModel class, by supplying an
+    initial array of parameters and optionally the current estimated
     standard deviations. The relevant data from a reflection table is
     added later by a Scaler using the update_reflection_data method.
-    This behaviour allows data to easily be added/changed after selecting
-    subsets of the data.
+    This behaviour allows data to easily be added/changed after
+    selecting subsets of the data.
     """
 
     def __init__(self, initial_values, parameter_esds=None):
@@ -54,10 +54,11 @@ class ScaleComponentBase(object):
     @property
     def data(self):
         """
-        Return a dictionary of reflection data relevant to the particular component.
+        Return a dictionary of reflection data relevant to the particular
+        component.
 
-        This is designed to be a dict of arrays which can be selected from when
-        updating the component (i.e. selecting subsets).
+        This is designed to be a dict of arrays which can be selected
+        from when updating the component (i.e. selecting subsets).
         """
         return self._data
 
@@ -167,7 +168,8 @@ assignment: was %s, attempting %s""" % (
         raise NotImplementedError()
 
     def calculate_scales_and_derivatives(self, block_id=0):
-        """Calculate and return inverse scales and derivatives for a given block."""
+        """Calculate and return inverse scales and derivatives for a given
+        block."""
         raise NotImplementedError()
 
     def calculate_scales(self, block_id=0):
@@ -179,8 +181,8 @@ class SingleScaleFactor(ScaleComponentBase):
     """
     A model component consisting of a single global scale parameter.
 
-    The inverse scale factor for every reflection is the parameter
-    value itself and the derivatives are therefore all 1.0.
+    The inverse scale factor for every reflection is the parameter value
+    itself and the derivatives are therefore all 1.0.
     """
 
     null_parameter_value = 1.0
@@ -223,7 +225,8 @@ This model component can only hold a single parameter."""
             self._n_refl = [data.size()]
 
     def calculate_scales_and_derivatives(self, block_id=0):
-        """Calculate and return inverse scales and derivatives for a given block."""
+        """Calculate and return inverse scales and derivatives for a given
+        block."""
         scales = flex.double(self.n_refl[block_id], self._parameters[0])
         derivatives = sparse.matrix(self.n_refl[block_id], 1)
         for i in range(self.n_refl[block_id]):
@@ -252,7 +255,8 @@ class SingleBScaleFactor(ScaleComponentBase):
 
     @property
     def d_values(self):
-        """Return a list of arrays of d-values associated with this component."""
+        """Return a list of arrays of d-values associated with this
+        component."""
         return self._d_values
 
     @ScaleComponentBase.data.setter
@@ -286,7 +290,8 @@ class SingleBScaleFactor(ScaleComponentBase):
         self._n_refl = [dvalues.size() for dvalues in self._d_values]
 
     def calculate_scales_and_derivatives(self, block_id=0):
-        """Calculate and return inverse scales and derivatives for a given block."""
+        """Calculate and return inverse scales and derivatives for a given
+        block."""
         d_squared = self._d_values[block_id] * self._d_values[block_id]
         scales = flex.exp(
             flex.double(self._n_refl[block_id], self._parameters[0]) / (2.0 * d_squared)
@@ -334,7 +339,8 @@ class SHScaleComponent(ScaleComponentBase):
 
     @property
     def sph_harm_table(self):
-        """Return the matrix of the full harmonic coefficient for a reflection table."""
+        """Return the matrix of the full harmonic coefficient for a reflection
+        table."""
         return self._data["sph_harm_table"]
 
     @sph_harm_table.setter
@@ -447,7 +453,8 @@ class SHScaleComponent(ScaleComponentBase):
             )
 
     def calculate_scales_and_derivatives(self, block_id=0):
-        """Calculate and return inverse scales and derivatives for a given block."""
+        """Calculate and return inverse scales and derivatives for a given
+        block."""
         if self._mode == "speed":
             return self._calculate_scales_and_derivatives_speedmode(block_id)
         elif self._mode == "memory":

@@ -1,7 +1,7 @@
 # LIBTBX_SET_DISPATCHER_NAME dials.plot_Fo_vs_Fc
 """
 Create a plot of Fo vs Fc similar to that shown by Figure 6 in
-https://doi.org/10.1107/S2059798317010348
+https://doi.org/10.1107/S2059798317010348.
 
 Usage: dials.plot_Fo_vs_Fc hklin=refined.mtz
 """

@@ -1,5 +1,5 @@
 """Trivial check for whether classification of reflections as exiting or
-entering the Ewald sphere is done the right way round"""
+entering the Ewald sphere is done the right way round."""
 
 from __future__ import absolute_import, division, print_function
 

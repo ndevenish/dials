@@ -1,6 +1,4 @@
-"""
-Unit testing for the export_mtz.py routines
-"""
+"""Unit testing for the export_mtz.py routines."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -10,17 +8,17 @@ from dials.util.batch_handling import calculate_batch_offsets
 
 
 def in_ranges(value, ranges):
-    """Check if a value is in a list of ranges"""
+    """Check if a value is in a list of ranges."""
     return all(low <= value <= high for low, high in ranges)
 
 
 def range_to_set(ranges):
-    """Convert a list of ranges to a set of numbers"""
+    """Convert a list of ranges to a set of numbers."""
     return set().union(*[set(range(l, h + 1)) for l, h in ranges])
 
 
 def has_consecutive_ranges(ranges):
-    """Check that a set of ranges is non-consecutive"""
+    """Check that a set of ranges is non-consecutive."""
     total_entries = sum(h - l + 1 + 1 for l, h in ranges)
     union = set().union(*[set(range(l, h + 2)) for l, h in ranges])
     return len(union) < total_entries
@@ -31,7 +29,7 @@ def offset_ranges(offsets, ranges):
 
 
 class TestBatchRangeCalculations(object):
-    "Test the calculation of non-overlapping batch ranges"
+    """Test the calculation of non-overlapping batch ranges."""
 
     class MockScan(object):
         def __init__(self, image_range):
@@ -57,12 +55,14 @@ class TestBatchRangeCalculations(object):
                 self.scan = []
 
     def _run_ranges(self, ranges):
-        """Convenience method to run the routine with a minimal experiment, and return the result as ranges of batch number"""
+        """Convenience method to run the routine with a minimal experiment, and
+        return the result as ranges of batch number."""
         input_data = [self.MockExperiment(x) for x in ranges]
         return offset_ranges(calculate_batch_offsets(input_data), ranges)
 
     def _run_ranges_to_set(self, ranges):
-        """Runs a list of ranges and returns a set of individual batch numbers"""
+        """Runs a list of ranges and returns a set of individual batch
+        numbers."""
         return range_to_set(self._run_ranges(ranges))
 
     def test_calculate_batch_ranges(self):

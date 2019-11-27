@@ -25,23 +25,19 @@ class Result(object):
     """
     A class to hold the result from spot finding on an image.
 
-    When doing multi processing, we can process the result of
-    each thread as it comes in instead of waiting for all results.
-    The purpose of this class is to allow us to set the pixel list
-    to None after each image to lower memory usage.
+    When doing multi processing, we can process the result of each
+    thread as it comes in instead of waiting for all results. The
+    purpose of this class is to allow us to set the pixel list to None
+    after each image to lower memory usage.
     """
 
     def __init__(self, pixel_list):
-        """
-        Set the pixel list
-        """
+        """Set the pixel list."""
         self.pixel_list = pixel_list
 
 
 class ExtractPixelsFromImage(object):
-    """
-    A class to extract pixels from a single image
-    """
+    """A class to extract pixels from a single image."""
 
     def __init__(
         self,
@@ -53,7 +49,7 @@ class ExtractPixelsFromImage(object):
         compute_mean_background,
     ):
         """
-        Initialise the class
+        Initialise the class.
 
         :param imageset: The imageset to extract from
         :param threshold_function: The function to threshold with
@@ -74,7 +70,7 @@ class ExtractPixelsFromImage(object):
 
     def __call__(self, index):
         """
-        Extract strong pixels from an image
+        Extract strong pixels from an image.
 
         :param index: The index of the image
         """
@@ -180,9 +176,7 @@ class ExtractPixelsFromImage(object):
 
 
 class ExtractPixelsFromImage2DNoShoeboxes(ExtractPixelsFromImage):
-    """
-    A class to extract pixels from a single image
-    """
+    """A class to extract pixels from a single image."""
 
     def __init__(
         self,
@@ -197,7 +191,7 @@ class ExtractPixelsFromImage2DNoShoeboxes(ExtractPixelsFromImage):
         filter_spots,
     ):
         """
-        Initialise the class
+        Initialise the class.
 
         :param imageset: The imageset to extract from
         :param threshold_function: The function to threshold with
@@ -221,7 +215,7 @@ class ExtractPixelsFromImage2DNoShoeboxes(ExtractPixelsFromImage):
 
     def __call__(self, index):
         """
-        Extract strong pixels from an image
+        Extract strong pixels from an image.
 
         :param index: The index of the image
         """
@@ -254,21 +248,18 @@ class ExtractPixelsFromImage2DNoShoeboxes(ExtractPixelsFromImage):
 
 class ExtractSpotsParallelTask(object):
     """
-    Execute the spot finder task in parallel
+    Execute the spot finder task in parallel.
 
-    We need this external class so that we can pickle it for cluster jobs
+    We need this external class so that we can pickle it for cluster
+    jobs
     """
 
     def __init__(self, function):
-        """
-        Initialise with the function to call
-        """
+        """Initialise with the function to call."""
         self.function = function
 
     def __call__(self, task):
-        """
-        Call the function with th task and save the IO
-        """
+        """Call the function with th task and save the IO."""
         from dials.util import log
 
         log.config_simple_cached()
@@ -279,22 +270,16 @@ class ExtractSpotsParallelTask(object):
 
 
 class PixelListToShoeboxes(object):
-    """
-    A helper class to convert pixel list to shoeboxes
-    """
+    """A helper class to convert pixel list to shoeboxes."""
 
     def __init__(self, min_spot_size, max_spot_size, write_hot_pixel_mask):
-        """
-        Initialize
-        """
+        """Initialize."""
         self.min_spot_size = min_spot_size
         self.max_spot_size = max_spot_size
         self.write_hot_pixel_mask = write_hot_pixel_mask
 
     def __call__(self, imageset, pixel_labeller):
-        """
-        Convert the pixel list to shoeboxes
-        """
+        """Convert the pixel list to shoeboxes."""
         from dxtbx.imageset import ImageSequence
 
         # Extract the pixel lists into a list of reflections
@@ -344,20 +329,14 @@ class PixelListToShoeboxes(object):
 
 
 class ShoeboxesToReflectionTable(object):
-    """
-    A class to filter shoeboxes and create reflection table
-    """
+    """A class to filter shoeboxes and create reflection table."""
 
     def __init__(self, filter_spots):
-        """
-        Initialise the reflection table creator
-        """
+        """Initialise the reflection table creator."""
         self.filter_spots = filter_spots
 
     def __call__(self, imageset, shoeboxes):
-        """
-        Filter shoeboxes and create reflection table
-        """
+        """Filter shoeboxes and create reflection table."""
         # Calculate the spot centroids
         centroid = shoeboxes.centroid_valid()
         logger.info("Calculated {} spot centroids".format(len(shoeboxes)))
@@ -381,16 +360,12 @@ class ShoeboxesToReflectionTable(object):
 
 
 class PixelListToReflectionTable(object):
-    """
-    Helper class to convert the pixel list to reflection table
-    """
+    """Helper class to convert the pixel list to reflection table."""
 
     def __init__(
         self, min_spot_size, max_spot_size, filter_spots, write_hot_pixel_mask
     ):
-        """
-        Initialise the converter
-        """
+        """Initialise the converter."""
 
         # Setup the pixel list to shoebox converter
         self.pixel_list_to_shoeboxes = PixelListToShoeboxes(
@@ -401,18 +376,14 @@ class PixelListToReflectionTable(object):
         self.shoeboxes_to_reflection_table = ShoeboxesToReflectionTable(filter_spots)
 
     def __call__(self, imageset, pixel_labeller):
-        """
-        Convert to reflection table
-        """
+        """Convert to reflection table."""
         shoeboxes, hot_pixels = self.pixel_list_to_shoeboxes(imageset, pixel_labeller)
 
         return self.shoeboxes_to_reflection_table(imageset, shoeboxes), hot_pixels
 
 
 class ExtractSpots(object):
-    """
-    Class to find spots in an image and extract them into shoeboxes.
-    """
+    """Class to find spots in an image and extract them into shoeboxes."""
 
     def __init__(
         self,
@@ -433,7 +404,7 @@ class ExtractSpots(object):
         write_hot_pixel_mask=False,
     ):
         """
-        Initialise the class with the strategy
+        Initialise the class with the strategy.
 
         :param threshold_function: The image thresholding strategy
         :param mask: The mask to use
@@ -460,7 +431,7 @@ class ExtractSpots(object):
 
     def __call__(self, imageset):
         """
-        Find the spots in the imageset
+        Find the spots in the imageset.
 
         :param imageset: The imageset to process
         :return: The list of spot shoeboxes
@@ -471,9 +442,8 @@ class ExtractSpots(object):
             return self._find_spots_2d_no_shoeboxes(imageset)
 
     def _compute_chunksize(self, nimg, nproc, min_chunksize):
-        """
-        Compute the chunk size for a given number of images and processes
-        """
+        """Compute the chunk size for a given number of images and
+        processes."""
         chunksize = int(math.ceil(nimg / nproc))
         remainder = nimg % (chunksize * nproc)
         test_chunksize = chunksize - 1
@@ -487,7 +457,7 @@ class ExtractSpots(object):
 
     def _find_spots(self, imageset):
         """
-        Find the spots in the imageset
+        Find the spots in the imageset.
 
         :param imageset: The imageset to process
         :return: The list of spot shoeboxes
@@ -593,7 +563,7 @@ class ExtractSpots(object):
 
     def _find_spots_2d_no_shoeboxes(self, imageset):
         """
-        Find the spots in the imageset
+        Find the spots in the imageset.
 
         :param imageset: The imageset to process
         :return: The list of spot shoeboxes
@@ -682,9 +652,7 @@ class ExtractSpots(object):
 
 
 class SpotFinder(object):
-    """
-    A class to do spot finding and filtering.
-    """
+    """A class to do spot finding and filtering."""
 
     def __init__(
         self,
@@ -865,9 +833,7 @@ class SpotFinder(object):
         return reflections, hot_mask
 
     def _create_hot_mask(self, imageset, hot_pixels):
-        """
-        Find hot pixels in images
-        """
+        """Find hot pixels in images."""
         # Write the hot mask
         if self.write_hot_mask:
 

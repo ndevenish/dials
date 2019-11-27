@@ -1,6 +1,4 @@
-"""
-Module of utility functions for scaling.
-"""
+"""Module of utility functions for scaling."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -145,8 +143,8 @@ def align_rotation_axis_along_z(exp_rot_axis, vectors):
 
 
 def sph_harm_table(reflection_table, lmax):
-    """Calculate the spherical harmonic table for a spherical
-    harmonic absorption correction."""
+    """Calculate the spherical harmonic table for a spherical harmonic
+    absorption correction."""
     theta_phi = calc_theta_phi(reflection_table["s0c"])
     theta_phi_2 = calc_theta_phi(reflection_table["s1c"])
     sph_h_t = create_sph_harm_table(theta_phi, theta_phi_2, lmax)
@@ -154,10 +152,14 @@ def sph_harm_table(reflection_table, lmax):
 
 
 def quasi_normalisation(reflection_table, experiment):
-    """Calculate normalised intensity (Esq) values for reflections, for the purpose
-    of selecting subsets based on Esq for scaling. If more involved analyses of
-    normalised intensities are needed, then it may be necessary to split this
-    procedure to handle acentric and centric reflections separately."""
+    """
+    Calculate normalised intensity (Esq) values for reflections, for the
+    purpose of selecting subsets based on Esq for scaling.
+
+    If more involved analyses of normalised intensities are needed, then
+    it may be necessary to split this procedure to handle acentric and
+    centric reflections separately.
+    """
 
     logger.info(
         "Calculating normalised intensity values to select a reflection \n"

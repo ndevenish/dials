@@ -13,8 +13,8 @@ import pytest
 
 
 def test_joint_refinement(dials_regression, run_in_tmpdir):
-    """A basic test of joint refinement of the CS-PAD detector at hierarchy level 2
-    with 300 crystals."""
+    """A basic test of joint refinement of the CS-PAD detector at hierarchy
+    level 2 with 300 crystals."""
 
     bevington = pytest.importorskip("scitbx.examples.bevington")
     if not hasattr(bevington, "non_linear_ls_eigen_wrapper"):
@@ -49,9 +49,12 @@ def test_joint_refinement(dials_regression, run_in_tmpdir):
 
 
 def test_constrained_refinement(dials_regression, run_in_tmpdir):
-    """Do constrained refinement, checking that a panel group with no data
-    on it still moves with its partners in the constraint.
-    See https://github.com/dials/dials/issues/990"""
+    """
+    Do constrained refinement, checking that a panel group with no data on it
+    still moves with its partners in the constraint.
+
+    See https://github.com/dials/dials/issues/990
+    """
 
     bevington = pytest.importorskip("scitbx.examples.bevington")
     if not hasattr(bevington, "non_linear_ls_eigen_wrapper"):

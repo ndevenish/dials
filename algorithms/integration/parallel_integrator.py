@@ -63,15 +63,11 @@ logger = logging.getLogger(__name__)
 
 
 class MaskCalculatorFactory(object):
-    """
-    A factory function to return a mask calculator object
-    """
+    """A factory function to return a mask calculator object."""
 
     @classmethod
     def create(cls, experiments, params=None):
-        """
-        Select the mask calculator
-        """
+        """Select the mask calculator."""
         from dials.algorithms.profile_model.gaussian_rs.algorithm import (
             GaussianRSMaskCalculatorFactory,
         )
@@ -94,15 +90,11 @@ class MaskCalculatorFactory(object):
 
 
 class BackgroundCalculatorFactory(object):
-    """
-    A factory function to return a background calculator object
-    """
+    """A factory function to return a background calculator object."""
 
     @classmethod
     def create(cls, experiments, params=None):
-        """
-        Select the background calculator
-        """
+        """Select the background calculator."""
         from dials.algorithms.background.simple.algorithm import (
             SimpleBackgroundCalculatorFactory,
         )
@@ -188,15 +180,11 @@ class BackgroundCalculatorFactory(object):
 
 
 class IntensityCalculatorFactory(object):
-    """
-    A factory function to return an intensity calculator object
-    """
+    """A factory function to return an intensity calculator object."""
 
     @classmethod
     def create(cls, experiments, reference_profiles, params=None):
-        """
-        Select the intensity calculator
-        """
+        """Select the intensity calculator."""
         from dials.algorithms.profile_model.gaussian_rs.algorithm import (
             GaussianRSIntensityCalculatorFactory,
         )
@@ -237,15 +225,11 @@ class IntensityCalculatorFactory(object):
 
 
 class ReferenceCalculatorFactory(object):
-    """
-    A factory function to return an reference calculator object
-    """
+    """A factory function to return an reference calculator object."""
 
     @classmethod
     def create(cls, experiments, params=None):
-        """
-        Select the reference calculator
-        """
+        """Select the reference calculator."""
         from dials.algorithms.profile_model.gaussian_rs.algorithm import (
             GaussianRSReferenceCalculatorFactory,
         )
@@ -280,7 +264,7 @@ class ReferenceCalculatorFactory(object):
 
 def assert_enough_memory(required_memory, max_memory_usage):
     """
-    Check there is enough memory available or fail
+    Check there is enough memory available or fail.
 
     :param required_memory: The required number of bytes
     :param max_memory_usage: The maximum memory usage allowed
@@ -312,9 +296,7 @@ def assert_enough_memory(required_memory, max_memory_usage):
 
 
 class Result(object):
-    """
-    A class representing a processing result.
-    """
+    """A class representing a processing result."""
 
     def __init__(self, index, reflections, reference=None):
         """
@@ -329,9 +311,7 @@ class Result(object):
 
 
 class IntegrationJob(object):
-    """
-    A class to represent an integration job
-    """
+    """A class to represent an integration job."""
 
     def __init__(self, index, job, experiments, reflections, reference, params=None):
         """
@@ -419,17 +399,13 @@ class IntegrationJob(object):
         return Result(self.index, self.reflections)
 
     def compute_required_memory(self, imageset):
-        """
-        Compute the required memory
-        """
+        """Compute the required memory."""
         return MultiThreadedIntegrator.compute_required_memory(
             imageset, self.params.integration.block.size
         )
 
     def integrate(self, imageset):
-        """
-        Integrate the reflections
-        """
+        """Integrate the reflections."""
         from dials.algorithms.integration.integrator import frame_hist
 
         # Compute the partiality
@@ -506,9 +482,7 @@ class IntegrationJob(object):
         self.reflections = integrator.reflections()
 
     def write_debug_files(self):
-        """
-        Write some debug output
-        """
+        """Write some debug output."""
 
         # Optionally save the shoeboxes
         debug = self.params.integration.debug
@@ -530,9 +504,7 @@ class IntegrationJob(object):
 
 
 class IntegrationManager(object):
-    """
-    A class to manage processing book-keeping
-    """
+    """A class to manage processing book-keeping."""
 
     def __init__(self, experiments, reflections, reference, params):
         """
@@ -561,9 +533,7 @@ class IntegrationManager(object):
         self.initialize()
 
     def initialize(self):
-        """
-        Initialise the processing
-        """
+        """Initialise the processing."""
         # Ensure the reflections contain bounding boxes
         assert "bbox" in self.reflections, "Reflections have no bbox"
 
@@ -585,9 +555,7 @@ class IntegrationManager(object):
         self.experiments.nullify_all_single_file_reader_format_instances()
 
     def task(self, index):
-        """
-        Get a task.
-        """
+        """Get a task."""
         frames = self.manager.job(index)
         experiments = self.experiments
         reference = self.reference
@@ -607,9 +575,7 @@ class IntegrationManager(object):
         return task
 
     def tasks(self):
-        """
-        Iterate through the tasks.
-        """
+        """Iterate through the tasks."""
         for i in range(len(self)):
             yield self.task(i)
 
@@ -622,9 +588,7 @@ class IntegrationManager(object):
         # self.time.total += result.total_time
 
     def finalize(self):
-        """
-        Finalize the processing and finish.
-        """
+        """Finalize the processing and finish."""
         # Check manager is finished
         assert self.manager.finished(), "Manager is not finished"
 
@@ -656,9 +620,7 @@ class IntegrationManager(object):
         return len(self.manager)
 
     def compute_max_block_size(self):
-        """
-        Compute the required memory
-        """
+        """Compute the required memory."""
         total_memory = psutil.virtual_memory().total
         max_memory_usage = self.params.integration.block.max_memory_usage
         assert max_memory_usage > 0.0, "maximum memory usage must be > 0"
@@ -669,9 +631,7 @@ class IntegrationManager(object):
         )
 
     def compute_blocks(self):
-        """
-        Compute the processing block size.
-        """
+        """Compute the processing block size."""
         block = self.params.integration.block
         max_block_size = self.compute_max_block_size()
         if block.size in [Auto, "auto", "Auto"]:
@@ -715,9 +675,7 @@ class IntegrationManager(object):
         block.units = "frames"
 
     def compute_jobs(self):
-        """
-        Compute the jobs
-        """
+        """Compute the jobs."""
         imageset = self.experiments[0].imageset
         array_range = imageset.get_array_range()
         block = self.params.integration.block
@@ -727,9 +685,7 @@ class IntegrationManager(object):
         assert len(self.blocks) > 0, "Invalid number of jobs"
 
     def summary(self):
-        """
-        Get a summary of the processing
-        """
+        """Get a summary of the processing."""
         # Compute the task table
         if self.experiments.all_stills():
             rows = [["#", "Group", "Frame From", "Frame To", "# Reflections"]]
@@ -779,9 +735,7 @@ class IntegrationManager(object):
 
 
 class ReferenceCalculatorJob(object):
-    """
-    A class to represent an integration job
-    """
+    """A class to represent an integration job."""
 
     def __init__(self, index, job, experiments, reflections, params=None):
         """
@@ -873,9 +827,7 @@ class ReferenceCalculatorJob(object):
         )
 
     def compute_reference_profiles(self, imageset):
-        """
-        Integrate the reflections
-        """
+        """Integrate the reflections."""
         from dials.algorithms.integration.integrator import frame_hist
 
         # Compute the partiality
@@ -968,9 +920,7 @@ class ReferenceCalculatorJob(object):
         logger.info(fmt % (n_mod, n_tot))
 
     def write_debug_files(self):
-        """
-        Write some debug output
-        """
+        """Write some debug output."""
 
         # Optionally save the shoeboxes
         debug = self.params.integration.debug
@@ -992,9 +942,7 @@ class ReferenceCalculatorJob(object):
 
 
 class ReferenceCalculatorManager(object):
-    """
-    A class to manage processing book-keeping
-    """
+    """A class to manage processing book-keeping."""
 
     def __init__(self, experiments, reflections, params):
         """
@@ -1022,9 +970,7 @@ class ReferenceCalculatorManager(object):
         self.initialize()
 
     def initialize(self):
-        """
-        Initialise the processing
-        """
+        """Initialise the processing."""
         # Ensure the reflections contain bounding boxes
         assert "bbox" in self.reflections, "Reflections have no bbox"
 
@@ -1052,9 +998,7 @@ class ReferenceCalculatorManager(object):
         self.experiments.nullify_all_single_file_reader_format_instances()
 
     def task(self, index):
-        """
-        Get a task.
-        """
+        """Get a task."""
         frames = self.manager.job(index)
         experiments = self.experiments
         reflections = self.manager.split(index)
@@ -1072,9 +1016,7 @@ class ReferenceCalculatorManager(object):
         return task
 
     def tasks(self):
-        """
-        Iterate through the tasks.
-        """
+        """Iterate through the tasks."""
         for i in range(len(self)):
             yield self.task(i)
 
@@ -1088,9 +1030,7 @@ class ReferenceCalculatorManager(object):
             self.reference.accumulate(result.reference)
 
     def finalize(self):
-        """
-        Finalize the processing and finish.
-        """
+        """Finalize the processing and finish."""
         # Check manager is finished
         assert self.manager.finished(), "Manager is not finished"
 
@@ -1125,9 +1065,7 @@ class ReferenceCalculatorManager(object):
         return len(self.manager)
 
     def compute_max_block_size(self):
-        """
-        Compute the required memory
-        """
+        """Compute the required memory."""
         total_memory = psutil.virtual_memory().total
         max_memory_usage = self.params.integration.block.max_memory_usage
         assert max_memory_usage > 0.0, "maximum memory usage must be > 0"
@@ -1138,9 +1076,7 @@ class ReferenceCalculatorManager(object):
         )
 
     def compute_blocks(self):
-        """
-        Compute the processing block size.
-        """
+        """Compute the processing block size."""
         block = self.params.integration.block
         max_block_size = self.compute_max_block_size()
         if block.size in [Auto, "auto", "Auto"]:
@@ -1193,9 +1129,7 @@ class ReferenceCalculatorManager(object):
         assert len(self.blocks) > 0, "Invalid number of jobs"
 
     def summary(self):
-        """
-        Get a summary of the processing
-        """
+        """Get a summary of the processing."""
         # Compute the task table
         if self.experiments.all_stills():
             rows = [["#", "Group", "Frame From", "Frame To", "# Reflections"]]
@@ -1245,10 +1179,7 @@ class ReferenceCalculatorManager(object):
 
 
 def compute_required_memory(imageset, block_size):
-    """
-    Compute the required memory
-
-    """
+    """Compute the required memory."""
     return MultiThreadedIntegrator.compute_required_memory(imageset, block_size)
 
 
@@ -1387,9 +1318,7 @@ class IntegratorProcessor(object):
 
 
 def split_partials_over_boundaries(reflections, block_size):
-    """
-    Split the reflections into partials or over job boundaries
-    """
+    """Split the reflections into partials or over job boundaries."""
 
     # Get the block size and num frames
     _, _, _, _, z0, z1 = reflections["bbox"].parts()

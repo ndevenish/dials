@@ -310,14 +310,17 @@ class XrayFrame(XFBaseClass):
         return len(d) > 1 and len(d.hierarchy()) == 4
 
     def add_file_name_or_data(self, file_name_or_data):
-        """The add_file_name_or_data() function appends @p
-        file_name_or_data to the image chooser, unless it is already
-        present.  For file-backed images, the base name is displayed in
-        the chooser.  If necessary, the number of entries in the chooser
-        is pruned.  The function returns the index of the recently added
-        entry.  XXX This is probably the place for heuristics to determine
-        if the viewer was given a pattern, or a plain list of files.  XXX
-        Rename this function, because it only deals with the chooser?
+        """
+        The add_file_name_or_data() function appends @p file_name_or_data to
+        the image chooser, unless it is already present.
+
+        For file-backed images, the base name is displayed in the
+        chooser.  If necessary, the number of entries in the chooser is
+        pruned.  The function returns the index of the recently added
+        entry.  XXX This is probably the place for heuristics to
+        determine if the viewer was given a pattern, or a plain list of
+        files.  XXX Rename this function, because it only deals with the
+        chooser?
         """
 
         key = self.get_key(file_name_or_data)
@@ -337,7 +340,9 @@ class XrayFrame(XFBaseClass):
 
     def get_beam_center_px(self):
         """
-        Get the beam center in pixel coordinates relative to the tile closest to it.
+        Get the beam center in pixel coordinates relative to the tile closest
+        to it.
+
         @return panel_id, beam_center_fast, beam_center_slow. panel_id is the panel the
         returned coordinates are relative to.
         """
@@ -387,8 +392,10 @@ class XrayFrame(XFBaseClass):
         return panel_id, beam_pixel_fast, beam_pixel_slow
 
     def load_image(self, file_name_or_data, get_raw_data=None, show_untrusted=False):
-        """The load_image() function displays the image from @p
-        file_name_or_data.  The chooser is updated appropriately.
+        """
+        The load_image() function displays the image from @p file_name_or_data.
+
+        The chooser is updated appropriately.
         """
 
         # Due to a bug in wxPython 3.0.2 for Linux
@@ -513,9 +520,11 @@ class XrayFrame(XFBaseClass):
         return self.pyslip.tiles.raw_image.get_beam()
 
     def get_key(self, file_name_or_data):
-        """This overridden get_key() function returns the key of @p file_name_or_data
-        if it's an DetectorImageBase object.  Otherwise it returns the super class's
-        key
+        """
+        This overridden get_key() function returns the key of @p
+        file_name_or_data if it's an DetectorImageBase object.
+
+        Otherwise it returns the super class's key
         """
         from iotbx.detectors.detectorbase import DetectorImageBase
 

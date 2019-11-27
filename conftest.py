@@ -19,9 +19,13 @@ def pytest_addoption(parser):
 
 
 def pytest_collection_modifyitems(config, items):
-    """Tests marked as slow will not be run unless slow tests are enabled with
-    the '--runslow' parameter or the test is selected specifically. The
-    latter allows running slow tests via the libtbx compatibility layer."""
+    """
+    Tests marked as slow will not be run unless slow tests are enabled with the
+    '--runslow' parameter or the test is selected specifically.
+
+    The latter allows running slow tests via the libtbx compatibility
+    layer.
+    """
     if not config.getoption("--runslow") and len(items) > 1:
         skip_slow = pytest.mark.skip(reason="need --runslow option to run")
         for item in items:
@@ -31,8 +35,11 @@ def pytest_collection_modifyitems(config, items):
 
 @pytest.fixture(scope="session")
 def dials_regression():
-    """Return the absolute path to the dials_regression module as a string.
-    Skip the test if dials_regression is not installed."""
+    """
+    Return the absolute path to the dials_regression module as a string.
+
+    Skip the test if dials_regression is not installed.
+    """
     try:
         import dials_regression as dr
 

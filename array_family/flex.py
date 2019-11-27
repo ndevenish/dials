@@ -74,9 +74,7 @@ def default_centroid_algorithm():
 
 @boost.python.inject_into(dials_array_family_flex_ext.reflection_table)
 class _(object):
-    """
-    An injector class to add additional methods to the reflection table.
-    """
+    """An injector class to add additional methods to the reflection table."""
 
     # Set the default algorithms. These are set as class variables so that if they
     # are changed in the class, all new instances of reflection table will have
@@ -216,9 +214,7 @@ class _(object):
             return result
 
     def as_msgpack_file(self, filename):
-        """
-        Write the reflection table to file in msgpack format
-        """
+        """Write the reflection table to file in msgpack format."""
         if filename and hasattr(filename, "__fspath__"):
             filename = filename.__fspath__()
         with libtbx.smart_open.for_writing(filename, "wb") as outfile:
@@ -226,9 +222,7 @@ class _(object):
 
     @staticmethod
     def from_msgpack_file(filename):
-        """
-        Read the reflection table from file in msgpack format
-        """
+        """Read the reflection table from file in msgpack format."""
         if filename and hasattr(filename, "__fspath__"):
             filename = filename.__fspath__()
         with libtbx.smart_open.for_reading(filename, "rb") as infile:
@@ -252,9 +246,8 @@ class _(object):
         return self
 
     def as_file(self, filename):
-        """
-        Write the reflection table to file in either msgpack or pickle format
-        """
+        """Write the reflection table to file in either msgpack or pickle
+        format."""
         if os.getenv("DIALS_USE_PICKLE"):
             self.as_pickle(filename)
         else:
@@ -262,9 +255,7 @@ class _(object):
 
     @staticmethod
     def from_file(filename):
-        """
-        Read the reflection table from either pickle or msgpack
-        """
+        """Read the reflection table from either pickle or msgpack."""
         try:
             return dials_array_family_flex_ext.reflection_table.from_msgpack_file(
                 filename
@@ -275,8 +266,8 @@ class _(object):
     @staticmethod
     def empty_standard(nrows):
         """
-        Create an empty table of specified number of rows with most of the standard
-        keys
+        Create an empty table of specified number of rows with most of the
+        standard keys.
 
         :param nrows: The number of rows to create
         :return: The reflection table
@@ -320,7 +311,7 @@ class _(object):
     @staticmethod
     def plot(table, detector, key):
         """
-        Plot a reflection table using matplotlib
+        Plot a reflection table using matplotlib.
 
         :param table: The reflection table
         :param detector: The detector model
@@ -403,7 +394,8 @@ class _(object):
         handle.close()
 
     def as_miller_array(self, experiment, intensity="sum"):
-        """Return a miller array with the chosen intensities.
+        """
+        Return a miller array with the chosen intensities.
 
         Use the provided experiment object and intensity choice to make a miller
         intensity array with sigmas (no scaling applied).
@@ -894,10 +886,8 @@ class _(object):
                 self["fraction"].set_selected(indices, result)
 
     def iterate_experiments_and_indices(self, experiments):
-        """
-        A helper function to interate through experiments and indices of reflections
-        for each experiment
-        """
+        """A helper function to interate through experiments and indices of
+        reflections for each experiment."""
         assert len(experiments) > 0
         index_list = self.split_indices_by_experiment_id(len(experiments))
         assert len(experiments) == len(index_list)
@@ -930,9 +920,7 @@ class _(object):
         )
 
     def compute_summed_intensity(self, image_volume=None):
-        """
-        Compute intensity via summation integration.
-        """
+        """Compute intensity via summation integration."""
         from dials.algorithms.integration.sum import IntegrationAlgorithm
 
         algorithm = IntegrationAlgorithm()
@@ -1174,9 +1162,7 @@ class _(object):
         return result
 
     def assert_experiment_identifiers_are_consistent(self, experiments=None):
-        """
-        Check the experiment identifiers
-        """
+        """Check the experiment identifiers."""
         identifiers = self.experiment_identifiers()
         if len(identifiers) > 0:
             values = list(identifiers.values())
@@ -1198,9 +1184,7 @@ class _(object):
                     ), experiment.identifier
 
     def are_experiment_identifiers_consistent(self, experiments=None):
-        """
-        Check the experiment identifiers
-        """
+        """Check the experiment identifiers."""
         try:
             self.assert_experiment_identifiers_are_consistent(experiments)
         except AssertionError:
@@ -1208,9 +1192,7 @@ class _(object):
         return True
 
     def compute_miller_indices_in_asu(self, experiments):
-        """
-        Compute miller indices in the asu
-        """
+        """Compute miller indices in the asu."""
         self["miller_index_asu"] = cctbx.array_family.flex.miller_index(len(self))
         for idx, experiment in enumerate(experiments):
 
@@ -1232,11 +1214,9 @@ class _(object):
         return self["miller_index_asu"]
 
     def select_on_experiment_identifiers(self, list_of_identifiers):
-        """
-        Given a list of experiment identifiers (strings), perform a selection
-        and return a reflection table with properly configured experiment_identifiers
-        map.
-        """
+        """Given a list of experiment identifiers (strings), perform a
+        selection and return a reflection table with properly configured
+        experiment_identifiers map."""
         # First get the reverse of the map i.e. ids for a given exp_identifier
         id_values = []
         for exp_id in list_of_identifiers:
@@ -1265,10 +1245,8 @@ Found %s"""
         return self
 
     def remove_on_experiment_identifiers(self, list_of_identifiers):
-        """
-        Remove datasets from the table, given a list of experiment
-        identifiers (strings).
-        """
+        """Remove datasets from the table, given a list of experiment
+        identifiers (strings)."""
         # First get the reverse of the map i.e. ids for a given exp_identifier
         assert "id" in self
         id_values = []
@@ -1294,9 +1272,11 @@ Found %s"""
 
     def clean_experiment_identifiers_map(self):
         """
-        Remove any entries from the identifier map that do not have any
-        data in the table. Primarily to call as saving data to give a
-        consistent table and map.
+        Remove any entries from the identifier map that do not have any data in
+        the table.
+
+        Primarily to call as saving data to give a consistent table and
+        map.
         """
         dataset_ids_in_table = set(self["id"]).difference({-1})
         dataset_ids_in_map = set(self.experiment_identifiers().keys())
@@ -1306,8 +1286,10 @@ Found %s"""
 
     def reset_ids(self):
         """
-        Reset the 'id' column such that the experiment identifiers are
-        numbered 0 .. n-1.
+        Reset the 'id' column such that the experiment identifiers are numbered
+        0 ..
+
+        n-1.
         """
         reverse_map = collections.OrderedDict(
             (v, k) for k, v in self.experiment_identifiers()
@@ -1360,7 +1342,8 @@ Found %s"""
                 self["xyzobs.mm.variance"].set_selected(sel, centroid_variance)
 
     def map_centroids_to_reciprocal_space(self, experiments, calculated=False):
-        """Map mm/radian spot centroids to reciprocal space.
+        """
+        Map mm/radian spot centroids to reciprocal space.
 
         Used to convert spot centroids provided in mm/radian units to reciprocal space
         as required for indexing. Adds the column 'rlp' to the reflection table, which
@@ -1412,7 +1395,8 @@ Found %s"""
                     self["rlp"].set_selected(sel, S)
 
     def calculate_entering_flags(self, experiments):
-        """Calculate the entering flags for the reflections.
+        """
+        Calculate the entering flags for the reflections.
 
         Calculate a unit vector normal to the spindle-beam plane for this experiment,
         such that the vector placed at the centre of the Ewald sphere points to the
@@ -1455,7 +1439,7 @@ class reflection_table_selector(object):
 
     def __init__(self, column, op, value):
         """
-        Initialise the selector
+        Initialise the selector.
 
         :param col: The column name
         :param op: The operator
@@ -1488,9 +1472,7 @@ class reflection_table_selector(object):
 
     @property
     def op_string(self):
-        """
-        Return the operator as a string
-        """
+        """Return the operator as a string."""
 
         if self.op == operator.lt:
             string = "<"
@@ -1512,7 +1494,7 @@ class reflection_table_selector(object):
 
     def __call__(self, reflections):
         """
-        Select the reflections
+        Select the reflections.
 
         :param reflections: The reflections
 

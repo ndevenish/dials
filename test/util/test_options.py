@@ -1,6 +1,4 @@
-"""
-Tests for the functions in dials.util.options
-"""
+"""Tests for the functions in dials.util.options."""
 from __future__ import absolute_import, division, print_function
 
 from mock import Mock
@@ -40,7 +38,8 @@ def mock_two_reflection_file_object(ids=[0, 2]):
 
 
 def test_flatten_experiments_updating_id_values():
-    """Test the correct handling of duplicate table id values.
+    """
+    Test the correct handling of duplicate table id values.
 
     Note that this function does not have the ability to update the
     experiment string identifier, only ensure that the table id values

@@ -1,4 +1,4 @@
-"""Setup experimental geometry for refinement test cases"""
+"""Setup experimental geometry for refinement test cases."""
 
 # Python and cctbx imports
 from __future__ import absolute_import, division, print_function
@@ -13,7 +13,7 @@ from dials.algorithms.refinement.engine import (
 
 
 class Extract(object):
-    """Parse and extract minimiser setup from PHIL"""
+    """Parse and extract minimiser setup from PHIL."""
 
     def __init__(
         self,

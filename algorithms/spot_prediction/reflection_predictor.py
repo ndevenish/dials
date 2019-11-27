@@ -37,10 +37,8 @@ phil_scope = parse(
 
 
 class ReflectionPredictor(object):
-    """
-    A reflection predictor that takes a number of experiments and does the proper
-    prediction for each type of experiment.
-    """
+    """A reflection predictor that takes a number of experiments and does the
+    proper prediction for each type of experiment."""
 
     def __init__(
         self, experiment, dmin=None, dmax=None, margin=1, force_static=False, padding=0

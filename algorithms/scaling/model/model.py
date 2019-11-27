@@ -1,8 +1,8 @@
 """
 Definitions of scaling models.
 
-A scaling model is a collection of scaling model components with appropriate
-methods to define how these are composed into one model.
+A scaling model is a collection of scaling model components with
+appropriate methods to define how these are composed into one model.
 """
 from __future__ import absolute_import, division, print_function
 
@@ -157,7 +157,8 @@ class ScalingModelBase(object):
         return False
 
     def limit_image_range(self, new_image_range):
-        """Modify the model if necessary due to reducing the image range.
+        """
+        Modify the model if necessary due to reducing the image range.
 
         Args:
             new_image_range (tuple): The (start, end) of the new image range.
@@ -220,7 +221,8 @@ class ScalingModelBase(object):
         raise NotImplementedError()
 
     def to_dict(self):
-        """Serialize the model to a dictionary.
+        """
+        Serialize the model to a dictionary.
 
         Returns:
             dict: A dictionary representation of the model.
@@ -379,7 +381,8 @@ class PhysicalScalingModel(ScalingModelBase):
             self.components["absorption"].parameter_restraints = parameter_restraints
 
     def limit_image_range(self, new_image_range):
-        """Modify the model to be suitable for a reduced image range.
+        """
+        Modify the model to be suitable for a reduced image range.
 
         For this model, this involves determining whether the number of parameters
         should be reduced and may reduce the number of parameters in the scale and
@@ -608,7 +611,8 @@ class ArrayScalingModel(ScalingModelBase):
             self.components["modulation"].data = {"x": norm_x_det, "y": norm_y_det}
 
     def limit_image_range(self, new_image_range):
-        """Modify the model to be suitable for a reduced image range.
+        """
+        Modify the model to be suitable for a reduced image range.
 
         For this model, this involves determining whether the number of parameters
         should be reduced and may reduce the number of parameters in the absorption
@@ -901,7 +905,8 @@ class KBScalingModel(ScalingModelBase):
 def calculate_new_offset(
     current_image_0, new_image_0, new_norm_fac, n_old_param, n_new_param
 ):
-    """Calculate the parameter offset for the new image range.
+    """
+    Calculate the parameter offset for the new image range.
 
     Returns:
         int: An offset to apply when selecting the new parameters from the
@@ -918,7 +923,8 @@ def calculate_new_offset(
 
 
 def initialise_smooth_input(osc_range, one_osc_width, interval):
-    """Calculate the required smoother parameters.
+    """
+    Calculate the required smoother parameters.
 
     Using information about the sequence and the chosen parameterisation
     interval, the required parameters for the smoother are determined.
@@ -994,7 +1000,8 @@ for entry_point in itertools.chain(
 
 
 def plot_scaling_models(model_dict):
-    """Return a dict of component plots for the model for plotting with plotly."""
+    """Return a dict of component plots for the model for plotting with
+    plotly."""
     for entry_point in itertools.chain(
         pkg_resources.iter_entry_points("dxtbx.scaling_model_ext")
     ):

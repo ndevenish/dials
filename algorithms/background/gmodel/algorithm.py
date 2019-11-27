@@ -4,20 +4,14 @@ import six.moves.cPickle as pickle
 
 
 class ModelCache(object):
-    """
-    A class to cache the model
-    """
+    """A class to cache the model."""
 
     def __init__(self):
-        """
-        Create a model dictionary
-        """
+        """Create a model dictionary."""
         self.model = dict()
 
     def get(self, name):
-        """
-        Get the model
-        """
+        """Get the model."""
         if name is None:
             raise RuntimeError("Model is not specified")
         try:

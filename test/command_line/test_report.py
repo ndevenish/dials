@@ -1,11 +1,12 @@
-"""Tests for dials.report"""
+"""Tests for dials.report."""
 from __future__ import absolute_import, division, print_function
 
 import procrunner
 
 
 def test_report_integrated_data(dials_data, tmpdir):
-    """Simple test to check that dials.report completes when given integrated data."""
+    """Simple test to check that dials.report completes when given integrated
+    data."""
 
     result = procrunner.run(
         [

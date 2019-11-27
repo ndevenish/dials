@@ -24,7 +24,7 @@ find_max = False
 
 def add_max_pixels_to_reflections(reflections):
     """Iterate through reflections, find max pixel in each shoebox and max
-    valid, add columns thereof"""
+    valid, add columns thereof."""
 
     from dials.algorithms.shoebox import MaskCode
 
@@ -45,7 +45,7 @@ def add_max_pixels_to_reflections(reflections):
 
 
 def add_resolution_to_reflections(reflections, experiments):
-    """Add column d to reflection list"""
+    """Add column d to reflection list."""
 
     # will assume everything from the first detector at the moment - clearly this
     # could be incorrect, will have to do something a little smarter, later

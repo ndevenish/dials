@@ -1,7 +1,5 @@
-"""
-Extension to general active parameter manager for scaling and function
-to use a scaler to determine the correct call to the apm factories.
-"""
+"""Extension to general active parameter manager for scaling and function to
+use a scaler to determine the correct call to the apm factories."""
 from __future__ import absolute_import, division, print_function
 
 import six
@@ -12,10 +10,8 @@ from dials.algorithms.scaling.active_parameter_managers import (
 
 
 class scaling_active_parameter_manager(active_parameter_manager):
-    """
-    Adds an extra property to the apm to avoid a repetitive calculation during
-    mimimisation cycles for scaling.
-    """
+    """Adds an extra property to the apm to avoid a repetitive calculation
+    during mimimisation cycles for scaling."""
 
     def __init__(self, components, selection_list):
         self.constant_g_values = None

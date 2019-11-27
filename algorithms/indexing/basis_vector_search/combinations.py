@@ -85,7 +85,8 @@ def filter_known_symmetry(
     absolute_angle_tolerance=5,
     max_delta=5,
 ):
-    """Filter crystal models for known symmetry.
+    """
+    Filter crystal models for known symmetry.
 
     Args:
         crystal_models (list): A list of :class:`dxtbx.model.Crystal` objects.

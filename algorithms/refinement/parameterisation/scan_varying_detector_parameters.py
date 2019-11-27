@@ -18,7 +18,7 @@ class ScanVaryingDetectorParameterisationSinglePanel(
     ScanVaryingModelParameterisation, DetectorMixin
 ):
     """A scan-varying parameterisation for a single abstract panel plane, with
-    angles expressed in mrad"""
+    angles expressed in mrad."""
 
     def __init__(self, detector, t_range, num_intervals, experiment_ids=None):
 
@@ -51,7 +51,7 @@ class ScanVaryingDetectorParameterisationSinglePanel(
         return
 
     def compose(self, t):
-        """calculate state and derivatives for model at image number t"""
+        """calculate state and derivatives for model at image number t."""
 
         # extract parameter sets from the internal list
         dist_set, shift1_set, shift2_set, tau1_set, tau2_set, tau3_set = self._param
@@ -124,6 +124,6 @@ class ScanVaryingDetectorParameterisationSinglePanel(
         return
 
     def get_state(self):
-        """Return detector matrix [d] at image number t"""
+        """Return detector matrix [d] at image number t."""
         # only a single panel exists, so no multi_state_elt argument is allowed
         return self._d_at_t

@@ -323,23 +323,17 @@ def nframes_hist(bbox, width=80, symbol="#", prefix=""):
 
 
 class Parameters(object):
-    """
-    A class to represent the integration parameters
-    """
+    """A class to represent the integration parameters."""
 
     class Filter(object):
-        """
-        Filter parameters
-        """
+        """Filter parameters."""
 
         def __init__(self):
             self.min_zeta = 0.05
             self.powder_filter = None
 
     class Profile(object):
-        """
-        Profile parameters
-        """
+        """Profile parameters."""
 
         class Validation(object):
             def __init__(self):
@@ -351,9 +345,7 @@ class Parameters(object):
             self.validation = Parameters.Profile.Validation()
 
     def __init__(self):
-        """
-        Initialize
-        """
+        """Initialize."""
         from dials.algorithms.integration import processor
 
         self.modelling = processor.Parameters()
@@ -365,9 +357,7 @@ class Parameters(object):
 
     @staticmethod
     def from_phil(params):
-        """
-        Convert the phil parameters
-        """
+        """Convert the phil parameters."""
         from dials.algorithms.integration import processor
         from dials.algorithms.integration.filtering import IceRingFilter
 
@@ -436,21 +426,15 @@ class Parameters(object):
 
 
 class InitializerRot(object):
-    """
-    A pre-processing class for oscillation data.
-    """
+    """A pre-processing class for oscillation data."""
 
     def __init__(self, experiments, params):
-        """
-        Initialise the pre-processor.
-        """
+        """Initialise the pre-processor."""
         self.experiments = experiments
         self.params = params
 
     def __call__(self, reflections):
-        """
-        Do some pre-processing.
-        """
+        """Do some pre-processing."""
         # Compute some reflection properties
         reflections.compute_zeta_multi(self.experiments)
         reflections.compute_d(self.experiments)
@@ -467,21 +451,15 @@ class InitializerRot(object):
 
 
 class InitializerStills(object):
-    """
-    A pre-processing class for stills data.
-    """
+    """A pre-processing class for stills data."""
 
     def __init__(self, experiments, params):
-        """
-        Initialise the pre-processor.
-        """
+        """Initialise the pre-processor."""
         self.experiments = experiments
         self.params = params
 
     def __call__(self, reflections):
-        """
-        Do some pre-processing.
-        """
+        """Do some pre-processing."""
         # Compute some reflection properties
         reflections.compute_d(self.experiments)
         reflections.compute_bbox(self.experiments)
@@ -498,9 +476,7 @@ class InitializerStills(object):
 
 class FinalizerBase(object):
     def __init__(self, reflections, experiments, params):
-        """
-        Initialise the post processor.
-        """
+        """Initialise the post processor."""
         self.reflections = reflections
         self.experiments = experiments
         self.params = params
@@ -526,14 +502,10 @@ class FinalizerBase(object):
 
 
 class FinalizerRot(FinalizerBase):
-    """
-    A post-processing class for oscillation data.
-    """
+    """A post-processing class for oscillation data."""
 
     def __call__(self):
-        """
-        Do some post processing.
-        """
+        """Do some post processing."""
         super(FinalizerRot, self).__call__()
 
         # Compute the corrections
@@ -541,14 +513,10 @@ class FinalizerRot(FinalizerBase):
 
 
 class FinalizerStills(FinalizerBase):
-    """
-    A post-processing class for stills data.
-    """
+    """A post-processing class for stills data."""
 
     def __call__(self):
-        """
-        Do some post processing.
-        """
+        """Do some post processing."""
         super(FinalizerStills, self).__call__()
 
         integrated = self.reflections
@@ -624,13 +592,11 @@ class FinalizerStills(FinalizerBase):
 
 
 class ProfileModellerExecutor(Executor):
-    """
-    The class to do profile modelling calculations
-    """
+    """The class to do profile modelling calculations."""
 
     def __init__(self, experiments, profile_fitter):
         """
-        Initialise the executor
+        Initialise the executor.
 
         :param experiments: The experiment list
         """
@@ -640,7 +606,7 @@ class ProfileModellerExecutor(Executor):
 
     def initialize(self, frame0, frame1, reflections):
         """
-        Initialise the processing for a job
+        Initialise the processing for a job.
 
         :param frame0: The first frame in the job
         :param frame1: The last frame in the job
@@ -680,7 +646,7 @@ class ProfileModellerExecutor(Executor):
 
     def process(self, frame, reflections):
         """
-        Process the data
+        Process the data.
 
         :param frame: The frame being processed
         :param reflections: The reflections to process
@@ -706,9 +672,7 @@ class ProfileModellerExecutor(Executor):
         logger.info(fmt % (nmod, ntot, frame))
 
     def finalize(self):
-        """
-        Finalize the processing
-        """
+        """Finalize the processing."""
         pass
 
     def data(self):
@@ -718,20 +682,16 @@ class ProfileModellerExecutor(Executor):
         return self.profile_fitter
 
     def __getinitargs__(self):
-        """
-        Support for pickling
-        """
+        """Support for pickling."""
         return (self.experiments, self.profile_fitter)
 
 
 class ProfileValidatorExecutor(Executor):
-    """
-    The class to do profile validation calculations
-    """
+    """The class to do profile validation calculations."""
 
     def __init__(self, experiments, profile_fitter):
         """
-        Initialise the executor
+        Initialise the executor.
 
         :param experiments: The experiment list
         """
@@ -741,7 +701,7 @@ class ProfileValidatorExecutor(Executor):
 
     def initialize(self, frame0, frame1, reflections):
         """
-        Initialise the processing for a job
+        Initialise the processing for a job.
 
         :param frame0: The first frame in the job
         :param frame1: The last frame in the job
@@ -783,7 +743,7 @@ class ProfileValidatorExecutor(Executor):
 
     def process(self, frame, reflections):
         """
-        Process the data
+        Process the data.
 
         :param frame: The frame being processed
         :param reflections: The reflections to process
@@ -809,9 +769,7 @@ class ProfileValidatorExecutor(Executor):
         logger.info(fmt % (nmod, ntot, frame))
 
     def finalize(self):
-        """
-        Finalize the processing
-        """
+        """Finalize the processing."""
         pass
 
     def data(self):
@@ -821,20 +779,16 @@ class ProfileValidatorExecutor(Executor):
         return self.results
 
     def __getinitargs__(self):
-        """
-        Support for pickling
-        """
+        """Support for pickling."""
         return (self.experiments, self.profile_fitter)
 
 
 class IntegratorExecutor(Executor):
-    """
-    The class to process the integration data
-    """
+    """The class to process the integration data."""
 
     def __init__(self, experiments, profile_fitter=None):
         """
-        Initialize the executor
+        Initialize the executor.
 
         :param experiments: The experiment list
         """
@@ -845,7 +799,7 @@ class IntegratorExecutor(Executor):
 
     def initialize(self, frame0, frame1, reflections):
         """
-        Initialize the processing for the job
+        Initialize the processing for the job.
 
         :param frame0: The first frame to process
         :param frame1: The last frame to process
@@ -890,7 +844,7 @@ class IntegratorExecutor(Executor):
 
     def process(self, frame, reflections):
         """
-        Process the reflections on a frame
+        Process the reflections on a frame.
 
         :param frame: The frame to process
         :param reflections: The reflections to process
@@ -955,32 +909,24 @@ class IntegratorExecutor(Executor):
         logger.info(fmt % (nsum, nprf, ntot, frame))
 
     def finalize(self):
-        """
-        Finalize the processing
-        """
+        """Finalize the processing."""
         pass
 
     def data(self):
-        """
-        Return data
-        """
+        """Return data."""
         return None
 
     def __getinitargs__(self):
-        """
-        Support for pickling
-        """
+        """Support for pickling."""
         return (self.experiments, self.profile_fitter)
 
 
 class Integrator(object):
-    """
-    The integrator class
-    """
+    """The integrator class."""
 
     def __init__(self, experiments, reflections, params):
         """
-        Initialize the integrator
+        Initialize the integrator.
 
         :param experiments: The experiment list
         :param reflections: The reflections to process
@@ -995,9 +941,7 @@ class Integrator(object):
         self.integration_report = None
 
     def integrate(self):
-        """
-        Integrate the data
-        """
+        """Integrate the data."""
         from dials.algorithms.integration.report import IntegrationReport
         from dials.algorithms.integration.report import ProfileModelReport
         from dials.algorithms.integration.report import ProfileValidationReport
@@ -1258,9 +1202,7 @@ class Integrator(object):
         return self.reflections
 
     def report(self):
-        """
-        Return the report of the processing
-        """
+        """Return the report of the processing."""
         from dials.util.report import Report
 
         result = Report()
@@ -1296,9 +1238,7 @@ class Integrator(object):
 
 
 class Integrator3D(Integrator):
-    """
-    Integrator for 3D algorithms
-    """
+    """Integrator for 3D algorithms."""
 
     InitializerClass = InitializerRot
     ProcessorClass = Processor3D
@@ -1306,9 +1246,7 @@ class Integrator3D(Integrator):
 
 
 class IntegratorFlat3D(Integrator):
-    """
-    Integrator for flattened 3D algorithms
-    """
+    """Integrator for flattened 3D algorithms."""
 
     InitializerClass = InitializerRot
     ProcessorClass = ProcessorFlat3D
@@ -1316,9 +1254,7 @@ class IntegratorFlat3D(Integrator):
 
 
 class Integrator2D(Integrator):
-    """
-    Integrator for 2D algorithms
-    """
+    """Integrator for 2D algorithms."""
 
     InitializerClass = InitializerRot
     ProcessorClass = Processor2D
@@ -1326,9 +1262,7 @@ class Integrator2D(Integrator):
 
 
 class IntegratorSingle2D(Integrator):
-    """
-    Integrator for 2D algorithms on a single image
-    """
+    """Integrator for 2D algorithms on a single image."""
 
     InitializerClass = InitializerRot
     ProcessorClass = ProcessorSingle2D
@@ -1336,9 +1270,7 @@ class IntegratorSingle2D(Integrator):
 
 
 class IntegratorStills(Integrator):
-    """
-    Integrator for still algorithms
-    """
+    """Integrator for still algorithms."""
 
     InitializerClass = InitializerStills
     ProcessorClass = ProcessorStills
@@ -1346,13 +1278,11 @@ class IntegratorStills(Integrator):
 
 
 class Integrator3DThreaded(object):
-    """
-    Integrator for 3D algorithms
-    """
+    """Integrator for 3D algorithms."""
 
     def __init__(self, experiments, reflections, params):
         """
-        Initialize the integrator
+        Initialize the integrator.
 
         :param experiments: The experiment list
         :param reflections: The reflections to process
@@ -1367,9 +1297,7 @@ class Integrator3DThreaded(object):
         self.integration_report = None
 
     def initialise(self):
-        """
-        Initialise the integrator
-        """
+        """Initialise the integrator."""
         # Compute some reflection properties
         self.reflections.compute_zeta_multi(self.experiments)
         self.reflections.compute_d(self.experiments)
@@ -1387,17 +1315,13 @@ class Integrator3DThreaded(object):
         #   self.reflections.set_flags(mask, self.reflections.flags.in_powder_ring)
 
     def finalise(self):
-        """
-        Finalise the integrator
-        """
+        """Finalise the integrator."""
 
         # Compute the corrections
         self.reflections.compute_corrections(self.experiments)
 
     def integrate(self):
-        """
-        Integrate the data
-        """
+        """Integrate the data."""
         from dials.algorithms.integration.parallel_integrator import (
             ReferenceCalculatorProcessor,
         )
@@ -1497,9 +1421,7 @@ class Integrator3DThreaded(object):
         return self.reflections
 
     def report(self):
-        """
-        Return the report of the processing
-        """
+        """Return the report of the processing."""
         from dials.util.report import Report
 
         result = Report()
@@ -1535,9 +1457,7 @@ class Integrator3DThreaded(object):
 
 
 class IntegratorFactory(object):
-    """
-    A factory for creating integrators.
-    """
+    """A factory for creating integrators."""
 
     @staticmethod
     def create(params, experiments, reflections):

@@ -7,7 +7,7 @@ class ComputeBackgroundAndGain(object):
     """Class to calculate the gain map of a detector."""
 
     def __init__(self, mask, kernel_size=(3, 3)):
-        """Initialise the class with a mask of trusted regions"""
+        """Initialise the class with a mask of trusted regions."""
         from scitbx.array_family import flex
 
         self._mask = mask.as_1d().as_int()

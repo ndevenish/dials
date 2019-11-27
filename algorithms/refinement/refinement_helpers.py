@@ -1,4 +1,4 @@
-"""Auxiliary functions for the refinement package"""
+"""Auxiliary functions for the refinement package."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -16,12 +16,14 @@ logger = logging.getLogger(__name__)
 
 
 def ordinal_number(array_index=None, cardinal_number=None):
-    """Return a string representing the ordinal number for the input integer. One
+    """
+    Return a string representing the ordinal number for the input integer. One
     of array_index or cardinal_number must be set, depending on whether the
     input is from a 0-based or 1-based sequence.
 
     Based on Thad Guidry's post at
-    https://groups.google.com/forum/#!topic/openrefine/G7_PSdUeno0"""
+    https://groups.google.com/forum/#!topic/openrefine/G7_PSdUeno0
+    """
     if [array_index, cardinal_number].count(None) != 1:
         raise ValueError("One of array_index or cardinal_number should be set")
     if array_index is not None:
@@ -34,8 +36,8 @@ def ordinal_number(array_index=None, cardinal_number=None):
 
 
 class PanelGroupCompose(pgc_cpp):
-    """Wrapper for the C++ PanelGroupCompose class with accessors that
-    return scitbx matrix values."""
+    """Wrapper for the C++ PanelGroupCompose class with accessors that return
+    scitbx matrix values."""
 
     def d1(self):
         return scitbx.matrix.col(super(PanelGroupCompose, self).d1())
@@ -71,13 +73,14 @@ class CrystalOrientationCompose(xloc_cpp):
 
 
 def dR_from_axis_and_angle(axis, angle, deg=False):
-    """Wrapper for C++ version of dR_from_axis_and_angle returning a matrix.sqr"""
+    """Wrapper for C++ version of dR_from_axis_and_angle returning a
+    matrix.sqr."""
     return scitbx.matrix.sqr(dR_cpp(axis, angle, deg))
 
 
 def dR_from_axis_and_angle_py(axis, angle, deg=False):
-    """return the first derivative of a rotation matrix specified by its
-    axis and angle"""
+    """return the first derivative of a rotation matrix specified by its axis
+    and angle."""
 
     # NB it is inefficient to do this separately from the calculation of
     # the rotation matrix itself, but it seems the Python interface to
@@ -116,10 +119,12 @@ def dR_from_axis_and_angle_py(axis, angle, deg=False):
 
 
 def skew_symm(v):
-    """Make matrix [v]_x from v. Essentially multiply vector by SO(3) basis
-    set Lx, Ly, Lz. Equation (2) from Gallego & Yezzi paper.
+    """
+    Make matrix [v]_x from v. Essentially multiply vector by SO(3) basis set
+    Lx, Ly, Lz. Equation (2) from Gallego & Yezzi paper.
 
-    NB a C++ version exists in gallego_yezzi.h."""
+    NB a C++ version exists in gallego_yezzi.h.
+    """
 
     L1 = scitbx.matrix.sqr((0, 0, 0, 0, 0, -1, 0, 1, 0))
     L2 = scitbx.matrix.sqr((0, 0, 1, 0, 0, 0, -1, 0, 0))
@@ -157,7 +162,7 @@ def dRq_de(theta, e, q):
 
 
 def random_param_shift(vals, sigmas):
-    """Add a random (normal) shift to a parameter set, for testing"""
+    """Add a random (normal) shift to a parameter set, for testing."""
 
     assert len(vals) == len(sigmas)
     shifts = [random.gauss(0, sd) for sd in sigmas]
@@ -167,8 +172,9 @@ def random_param_shift(vals, sigmas):
 
 
 def get_fd_gradients(mp, deltas, multi_state_elt=None):
-    """Calculate centered finite difference gradients for each of the
-    parameters of the model parameterisation mp.
+    """
+    Calculate centered finite difference gradients for each of the parameters
+    of the model parameterisation mp.
 
     "deltas" must be a sequence of the same length as the parameter list, and
     contains the step size for the difference calculations for each parameter.
@@ -210,7 +216,8 @@ def get_fd_gradients(mp, deltas, multi_state_elt=None):
 
 
 def get_panel_groups_at_depth(group, depth=0):
-    """Return a list of the panel groups at a certain depth below the node group"""
+    """Return a list of the panel groups at a certain depth below the node
+    group."""
     assert depth >= 0
     if depth == 0:
         return [group]
@@ -224,7 +231,8 @@ def get_panel_groups_at_depth(group, depth=0):
 
 
 def get_panel_ids_at_root(panel_list, group):
-    """Get the sequential panel IDs for a set of panels belonging to a group"""
+    """Get the sequential panel IDs for a set of panels belonging to a
+    group."""
     if group.is_group():
         return [
             p for gp in group.children() for p in get_panel_ids_at_root(panel_list, gp)
@@ -234,15 +242,19 @@ def get_panel_ids_at_root(panel_list, group):
 
 
 def string_sel(l, full_names, prefix=""):
-    """Provide flexible matching between a list of input strings, l,
-    consisting either of indices or partial names, and a list of full names,
-    with an optional shared prefix. The input list l may arrive from PHIL
-    conversion of the strings type. In that case, comma-separated values will
-    require splitting, and bracket characters will be removed. The values in
-    the processed list l should consist of integers or partial names. Integers
-    will be treated as 0-based indices and partial names will be matched to
-    as many full names as possible. The created selection is returned as a
-    boolean list."""
+    """
+    Provide flexible matching between a list of input strings, l, consisting
+    either of indices or partial names, and a list of full names, with an
+    optional shared prefix.
+
+    The input list l may arrive from PHIL conversion of the strings
+    type. In that case, comma-separated values will require splitting,
+    and bracket characters will be removed. The values in the processed
+    list l should consist of integers or partial names. Integers will be
+    treated as 0-based indices and partial names will be matched to as
+    many full names as possible. The created selection is returned as a
+    boolean list.
+    """
 
     sel = [False] * len(full_names)
     full_names = [prefix + s for s in full_names]
@@ -267,7 +279,7 @@ def string_sel(l, full_names, prefix=""):
 
 def calculate_frame_numbers(reflections, experiments):
     """calculate observed frame numbers for all reflections, if not already
-    set"""
+    set."""
 
     # Only do this if we have to
     if "xyzobs.px.value" in reflections:

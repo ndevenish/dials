@@ -95,7 +95,7 @@ def raypredictor(dials_regression):
 
 
 def test_miller_index_set(raypredictor):
-    """Ensure we have the whole set of miller indices"""
+    """Ensure we have the whole set of miller indices."""
     gen_hkl = {r["miller_index"] for r in raypredictor.reflections.rows()}
     missing = []
     for hkl in raypredictor.integrate_handle.hkl:
@@ -109,7 +109,7 @@ def test_miller_index_set(raypredictor):
 
 
 def test_rotation_angles(raypredictor):
-    """Ensure the rotation angles agree with XDS"""
+    """Ensure the rotation angles agree with XDS."""
 
     # Create a dict of lists of xy for each hkl
     gen_phi = {}

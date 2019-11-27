@@ -212,7 +212,7 @@ class progress(tqdm):
 
     @property
     def rate(self):
-        """Calculate rate using the same algorithm as tqdm"""
+        """Calculate rate using the same algorithm as tqdm."""
         if self.avg_time:
             return 1 / self.avg_time
         elapsed = self._time() - self.start_t
@@ -220,7 +220,7 @@ class progress(tqdm):
 
     @property
     def total_time(self):
-        """Return the current estimate of the total time required"""
+        """Return the current estimate of the total time required."""
         elapsed = self._time() - self.start_t
         rate = self.rate
         remaining = ((self.total - self.n) / rate) if rate else 0

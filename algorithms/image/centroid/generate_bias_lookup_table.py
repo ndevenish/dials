@@ -1,12 +1,10 @@
-"""
-Code to generate lookup values for algorithms/image/centroid/bias.h.
-"""
+"""Code to generate lookup values for algorithms/image/centroid/bias.h."""
 from __future__ import absolute_import, division, print_function
 
 
 def sum_of_erf(mu, sigma, N=1000):
     """
-    Compute the sum of erf term
+    Compute the sum of erf term.
 
     :param mu: The Gaussian mean
     :param sigma: The Gaussian sigma
@@ -24,7 +22,7 @@ def sum_of_erf(mu, sigma, N=1000):
 
 def compute_normal_bias_sq(sigma, N1=1000, N2=1000):
     """
-    Compute the bias for a Gaussian profile
+    Compute the bias for a Gaussian profile.
 
     :param sigma: The Gaussian sigma
     :param N1: The number of iterations for the sum_of_erf
@@ -50,7 +48,7 @@ def compute_normal_bias_sq(sigma, N1=1000, N2=1000):
 
 def compute_lookup_table(max_sigma=0.5, N1=1000, N2=1000, N3=50):
     """
-    Compute a lookup table of bias for Gaussian sigma values
+    Compute a lookup table of bias for Gaussian sigma values.
 
     :param max_sigma: The maximum sigma to compute
     :param N1: The number of iterations for the sum_of_erf

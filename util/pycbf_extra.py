@@ -7,7 +7,8 @@ import numpy
 
 
 def print_info(cbf_path):
-    """Print out a load of data held in the CBF file.
+    """
+    Print out a load of data held in the CBF file.
 
     This is by no means a full list of the data contained in the file, it's
     mainly for debugging and development purposes. The data that will be
@@ -73,7 +74,8 @@ def print_info(cbf_path):
 
 
 def get_beam_direction(cbf_handle):
-    """Find the beam direction (why is this not simpler in pycbf?)
+    """
+    Find the beam direction (why is this not simpler in pycbf?)
 
     :param cbf_handle: The cbf file handle
     :returns: The beam vector
@@ -91,7 +93,8 @@ def get_beam_direction(cbf_handle):
 
 
 def compute_central_rotation_matrix(gonio):
-    """Compute the central rotation matrix
+    """
+    Compute the central rotation matrix.
 
     :param gonio: The goniometer struct
     :returns: The central rotation matrix
@@ -104,7 +107,8 @@ def compute_central_rotation_matrix(gonio):
 
 
 def get_image(cbf_handle, category="array_data", column="data", row=0, element=0):
-    """Read an image from a CBF file
+    """
+    Read an image from a CBF file.
 
     This function is a bit of a hack - I'm not sure what the general structure
     of a CBF file is like but for the data I have, it works. Reads an image
@@ -146,7 +150,8 @@ def get_image(cbf_handle, category="array_data", column="data", row=0, element=0
 
 
 def get_image_volume(cbf_paths):
-    """Load the image volume from the list of cbf_paths. The list of paths is
+    """
+    Load the image volume from the list of cbf_paths. The list of paths is
     assumed to be is order from 1->n.
 
     :param cbf_paths: The list of cbf files
@@ -176,7 +181,8 @@ def get_image_volume(cbf_paths):
 
 
 def search_for_image_volume(search_path):
-    """Load the CBF image volume
+    """
+    Load the CBF image volume.
 
     Args:
         search_path: The CBF file search path

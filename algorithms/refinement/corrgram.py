@@ -1,4 +1,4 @@
-"""Creation of 'corrgram' correlation matrix plots"""
+"""Creation of 'corrgram' correlation matrix plots."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -45,9 +45,13 @@ phil_scope = libtbx.phil.parse(phil_str)
 
 
 def corrgram(corrmat, labels):
-    """Create a correlation matrix plot or 'corrgram' for the provided
-    correlation matrix and row/column labels. Inspired by R's corrplot and
-    https://github.com/louridas/corrplot/blob/master/corrplot.py"""
+    """
+    Create a correlation matrix plot or 'corrgram' for the provided correlation
+    matrix and row/column labels.
+
+    Inspired by R's corrplot and
+    https://github.com/louridas/corrplot/blob/master/corrplot.py
+    """
 
     try:  # is corrmat a scitbx matrix?
         corrmat = corrmat.as_flex_double_matrix()

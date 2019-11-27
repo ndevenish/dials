@@ -13,7 +13,7 @@ RAD2DEG = 180.0 / pi
 
 
 class CentroidOutlier(object):
-    """Base class for centroid outlier detection algorithms"""
+    """Base class for centroid outlier detection algorithms."""
 
     def __init__(
         self,
@@ -57,22 +57,32 @@ class CentroidOutlier(object):
             return bw
 
     def set_block_width(self, block_width):
-        """Set the block width for outlier detection in degrees. This can be either
-        a single value or a list with one value per experiment. None is accepted
-        to mean that the dataset will not be split into blocks."""
+        """
+        Set the block width for outlier detection in degrees.
+
+        This can be either a single value or a list with one value per
+        experiment. None is accepted to mean that the dataset will not
+        be split into blocks.
+        """
         self._block_width = block_width
 
     def _detect_outliers(self, cols):
-        """Perform outlier detection using the input cols and return a flex.bool
-        indicating which rows in the cols are considered outlying. cols should be
-        a list of flex arrays of equal lengths"""
+        """
+        Perform outlier detection using the input cols and return a flex.bool
+        indicating which rows in the cols are considered outlying.
+
+        cols should be a list of flex arrays of equal lengths
+        """
 
         # to be implemented by derived classes
         raise NotImplementedError()
 
     def __call__(self, reflections):
-        """Identify outliers in the input and set the centroid_outlier flag.
-        Return True if any outliers were detected, otherwise False"""
+        """
+        Identify outliers in the input and set the centroid_outlier flag.
+
+        Return True if any outliers were detected, otherwise False
+        """
 
         logger.info(
             "Detecting centroid outliers using the {} algorithm".format(

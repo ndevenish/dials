@@ -16,7 +16,7 @@ import os
 
 def make_detector():
     """Make a dummy 4 panel detector with not many pixels to ensure test runs
-    quickly"""
+    quickly."""
     pixel_size_x = 0.1
     pixel_size_y = 0.1
     npixels_per_panel_x = 50
@@ -55,8 +55,11 @@ def make_detector():
     reason="dx,dy maps not loaded from json, https://github.com/dials/dials/issues/471"
 )
 def test_translate(dials_regression, run_in_tmpdir):
-    """Test as written in https://github.com/dials/dials/issues/471. This
-    is pretty slow!"""
+    """
+    Test as written in https://github.com/dials/dials/issues/471.
+
+    This is pretty slow!
+    """
 
     # use the i04_weak_data for this test
     data_dir = os.path.join(dials_regression, "image_examples", "DLS_I04")
@@ -88,8 +91,12 @@ def test_translate(dials_regression, run_in_tmpdir):
 
 
 def test_elliptical_distortion(run_in_tmpdir):
-    """Create distortion maps for elliptical distortion using a dummy experiments
-    with a small detector, for speed. Check those maps seem sensible"""
+    """
+    Create distortion maps for elliptical distortion using a dummy experiments
+    with a small detector, for speed.
+
+    Check those maps seem sensible
+    """
 
     # Make a detector model
     d = make_detector()

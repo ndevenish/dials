@@ -94,14 +94,14 @@ def spotpredictor(dials_regression):
 
 
 def test_dmin(spotpredictor):
-    """Ensure calculated d_min < d_min in integrate file"""
+    """Ensure calculated d_min < d_min in integrate file."""
     d = [spotpredictor.unit_cell.d(h) for h in spotpredictor.integrate_handle.hkl]
     d_min = min(d)
     assert spotpredictor.d_min <= d_min
 
 
 def test_miller_index_set(spotpredictor):
-    """Ensure we have the whole set of miller indices"""
+    """Ensure we have the whole set of miller indices."""
     gen_hkl = {}
     for r in spotpredictor.reflections.rows():
         gen_hkl[r["miller_index"]] = True
@@ -110,7 +110,7 @@ def test_miller_index_set(spotpredictor):
 
 
 def test_rotation_angles(spotpredictor):
-    """Ensure the rotation angles agree with XDS"""
+    """Ensure the rotation angles agree with XDS."""
 
     # Create a dict of lists of xy for each hkl
     gen_phi = {}
@@ -160,7 +160,7 @@ def test_beam_vectors(spotpredictor):
 
 
 def test_image_coordinates(spotpredictor):
-    """Ensure the image coordinates agree with XDS"""
+    """Ensure the image coordinates agree with XDS."""
     # Create a dict of lists of xy for each hkl
     gen_xy = {}
     for r in spotpredictor.reflections.rows():

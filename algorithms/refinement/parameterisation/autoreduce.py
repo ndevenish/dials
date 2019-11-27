@@ -66,12 +66,13 @@ def count_associated_refs(result):
 
 
 class AutoReduce(object):
-    """Checks for over-parameterisation of models and acts in that case.
+    """
+    Checks for over-parameterisation of models and acts in that case.
 
     Tests each model parameterisation to ensure there are enough
-    reflections in refinement to support that parameterisation. If there are
-    not then some action is taken. More details are given in documentation
-    within the phil_str alongside this class definition.
+    reflections in refinement to support that parameterisation. If there
+    are not then some action is taken. More details are given in
+    documentation within the phil_str alongside this class definition.
     """
 
     def __init__(
@@ -82,7 +83,8 @@ class AutoReduce(object):
         constraints_manager=None,
         constraints_manager_factory=None,
     ):
-        """Initialise the AutoReduce object
+        """
+        Initialise the AutoReduce object.
 
         Args:
             options: A PHIL scope containing the auto reduction options
@@ -127,7 +129,8 @@ class AutoReduce(object):
         return nref_per_param
 
     def check_and_fail(self):
-        """Check for too few reflections to support the model parameterisation.
+        """
+        Check for too few reflections to support the model parameterisation.
 
         Test each parameterisation of each type against the reflections it affects.
 
@@ -149,7 +152,8 @@ class AutoReduce(object):
             raise DialsRefineConfigError(msg)
 
     def check_and_fix(self):
-        """Fix parameters when there are too few reflections.
+        """
+        Fix parameters when there are too few reflections.
 
         Test each parameter against the reflections it affects and fix any for
         which there are too few reflections.
@@ -170,7 +174,9 @@ class AutoReduce(object):
             self.constraints_manager = self.constraints_manager_factory()
 
     def check_and_remove(self):
-        """Fix parameters and remove reflections when there are too few reflections.
+        """
+        Fix parameters and remove reflections when there are too few
+        reflections.
 
         Test each parameter against the reflections it affects and fix any for
         which there are too few reflections. In addition, remove all reflections
@@ -244,7 +250,9 @@ class AutoReduce(object):
             self.reflection_manager.filter_obs(refs_to_filter)
 
     def __call__(self):
-        """Perform checks and parameter reduction according to the selected option.
+        """
+        Perform checks and parameter reduction according to the selected
+        option.
 
         Returns:
             None

@@ -1,6 +1,4 @@
-"""
-Tests for intensity combination.
-"""
+"""Tests for intensity combination."""
 from __future__ import absolute_import, division, print_function
 import pytest
 from mock import Mock
@@ -30,9 +28,13 @@ def test_exp_P1():
 
 
 def generate_simple_table(prf=True):
-    """Generate a reflection table for testing intensity combination.
+    """
+    Generate a reflection table for testing intensity combination.
+
     The numbers are contrived to make sum intensities agree well at high
-    intensity but terribly at low and vice versa for profile intensities."""
+    intensity but terribly at low and vice versa for profile
+    intensities.
+    """
     reflections = flex.reflection_table()
     reflections["miller_index"] = flex.miller_index(
         [
@@ -143,7 +145,7 @@ def generate_simple_table(prf=True):
 
 
 def test_combine_intensities(test_exp_P1):
-    """Test the combine intensities function for a single dataset"""
+    """Test the combine intensities function for a single dataset."""
     reflections = generate_simple_table()
     scaler = Mock()
     scaler.reflection_table = reflections
@@ -221,7 +223,7 @@ def test_combine_intensities(test_exp_P1):
 
 
 def test_combine_intensities_multi_dataset(test_exp_P1):
-    """Test the combine intensities function for multiple datasets"""
+    """Test the combine intensities function for multiple datasets."""
     r1 = generate_simple_table()
     r1["partiality"] = flex.double(25, 1.0)
     r2 = generate_simple_table(prf=False)

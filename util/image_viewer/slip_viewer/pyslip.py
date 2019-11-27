@@ -74,7 +74,8 @@ EventRightBoxSelect = 3
 
 
 def point_inside_polygon(x, y, poly):
-    """Decide if point is inside polygon.
+    """
+    Decide if point is inside polygon.
 
     x     x coord of point in question
     y     y coord of point in question
@@ -115,10 +116,11 @@ def point_inside_polygon(x, y, poly):
 
 
 class _BufferedCanvas(wx.Panel):
-    """Implements a buffered, flicker-free canvas widget.
+    """
+    Implements a buffered, flicker-free canvas widget.
 
     This class is based on:
-        http://wiki.wxpython.org/index.cgi/BufferedCanvas
+    http://wiki.wxpython.org/index.cgi/BufferedCanvas
     """
 
     # The backing buffer
@@ -132,13 +134,12 @@ class _BufferedCanvas(wx.Panel):
         size=wx.DefaultSize,
         style=wx.NO_FULL_REPAINT_ON_RESIZE,
     ):
-        """Initialize the canvas.
+        """
+        Initialize the canvas.
 
-        parent  reference to 'parent' widget
-        id      the unique widget ID
-        pos     canvas position
-        size    canvas size
-        style   wxPython style
+        parent  reference to 'parent' widget id      the unique widget
+        ID pos     canvas position size    canvas size style   wxPython
+        style
         """
 
         wx.Panel.__init__(self, parent, id, pos, size, style)
@@ -205,7 +206,8 @@ class _BufferedCanvas(wx.Panel):
 
 
 class _Tiles(object):
-    """An object to handle a pyslip tiles directory.
+    """
+    An object to handle a pyslip tiles directory.
 
     Uses 'elephant' caching - it never forgets!
     TODO: Add more sophisticated limit + 'drop LRU' caching.
@@ -224,7 +226,8 @@ class _Tiles(object):
     MaxTileList = 4096
 
     def __init__(self, tile_dir):
-        """Initialise a Tiles instance.
+        """
+        Initialise a Tiles instance.
 
         tile_dir  root directory of tiles
         """
@@ -266,7 +269,8 @@ class _Tiles(object):
         self.max_level = max(self.levels)
 
     def UseLevel(self, n):
-        """Prepare to serve tiles from the required level.
+        """
+        Prepare to serve tiles from the required level.
 
         n  The required level
 
@@ -300,7 +304,8 @@ class _Tiles(object):
         )
 
     def GetInfo(self, level):
-        """Get tile info for a particular level.
+        """
+        Get tile info for a particular level.
 
         level  the level to get tile info for
 
@@ -321,7 +326,8 @@ class _Tiles(object):
         return info
 
     def GetTile(self, x, y):
-        """Get bitmap for tile at tile coords (x, y).
+        """
+        Get bitmap for tile at tile coords (x, y).
 
         x  X coord of tile required (tile coordinates)
         y  Y coord of tile required (tile coordinates)
@@ -390,17 +396,15 @@ class _Layer(object):
         name="<no name given>",
         type=None,
     ):
-        """Initialise the Layer object.
+        """
+        Initialise the Layer object.
 
-        id           unique layer ID
-        painter      render function
-        data         the layer data
-        map_rel      True if layer is map-relative, else layer-relative
-        visible      layer visibility
-        show_levels  list of levels at which to auto-show the level
-        selectable   True if select operates on this layer, Else False
-        name         the name of the layer (for debug)
-        type         a layer 'type' flag
+        id           unique layer ID painter      render function data
+        the layer data map_rel      True if layer is map-relative, else
+        layer-relative visible      layer visibility show_levels  list
+        of levels at which to auto-show the level selectable   True if
+        select operates on this layer, Else False name         the name
+        of the layer (for debug) type         a layer 'type' flag
         """
 
         self.painter = painter  # routine to draw layer
@@ -429,18 +433,19 @@ class _Layer(object):
 
 
 class Resource(object):
-    """A class to allow the loading of layer data to/from disk as a resource.
+    """
+    A class to allow the loading of layer data to/from disk as a resource.
 
     An instance of Resource has the following attributes/methods:
-        .layers      a dictionary of named Layer objects
-        .AddLayer()  add a layer to the resource
-        .GetLayer()  get a layer resource by name and type
-        .Read()      read a resource from disk
-        .Write()     write resource to disk
+    .layers      a dictionary of named Layer objects     .AddLayer()
+    add a layer to the resource     .GetLayer()  get a layer resource by
+    name and type     .Read()      read a resource from disk
+    .Write()     write resource to disk
     """
 
     def __init__(self, fname=None):
-        """Initialise a Resource object, optionally loading data from disk.
+        """
+        Initialise a Resource object, optionally loading data from disk.
 
         fname  path to a resource file to read
         """
@@ -452,7 +457,8 @@ class Resource(object):
             self.Read(fname)
 
     def Read(self, fname):
-        """Read a resource from disk.
+        """
+        Read a resource from disk.
 
         fname  path to file to read
 
@@ -470,7 +476,8 @@ class Resource(object):
             raise IOError(msg)
 
     def Write(self, fname=None):
-        """Write the Resource to disk.
+        """
+        Write the Resource to disk.
 
         fname  path to file to write (default is load self.filename)
 
@@ -494,17 +501,18 @@ class Resource(object):
         )
 
     def AddLayer(self, name, layer_type, data):
-        """Add a layer to the Resource.
+        """
+        Add a layer to the Resource.
 
-        name        name of the layer
-        layer_type  type of the layer
-        data        layer data
+        name        name of the layer layer_type  type of the layer data
+        layer data
         """
 
         self.layers[name] = (layer_type, data)
 
     def GetLayers(self):
-        """Get layers object.
+        """
+        Get layers object.
 
         Returns a dict: {'layer_name': <layer_data>, ...}
         """
@@ -512,7 +520,8 @@ class Resource(object):
         return self.layers
 
     def GetLayer(self, name):
-        """Get a layer by name.
+        """
+        Get a layer by name.
 
         name  name of the layer to get
 
@@ -522,7 +531,8 @@ class Resource(object):
         return self.layers.get(name, None)
 
     def DeleteLayer(self, name):
-        """Delete a layer by name.
+        """
+        Delete a layer by name.
 
         name  name of the layer to delete
         """
@@ -564,7 +574,8 @@ class _PySlipEvent(wx.PyCommandEvent):
     """Event sent from the pySlip widget."""
 
     def __init__(self, eventType, id):
-        """Construct a PySlip event.
+        """
+        Construct a PySlip event.
 
         eventType  type of event
         id         unique event number
@@ -756,7 +767,8 @@ class PySlip(_BufferedCanvas):
         max_level=None,
         **kwargs
     ):
-        """Initialise a pySlip instance.
+        """
+        Initialise a pySlip instance.
 
         parent       reference to parent object
         tile_dir     the root tile directory
@@ -896,7 +908,8 @@ class PySlip(_BufferedCanvas):
         update=True,
         **kwargs
     ):
-        """Add a layer of points.
+        """
+        Add a layer of points.
 
         points       iterable of point data:
                          (x, y, [attributes])
@@ -1144,35 +1157,31 @@ class PySlip(_BufferedCanvas):
         update=True,
         **kwargs
     ):
-        """Add a layer of polygon data to the map.
+        """
+        Add a layer of polygon data to the map.
 
         data         iterable of polygon tuples:
-                         (<iter>[, attributes])
-                     where <iter> is another iterable of (x, y) tuples and
-                     attributes is a dictionary of polygon attributes:
-                         placement   a placement string (view-relative only)
-                         width       width of polygon edge lines
-                         colour      colour of edge lines
-                         close       if True closes polygon
-                         filled      polygon is filled (implies closed)
-                         fillcolour  fill colour
-                         offset_x    X offset
-                         offset_y    Y offset
-                         data        polygon data object
-        map_rel      points drawn relative to map if True, else view relative
-        visible      True if the layer is to be immediately visible
-        show_levels  list of levels at which layer is auto-shown (or None)
-        selectable   True if select operates on this layer
-        name         name of this layer
+        (<iter>[, attributes])              where <iter> is another
+        iterable of (x, y) tuples and              attributes is a
+        dictionary of polygon attributes:                  placement   a
+        placement string (view-relative only)                  width
+        width of polygon edge lines                  colour      colour
+        of edge lines                  close       if True closes
+        polygon                  filled      polygon is filled (implies
+        closed)                  fillcolour  fill colour
+        offset_x    X offset                  offset_y    Y offset
+        data        polygon data object map_rel      points drawn
+        relative to map if True, else view relative visible      True if
+        the layer is to be immediately visible show_levels  list of
+        levels at which layer is auto-shown (or None) selectable   True
+        if select operates on this layer name         name of this layer
         kwargs       extra keyword args, layer-specific:
-                         placement   placement string (view-rel only)
-                         width       width of polygons in pixels
-                         colour      colour of polygon edge lines
-                         close       True if polygon is to be closed
-                         filled      if True, fills polygon
-                         fillcolour  fill colour
-                         offset_x    X offset
-                         offset_y    Y offset
+        placement   placement string (view-rel only)
+        width       width of polygons in pixels                  colour
+        colour of polygon edge lines                  close       True
+        if polygon is to be closed                  filled      if True,
+        fills polygon                  fillcolour  fill colour
+        offset_x    X offset                  offset_y    Y offset
         """
 
         # get global values, if required
@@ -1262,7 +1271,8 @@ class PySlip(_BufferedCanvas):
         name="<image_layer>",
         **kwargs
     ):
-        """Add a layer of images to the map.
+        """
+        Add a layer of images to the map.
 
         data         list of (lon, lat, fname[, attributes]) (map_rel)
                      or list of (x, y, fname, [attributes]) (view relative)
@@ -1353,17 +1363,18 @@ class PySlip(_BufferedCanvas):
         update=True,
         **kwargs
     ):
-        """Add a text layer to the map.
+        """
+        Add a text layer to the map.
 
-        text         list of sequence of (lon, lat, text, [dict]) coordinates
-        map_rel      points drawn relative to map if True, else view relative
-        visible      True if the layer is to be immediately visible
-        show_levels  list of levels at which layer is auto-shown
-        selectable   True if select operates on this layer
-        name         name of this layer
-        kwargs       a dictionary of changeable text attributes
-                         (placement, radius, fontname, fontsize, colour, data)
-                     these supply any data missing in 'data'
+        text         list of sequence of (lon, lat, text, [dict])
+        coordinates map_rel      points drawn relative to map if True,
+        else view relative visible      True if the layer is to be
+        immediately visible show_levels  list of levels at which layer
+        is auto-shown selectable   True if select operates on this layer
+        name         name of this layer kwargs       a dictionary of
+        changeable text attributes                  (placement, radius,
+        fontname, fontsize, colour, data)              these supply any
+        data missing in 'data'
         """
 
         if map_rel:
@@ -1465,7 +1476,8 @@ class PySlip(_BufferedCanvas):
         type,
         update=True,
     ):
-        """Add a generic layer to the system.
+        """
+        Add a generic layer to the system.
 
         render       the function used to render the layer
         data         actual layer data (depends on layer type)
@@ -1514,7 +1526,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def ShowLayer(self, id):
-        """Show a layer.
+        """
+        Show a layer.
 
         id  the layer id
         """
@@ -1523,7 +1536,8 @@ class PySlip(_BufferedCanvas):
         self.Update()
 
     def HideLayer(self, id):
-        """Hide a layer.
+        """
+        Hide a layer.
 
         id  the layer id
         """
@@ -1532,7 +1546,8 @@ class PySlip(_BufferedCanvas):
         self.Update()
 
     def DeleteLayer(self, id, update=True):
-        """Delete a layer.
+        """
+        Delete a layer.
 
         id  the layer id
         """
@@ -1549,10 +1564,11 @@ class PySlip(_BufferedCanvas):
                 self.Update()
 
     def SetLayerShowLevels(self, id, show_levels=None):
-        """Update the show_levels list for a layer.
+        """
+        Update the show_levels list for a layer.
 
-        id           ID of the layer we are going to update
-        show_levels  new layer show list
+        id           ID of the layer we are going to update show_levels
+        new layer show list
         """
 
         # just in case we got None
@@ -1566,10 +1582,11 @@ class PySlip(_BufferedCanvas):
             layer.show_levels = show_levels
 
     def SetLayerSelectable(self, id, selectable=False):
-        """Update the .selectable attribute for a layer.
+        """
+        Update the .selectable attribute for a layer.
 
-        id          ID of the layer we are going to update
-        selectable  new .selectable attribute value (True or False)
+        id          ID of the layer we are going to update selectable
+        new .selectable attribute value (True or False)
         """
 
         # just in case we got None
@@ -1582,7 +1599,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def PushLayerToBack(self, id):
-        """Make layer specified be drawn at back of Z order.
+        """
+        Make layer specified be drawn at back of Z order.
 
         id  ID of the layer to push to the back
         """
@@ -1592,7 +1610,8 @@ class PySlip(_BufferedCanvas):
         self.Update()
 
     def PopLayerToFront(self, id):
-        """Make layer specified be drawn at front of Z order.
+        """
+        Make layer specified be drawn at front of Z order.
 
         id  ID of the layer to pop to the front
         """
@@ -1602,10 +1621,11 @@ class PySlip(_BufferedCanvas):
         self.Update()
 
     def PlaceLayerBelowLayer(self, id, top_id):
-        """Place a layer so it will be drawn behind another layer.
+        """
+        Place a layer so it will be drawn behind another layer.
 
-        id      ID of layer to place underneath 'top_id'
-        top_id  ID of layer to be drawn *above* 'id'
+        id      ID of layer to place underneath 'top_id' top_id  ID of
+        layer to be drawn *above* 'id'
         """
 
         self.layer_z_order.remove(id)
@@ -1618,7 +1638,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def LightweightDrawPointLayer2(self, dc, data, map_rel):
-        """Draw a points layer.
+        """
+        Draw a points layer.
 
         dc       the device context to draw on
         data     an iterable of point tuples:
@@ -1662,13 +1683,14 @@ class PySlip(_BufferedCanvas):
                 dc.DrawRectangleList(rectangles)
 
     def LightweightDrawPointLayer(self, dc, data, map_rel):
-        """Draw a points layer.
+        """
+        Draw a points layer.
 
-        dc       the device context to draw on
-        data     an iterable of point tuples:
-                     (x, y, place, radius, colour, x_off, y_off, pdata)
-        map_rel  points relative to map if True, MUST BE TRUE for lightweight
-        Assumes all points are the same colour, saving 100's of ms.
+        dc       the device context to draw on data     an iterable of
+        point tuples:              (x, y, place, radius, colour, x_off,
+        y_off, pdata) map_rel  points relative to map if True, MUST BE
+        TRUE for lightweight Assumes all points are the same colour,
+        saving 100's of ms.
         """
         assert map_rel is True
         if len(data) == 0:
@@ -1691,12 +1713,13 @@ class PySlip(_BufferedCanvas):
                         dc.DrawCircle(x + x_off, y + y_off, radius)
 
     def DrawPointLayer(self, dc, data, map_rel):
-        """Draw a points layer.
+        """
+        Draw a points layer.
 
-        dc       the device context to draw on
-        data     an iterable of point tuples:
-                     (x, y, place, radius, colour, x_off, y_off, pdata)
-        map_rel  points relative to map if True, else relative to view
+        dc       the device context to draw on data     an iterable of
+        point tuples:              (x, y, place, radius, colour, x_off,
+        y_off, pdata) map_rel  points relative to map if True, else
+        relative to view
         """
 
         # draw points on map/view
@@ -1725,14 +1748,14 @@ class PySlip(_BufferedCanvas):
                     dc.DrawCircle(x, y, radius)
 
     def DrawPolygonLayer(self, dc, data, map_rel):
-        """Draw a polygon layer.
+        """
+        Draw a polygon layer.
 
-        dc       the device context to draw on
-        data     an iterable of polygon tuples:
-                     (p, placement, width, colour, closed,
-                      filled, fillcolour, offset_x, offset_y, data)
-                 where p is an iterable of points: (x, y)
-        map_rel  points relative to map if True, else relative to view
+        dc       the device context to draw on data     an iterable of
+        polygon tuples:              (p, placement, width, colour,
+        closed,               filled, fillcolour, offset_x, offset_y,
+        data)          where p is an iterable of points: (x, y) map_rel
+        points relative to map if True, else relative to view
         """
 
         # draw polygons on map/view
@@ -1823,12 +1846,13 @@ class PySlip(_BufferedCanvas):
             dc.DrawPolygonList(polygons, pens=pens, brushes=brushes)
 
     def DrawImageLayer(self, dc, images, map_rel):
-        """Draw an image Layer on the view.
+        """
+        Draw an image Layer on the view.
 
-        dc       the device context to draw on
-        images   a sequence of image tuple sequences
-                   (x,y,bmap,w,h,placement,offset_x,offset_y,idata)
-        map_rel  points relative to map if True, else relative to view
+        dc       the device context to draw on images   a sequence of
+        image tuple sequences
+        (x,y,bmap,w,h,placement,offset_x,offset_y,idata) map_rel  points
+        relative to map if True, else relative to view
         """
 
         # draw images on map/view
@@ -1852,13 +1876,14 @@ class PySlip(_BufferedCanvas):
                 dc.DrawBitmap(bmap, x, y, False)
 
     def DrawTextLayer(self, dc, text, map_rel):
-        """Draw a text Layer on the view.
+        """
+        Draw a text Layer on the view.
 
-        dc       the device context to draw on
-        text     a sequence of tuples:
-                     (lon, lat, tdata, placement, radius, colour, fontname,
-                      fontsize, offset_x, offset_y, tdata)
-        map_rel  points relative to map if True, else relative to view
+        dc       the device context to draw on text     a sequence of
+        tuples:              (lon, lat, tdata, placement, radius,
+        colour, fontname,               fontsize, offset_x, offset_y,
+        tdata) map_rel  points relative to map if True, else relative to
+        view
         """
 
         if text is None:
@@ -1963,7 +1988,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def GotoPosition(self, posn):
-        """Set view to centre on a position in the current level.
+        """
+        Set view to centre on a position in the current level.
 
         posn  a tuple (lon,lat) to centre view on
         """
@@ -1980,7 +2006,8 @@ class PySlip(_BufferedCanvas):
         self.Update()
 
     def GotoLevelAndPosition(self, level, posn):
-        """Goto a map level and set view to centre on a position.
+        """
+        Goto a map level and set view to centre on a position.
 
         level  the map level to use
         posn   a tuple (lon,lat) to centre view on
@@ -1992,7 +2019,8 @@ class PySlip(_BufferedCanvas):
             self.GotoPosition(posn)
 
     def ZoomToArea(self, posn, size):
-        """Set view to level and position to view an area.
+        """
+        Set view to level and position to view an area.
 
         posn  a tuple (lon,lat) to centre view on
         size  a tuple (width,height) of area in degrees
@@ -2023,7 +2051,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def ConvertGeo2View(self, lonlat):
-        """Convert a geo (lon+lat) position to view pixel coords.
+        """
+        Convert a geo (lon+lat) position to view pixel coords.
 
         lonlat  (longitude, latitude) of point
 
@@ -2038,7 +2067,8 @@ class PySlip(_BufferedCanvas):
         )
 
     def ConvertGeo2ViewMasked(self, lonlat):
-        """Convert a geo (lon+lat) position to view pixel coords.
+        """
+        Convert a geo (lon+lat) position to view pixel coords.
 
         lonlat  (longitude, latitude) of point
 
@@ -2057,7 +2087,8 @@ class PySlip(_BufferedCanvas):
         return None
 
     def ConvertView2Geo(self, xy):
-        """Convert an x,y view position to geo lon+lat.
+        """
+        Convert an x,y view position to geo lon+lat.
 
         xy  tuple of view X & Y coordinate (pixels)
 
@@ -2080,7 +2111,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def OnMove(self, event):
-        """Handle a mouse move (map drag or rectangle select).
+        """
+        Handle a mouse move (map drag or rectangle select).
 
         event  the mouse move event
 
@@ -2123,7 +2155,11 @@ class PySlip(_BufferedCanvas):
             self.Update()
 
     def OnLeftDown(self, event):
-        """Left mouse button down. Prepare for possible drag."""
+        """
+        Left mouse button down.
+
+        Prepare for possible drag.
+        """
 
         click_posn = event.GetPositionTuple() if WX3 else event.GetPosition()
 
@@ -2139,7 +2175,8 @@ class PySlip(_BufferedCanvas):
         event.Skip()
 
     def OnLeftUp(self, event):
-        """Left mouse button up.
+        """
+        Left mouse button up.
 
         Note that when we iterate through the layer_z_order list we must
         iterate on a *copy* as the user select process can modify
@@ -2224,10 +2261,11 @@ class PySlip(_BufferedCanvas):
             self.Update()
 
     def OnLeftDClick(self, event):
-        """Left mouse button double-click.
+        """
+        Left mouse button double-click.
 
-        Zoom in (if possible).
-        Zoom out (if possible) if shift key is down.
+        Zoom in (if possible). Zoom out (if possible) if shift key is
+        down.
         """
 
         # ignore next Left UP event
@@ -2252,17 +2290,29 @@ class PySlip(_BufferedCanvas):
         self.RaiseMousePositionEvent(xy)
 
     def OnMiddleDown(self, event):
-        """Middle mouse button down.  Do nothing in this version."""
+        """
+        Middle mouse button down.
+
+        Do nothing in this version.
+        """
 
         pass
 
     def OnMiddleUp(self, event):
-        """Middle mouse button up.  Do nothing in this version."""
+        """
+        Middle mouse button up.
+
+        Do nothing in this version.
+        """
 
         pass
 
     def OnRightDown(self, event):
-        """Right mouse button down. Prepare for right select (no drag)."""
+        """
+        Right mouse button down.
+
+        Prepare for right select (no drag).
+        """
 
         click_posn = event.GetPositionTuple() if WX3 else event.GetPosition()
 
@@ -2274,7 +2324,8 @@ class PySlip(_BufferedCanvas):
         event.Skip()
 
     def OnRightUp(self, event):
-        """Right mouse button up.
+        """
+        Right mouse button up.
 
         Note that when we iterate through the layer_z_order list we must
         iterate on a *copy* as the user select process can modify
@@ -2382,8 +2433,9 @@ class PySlip(_BufferedCanvas):
     ######
 
     def Draw(self, dc):
-        """Do actual map tile and layers drawing.
-        Overrides the _BufferedCanvas.draw() method.
+        """
+        Do actual map tile and layers drawing. Overrides the
+        _BufferedCanvas.draw() method.
 
         dc  device context to draw on
 
@@ -2446,7 +2498,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def ResizeCallback(self, event=None):
-        """Handle a window resize.
+        """
+        Handle a window resize.
 
         event  that caused the resize, may be None (not used)
 
@@ -2498,7 +2551,8 @@ class PySlip(_BufferedCanvas):
         self.RecalcViewLonLatLimits()
 
     def RecalcViewLonLatLimits(self):
-        """Recalculate the view lon/lat extent values.
+        """
+        Recalculate the view lon/lat extent values.
 
         Assumes only the .view_offset_? and .ppd_? values have been set.
         """
@@ -2510,7 +2564,8 @@ class PySlip(_BufferedCanvas):
         self.view_blat = self.view_tlat - self.view_height / self.ppd_y
 
     def ZoomToLevel(self, level):
-        """Use a new tile level.
+        """
+        Use a new tile level.
 
         level  the new tile level to use.
 
@@ -2538,7 +2593,8 @@ class PySlip(_BufferedCanvas):
         return False
 
     def GetMapCoordsFromView(self, posn):
-        """Convert view pixel coordinates to map coordinates.
+        """
+        Convert view pixel coordinates to map coordinates.
 
         posn  is a tuple (x, y) of view pixel coordinates
 
@@ -2559,7 +2615,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def GetNearestPointInLayer(self, layer, pt):
-        """Determine if clicked location selects a point in layer data.
+        """
+        Determine if clicked location selects a point in layer data.
 
         layer  layer object we are looking in
         pt     click geo location (lon, lat) or screen (x, y)
@@ -2605,7 +2662,8 @@ class PySlip(_BufferedCanvas):
         return None
 
     def GetBoxSelPointsInLayer(self, layer, p1, p2):
-        """Get list of points inside box.
+        """
+        Get list of points inside box.
 
         layer  reference to layer object we are working on
         p1     one corner point of selection box
@@ -2651,7 +2709,8 @@ class PySlip(_BufferedCanvas):
         return result
 
     def GetNearestImageInLayer(self, layer, pt):
-        """Decide if clicked location selects an image object in layer data.
+        """
+        Decide if clicked location selects an image object in layer data.
 
         layer  layer object we are looking in
         pt     click geo location (lon, lat)
@@ -2676,7 +2735,8 @@ class PySlip(_BufferedCanvas):
         return None
 
     def GetBoxSelImagesInLayer(self, layer, p1, p2):
-        """Get list of images inside box p1-p2.
+        """
+        Get list of images inside box p1-p2.
 
         layer  reference to layer object we are working on
         p1     one corner point of selection box
@@ -2705,7 +2765,8 @@ class PySlip(_BufferedCanvas):
         return result
 
     def GetNearestPolygonInLayer(self, layer, pt):
-        """Get nearest polygon object in layer data.
+        """
+        Get nearest polygon object in layer data.
 
         layer  layer object we are looking in
         pt     click geo location (lon, lat)
@@ -2726,7 +2787,8 @@ class PySlip(_BufferedCanvas):
         return None
 
     def GetBoxSelPolygonsInLayer(self, layer, p1, p2):
-        """Get list of polygons inside box p1-p2.
+        """
+        Get list of polygons inside box p1-p2.
 
         layer  reference to layer object we are working on
         p1     one corner point of selection box
@@ -2740,7 +2802,8 @@ class PySlip(_BufferedCanvas):
         return []
 
     def GetNearestTextInLayer(self, layer, pt):
-        """Determine if clicked location selects a text object in layer data.
+        """
+        Determine if clicked location selects a text object in layer data.
 
         layer  layer object we are looking in
         pt     click geo location (lon, lat)
@@ -2767,7 +2830,8 @@ class PySlip(_BufferedCanvas):
         return None
 
     def GetBoxSelTextsInLayer(self, layer, p1, p2):
-        """Get list of text objects inside box p1-p2.
+        """
+        Get list of text objects inside box p1-p2.
 
         layer  reference to layer object we are working on
         p1     one corner point of selection box
@@ -2804,7 +2868,8 @@ class PySlip(_BufferedCanvas):
     ######
 
     def ZoomIn(self, xy, update=True):
-        """Zoom map in to the next level.
+        """
+        Zoom map in to the next level.
 
         xy  is a tuple (x, y) of pixel coords of new centre after zoom
 
@@ -2824,7 +2889,8 @@ class PySlip(_BufferedCanvas):
             self.Update()
 
     def ZoomOut(self, xy, update=True):
-        """Zoom map out to the previous level.
+        """
+        Zoom map out to the previous level.
 
         xy  is a tuple (x, y) of pixel coords of new centre after zoom
 
@@ -2849,7 +2915,8 @@ class PySlip(_BufferedCanvas):
     # flag as the user controls selectability on a layer-by-layer basis.
 
     def RaiseSelectEvent(self, evtype, layer, point, mposn=None, vposn=None):
-        """Raise a point SELECT event.
+        """
+        Raise a point SELECT event.
 
         evtype  select event type
         layer   layer the select was on
@@ -2870,7 +2937,8 @@ class PySlip(_BufferedCanvas):
         self.GetEventHandler().ProcessEvent(event)
 
     def SetLevelChangeEvent(self, event):
-        """Set event routine on level change.
+        """
+        Set event routine on level change.
 
         event  True if event is to be raised on change
         """
@@ -2886,7 +2954,8 @@ class PySlip(_BufferedCanvas):
             self.GetEventHandler().ProcessEvent(event)
 
     def SetMousePositionEvent(self, event):
-        """Set callback function on mouse move.
+        """
+        Set callback function on mouse move.
 
         event  True if event is to be raised on mouse move
         """
@@ -2894,7 +2963,8 @@ class PySlip(_BufferedCanvas):
         self.mouse_position_event = event
 
     def RaiseMousePositionEvent(self, posn):
-        """Raise a mouse position event.
+        """
+        Raise a mouse position event.
 
         posn  the new mouse position (in view pixel coordinates)
         """
@@ -2908,7 +2978,8 @@ class PySlip(_BufferedCanvas):
             self.GetEventHandler().ProcessEvent(event)
 
     def PositionIsOnMap(self, posn):
-        """Return True if 'posn' is actually on map (not just view).
+        """
+        Return True if 'posn' is actually on map (not just view).
 
         posn  a tuple (x,y) position in view pixel coordinates
         """
@@ -2916,7 +2987,8 @@ class PySlip(_BufferedCanvas):
         return True  # NKS always accept mouse coordinates
 
     def get_i18n_kw(self, kwargs, kws, default):
-        """Get alternate international keyword value.
+        """
+        Get alternate international keyword value.
 
         kwargs   dictionary to look for keyword value
         kws      iterable of keyword spelling strings

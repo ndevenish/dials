@@ -116,9 +116,12 @@ class ParameterReporter(object):
         return s
 
     def varying_params_vs_image_number(self, image_range):
-        """Returns a string which is a table of scan-varying parameter values vs
-        image number, if scan-varying parameters are present. Otherwise returns
-        None"""
+        """
+        Returns a string which is a table of scan-varying parameter values vs
+        image number, if scan-varying parameters are present.
+
+        Otherwise returns None
+        """
 
         image_numbers = list(range(image_range[0], image_range[1] + 1))
         columns = [TableColumn("Image", image_numbers)]
@@ -153,7 +156,7 @@ class ParameterReporter(object):
 
     def get_params(self, only_free=True):
         """return a concatenated list of parameters from each of the components
-        in the global model"""
+        in the global model."""
 
         global_p_list = []
         for parameterisation in (

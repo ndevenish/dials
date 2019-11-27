@@ -1,6 +1,4 @@
-"""
-A simple test of refinement using two crystals.
-"""
+"""A simple test of refinement using two crystals."""
 
 from __future__ import absolute_import, division, print_function
 

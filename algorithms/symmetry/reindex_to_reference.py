@@ -8,7 +8,8 @@ from mmtbx.scaling.twin_analyses import twin_laws
 
 
 def determine_reindex_operator_against_reference(test_miller_set, reference_miller_set):
-    """Reindex a miller set to match a reference miller set.
+    """
+    Reindex a miller set to match a reference miller set.
 
     This function takes two miller arrays, a reference and a test array. The
     space group is checked to see if any reindexing may be required to give

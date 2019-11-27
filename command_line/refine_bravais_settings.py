@@ -1,4 +1,5 @@
-"""Refinement of Bravais settings consistent with the primitive unit cell.
+"""
+Refinement of Bravais settings consistent with the primitive unit cell.
 
 This program takes as input the output of dials.index, i.e. indexed.expt
 and indexed.refl files. Full refinement of the crystal and experimental
@@ -135,7 +136,7 @@ def map_to_primitive(experiments, reflections):
 
 
 def select_datasets_on_crystal_id(experiments, reflections, crystal_id):
-    """Select experiments and reflections with the given crystal id"""
+    """Select experiments and reflections with the given crystal id."""
     assert crystal_id < len(experiments.crystals())
     experiment_ids = experiments.where(crystal=experiments.crystals()[crystal_id])
 

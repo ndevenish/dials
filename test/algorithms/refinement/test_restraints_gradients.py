@@ -1,7 +1,5 @@
-"""
-Figure out correct gradient expressions required for crystal unit cell
-restraints
-"""
+"""Figure out correct gradient expressions required for crystal unit cell
+restraints."""
 
 # Python and cctbx imports
 from __future__ import absolute_import, division, print_function

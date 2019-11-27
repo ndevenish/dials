@@ -432,7 +432,8 @@ class _Tiles(object):
         return 2.0 ** -self.zoom_level
 
     def UseLevel(self, n):
-        """Prepare to serve tiles from the required level.
+        """
+        Prepare to serve tiles from the required level.
 
         n  The required level
 
@@ -502,7 +503,8 @@ class _Tiles(object):
     def GetTile(self, x, y):
         # from libtbx.development.timers import Timer
         # T = Timer("get tile")
-        """Get bitmap for tile at tile coords (x, y).
+        """
+        Get bitmap for tile at tile coords (x, y).
 
         x  X coord of tile required (tile coordinates)
         y  Y coord of tile required (tile coordinates)
@@ -700,6 +702,7 @@ class _Tiles(object):
     def get_resolution(self, x, y, readout=None):
         """
         Determine the resolution of a pixel.
+
         Arguments are in image pixel coordinates (starting from 1,1).
         """
 

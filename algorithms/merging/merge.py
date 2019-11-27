@@ -77,7 +77,8 @@ def prepare_merged_reflection_table(experiments, reflection_table, d_min=None):
 
 
 def make_MAD_merged_mtz_file(params, experiments, reflections, wavelengths):
-    """Make a multi wavelength merged mtz file from experiments and reflections."""
+    """Make a multi wavelength merged mtz file from experiments and
+    reflections."""
     # need to add a crystal to the mtz object
     # now go through data selecting on wavelength - loop over each to get mtz_object
     # Create the mtz file

@@ -16,7 +16,7 @@ def generate_exp(wavelength=1):
 
 
 def test_split_by_wavelength(tmpdir):
-    """Test the split_by_wavelength option of dials.split_experiments"""
+    """Test the split_by_wavelength option of dials.split_experiments."""
     experiments = ExperimentList()
     exp = generate_exp(wavelength=1.0)
     exp.identifier = "0"

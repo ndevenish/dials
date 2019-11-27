@@ -1,6 +1,4 @@
-"""
-Test refinement of a crystal unit cell using a two theta target.
-"""
+"""Test refinement of a crystal unit cell using a two theta target."""
 
 from __future__ import absolute_import, division, print_function
 import os
@@ -71,7 +69,7 @@ def generate_reflections(experiments):
 
 
 def test_fd_derivatives():
-    """Test derivatives of the prediction equation"""
+    """Test derivatives of the prediction equation."""
 
     from libtbx.phil import parse
 
@@ -190,7 +188,7 @@ def test_fd_derivatives():
 
 
 def test_refinement(dials_regression):
-    """Test a refinement run"""
+    """Test a refinement run."""
 
     # Get a beam and detector from a experiments. This one has a CS-PAD, but that
     # is irrelevant

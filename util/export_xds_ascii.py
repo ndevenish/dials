@@ -26,8 +26,8 @@ logger = logging.getLogger(__name__)
 
 
 def export_xds_ascii(integrated_data, experiment_list, params, var_model=(1, 0)):
-    """Export data from integrated_data corresponding to experiment_list to
-    an XDS_ASCII.HKL formatted text file."""
+    """Export data from integrated_data corresponding to experiment_list to an
+    XDS_ASCII.HKL formatted text file."""
 
     if len(experiment_list) == 1:
         experiment_data = integrated_data.select(integrated_data["id"] >= 0)
@@ -48,7 +48,8 @@ def export_xds_ascii(integrated_data, experiment_list, params, var_model=(1, 0))
 
 def _export_experiment(filename, integrated_data, experiment, params, var_model=(1, 0)):
     # type: (str, flex.reflection_table, dxtbx.model.Experiment, libtbx.phil.scope_extract, Tuple)
-    """Export a single experiment to an XDS_ASCII.HKL format file.
+    """
+    Export a single experiment to an XDS_ASCII.HKL format file.
 
     Args:
         filename: The file to write to

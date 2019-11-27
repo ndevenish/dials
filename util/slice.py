@@ -77,7 +77,7 @@ def slice_reflections(reflections, image_ranges):
 
 
 def slice_crystal(crystal, array_range):
-    """Slice a scan-varying crystal by the provided array range"""
+    """Slice a scan-varying crystal by the provided array range."""
 
     if crystal.num_scan_points == 0:
         return crystal

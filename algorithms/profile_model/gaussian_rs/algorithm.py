@@ -2,15 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 
 class GaussianRSMaskCalculatorFactory(object):
-    """
-    Factory class for mask calculator
-    """
+    """Factory class for mask calculator."""
 
     @classmethod
     def create(cls, experiments):
-        """
-        Create the mask calculator
-        """
+        """Create the mask calculator."""
         from dials.algorithms.integration.parallel_integrator import (
             GaussianRSMaskCalculator,
         )
@@ -33,15 +29,11 @@ class GaussianRSMaskCalculatorFactory(object):
 
 
 class GaussianRSIntensityCalculatorFactory(object):
-    """
-    A class to create the intensity calculator
-    """
+    """A class to create the intensity calculator."""
 
     @classmethod
     def create(cls, data, detector_space=False, deconvolution=False):
-        """
-        Create the intensity calculator
-        """
+        """Create the intensity calculator."""
         from dials.algorithms.integration.parallel_integrator import (
             GaussianRSIntensityCalculator,
         )
@@ -51,15 +43,11 @@ class GaussianRSIntensityCalculatorFactory(object):
 
 
 class GaussianRSReferenceCalculatorFactory(object):
-    """
-    A class to create the reference calculator
-    """
+    """A class to create the reference calculator."""
 
     @classmethod
     def create(cls, experiments, grid_size=5, scan_step=5, grid_method="circular_grid"):
-        """
-        Create the intensity calculator
-        """
+        """Create the intensity calculator."""
         from dials.algorithms.integration.parallel_integrator import (
             GaussianRSReferenceCalculator,
         )

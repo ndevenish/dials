@@ -1,6 +1,4 @@
-"""
-Error model classes for scaling.
-"""
+"""Error model classes for scaling."""
 from __future__ import absolute_import, division, print_function
 import logging
 from math import log, exp
@@ -54,7 +52,7 @@ class BasicErrorModelParameterisation(object):
             self.set_active_parameter("b")
 
     def set_param_vals(self, x):
-        """method for refinement engine access"""
+        """method for refinement engine access."""
         self.x = x
         if self.active_parameterisation == "a":
             self.a = self.x[1]
@@ -62,7 +60,7 @@ class BasicErrorModelParameterisation(object):
             self.b = self.x[0]
 
     def get_param_vals(self):
-        """method for refinement engine access"""
+        """method for refinement engine access."""
         return self.x
 
     def set_active_parameter(self, name):
@@ -136,13 +134,16 @@ class BasicErrorModel(object):
 
     @classmethod
     def filter_unsuitable_reflections(cls, Ih_table, cutoff, min_Ih, min_partiality):
-        """Do a first pass to calculate delta_hl and filter out the largest
+        """
+        Do a first pass to calculate delta_hl and filter out the largest
         deviants, so that the error model is not misled by these and instead
         operates on the central ~90% of the data. Also choose reflection groups
         with n_h > 1, as these have deltas of zero by definition and will bias
         the variance calculations. Also, only use groups where <Ih> > 25.0, as
-        the assumptions of normally distributed deltas will not hold for low
-        <Ih>."""
+        the assumptions of normally distributed deltas will not hold for low.
+
+        <Ih>.
+        """
         n_h = Ih_table.calc_nh()
         sigmaprime = calc_sigmaprime([1.0, 0.0], Ih_table)
         delta_hl = calc_deltahl(Ih_table, n_h, sigmaprime)
@@ -194,7 +195,8 @@ class BasicErrorModel(object):
             self.components["a"].reinitialise([parameterisation.a, parameterisation.b])
 
     def update_parameters_after_minimisation(self, parameterisation):
-        """Update the state of the error model and prepare for next minimisation."""
+        """Update the state of the error model and prepare for next
+        minimisation."""
         if parameterisation.active_parameterisation == "a":
             self.components["a"].parameters = [parameterisation.a]
             # just refined a, so need to prepare b.
@@ -238,7 +240,8 @@ class BasicErrorModel(object):
             return self.components["b"].minimisation_summary()
 
     def update_variances(self, variances, intensities):
-        """Use the error model parameter to calculate new values for the variances."""
+        """Use the error model parameter to calculate new values for the
+        variances."""
         new_variance = (self.parameters[0] ** 2) * (
             variances + ((self.parameters[1] * intensities) ** 2)
         )
@@ -252,9 +255,7 @@ class BasicErrorModel(object):
 
 
 class BasicErrorModelB(object):
-    """
-    Object to manage calculation of deviations for an error model.
-    """
+    """Object to manage calculation of deviations for an error model."""
 
     min_reflections_required = 250
 
@@ -336,7 +337,7 @@ class BasicErrorModelB(object):
 
     @property
     def n_refl(self):
-        """The number of reflections being used in minimisation"""
+        """The number of reflections being used in minimisation."""
         return self.Ih_table.size
 
     def update_for_minimisation(self, parameterisation):
@@ -348,12 +349,15 @@ class BasicErrorModelB(object):
         self.bin_variances = self.calculate_bin_variances()
 
     def create_summation_matrix(self):
-        """"Create a summation matrix to allow sums into intensity bins.
+        """
+        "Create a summation matrix to allow sums into intensity bins.
 
-        This routine attempts to bin into bins equally spaced in log(intensity),
-        to give a representative sample across all intensities. To avoid
-        undersampling, it is required that there are at least 100 reflections
-        per intensity bin unless there are very few reflections."""
+        This routine attempts to bin into bins equally spaced in
+        log(intensity), to give a representative sample across all
+        intensities. To avoid undersampling, it is required that there
+        are at least 100 reflections per intensity bin unless there are
+        very few reflections.
+        """
         n = self.Ih_table.size
         self.binning_info["n_reflections"] = n
         summation_matrix = sparse.matrix(n, self.n_bins)

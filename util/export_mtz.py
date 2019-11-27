@@ -35,7 +35,8 @@ logger = logging.getLogger(__name__)
 
 
 class MTZWriterBase(object):
-    """Helper for adding metadata, crystals and datasets to an mtz file object."""
+    """Helper for adding metadata, crystals and datasets to an mtz file
+    object."""
 
     def __init__(self, space_group, unit_cell=None):
         """If a unit cell is provided, will be used as default unless specified
@@ -90,7 +91,8 @@ class MergedMTZWriter(MTZWriterBase):
         anom_amplitudes=None,
         suffix=None,
     ):
-        """Add merged data to the most recent dataset.
+        """
+        Add merged data to the most recent dataset.
 
         Args:
             merged_array: A merged miller array of IMEAN intensities
@@ -595,7 +597,8 @@ def export_mtz(integrated_data, experiment_list, params):
 
 
 def match_wavelengths(experiments):
-    """Create a dictionary matching wavelength to experiments (index in list)"""
+    """Create a dictionary matching wavelength to experiments (index in
+    list)"""
     wavelengths = OrderedDict()
     for i, x in enumerate(experiments):
         w = x.beam.get_wavelength()

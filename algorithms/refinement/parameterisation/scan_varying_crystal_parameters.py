@@ -16,7 +16,7 @@ class ScanVaryingCrystalOrientationParameterisation(
     ScanVaryingModelParameterisation, CrystalOrientationMixin
 ):
     """Scan-varying parameterisation for crystal orientation, with angles
-    expressed in mrad"""
+    expressed in mrad."""
 
     def __init__(self, crystal, t_range, num_intervals, experiment_ids=None):
         if experiment_ids is None:
@@ -59,7 +59,7 @@ class ScanVaryingCrystalOrientationParameterisation(
         return
 
     def compose(self, t):
-        """calculate state and derivatives for model at image number t"""
+        """calculate state and derivatives for model at image number t."""
 
         # Extract orientation from the initial state
         U0 = self._initial_state
@@ -104,7 +104,7 @@ class ScanVaryingCrystalOrientationParameterisation(
         return
 
     def get_state(self):
-        """Return crystal orientation matrix [U] at image number t"""
+        """Return crystal orientation matrix [U] at image number t."""
 
         # only a single crystal is parameterised here, so no multi_state_elt
         # argument is allowed
@@ -115,7 +115,7 @@ class ScanVaryingCrystalOrientationParameterisation(
 class ScanVaryingCrystalUnitCellParameterisation(
     ScanVaryingModelParameterisation, CrystalUnitCellMixin
 ):
-    """Scan-varying parameterisation for the crystal unit cell"""
+    """Scan-varying parameterisation for the crystal unit cell."""
 
     def __init__(
         self,
@@ -162,7 +162,7 @@ class ScanVaryingCrystalUnitCellParameterisation(
         return
 
     def compose(self, t):
-        """calculate state and derivatives for model at image number t"""
+        """calculate state and derivatives for model at image number t."""
 
         # extract values and weights at time t using the smoother
         vals, weights, sumweights = zip(
@@ -189,7 +189,7 @@ class ScanVaryingCrystalUnitCellParameterisation(
         return
 
     def get_state(self):
-        """Return crystal orthogonalisation matrix [B] at image number t"""
+        """Return crystal orthogonalisation matrix [B] at image number t."""
 
         # only a single crystal is parameterised here, so no multi_state_elt
         # argument is allowed
@@ -197,9 +197,8 @@ class ScanVaryingCrystalUnitCellParameterisation(
         return self._B_at_t
 
     def set_state_uncertainties(self, var_cov_list):
-        """Send the calculated variance-covariance of the elements of the B matrix
-        for all scan points back to the crystal model, if required
-        """
+        """Send the calculated variance-covariance of the elements of the B
+        matrix for all scan points back to the crystal model, if required."""
         if not self._set_state_uncertainties:
             return
 

@@ -4,9 +4,7 @@ import os
 
 
 def dump(experiments, reflections, directory):
-    """
-    Dump the files in XDS format
-    """
+    """Dump the files in XDS format."""
     from dxtbx.serialize import xds
     from scitbx import matrix
 

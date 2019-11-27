@@ -12,9 +12,9 @@ from dials.algorithms.refinement.parameterisation.prediction_parameters import (
 
 
 class StateDerivativeCache(object):
-    """Keep derivatives of the model states in a memory-efficient format
-    by storing each derivative once alongside the indices of reflections affected
-    by that derivative"""
+    """Keep derivatives of the model states in a memory-efficient format by
+    storing each derivative once alongside the indices of reflections affected
+    by that derivative."""
 
     def __init__(self, parameterisations=None):
 
@@ -30,11 +30,14 @@ class StateDerivativeCache(object):
         self._nref = 0
 
     def build_gradients(self, parameterisation, isel=None, imatch=None):
-        """Return an object mimicking a list of flex arrays containing state
-        gradients wrt each parameter of the parameterisation. In fact this is a
-        generator so that iterating over the elements of the list will return
-        control here so that the gradient array for a single parameter can be
-        reconstructed on the fly"""
+        """
+        Return an object mimicking a list of flex arrays containing state
+        gradients wrt each parameter of the parameterisation.
+
+        In fact this is a generator so that iterating over the elements
+        of the list will return control here so that the gradient array
+        for a single parameter can be reconstructed on the fly
+        """
 
         # Get the data from the cache
         entry = self._cache[parameterisation]
@@ -80,7 +83,7 @@ class StateDerivativeCache(object):
             yield ds_dp
 
     def clear(self):
-        """Clear all cached values"""
+        """Clear all cached values."""
 
         for p in self._cache:
             self._cache[p] = [[] for i in range(p.num_free())]
@@ -88,7 +91,7 @@ class StateDerivativeCache(object):
     def append(self, parameterisation, iparam, derivative, iselection):
         """For a particular parameterisation and parameter number of the free
         parameters of that parameterisation, append a state derivative and the
-        iselection of reflections it affects to the cache"""
+        iselection of reflections it affects to the cache."""
 
         l1 = self._cache[parameterisation]
         l2 = l1[iparam]
@@ -96,15 +99,15 @@ class StateDerivativeCache(object):
 
     @property
     def nref(self):
-        """Get the length of the reflection list to which indices in the iselections
-        refer"""
+        """Get the length of the reflection list to which indices in the
+        iselections refer."""
 
         return self._nref
 
     @nref.setter
     def nref(self, value):
-        """Set the length of the reflection list to which indices in the iselections
-        refer"""
+        """Set the length of the reflection list to which indices in the
+        iselections refer."""
 
         self._nref = value
 
@@ -112,7 +115,7 @@ class StateDerivativeCache(object):
 class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
     """An extension of the rotation scans version of the
     PredictionParameterisation class that supports model parameterisations that
-    vary smoothly with the observed image number"""
+    vary smoothly with the observed image number."""
 
     def __init__(
         self,
@@ -181,8 +184,8 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     def _get_xl_orientation_parameterisation(self, experiment_id):
         """Return the crystal orientation parameterisation for the requested
-        experiment number (or None if the crystal orientation in that experiment
-        is not parameterised)"""
+        experiment number (or None if the crystal orientation in that
+        experiment is not parameterised)"""
 
         param_set = self._exp_to_param[experiment_id]
         xl_op = None
@@ -215,8 +218,9 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
         return bp
 
     def _get_detector_parameterisation(self, experiment_id):
-        """Return the detector parameterisation for the requested experiment number
-        (or None if the detector in that experiment is not parameterised)"""
+        """Return the detector parameterisation for the requested experiment
+        number (or None if the detector in that experiment is not
+        parameterised)"""
 
         param_set = self._exp_to_param[experiment_id]
         dp = None
@@ -226,8 +230,9 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
         return dp
 
     def _get_goniometer_parameterisation(self, experiment_id):
-        """Return the goniometer parameterisation for the requested experiment number
-        (or None if the goniometer in that experiment is not parameterised)"""
+        """Return the goniometer parameterisation for the requested experiment
+        number (or None if the goniometer in that experiment is not
+        parameterised)"""
 
         param_set = self._exp_to_param[experiment_id]
         gp = None
@@ -239,8 +244,9 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
     def _get_state_from_parameterisation(
         self, parameterisation, frame, multi_state_elt=None
     ):
-        """Get the model state from the parameterisation at the specified frame,
-        taking care of whether it is a scan-varying parameterisation or not"""
+        """Get the model state from the parameterisation at the specified
+        frame, taking care of whether it is a scan-varying parameterisation or
+        not."""
 
         if parameterisation is None:
             return None
@@ -257,9 +263,13 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
         return state
 
     def _prepare_for_compose(self, reflections, skip_derivatives=False):
-        """Add columns to the reflection table to hold the varying state matrices
-        or vectors for the experimental models, if required. Also prepare the cache
-        for the derivatives of states that are scan-varying"""
+        """
+        Add columns to the reflection table to hold the varying state matrices
+        or vectors for the experimental models, if required.
+
+        Also prepare the cache for the derivatives of states that are
+        scan-varying
+        """
 
         nref = len(reflections)
         # set columns if needed
@@ -282,9 +292,13 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
         self._derivative_cache.nref = nref
 
     def compose(self, reflections, skip_derivatives=False):
-        """Compose scan-varying crystal parameterisations at the specified image
-        number, for the specified experiment, for each image. Put the varying
-        matrices in the reflection table, and cache the derivatives."""
+        """
+        Compose scan-varying crystal parameterisations at the specified image
+        number, for the specified experiment, for each image.
+
+        Put the varying matrices in the reflection table, and cache the
+        derivatives.
+        """
 
         self._prepare_for_compose(reflections, skip_derivatives)
 
@@ -508,9 +522,13 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     # overloaded for the scan-varying case
     def _get_model_data_for_experiment(self, experiment, reflections):
-        """helper function to return model data s0, U, B, D and S for a particular
-        experiment. In this scan-varying overload this is trivial because these
-        values are already set as arrays in the reflection table"""
+        """
+        helper function to return model data s0, U, B, D and S for a particular
+        experiment.
+
+        In this scan-varying overload this is trivial because these
+        values are already set as arrays in the reflection table
+        """
 
         return {
             "s0": reflections["s0_vector"],
@@ -522,7 +540,7 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     def _beam_derivatives(self, isel, parameterisation, reflections):
         """Determine whether ds0_dp was precalculated then call the base class
-        method"""
+        method."""
 
         if self._varying_beams:
             if "imatch" in reflections:
@@ -541,7 +559,7 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     def _xl_orientation_derivatives(self, isel, parameterisation, reflections):
         """Determine whether dU_dp was precalculated then call the base class
-        method"""
+        method."""
 
         if self._varying_xl_orientations:
             if "imatch" in reflections:
@@ -560,7 +578,7 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     def _xl_unit_cell_derivatives(self, isel, parameterisation, reflections):
         """Determine whether dB_dp was precalculated then call the base class
-        method"""
+        method."""
 
         if self._varying_xl_unit_cells:
             if "imatch" in reflections:
@@ -579,7 +597,7 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     def _detector_derivatives(self, isel, panel_id, parameterisation, reflections):
         """Determine whether dd_dp was precalculated then call the base class
-        method"""
+        method."""
 
         if self._varying_detectors:
             if "imatch" in reflections:
@@ -598,7 +616,7 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
 
     def _goniometer_derivatives(self, isel, parameterisation, reflections):
         """Determine whether dS_dp was precalculated then call the base class
-        method"""
+        method."""
 
         if self._varying_goniometers:
             if "imatch" in reflections:
@@ -618,19 +636,21 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
     def calculate_model_state_uncertainties(
         self, var_cov=None, obs_image_number=None, experiment_id=None
     ):
-        """Take a variance-covariance matrix of all free parameters (probably
+        """
+        Take a variance-covariance matrix of all free parameters (probably
         calculated by a minimisation engine). For each parameterisation in the
-        global model, extract the subset of this matrix for the associated block
-        of parameters. Pass this on to the relevant model parameterisation to
-        calculate its own uncertainty of state.
+        global model, extract the subset of this matrix for the associated
+        block of parameters. Pass this on to the relevant model
+        parameterisation to calculate its own uncertainty of state.
 
-        This scan-varying version should first be called with var_cov set but
-        obs_image_number=None and experiment_id=None. This calls the scan-static
-        version to do the calculation for the scan-static parameterisations and
-        also caches the subsets of var_cov relevant for the scan-varying
-        parameterisations. Subsequent calls should provide obs_image_number and
-        experiment_id to calculate for a particular crystal at a particular
-        scan-point"""
+        This scan-varying version should first be called with var_cov
+        set but obs_image_number=None and experiment_id=None. This calls
+        the scan-static version to do the calculation for the scan-
+        static parameterisations and also caches the subsets of var_cov
+        relevant for the scan-varying parameterisations. Subsequent
+        calls should provide obs_image_number and experiment_id to
+        calculate for a particular crystal at a particular scan-point
+        """
 
         # First call, only a variance-covariance matrix is supplied
         if var_cov is not None:
@@ -667,9 +687,13 @@ class ScanVaryingPredictionParameterisation(XYPhiPredictionParameterisation):
         return result
 
     def set_model_state_uncertainties(self, u_cov_list, b_cov_list, experiment_id=None):
-        """Identify the crystal parameterisations and set the list of covariance
-        matrices, if available. They will only be available if the parameterisation
-        is a scan-varying type, otherwise they are None"""
+        """
+        Identify the crystal parameterisations and set the list of covariance
+        matrices, if available.
+
+        They will only be available if the parameterisation is a scan-
+        varying type, otherwise they are None
+        """
 
         xl_op = self._get_xl_orientation_parameterisation(experiment_id)
         xl_ucp = self._get_xl_unit_cell_parameterisation(experiment_id)

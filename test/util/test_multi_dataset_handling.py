@@ -1,6 +1,4 @@
-"""
-Tests for dials.util.multi_dataset_handling functions
-"""
+"""Tests for dials.util.multi_dataset_handling functions."""
 from __future__ import absolute_import, division, print_function
 
 import pytest
@@ -15,7 +13,7 @@ from dxtbx.model import Experiment, ExperimentList
 
 @pytest.fixture
 def experiments():
-    """Make a list of three empty experiments"""
+    """Make a list of three empty experiments."""
     experiments = ExperimentList()
     experiments.append(Experiment())
     experiments.append(Experiment())
@@ -33,7 +31,7 @@ def experiments_024(experiments):
 
 @pytest.fixture
 def reflections():
-    """Make a list of three reflection tables"""
+    """Make a list of three reflection tables."""
     rt1 = flex.reflection_table()
     rt1["id"] = flex.int([0, 0, 0])
     rt2 = flex.reflection_table()
@@ -233,8 +231,12 @@ def test_assigning_specified_identifiers(experiments, reflections):
 
 
 def test_parse_multiple_datasets():
-    """Test the namesake function. This expects a list of reflection tables, and
-    selects on the column named 'id'."""
+    """
+    Test the namesake function.
+
+    This expects a list of reflection tables, and selects on the column
+    named 'id'.
+    """
     rt1 = flex.reflection_table()
     rt1["id"] = flex.int([0, 0, 0])
     rt1.experiment_identifiers()[0] = "0"

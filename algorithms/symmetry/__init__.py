@@ -1,4 +1,5 @@
-"""Methods for symmetry determination.
+"""
+Methods for symmetry determination.
 
 This module provides a base class for symmetry determination algorithms.
 """
@@ -37,7 +38,8 @@ class symmetry_base(object):
         relative_length_tolerance=None,
         absolute_angle_tolerance=None,
     ):
-        """Initialise a symmetry_base object.
+        """
+        Initialise a symmetry_base object.
 
         Args:
           intensities (cctbx.miller.array): The intensities on which to perform
@@ -178,7 +180,8 @@ class symmetry_base(object):
 
     @staticmethod
     def kernel_normalisation(intensities):
-        """Kernel normalisation of the input intensities.
+        """
+        Kernel normalisation of the input intensities.
 
         Args:
           intensities (cctbx.miller.array): The intensities to be normalised.
@@ -193,7 +196,8 @@ class symmetry_base(object):
 
     @staticmethod
     def quasi_normalisation(intensities):
-        """Quasi-normalisation of the input intensities.
+        """
+        Quasi-normalisation of the input intensities.
 
         Args:
           intensities (cctbx.miller.array): The intensities to be normalised.
@@ -223,7 +227,8 @@ class symmetry_base(object):
 
     @staticmethod
     def ml_aniso_normalisation(intensities):
-        """Anisotropic maximum-likelihood normalisation of the input intensities.
+        """
+        Anisotropic maximum-likelihood normalisation of the input intensities.
 
         Args:
           intensities (cctbx.miller.array): The intensities to be normalised.
@@ -235,7 +240,8 @@ class symmetry_base(object):
 
     @staticmethod
     def ml_iso_normalisation(intensities):
-        """Isotropic maximum-likelihood normalisation of the input intensities.
+        """
+        Isotropic maximum-likelihood normalisation of the input intensities.
 
         Args:
           intensities (cctbx.miller.array): The intensities to be normalised.

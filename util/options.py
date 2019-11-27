@@ -190,8 +190,8 @@ class Importer(object):
         load_models=True,
     ):
         """
-        Parse the arguments. Populates its instance attributes in an intelligent way
-        from the arguments in args.
+        Parse the arguments. Populates its instance attributes in an
+        intelligent way from the arguments in args.
 
         If include is set, only those items set will be tried. If not, then if
         exclude is set, then those items will not be tested.
@@ -241,7 +241,8 @@ class Importer(object):
             self.unhandled = self.try_read_reflections(self.unhandled, verbose)
 
     def _handle_converter_error(self, argument, exception, type, validation=False):
-        "Record information about errors that occured processing an argument"
+        """Record information about errors that occured processing an
+        argument."""
         self.handling_errors[argument].append(
             ArgumentHandlingErrorInfo(
                 name=argument,
@@ -338,7 +339,8 @@ class Importer(object):
         return unhandled
 
     def try_read_reflections(self, args, verbose):
-        """Try to import reflections.
+        """
+        Try to import reflections.
 
         :param args: The input arguments
         :param verbose: Print verbose output
@@ -366,7 +368,7 @@ class Importer(object):
 
 
 class PhilCommandParser(object):
-    """A class to parse phil parameters from positional arguments"""
+    """A class to parse phil parameters from positional arguments."""
 
     def __init__(
         self,
@@ -410,7 +412,7 @@ class PhilCommandParser(object):
     @property
     def phil(self):
         """
-        Get the phil object
+        Get the phil object.
 
         :return: The phil scope
         """
@@ -747,9 +749,12 @@ class OptionParserBase(optparse.OptionParser, object):
 
 
 class OptionParser(OptionParserBase):
-    """A class to parse command line options and get the system configuration.
-    The class extends optparse.OptionParser to include the reading of phil
-    parameters."""
+    """
+    A class to parse command line options and get the system configuration.
+
+    The class extends optparse.OptionParser to include the reading of
+    phil parameters.
+    """
 
     def __init__(
         self,
@@ -938,7 +943,7 @@ class OptionParser(OptionParserBase):
     @property
     def phil(self):
         """
-        Get the phil object
+        Get the phil object.
 
         :returns: The phil scope
         """
@@ -964,7 +969,7 @@ class OptionParser(OptionParserBase):
 
     def _strip_rst_markup(self, text):
         """
-        Strip rst markup
+        Strip rst markup.
 
         :param text: The text to strip
         :return: The stripped text
@@ -973,7 +978,7 @@ class OptionParser(OptionParserBase):
 
     def format_help(self, formatter=None):
         """
-        Format the help string
+        Format the help string.
 
         :param formatter: The formatter to use
         :return: The formatted help text
@@ -1013,7 +1018,7 @@ class OptionParser(OptionParserBase):
                 parameter_choice_list[d.path] = ["true", "false"]
 
         def construct_completion_tree(paths):
-            """Construct a tree of parameters, grouped by common prefixes"""
+            """Construct a tree of parameters, grouped by common prefixes."""
 
             # Split parameter paths at '.' character
             paths = [p.split(".", 1) for p in paths]
@@ -1103,7 +1108,7 @@ class OptionParser(OptionParserBase):
 
 def flatten_reflections(filename_object_list):
     """
-    Flatten a list of reflections tables
+    Flatten a list of reflections tables.
 
     A check is also made for the 'id' values in the reflection tables, which are
     renumbered from 0..n-1 to avoid clashes. The experiment_identifiers dict is
@@ -1139,7 +1144,7 @@ def flatten_reflections(filename_object_list):
 
 def flatten_experiments(filename_object_list):
     """
-    Flatten a list of experiment lists
+    Flatten a list of experiment lists.
 
     :param filename_object_list: The parameter item
     :return: The flattened experiment lists

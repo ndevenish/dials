@@ -58,7 +58,8 @@ refinement {
 
 
 def dxtbx_crystal_from_orientation(crystal_orientation, space_group):
-    """Convert a cctbx crystal_orientation to a dxtbx.Crystal model.
+    """
+    Convert a cctbx crystal_orientation to a dxtbx.Crystal model.
 
     Args:
         crystal_orientation (cctbx.crystal_orientation):
@@ -175,7 +176,8 @@ bravais_lattice_to_lowest_symmetry_spacegroup_number = {
 
 
 def refined_settings_from_refined_triclinic(experiments, reflections, params):
-    """Generate a RefinedSettingsList from a triclinic model.
+    """
+    Generate a RefinedSettingsList from a triclinic model.
 
     Args:
         experiments: The experiments refined with a triclinic model
@@ -253,7 +255,8 @@ def refined_settings_from_refined_triclinic(experiments, reflections, params):
 
 
 def identify_likely_solutions(all_solutions):
-    """Identify likely solutions using heuristics.
+    """
+    Identify likely solutions using heuristics.
 
     Args:
         all_solutions (RefinedSettingsList): The list of refined bravais settings.

@@ -166,20 +166,14 @@ phil_scope = parse(
 
 
 class ImageSetImporter(object):
-    """
-    A class to manage the import of the experiments
-    """
+    """A class to manage the import of the experiments."""
 
     def __init__(self, params):
-        """
-        Init the class
-        """
+        """Init the class."""
         self.params = params
 
     def __call__(self):
-        """
-        Import the experiments
-        """
+        """Import the experiments."""
 
         # Get the experiments
         experiments = flatten_experiments(self.params.input.experiments)
@@ -229,21 +223,15 @@ class ImageSetImporter(object):
 
 
 class ReferenceGeometryUpdater(object):
-    """
-    A class to replace beam + detector with a reference
-    """
+    """A class to replace beam + detector with a reference."""
 
     def __init__(self, params):
-        """
-        Load the reference geometry
-        """
+        """Load the reference geometry."""
         self.params = params
         self.reference = self.load_reference_geometry(params)
 
     def __call__(self, imageset):
-        """
-        Replace with the reference geometry
-        """
+        """Replace with the reference geometry."""
         if self.params.input.check_reference_geometry:
             # Check static detector items are the same
             assert self.reference.detector.is_similar_to(
@@ -257,9 +245,7 @@ class ReferenceGeometryUpdater(object):
         return imageset
 
     def load_reference_geometry(self, params):
-        """
-        Load a reference geometry file
-        """
+        """Load a reference geometry file."""
         # Load reference geometry
         reference_detector = None
         reference_beam = None
@@ -295,20 +281,14 @@ class ReferenceGeometryUpdater(object):
 
 
 class ManualGeometryUpdater(object):
-    """
-    A class to update the geometry manually
-    """
+    """A class to update the geometry manually."""
 
     def __init__(self, params):
-        """
-        Save the params
-        """
+        """Save the params."""
         self.params = params
 
     def __call__(self, imageset):
-        """
-        Override the parameters
-        """
+        """Override the parameters."""
         from dxtbx.imageset import ImageSequence, ImageSetFactory
         from dxtbx.model import BeamFactory
         from dxtbx.model import DetectorFactory
@@ -439,14 +419,10 @@ class ManualGeometryUpdater(object):
 
 
 class MetaDataUpdater(object):
-    """
-    A class to manage updating the experiments metadata
-    """
+    """A class to manage updating the experiments metadata."""
 
     def __init__(self, params):
-        """
-        Init the class
-        """
+        """Init the class."""
         from dials.util.options import geometry_phil_scope
 
         self.params = params
@@ -475,9 +451,7 @@ class MetaDataUpdater(object):
             logger.info("")
 
     def __call__(self, imageset_list):
-        """
-        Transform the metadata
-        """
+        """Transform the metadata."""
         # Import the lookup data
         lookup = self.import_lookup_data(self.params)
 
@@ -583,9 +557,7 @@ class MetaDataUpdater(object):
         return imageset
 
     def import_lookup_data(self, params):
-        """
-        Get the lookup data
-        """
+        """Get the lookup data."""
         # Check the lookup inputs
         mask_filename = None
         gain_filename = None
@@ -665,9 +637,7 @@ class MetaDataUpdater(object):
         )
 
     def convert_to_grid_scan(self, imageset_list, params):
-        """
-        Convert the imagesets to grid scans
-        """
+        """Convert the imagesets to grid scans."""
         if params.input.grid_size is None:
             raise Sorry("The input.grid_size parameter is required")
         result = []
@@ -814,9 +784,7 @@ class Script(object):
         self.write_experiments(experiments, params)
 
     def write_experiments(self, experiments, params):
-        """
-        Output the experiments to file.
-        """
+        """Output the experiments to file."""
         if params.output.experiments:
             logger.info("-" * 80)
             logger.info("Writing experiments to %s" % params.output.experiments)
@@ -825,9 +793,7 @@ class Script(object):
             )
 
     def assert_single_sequence(self, experiments, params):
-        """
-        Print an error message if more than 1 sequence
-        """
+        """Print an error message if more than 1 sequence."""
         sequences = [
             e.imageset for e in experiments if isinstance(e.imageset, ImageSequence)
         ]
@@ -855,9 +821,7 @@ class Script(object):
             )
 
     def diagnose_multiple_sequences(self, sequences, params):
-        """
-        Print a diff between sequences.
-        """
+        """Print a diff between sequences."""
         logger.info("")
         for i in range(1, len(sequences)):
             logger.info("=" * 80)
@@ -868,9 +832,7 @@ class Script(object):
         logger.info("")
 
     def print_sequence_diff(self, sequence1, sequence2, params):
-        """
-        Print a diff between sequences.
-        """
+        """Print a diff between sequences."""
         from dxtbx.model.experiment_list import SequenceDiff
 
         diff = SequenceDiff(params.input.tolerance)

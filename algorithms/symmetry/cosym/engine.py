@@ -9,14 +9,16 @@ import scitbx.lbfgs
 
 
 class lbfgs_with_curvs(object):
-    """Minimise a target function using the LBFGS minimiser.
+    """
+    Minimise a target function using the LBFGS minimiser.
 
-    Implementation of an LBFGS minimiser using curvature information, according
-    to the interface defined by :mod:`scitbx.lbfgs`.
+    Implementation of an LBFGS minimiser using curvature information,
+    according to the interface defined by :mod:`scitbx.lbfgs`.
     """
 
     def __init__(self, target, coords, use_curvatures=True, termination_params=None):
-        """Initialise an lbfgs_with_curvs object.
+        """
+        Initialise an lbfgs_with_curvs object.
 
         Args:
           target (dials.algorithms.target.Target): The target function to minimise.
@@ -42,7 +44,8 @@ class lbfgs_with_curvs(object):
         )
 
     def compute_functional_gradients_diag(self):
-        """Compute the functional, gradients and diagonal.
+        """
+        Compute the functional, gradients and diagonal.
 
         Returns:
           tuple: A tuple of the functional, gradients and diagonal, where the
@@ -60,7 +63,8 @@ class lbfgs_with_curvs(object):
         return self.target.curvatures(self.x)
 
     def compute_functional_gradients_and_curvatures(self):
-        """Compute the functional, gradients and curvatures.
+        """
+        Compute the functional, gradients and curvatures.
 
         Returns:
           tuple: A tuple of the functional, gradients and curvatures.
@@ -70,7 +74,8 @@ class lbfgs_with_curvs(object):
         return self.f, self.g, self.c
 
     def compute_functional_and_gradients(self):
-        """Compute the functional and gradients.
+        """
+        Compute the functional and gradients.
 
         Returns:
           tuple: A tuple of the functional and gradients.

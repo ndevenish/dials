@@ -1,6 +1,4 @@
-"""
-Tests for the scaling model classes.
-"""
+"""Tests for the scaling model classes."""
 from __future__ import absolute_import, division, print_function
 import copy
 import pytest
@@ -94,7 +92,7 @@ def generated_param():
 
 
 def test_ScalingModelBase(mock_errormodel):
-    """Test for base scaling model class"""
+    """Test for base scaling model class."""
 
     configdict = {"corrections": ["1"]}
     SM_base = ScalingModelBase(configdict)

@@ -136,9 +136,12 @@ class Script(object):
 
     @staticmethod
     def check_input(reflections):
-        """Check the input is suitable for refinement. So far just check keys in
-        the reflection table. Maybe later check experiments have overlapping models
-        etc."""
+        """
+        Check the input is suitable for refinement.
+
+        So far just check keys in the reflection table. Maybe later
+        check experiments have overlapping models etc.
+        """
 
         msg = (
             "The supplied reflection table does not have the required data "
@@ -154,7 +157,8 @@ class Script(object):
 
     @staticmethod
     def combine_crystals(experiments):
-        """Replace all crystals in the experiments list with the first crystal"""
+        """Replace all crystals in the experiments list with the first
+        crystal."""
 
         new_experiments = ExperimentList()
         ref_crystal = experiments[0].crystal
@@ -176,7 +180,7 @@ class Script(object):
     def filter_integrated_centroids(reflections):
         """Filter reflections to include only those with the integrated and the
         strong flag set, but only if there are apparently some integrated
-        reflections"""
+        reflections."""
 
         orig_len = len(reflections)
         mask = reflections.get_flags(reflections.flags.integrated)
@@ -194,7 +198,7 @@ class Script(object):
 
     @staticmethod
     def convert_to_P1(reflections, experiments):
-        """Convert the input crystals to P 1 and reindex the reflections"""
+        """Convert the input crystals to P 1 and reindex the reflections."""
         for iexp, exp in enumerate(experiments):
             sel = reflections["id"] == iexp
             xl = exp.crystal
@@ -269,7 +273,7 @@ class Script(object):
 
     @staticmethod
     def cell_param_table(crystal):
-        """Construct a table of cell parameters and their ESDs"""
+        """Construct a table of cell parameters and their ESDs."""
 
         cell = crystal.get_unit_cell().parameters()
         esd = crystal.get_cell_parameter_sd()

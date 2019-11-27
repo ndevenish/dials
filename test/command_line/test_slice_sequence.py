@@ -35,8 +35,8 @@ def test_slice_sequence_and_compare_with_expected_results(dials_regression, tmpd
 
 
 def test_slice_sequence_with_first_images_missing(dials_regression, tmpdir):
-    """Test slicing where scan image range does not start at 1, exercising
-    a case that exposed a bug"""
+    """Test slicing where scan image range does not start at 1, exercising a
+    case that exposed a bug."""
 
     # use the i04_weak_data for this test
     data_dir = os.path.join(dials_regression, "refinement_test_data", "i04_weak_data")
@@ -65,7 +65,7 @@ def test_slice_sequence_with_first_images_missing(dials_regression, tmpdir):
 
 
 def test_slice_sequence_with_scan_varying_crystal(dials_data, tmpdir):
-    """test slicing keeps a scan-varying crystal"""
+    """test slicing keeps a scan-varying crystal."""
 
     expt = dials_data("l_cysteine_4_sweeps_scaled") / "scaled_30.expt"
     procrunner.run(

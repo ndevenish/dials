@@ -44,8 +44,12 @@ def make_test_data_thermo_61c():
 
 
 def make_test_data_thaumatin_41c():
-    """Real thaumatin data (P41212). Nice example of 41 screw axis,
-    in trouble if we can't get this one right!"""
+    """
+    Real thaumatin data (P41212).
+
+    Nice example of 41 screw axis, in trouble if we can't get this one
+    right!
+    """
     r = flex.reflection_table()
     miller_ax_vals = list(range(1, 87))
     i = [-0.006, -0.027, -0.016, 0.094, 0.012, 0.041, 0.039, 605.708, -0.01]
@@ -74,7 +78,7 @@ def make_test_data_thaumatin_41c():
 
 
 def test_screw_axes_example_data():
-    """Test some example data where we know the answer"""
+    """Test some example data where we know the answer."""
     refls = make_test_data_LCY_21c()
     score = ScrewAxis21c().score_axis(refls)
     assert score > 0.95

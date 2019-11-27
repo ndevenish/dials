@@ -771,7 +771,8 @@ def _parameterise_goniometers(options, experiments, analysis):
 def build_prediction_parameterisation(
     options, experiments, reflection_manager, do_stills=False
 ):
-    """Given a set of parameters, create a parameterisation from a set of
+    """
+    Given a set of parameters, create a parameterisation from a set of
     experimental models.
 
     Params:

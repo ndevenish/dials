@@ -17,7 +17,8 @@ characteristic_grid = None
 
 
 class FFT1D(Strategy):
-    """Basis vector search using a 1D FFT.
+    """
+    Basis vector search using a 1D FFT.
 
     See:
         Steller, I., Bolotovsky, R. & Rossmann, M. G. (1997). J. Appl. Cryst. 30, 1036-1040.
@@ -27,7 +28,8 @@ class FFT1D(Strategy):
     phil_scope = phil.parse(fft1d_phil_str)
 
     def __init__(self, max_cell, params=None, *args, **kwargs):
-        """Construct an FFT1D object.
+        """
+        Construct an FFT1D object.
 
         Args:
             max_cell (float): An estimate of the maximum cell dimension of the primitive
@@ -39,7 +41,8 @@ class FFT1D(Strategy):
         super(FFT1D, self).__init__(max_cell, params=params, *args, **kwargs)
 
     def find_basis_vectors(self, reciprocal_lattice_vectors):
-        """Find a list of likely basis vectors.
+        """
+        Find a list of likely basis vectors.
 
         Args:
             reciprocal_lattice_vectors (scitbx.array_family.flex.vec3_double):

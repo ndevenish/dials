@@ -1,7 +1,5 @@
-"""
-Test command line program dials.two_theta_refine by running a job with saved
-data and comparing with expected output.
-"""
+"""Test command line program dials.two_theta_refine by running a job with saved
+data and comparing with expected output."""
 
 from __future__ import absolute_import, division, print_function
 

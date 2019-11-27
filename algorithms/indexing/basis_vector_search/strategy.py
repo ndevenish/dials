@@ -9,7 +9,8 @@ class Strategy(object):
     phil_scope = None
 
     def __init__(self, max_cell, params=None, *args, **kwargs):
-        """Construct the strategy.
+        """
+        Construct the strategy.
 
         Args:
             max_cell (float): An estimate of the maximum cell dimension of the primitive
@@ -21,7 +22,8 @@ class Strategy(object):
             self._params = self.phil_scope.extract()
 
     def find_basis_vectors(self, reciprocal_lattice_vectors):
-        """Find a list of likely basis vectors.
+        """
+        Find a list of likely basis vectors.
 
         Args:
             reciprocal_lattice_vectors (scitbx.array_family.flex.vec3_double):

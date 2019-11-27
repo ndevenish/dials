@@ -1,5 +1,5 @@
-""""
-Classes that each define a smoothly varying component of a scaling model.
+"""
+" Classes that each define a smoothly varying component of a scaling model.
 
 These classes use a gaussian smoother (1D, 2D or 3D) to calculate the
 inverse scale factors and derivatives with respect to the component
@@ -100,11 +100,13 @@ class GaussianSmoother3D(GS3D):
 
 
 class SmoothMixin(object):
-    """Mixin class for smooth scale factor components.
+    """
+    Mixin class for smooth scale factor components.
 
     This uses a Gaussian smoother to calculate scales and derivatives
     based on the parameters and a have a set of normalised_values
-    associated with the data."""
+    associated with the data.
+    """
 
     def __init__(self):
         self._Vr = 1.0
@@ -122,8 +124,8 @@ class SmoothMixin(object):
 
     @staticmethod
     def nparam_to_val(n_params):
-        """Convert the number of parameters to the required input value
-        for the smoother."""
+        """Convert the number of parameters to the required input value for the
+        smoother."""
         assert (
             n_params >= 2
         ), """cannot initialise a smooth scale factor
@@ -134,9 +136,12 @@ class SmoothMixin(object):
 
 
 class SmoothScaleComponent1D(ScaleComponentBase, SmoothMixin):
-    """A smoothly varying scale component in one dimension.
+    """
+    A smoothly varying scale component in one dimension.
 
-    This class has the option to fix the first parameter during minimisation."""
+    This class has the option to fix the first parameter during
+    minimisation.
+    """
 
     null_parameter_value = 1.0
 
@@ -187,18 +192,18 @@ class SmoothScaleComponent1D(ScaleComponentBase, SmoothMixin):
                 self._parameter_esds.set_selected(sel, esds)
 
     def set_new_parameters(self, new_parameters):
-        """Set new parameters of a different length i.e. after batch handling"""
+        """Set new parameters of a different length i.e. after batch
+        handling."""
         self._parameters = new_parameters
         self._parameter_esds = None
         self._n_params = len(self._parameters)
 
     @property
     def normalised_values(self):
-        """This is a list of the relevant data needed to calculate the
-        inverse scale factors, normalised to give 'normalised coordinate
-        values' that fit in the range of the smoother parameters, which
-        are defined as a 1D array at normalised coordinates separated by
-        a spacing of 1."""
+        """This is a list of the relevant data needed to calculate the inverse
+        scale factors, normalised to give 'normalised coordinate values' that
+        fit in the range of the smoother parameters, which are defined as a 1D
+        array at normalised coordinates separated by a spacing of 1."""
         return self._normalised_values
 
     @ScaleComponentBase.data.setter
@@ -282,8 +287,8 @@ class SmoothScaleComponent1D(ScaleComponentBase, SmoothMixin):
 
 
 class SmoothBScaleComponent1D(SmoothScaleComponent1D):
-    """Subclass of SmoothScaleComponent1D to implement a smoothly
-    varying B-factor correction."""
+    """Subclass of SmoothScaleComponent1D to implement a smoothly varying
+    B-factor correction."""
 
     null_parameter_value = 0.0
 
@@ -343,13 +348,16 @@ class SmoothBScaleComponent1D(SmoothScaleComponent1D):
 
 
 class SmoothScaleComponent2D(ScaleComponentBase, SmoothMixin):
-    """Implementation of a 2D array-based smoothly varying scale factor.
+    """
+    Implementation of a 2D array-based smoothly varying scale factor.
 
-    A 2d array of parameters is defined, and the scale factor at fractional
-    coordinates is calculated as smoothly varying based on the distance to
-    the nearby parameters as calculated in the GaussianSmoother2D. The
-    initial values are passed as a 1D array, and shape is a 2-tuple
-    indicating the number of parameters in each dimension."""
+    A 2d array of parameters is defined, and the scale factor at
+    fractional coordinates is calculated as smoothly varying based on
+    the distance to the nearby parameters as calculated in the
+    GaussianSmoother2D. The initial values are passed as a 1D array, and
+    shape is a 2-tuple indicating the number of parameters in each
+    dimension.
+    """
 
     null_parameter_value = 1.0
 
@@ -371,7 +379,8 @@ class SmoothScaleComponent2D(ScaleComponentBase, SmoothMixin):
         self._data = data
 
     def set_new_parameters(self, new_parameters, shape):
-        """Set new parameters of a different length i.e. after batch handling"""
+        """Set new parameters of a different length i.e. after batch
+        handling."""
         assert len(new_parameters) == shape[0] * shape[1]
         self._parameters = new_parameters
         self._parameter_esds = None
@@ -400,7 +409,7 @@ class SmoothScaleComponent2D(ScaleComponentBase, SmoothMixin):
         return self._normalised_y_values
 
     def update_reflection_data(self, selection=None, block_selections=None):
-        """control access to setting all of reflection data at once"""
+        """control access to setting all of reflection data at once."""
 
         self._normalised_x_values = []
         self._normalised_y_values = []
@@ -481,13 +490,16 @@ class SmoothScaleComponent2D(ScaleComponentBase, SmoothMixin):
 
 
 class SmoothScaleComponent3D(ScaleComponentBase, SmoothMixin):
-    """Implementation of a 3D array-based smoothly varying scale factor.
+    """
+    Implementation of a 3D array-based smoothly varying scale factor.
 
-    A 3d array of parameters is defined, and the scale factor at fractional
-    coordinates is calculated as smoothly varying based on the distance to
-    the nearby parameters as calculated in the GaussianSmoother3D. The
-    initial values are passed as a 1D array, and shape is a 3-tuple
-    indicating the number of parameters in each dimension."""
+    A 3d array of parameters is defined, and the scale factor at
+    fractional coordinates is calculated as smoothly varying based on
+    the distance to the nearby parameters as calculated in the
+    GaussianSmoother3D. The initial values are passed as a 1D array, and
+    shape is a 3-tuple indicating the number of parameters in each
+    dimension.
+    """
 
     null_parameter_value = 1.0
 
@@ -506,7 +518,8 @@ class SmoothScaleComponent3D(ScaleComponentBase, SmoothMixin):
         self._normalised_z_values = None
 
     def set_new_parameters(self, new_parameters, shape):
-        """Set new parameters of a different length i.e. after batch handling"""
+        """Set new parameters of a different length i.e. after batch
+        handling."""
         assert len(new_parameters) == shape[0] * shape[1] * shape[2]
         self._parameters = new_parameters
         self._parameter_esds = None
@@ -551,7 +564,7 @@ class SmoothScaleComponent3D(ScaleComponentBase, SmoothMixin):
         return self._normalised_z_values
 
     def update_reflection_data(self, selection=None, block_selections=None):
-        """control access to setting all of reflection data at once"""
+        """control access to setting all of reflection data at once."""
         self._normalised_x_values = []
         self._normalised_y_values = []
         self._normalised_z_values = []

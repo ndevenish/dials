@@ -1,8 +1,6 @@
 # coding: utf-8
-"""
-Testing for other refiner/refinement small utilities that can be tested
-alone.
-"""
+"""Testing for other refiner/refinement small utilities that can be tested
+alone."""
 
 from __future__ import absolute_import, division, print_function
 

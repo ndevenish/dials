@@ -28,7 +28,8 @@ max_vectors = 30
 
 
 class RealSpaceGridSearch(Strategy):
-    """Basis vector search using a real space grid search.
+    """
+    Basis vector search using a real space grid search.
 
     See:
         Gildea, R. J., Waterman, D. G., Parkhurst, J. M., Axford, D., Sutton, G., Stuart, D. I., Sauter, N. K., Evans, G. & Winter, G. (2014). Acta Cryst. D70, 2652-2666.
@@ -37,7 +38,8 @@ class RealSpaceGridSearch(Strategy):
     phil_scope = phil.parse(real_space_grid_search_phil_str)
 
     def __init__(self, max_cell, target_unit_cell, params=None, *args, **kwargs):
-        """Construct a real_space_grid_search object.
+        """
+        Construct a real_space_grid_search object.
 
         Args:
             max_cell (float): An estimate of the maximum cell dimension of the primitive
@@ -63,9 +65,11 @@ class RealSpaceGridSearch(Strategy):
 
     @property
     def search_vectors(self):
-        """Generator of the search vectors.
+        """
+        Generator of the search vectors.
 
-        The lengths of the vectors correspond to the target unit cell dimensions.
+        The lengths of the vectors correspond to the target unit cell
+        dimensions.
         """
         unique_cell_dimensions = set(self._target_unit_cell.parameters()[:3])
         for i, direction in enumerate(self.search_directions):
@@ -74,7 +78,8 @@ class RealSpaceGridSearch(Strategy):
 
     @staticmethod
     def compute_functional(vector, reciprocal_lattice_vectors):
-        """Compute the functional for a single direction vector.
+        """
+        Compute the functional for a single direction vector.
 
         Args:
             vector (tuple): The vector at which to compute the functional.
@@ -88,7 +93,8 @@ class RealSpaceGridSearch(Strategy):
         return flex.sum(flex.cos(two_pi_S_dot_v))
 
     def score_vectors(self, reciprocal_lattice_vectors):
-        """Compute the functional for the given directions.
+        """
+        Compute the functional for the given directions.
 
         Args:
             directions: An iterable of the search directions.
@@ -106,7 +112,8 @@ class RealSpaceGridSearch(Strategy):
         return vectors, scores
 
     def find_basis_vectors(self, reciprocal_lattice_vectors):
-        """Find a list of likely basis vectors.
+        """
+        Find a list of likely basis vectors.
 
         Args:
             reciprocal_lattice_vectors (scitbx.array_family.flex.vec3_double):

@@ -111,8 +111,8 @@ phil_str = """
 
 
 def eval_flag_expression(expression, reflections):
-    """Test a Boolean expression of reflection flags for validity then
-    evaluate it"""
+    """Test a Boolean expression of reflection flags for validity then evaluate
+    it."""
 
     result = []
     tokens = iter(expression.split("\n"))
@@ -177,7 +177,7 @@ def eval_flag_expression(expression, reflections):
 
 
 def run_analysis(flags, reflections):
-    """Print a table of flags present in the reflections file"""
+    """Print a table of flags present in the reflections file."""
 
     header = ["flag", "nref"]
     rows = []

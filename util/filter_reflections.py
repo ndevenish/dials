@@ -61,7 +61,8 @@ class NoProfilesException(Exception):
 
 
 def filter_reflection_table(reflection_table, intensity_choice, *args, **kwargs):
-    """Filter the data and delete unneeded intensity columns.
+    """
+    Filter the data and delete unneeded intensity columns.
 
     A list of which intensities to filter on e.g "sum", "scale", "profile" or
     allowed combinations. If a combination is given, only those reflections
@@ -143,7 +144,8 @@ def filtered_arrays_from_experiments_reflections(
     partiality_threshold=0.99,
     return_batches=False,
 ):
-    """Create a list of filtered arrays from experiments and reflections.
+    """
+    Create a list of filtered arrays from experiments and reflections.
 
     A partiality threshold can be set, and if outlier_rejection_after_filter
     is True, and intensity.scale values are not present, then a round of
@@ -243,7 +245,8 @@ option partiality_threshold can be lowered to include partials."""
 
 
 def checkdataremains(func):
-    """Decorate a filtering method, to raise a ValueError if all data filtered."""
+    """Decorate a filtering method, to raise a ValueError if all data
+    filtered."""
 
     def wrapper(*args, **kwargs):
 
@@ -257,12 +260,13 @@ def checkdataremains(func):
 
 
 class FilteringReductionMethods(object):
-    """A collection of methods for filtering.
+    """
+    A collection of methods for filtering.
 
-    Some internal methods require an 'intensity' string, which indicates which
-    column to filter on. These methods can be called multiple times to filter
-    on multiple intensity choices. All methods may reduce the size of the
-    reflection table by deleting data.
+    Some internal methods require an 'intensity' string, which indicates
+    which column to filter on. These methods can be called multiple
+    times to filter on multiple intensity choices. All methods may
+    reduce the size of the reflection table by deleting data.
     """
 
     @staticmethod
@@ -390,10 +394,11 @@ class FilteringReductionMethods(object):
 
 
 class FilterForExportAlgorithm(FilteringReductionMethods):
-    """Definition of the filter_for_export algorithm.
+    """
+    Definition of the filter_for_export algorithm.
 
-    An abstract class, from which reduction methods for particular intensity
-    types can be implemented in a subclass.
+    An abstract class, from which reduction methods for particular
+    intensity types can be implemented in a subclass.
     """
 
     allowed_intensities = ["prf", "scale", "sum"]  # Supported intensities
@@ -480,7 +485,8 @@ class PrfIntensityReducer(FilterForExportAlgorithm):
     @staticmethod
     @checkdataremains
     def reduce_on_intensities(reflection_table):
-        """Select reflections successfully integrated by profile fitting.
+        """
+        Select reflections successfully integrated by profile fitting.
 
         Raises:
             NoProfilesException: Custom Exception to indicate no reflections
@@ -499,7 +505,8 @@ class PrfIntensityReducer(FilterForExportAlgorithm):
 
     @classmethod
     def apply_scaling_factors(cls, reflection_table):
-        """Apply corrections to the intensities and variances (partiality, lp, qe)."""
+        """Apply corrections to the intensities and variances (partiality, lp,
+        qe)."""
         if "partiality" in reflection_table:
             reflection_table = reflection_table.select(
                 reflection_table["partiality"] > 0.0
@@ -532,7 +539,8 @@ class SumIntensityReducer(FilterForExportAlgorithm):
 
     @classmethod
     def apply_scaling_factors(cls, reflection_table):
-        """Apply corrections to the intensities and variances (partiality, lp, qe)."""
+        """Apply corrections to the intensities and variances (partiality, lp,
+        qe)."""
         reflection_table, conversion = cls.calculate_lp_qe_correction_and_filter(
             reflection_table
         )
@@ -549,9 +557,11 @@ class SumIntensityReducer(FilterForExportAlgorithm):
 
 
 class SumAndPrfIntensityReducer(FilterForExportAlgorithm):
-    """Reduction methods for data with sum and profile intensities.
+    """
+    Reduction methods for data with sum and profile intensities.
 
-    Only reflections with valid values for all intensity types are retained.
+    Only reflections with valid values for all intensity types are
+    retained.
     """
 
     intensities = ["sum", "prf"]
@@ -559,7 +569,8 @@ class SumAndPrfIntensityReducer(FilterForExportAlgorithm):
     @staticmethod
     @checkdataremains
     def reduce_on_intensities(reflection_table):
-        """Select reflections successfully integrated by sum and prf methods."""
+        """Select reflections successfully integrated by sum and prf
+        methods."""
         if (
             reflection_table.get_flags(reflection_table.flags.integrated_prf).count(
                 True
@@ -581,7 +592,8 @@ class SumAndPrfIntensityReducer(FilterForExportAlgorithm):
 
     @classmethod
     def apply_scaling_factors(cls, reflection_table):
-        """Apply corrections to the intensities and variances (partiality, lp, qe)."""
+        """Apply corrections to the intensities and variances (partiality, lp,
+        qe)."""
         reflection_table, conversion = cls.calculate_lp_qe_correction_and_filter(
             reflection_table
         )
@@ -646,9 +658,11 @@ class ScaleIntensityReducer(FilterForExportAlgorithm):
 
 
 class AllSumPrfScaleIntensityReducer(FilterForExportAlgorithm):
-    """Reduction methods for data with sum, profile and scale intensities.
+    """
+    Reduction methods for data with sum, profile and scale intensities.
 
-    Only reflections with valid values for all intensity types are retained.
+    Only reflections with valid values for all intensity types are
+    retained.
     """
 
     intensities = ["sum", "prf", "scale"]
@@ -673,9 +687,11 @@ class AllSumPrfScaleIntensityReducer(FilterForExportAlgorithm):
 
 
 class SumAndScaleIntensityReducer(FilterForExportAlgorithm):
-    """Reduction methods for data with sum and scale intensities.
+    """
+    Reduction methods for data with sum and scale intensities.
 
-    Only reflections with valid values for all intensity types are retained.
+    Only reflections with valid values for all intensity types are
+    retained.
     """
 
     intensities = ["sum", "scale"]
@@ -696,11 +712,12 @@ class SumAndScaleIntensityReducer(FilterForExportAlgorithm):
 
 
 def sum_partial_reflections(reflection_table):
-    """Sum partial reflections if more than one recording of a reflection present.
+    """
+    Sum partial reflections if more than one recording of a reflection present.
 
-    This is a weighted sum for summation integration; weighted average for
-    profile fitted reflections. N.B. this will report total partiality for
-    the summed reflection.
+    This is a weighted sum for summation integration; weighted average
+    for profile fitted reflections. N.B. this will report total
+    partiality for the summed reflection.
     """
     nrefl = reflection_table.size()
     intensities = []

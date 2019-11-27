@@ -2,9 +2,9 @@
 Test command line program dials.refine by running a job with saved data and
 comparing with expected output.
 
-This serves as a high level test that not only checks whether refinement works,
-but also that the command line program is functioning and that the output models
-have not changed format and so on.
+This serves as a high level test that not only checks whether refinement
+works, but also that the command line program is functioning and that
+the output models have not changed format and so on.
 """
 
 from __future__ import absolute_import, division, print_function
@@ -62,9 +62,12 @@ def test1(dials_regression, tmpdir):
 
 
 def test2(dials_regression, tmpdir):
-    """Run scan-varying refinement, comparing RMSD table with expected values.
+    """
+    Run scan-varying refinement, comparing RMSD table with expected values.
+
     This test automates what was manually done periodically and recorded in
-    dials_regression/refinement_test_data/centroid/README.txt"""
+    dials_regression/refinement_test_data/centroid/README.txt
+    """
 
     # use the i04_weak_data for this test
     data_dir = os.path.join(dials_regression, "refinement_test_data", "centroid")
@@ -133,8 +136,8 @@ def test2(dials_regression, tmpdir):
 
 
 def test3(dials_regression, tmpdir):
-    """Strict check for scan-varying refinement using automated outlier rejection
-    block width and interval width setting"""
+    """Strict check for scan-varying refinement using automated outlier
+    rejection block width and interval width setting."""
 
     # use the i04_weak_data for this test
     data_dir = os.path.join(dials_regression, "refinement_test_data", "centroid")

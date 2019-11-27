@@ -88,10 +88,13 @@ rotation {
 
 
 def random_background_plane2(sbox, a, b, c, d):
-    """Draw values from Poisson distribution for each position where the mean for
+    """
+    Draw values from Poisson distribution for each position where the mean for.
+
     that distribition is equal to a + b * i + c * j + d * k where a, b, c, d are
     floating point values and i, j, k are the shoebox indices in directions x, y
-    and z respectively."""
+    and z respectively.
+    """
 
     from scitbx.random import variate, poisson_distribution
 
@@ -114,10 +117,13 @@ def random_background_plane2(sbox, a, b, c, d):
 
 
 def random_background_plane(sbox, a, b, c, d):
-    """Draw values from Poisson distribution for each position where the mean for
+    """
+    Draw values from Poisson distribution for each position where the mean for.
+
     that distribition is equal to a + b * i + c * j + d * k where a, b, c, d are
     floating point values and i, j, k are the shoebox indices in directions x, y
-    and z respectively."""
+    and z respectively.
+    """
 
     from scitbx.random import variate, poisson_distribution
 

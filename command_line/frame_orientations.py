@@ -1,8 +1,8 @@
 """
-Print a table of the orientation for every image of a dataset. The
-orientation is expressed as a zone axis (a direction referenced to the direct
-lattice) [uvw] giving the beam direction with respect to the crystal lattice.
-Take into account any scan-varying models.
+Print a table of the orientation for every image of a dataset. The orientation
+is expressed as a zone axis (a direction referenced to the direct lattice)
+[uvw] giving the beam direction with respect to the crystal lattice. Take into
+account any scan-varying models.
 
 Usage: dials.frame_orientations refined.expt
 """
@@ -142,7 +142,7 @@ class Script(object):
 
 def extract_experiment_data(exp, scale=1):
     """Extract lists of the image number, beam direction and zone axis from an
-    experiment"""
+    experiment."""
     crystal = exp.crystal
     beam = exp.beam
     scan = exp.scan

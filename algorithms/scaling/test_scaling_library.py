@@ -1,6 +1,4 @@
-"""
-Tests for scaling library module.
-"""
+"""Tests for scaling library module."""
 from __future__ import absolute_import, division, print_function
 
 import pytest
@@ -33,7 +31,7 @@ def test_reflections():
 
 @pytest.fixture
 def test_experiments():
-    """Make a test experiments list"""
+    """Make a test experiments list."""
     return generated_exp()
 
 
@@ -224,7 +222,8 @@ def test_create_scaling_model():
 
 
 def mock_intensity_array_from_cif_file(cif):
-    """Mock cif-intensity converter to replace call in create_datastructures..."""
+    """Mock cif-intensity converter to replace call in
+    create_datastructures..."""
     miller_set = miller.set(
         crystal_symmetry=crystal.symmetry(space_group=cif.space_group),
         indices=cif.indices,
@@ -239,8 +238,8 @@ def mock_intensity_array_from_cif_file(cif):
     side_effect=mock_intensity_array_from_cif_file,
 )
 def test_get_intensities_from_cif(_, test_reflections, test_experiments, mock_cif):
-    """Test the conversion of a cif file to reflections and experiments suitable
-    for scaling."""
+    """Test the conversion of a cif file to reflections and experiments
+    suitable for scaling."""
     exp, refl = create_datastructures_for_structural_model(
         [test_reflections], test_experiments, mock_cif
     )

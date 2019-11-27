@@ -2,7 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 
 def centroid_px_to_mm(detector, scan, position, variance, sd_error):
-    """Convenience function to calculate centroid in mm/rad from px"""
+    """Convenience function to calculate centroid in mm/rad from px."""
 
     # Get the pixel to millimeter function
     assert len(detector) == 1
@@ -10,7 +10,7 @@ def centroid_px_to_mm(detector, scan, position, variance, sd_error):
 
 
 def centroid_px_to_mm_panel(panel, scan, position, variance, sd_error):
-    """Convenience function to calculate centroid in mm/rad from px"""
+    """Convenience function to calculate centroid in mm/rad from px."""
     # Get the pixel to millimeter function
     pixel_size = panel.get_pixel_size()
     if scan is None:

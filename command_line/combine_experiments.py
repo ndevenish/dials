@@ -187,7 +187,8 @@ phil_scope = parse(
 
 
 def find_experiment_in(experiment, all_experiments):
-    """Search the phil experiment list and find where an experiment came from.
+    """
+    Search the phil experiment list and find where an experiment came from.
 
     :param Experiment experiment: The experiment to search for
     :param all_experiments:       The list of all experiments from phil
@@ -206,7 +207,7 @@ def find_experiment_in(experiment, all_experiments):
 
 
 class ComparisonError(Exception):
-    """Exception to indicate problem with tolerance comparisons"""
+    """Exception to indicate problem with tolerance comparisons."""
 
     pass
 
@@ -386,7 +387,7 @@ class Script(object):
         self.run_with_preparsed(params, options)
 
     def run_with_preparsed(self, params, options):
-        """Run combine_experiments, but allow passing in of parameters"""
+        """Run combine_experiments, but allow passing in of parameters."""
         # Try to load the models and data
         if len(params.input.experiments) == 0:
             print("No Experiments found in the input")

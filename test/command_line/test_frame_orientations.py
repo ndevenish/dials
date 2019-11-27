@@ -5,8 +5,11 @@ from dials.command_line.frame_orientations import extract_experiment_data
 
 
 def test_extract_experiment_data():
-    """Test basic operation of the extract_experiment_data function. Does not
-    test extraction of data from scan-varying models"""
+    """
+    Test basic operation of the extract_experiment_data function.
+
+    Does not test extraction of data from scan-varying models
+    """
 
     # Set up an Experiment with idealised geometry
     from dxtbx.model import BeamFactory

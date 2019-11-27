@@ -27,7 +27,7 @@ def validate_mtz(mtz_file, expected_labels, unexpected_labels=None):
 @pytest.mark.parametrize("anomalous", [True, False])
 @pytest.mark.parametrize("truncate", [True, False])
 def test_merge(dials_data, tmpdir, anomalous, truncate):
-    """Test the command line script with LCY data"""
+    """Test the command line script with LCY data."""
     # Main options: truncate on/off, anomalous on/off
 
     mean_labels = ["IMEAN", "SIGIMEAN"]

@@ -1,6 +1,4 @@
-"""
-Optimise the combination of profile and summation intensity values.
-"""
+"""Optimise the combination of profile and summation intensity values."""
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -19,7 +17,8 @@ def fast_merging_stats(array):
     """
     Quickly calculate required merging stats for intensity combination.
 
-    This is a cut-down version of iobtx.merging_statistics.merging_stats.
+    This is a cut-down version of
+    iobtx.merging_statistics.merging_stats.
     """
     assert array.sigmas() is not None
     positive_sel = array.sigmas() > 0
@@ -78,9 +77,8 @@ def _make_reflection_table_from_scaler(scaler):
 
 
 class SingleDatasetIntensityCombiner(object):
-    """
-    Class to combine profile and summation intensities for a single datset.
-    """
+    """Class to combine profile and summation intensities for a single
+    datset."""
 
     def __init__(self, scaler, use_Imid=None):
         if "intensity.prf.value" not in scaler.reflection_table:
@@ -147,7 +145,8 @@ class SingleDatasetIntensityCombiner(object):
             self.Imids = Imid_list
 
     def _test_Imid_combinations(self):
-        """Test the different combinations, returning the rows and results dict."""
+        """Test the different combinations, returning the rows and results
+        dict."""
         rows = []
         results = {}
 
@@ -228,9 +227,8 @@ def _calculate_suitable_combined_intensities(scaler, max_key):
 
 
 class MultiDatasetIntensityCombiner(object):
-    """
-    Class to combine profile and summation intensities for multiple datasets.
-    """
+    """Class to combine profile and summation intensities for multiple
+    datasets."""
 
     def __init__(self, multiscaler):
         self.active_scalers = multiscaler.active_scalers
@@ -354,7 +352,8 @@ class MultiDatasetIntensityCombiner(object):
 
 
 def _get_Is_from_Imidval(reflections, Imid):
-    """Intepret the Imid value to extract and return the Icomb and Vcomb values."""
+    """Intepret the Imid value to extract and return the Icomb and Vcomb
+    values."""
     if Imid == 0:  # special value to trigger prf
         Int = reflections["intensity.prf.value"]
         Var = reflections["intensity.prf.variance"]
@@ -413,8 +412,8 @@ def _determine_inverse_partiality(reflections):
 
 
 def _calculate_combined_raw_intensities(Iprf, Isum, Vprf, Vsum, Imid):
-    """Use partiality-corrected Isum, alongside Iprf to calculate
-    combined raw intensities."""
+    """Use partiality-corrected Isum, alongside Iprf to calculate combined raw
+    intensities."""
     w = 1.0 / (1.0 + (Isum / Imid) ** 3)
     w.set_selected(Isum <= 0, 1.0)
     Icomb = (w * Iprf) + ((1.0 - w) * Isum)

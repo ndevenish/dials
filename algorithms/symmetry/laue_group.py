@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 
 
 class LaueGroupAnalysis(symmetry_base):
-    """Determination of Laue group symmetry using algorithms similar to POINTLESS.
+    """
+    Determination of Laue group symmetry using algorithms similar to POINTLESS.
 
-    See also:
-      `Evans, P. (2006). Acta Cryst. D62, 72-82
-      <https://doi.org/10.1107/S0907444905036693>`_ and
-      `Evans, P. R. (2011). Acta Cryst. D67, 282-292
-      <https://doi.org/10.1107/S090744491003982X>`_.
+    See also:   `Evans, P. (2006). Acta Cryst. D62, 72-82
+    <https://doi.org/10.1107/S0907444905036693>`_ and   `Evans, P. R.
+    (2011). Acta Cryst. D67, 282-292
+    <https://doi.org/10.1107/S090744491003982X>`_.
     """
 
     def __init__(
@@ -37,7 +37,8 @@ class LaueGroupAnalysis(symmetry_base):
         relative_length_tolerance=None,
         absolute_angle_tolerance=None,
     ):
-        """Intialise a LaueGroupAnalysis object.
+        """
+        Intialise a LaueGroupAnalysis object.
 
         Args:
           intensities (cctbx.miller.array): The intensities on which to perform
@@ -77,7 +78,8 @@ class LaueGroupAnalysis(symmetry_base):
         self._score_laue_groups()
 
     def _estimate_cc_sig_fac(self):
-        """Estimation of sigma(CC) as a function of sample size.
+        """
+        Estimation of sigma(CC) as a function of sample size.
 
         Estimate the error in the correlation coefficient, sigma(CC) by using
         pairs of reflections at similar resolutions that are not related by
@@ -236,7 +238,8 @@ class LaueGroupAnalysis(symmetry_base):
         self.best_solution = self.subgroup_scores[0]
 
     def __str__(self):
-        """Return a string representation of the results.
+        """
+        Return a string representation of the results.
 
         Returns:
           str:
@@ -348,7 +351,8 @@ class LaueGroupAnalysis(symmetry_base):
         return "\n".join(output)
 
     def as_dict(self):
-        """Return a dictionary representation of the results.
+        """
+        Return a dictionary representation of the results.
 
         Returns:
           dict
@@ -379,7 +383,8 @@ class LaueGroupAnalysis(symmetry_base):
         return d
 
     def as_json(self, filename=None, indent=2):
-        """Return a json representation of the results.
+        """
+        Return a json representation of the results.
 
         Args:
           filename (str): Optional filename to export the json representation of
@@ -424,7 +429,8 @@ class ScoreCorrelationCoefficient(object):
 
     @property
     def p_cc_given_s(self):
-        """Probability of observing this CC if the sym op is present, p(CC; S).
+        """
+        Probability of observing this CC if the sym op is present, p(CC; S).
 
         Modelled by a Cauchy distribution centred on cc_true and width gamma = sigma_cc
         """
@@ -432,13 +438,14 @@ class ScoreCorrelationCoefficient(object):
 
     @property
     def p_cc_given_not_s(self):
-        """Probability of observing this CC if the sym op is NOT present, p(CC; !S).
-        """
+        """Probability of observing this CC if the sym op is NOT present, p(CC;
+        !S)."""
         return self._p_cc_given_not_s
 
     @property
     def p_s_given_cc(self):
-        """The likelihood of this symmetry element being present.
+        """
+        The likelihood of this symmetry element being present.
 
         p(S; CC) = p(CC; S) / (p(CC; S) + p(CC; !S))
         """
@@ -457,7 +464,8 @@ class ScoreCorrelationCoefficient(object):
 
 
 class ScoreSymmetryElement(object):
-    """Analyse intensities for presence of a given symmetry operation.
+    """
+    Analyse intensities for presence of a given symmetry operation.
 
     1) Calculate the correlation coefficient, CC, for the given sym op.
 
@@ -476,7 +484,8 @@ class ScoreSymmetryElement(object):
     """
 
     def __init__(self, intensities, sym_op, cc_true, cc_sig_fac):
-        """Initialise a ScoreSymmetryElement object.
+        """
+        Initialise a ScoreSymmetryElement object.
 
         Args:
           intensities (cctbx.miller.array): The intensities on which to perform
@@ -540,7 +549,8 @@ class ScoreSymmetryElement(object):
         self.likelihood = score_cc.p_s_given_cc
 
     def __str__(self):
-        """Return a string representation of the symmetry element scoring.
+        """
+        Return a string representation of the symmetry element scoring.
 
         Returns:
           str:
@@ -554,7 +564,8 @@ class ScoreSymmetryElement(object):
         )
 
     def as_dict(self):
-        """Return a dictionary representation of the symmetry element scoring.
+        """
+        Return a dictionary representation of the symmetry element scoring.
 
         The dictionary will contain the following keys:
           - likelihood: The likelihood of the symmetry element being present
@@ -577,7 +588,8 @@ class ScoreSymmetryElement(object):
 
 
 class ScoreSubGroup(object):
-    """Score the probability of a given subgroup being the true subgroup.
+    """
+    Score the probability of a given subgroup being the true subgroup.
 
     1) Calculates the combined correlation coefficients for symmetry operations
        present/absent from the subgroup.
@@ -592,7 +604,8 @@ class ScoreSubGroup(object):
     """
 
     def __init__(self, subgroup, sym_op_scores):
-        """Initialise a ScoreSubGroup object.
+        """
+        Initialise a ScoreSubGroup object.
 
         Args:
           subgroup (dict): A dictionary describing the subgroup as generated by
@@ -643,7 +656,8 @@ class ScoreSubGroup(object):
         self.confidence = 0
 
     def __str__(self):
-        """Return a string representation of the subgroup scores.
+        """
+        Return a string representation of the subgroup scores.
 
         Returns:
           str:
@@ -659,7 +673,8 @@ class ScoreSubGroup(object):
         )
 
     def as_dict(self):
-        """Return a dictionary representation of the subgroup scoring.
+        """
+        Return a dictionary representation of the subgroup scoring.
 
         The dictionary will contain the following keys:
           - patterson_group: The current subgroup
@@ -700,14 +715,16 @@ class ScoreSubGroup(object):
 
 
 class CorrelationCoefficientAccumulator(object):
-    """Class for incremental computation of correlation coefficients.
+    """
+    Class for incremental computation of correlation coefficients.
 
     Uses the single-pass formula for Pearson correlation coefficient:
       https://en.wikipedia.org/wiki/Pearson_correlation_coefficient#For_a_sample
     """
 
     def __init__(self, x=None, y=None):
-        """Initialise a CorrelationCoefficientAccumulator object.
+        """
+        Initialise a CorrelationCoefficientAccumulator object.
 
         Args:
           x (list): Optional list of `x` values to initialise the accumulator.
@@ -723,7 +740,8 @@ class CorrelationCoefficientAccumulator(object):
             self.accumulate(x, y)
 
     def accumulate(self, x, y):
-        """Accumulate the `x` and `y` values provided.
+        """
+        Accumulate the `x` and `y` values provided.
 
         Args:
           x (list): The list of `x` values to accumulate.
@@ -738,7 +756,8 @@ class CorrelationCoefficientAccumulator(object):
         self._sum_y_sq += flex.sum(flex.pow2(y))
 
     def coefficient(self):
-        """Calculate the correlation coefficient.
+        """
+        Calculate the correlation coefficient.
 
         Returns:
           float: The correlation coefficient.
@@ -748,7 +767,9 @@ class CorrelationCoefficientAccumulator(object):
         return self.numerator() / self.denominator()
 
     def n(self):
-        """Return the number of values contributing to the correlation coefficient.
+        """
+        Return the number of values contributing to the correlation
+        coefficient.
 
         Returns:
           n (int)
@@ -778,7 +799,9 @@ class CorrelationCoefficientAccumulator(object):
         )
 
     def __iadd__(self, other):
-        """Add together two instances of :class:`CorrelationCoefficientAccumulator`.
+        """
+        Add together two instances of
+        :class:`CorrelationCoefficientAccumulator`.
 
         Args:
           other (CorrelationCoefficientAccumulator):
@@ -797,7 +820,8 @@ class CorrelationCoefficientAccumulator(object):
 
 
 def trunccauchy_pdf(x, a, b, loc=0, scale=1):
-    """Calculate a truncated Cauchy probability density function.
+    """
+    Calculate a truncated Cauchy probability density function.
 
     Args:
       x (float): The point at which to calculate the PDF.

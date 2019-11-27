@@ -5,7 +5,8 @@ import abc
 
 
 class Parameter(object):
-    """A class to help formalise what a parameter is.
+    """
+    A class to help formalise what a parameter is.
 
     A Parameter must have a numerical value (either a length or an angle). It may
     also have a vector axis which provides context for what that number means.
@@ -21,7 +22,8 @@ class Parameter(object):
     """
 
     def __init__(self, value, axis=None, ptype=None, name="Parameter"):
-        """Initialisation for the Parameter class.
+        """
+        Initialisation for the Parameter class.
 
         Args:
             value (float): The initial parameter value.
@@ -70,7 +72,8 @@ class Parameter(object):
 
     @property
     def axis(self):
-        """A 3D column vector giving the direction of action of the parameter."""
+        """A 3D column vector giving the direction of action of the
+        parameter."""
         return self._axis
 
     def get_fixed(self):
@@ -78,15 +81,16 @@ class Parameter(object):
         return self._fixed
 
     def fix(self):
-        """Fix the parameter"""
+        """Fix the parameter."""
         self._fixed = True
 
     def unfix(self):
-        """Unfix (free) the parameter"""
+        """Unfix (free) the parameter."""
         self._fixed = False
 
     def __str__(self):
-        """Provide a descriptive string representation of the Parameter class"""
+        """Provide a descriptive string representation of the Parameter
+        class."""
 
         msg = "Parameter " + self.name + ":\n"
         try:
@@ -107,7 +111,8 @@ class Parameter(object):
 
 
 class ModelParameterisation(object):
-    """An abstract interface for the parameterisation of a model.
+    """
+    An abstract interface for the parameterisation of a model.
 
     Parameterisation of experimental objects, such as the detector, the beam,
     etc. should adhere to this interface in order to compose their state from
@@ -126,7 +131,8 @@ class ModelParameterisation(object):
     def __init__(
         self, model, initial_state, param_list, experiment_ids, is_multi_state=False
     ):
-        """Initialisation for the ModelParameterisation abstract base class.
+        """
+        Initialisation for the ModelParameterisation abstract base class.
 
         Args:
             model: The experimental model to be parameterised.
@@ -155,20 +161,20 @@ class ModelParameterisation(object):
         return
 
     def is_multi_state(self):
-        """Query whether this is a multi-state parameterisation or not (e.g. True
-        for a multi-panel detector parameterisation)"""
+        """Query whether this is a multi-state parameterisation or not (e.g.
+        True for a multi-panel detector parameterisation)"""
 
         return self._is_multi_state
 
     def num_free(self):
-        """Get the number of free parameters"""
+        """Get the number of free parameters."""
 
         if self._num_free is None:
             self._num_free = sum(not x.get_fixed() for x in self._param)
         return self._num_free
 
     def num_total(self):
-        """Get the total number of parameters, both fixed and free"""
+        """Get the total number of parameters, both fixed and free."""
         return self._total_len
 
     def get_experiment_ids(self):
@@ -176,24 +182,27 @@ class ModelParameterisation(object):
         return self._exp_ids
 
     def get_model(self):
-        """Get the model that is parameterised"""
+        """Get the model that is parameterised."""
         return self._model
 
     @abc.abstractmethod
     def compose(self):
-        """Compose the current model state.
+        """
+        Compose the current model state.
 
-        Using the initial state and the current parameter list, compose the current
-        state of the model. Also calculate the derivatives of the state wrt each
-        parameter in the list. Intended to be called automatically once parameters
-        are updated, e.g. at the end of each refinement cycle.
+        Using the initial state and the current parameter list, compose
+        the current state of the model. Also calculate the derivatives
+        of the state wrt each parameter in the list. Intended to be
+        called automatically once parameters are updated, e.g. at the
+        end of each refinement cycle.
         """
 
         # Specific methods for each model are defined by derived classes.
         pass
 
     def get_params(self, only_free=True):
-        """Get the internal list of parameters. It is intended that this function
+        """
+        Get the internal list of parameters. It is intended that this function
         be used for reporting parameter attributes, not for modifying them.
 
         Args:
@@ -209,7 +218,8 @@ class ModelParameterisation(object):
             return [x for x in self._param]
 
     def get_param_vals(self, only_free=True):
-        """Get the values of the internal list of parameters as a sequence of
+        """
+        Get the values of the internal list of parameters as a sequence of
         floats.
 
         Args:
@@ -225,7 +235,8 @@ class ModelParameterisation(object):
             return [x.value for x in self._param]
 
     def get_param_names(self, only_free=True):
-        """Get the list of names of the parameters.
+        """
+        Get the list of names of the parameters.
 
         Args:
             only_free (bool): Whether fixed parameters should have their names
@@ -239,7 +250,8 @@ class ModelParameterisation(object):
             return [x.name for x in self._param]
 
     def set_param_vals(self, vals):
-        """Set the values of the internal list of parameters from a sequence of
+        """
+        Set the values of the internal list of parameters from a sequence of
         floats.
 
         Args:
@@ -261,8 +273,9 @@ class ModelParameterisation(object):
         return
 
     def set_param_esds(self, esds):
-        """Set the estimated standard deviations of the internal list of parameters
-        from a sequence of floats.
+        """
+        Set the estimated standard deviations of the internal list of
+        parameters from a sequence of floats.
 
         Args:
             esds (list): A list of floating point parameter esd values, equal in
@@ -279,12 +292,13 @@ class ModelParameterisation(object):
         return
 
     def get_fixed(self):
-        """Get the list determining whether each parameter is fixed or not"""
+        """Get the list determining whether each parameter is fixed or not."""
 
         return [p.get_fixed() for p in self._param]
 
     def set_fixed(self, fix):
-        """Set parameters to be fixed or free.
+        """
+        Set parameters to be fixed or free.
 
         Args:
             fix (list): A list of bools, determining whether each parameter is
@@ -306,7 +320,8 @@ class ModelParameterisation(object):
 
     @abc.abstractmethod
     def get_state(self, multi_state_elt=None):
-        """Get the current state of the model under parameterisation.
+        """
+        Get the current state of the model under parameterisation.
 
         This is required, for example, by the calculation of finite
         difference gradients.
@@ -324,7 +339,8 @@ class ModelParameterisation(object):
         pass
 
     def get_ds_dp(self, only_free=True, multi_state_elt=None, use_none_as_null=False):
-        """Get a list of derivatives of the state wrt each parameter.
+        """
+        Get a list of derivatives of the state wrt each parameter.
 
         This is returned as a list in the same order as the internal list of
         parameters.
@@ -370,8 +386,10 @@ class ModelParameterisation(object):
         return [null if e is None else e for e in grads]
 
     def calculate_state_uncertainties(self, var_cov):
-        """Given a variance-covariance array for the parameters of this model,
-        propagate those estimated errors into the uncertainties of the model state
+        """
+        Given a variance-covariance array for the parameters of this model,
+        propagate those estimated errors into the uncertainties of the model
+        state.
 
         Args:
             var_cov: A variance-covariance matrix for the parameters of this model.
@@ -413,9 +431,10 @@ class ModelParameterisation(object):
         return state_covs
 
     def set_state_uncertainties(self, var_cov, multi_state_elt=None):
-        """Send the calculated variance-covariance matrix for model state elements
-        back to the model for storage alongside the model state, and potentially
-        use in further propagation of error calculations.
+        """
+        Send the calculated variance-covariance matrix for model state elements
+        back to the model for storage alongside the model state, and
+        potentially use in further propagation of error calculations.
 
         Args:
             var_cov: A variance-covariance matrix for the parameters of this model.

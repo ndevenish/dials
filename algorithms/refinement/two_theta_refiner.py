@@ -1,4 +1,4 @@
-"""Versions of refinement classes for two theta refinement of the unit cell"""
+"""Versions of refinement classes for two theta refinement of the unit cell."""
 
 from __future__ import absolute_import, division, print_function
 import logging
@@ -32,7 +32,7 @@ class ConstantTwoThetaWeightingStrategy(object):
 
 
 def calc_2theta(reflections, experiments):
-    """Calculate and return 2theta angles in radians"""
+    """Calculate and return 2theta angles in radians."""
 
     twotheta = flex.double(len(reflections), 0.0)
     for iexp, exp in enumerate(experiments):
@@ -143,8 +143,8 @@ class TwoThetaTarget(Target):
         return
 
     def predict(self):
-        """perform reflection prediction for the working reflections and update the
-        reflection manager"""
+        """perform reflection prediction for the working reflections and update
+        the reflection manager."""
 
         # get the matches
         reflections = self._reflection_manager.get_obs()
@@ -188,7 +188,7 @@ class TwoThetaTarget(Target):
         return residuals2
 
     def _rmsds_core(self, reflections):
-        """calculate unweighted RMSDs for the specified reflections"""
+        """calculate unweighted RMSDs for the specified reflections."""
 
         resid_2theta = flex.sum(reflections["2theta_resid2"])
         n = len(reflections)
@@ -197,7 +197,7 @@ class TwoThetaTarget(Target):
         return rmsds
 
     def achieved(self):
-        """RMSD criterion for target achieved"""
+        """RMSD criterion for target achieved."""
         r = self._rmsds if self._rmsds else self.rmsds()
 
         # reset cached rmsds to avoid getting out of step
@@ -264,8 +264,8 @@ class TwoThetaPredictionParameterisation(PredictionParameterisation):
         return d2theta_dp
 
     def _grads_xl_unit_cell_loop(self, reflections, results, callback=None):
-        """Loop over all crystal unit cell parameterisations, calculate gradients
-        and extend the results"""
+        """Loop over all crystal unit cell parameterisations, calculate
+        gradients and extend the results."""
 
         # loop over the crystal unit cell parameterisations
         for xlucp in self._xl_unit_cell_parameterisations:

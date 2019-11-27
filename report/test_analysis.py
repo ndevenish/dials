@@ -1,4 +1,4 @@
-"""Tests for dials.report.analysis module"""
+"""Tests for dials.report.analysis module."""
 from __future__ import absolute_import, division, print_function
 import pytest
 from mock import mock
@@ -92,8 +92,8 @@ def test_Rmerge_vs_batch(batch_array, data_array):
 def test_reflections_to_batch_properties(
     data_array, example_miller_set, example_crystal
 ):
-    """Test the helper functions that provide the batch properties from reflection
-    tables and experiments."""
+    """Test the helper functions that provide the batch properties from
+    reflection tables and experiments."""
     # first make a reflection table.
     reflections = flex.reflection_table()
     reflections["intensity.scale.value"] = data_array.data() * flex.double(9, 2.0)

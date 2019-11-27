@@ -1,5 +1,5 @@
 """Analysis of centroid residuals for determining suitable refinement and
-outlier rejection parameters automatically"""
+outlier rejection parameters automatically."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -115,8 +115,8 @@ class CentroidAnalyser(object):
     def __call__(
         self, calc_average_residuals=True, calc_periodograms=True, spans=(4, 4)
     ):
-        """Perform analysis and return the results as a list of dictionaries (one
-        for each experiment)"""
+        """Perform analysis and return the results as a list of dictionaries
+        (one for each experiment)"""
 
         # if not doing further analysis, return the basic data
         if not calc_average_residuals and not calc_periodograms:
@@ -211,7 +211,8 @@ class CentroidAnalyser(object):
 
     def _analyse_periodogram(self, pgram):
         """Use the periodogram pgram to suggest a suitable interval width for
-        scan-varying refinement to account for the major variation in residuals"""
+        scan-varying refinement to account for the major variation in
+        residuals."""
 
         if pgram is None:
             return None

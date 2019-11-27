@@ -86,8 +86,8 @@ def get_git_version(dials_path, treat_merges_as_single_commit=False):
 
 
 def dials_version():
-    """Try to obtain the current git revision number
-    and store a copy in .gitversion"""
+    """Try to obtain the current git revision number and store a copy in
+    .gitversion."""
     version = None
 
     try:

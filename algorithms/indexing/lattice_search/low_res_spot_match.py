@@ -117,15 +117,16 @@ max_quads = 600
 
 class LowResSpotMatch(Strategy):
     """Lattice search by matching low resolution spots to candidate indices
-    based on resolution and reciprocal space distance between observed spots.
-    """
+    based on resolution and reciprocal space distance between observed
+    spots."""
 
     phil_scope = libtbx.phil.parse(low_res_spot_match_phil_str)
 
     def __init__(
         self, target_symmetry_primitive, max_lattices, params=None, *args, **kwargs
     ):
-        """Construct a LowResSpotMatch object.
+        """
+        Construct a LowResSpotMatch object.
 
         Args:
             target_symmetry_primitive (cctbx.crystal.symmetry): The target
@@ -147,7 +148,8 @@ class LowResSpotMatch(Strategy):
         self.Bmat = matrix.sqr(uc.fractionalization_matrix()).transpose()
 
     def find_crystal_models(self, reflections, experiments):
-        """Find a list of candidate crystal models.
+        """
+        Find a list of candidate crystal models.
 
         Args:
             reflections (dials.array_family.flex.reflection_table):
@@ -256,9 +258,13 @@ class LowResSpotMatch(Strategy):
         return
 
     def _calc_obs_data(self, reflections, experiments):
-        """Calculates a set of low resolution observations to try to match to
-    indices. Each observation will record its d* value as well as
-    tolerated d* bands and a 'clock angle'"""
+        """
+        Calculates a set of low resolution observations to try to match to
+        indices.
+
+        Each observation will record its d* value as well as tolerated
+        d* bands and a 'clock angle'
+        """
 
         spot_d_star = reflections["rlp"].norms()
         if self._params.candidate_spots.limit_resolution_by == "n_spots":

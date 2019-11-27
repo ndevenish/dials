@@ -18,21 +18,15 @@ RAD2DEG = 180.0 / math.pi
 
 
 class MMCIFOutputFile(object):
-    """
-    Class to output experiments and reflections as MMCIF file
-    """
+    """Class to output experiments and reflections as MMCIF file."""
 
     def __init__(self, params):
-        """
-        Init with the filename
-        """
+        """Init with the filename."""
         self._cif = iotbx.cif.model.cif()
         self.params = params
 
     def write(self, experiments, reflections):
-        """
-        Write the experiments and reflections to file
-        """
+        """Write the experiments and reflections to file."""
 
         # if mmmcif filename is auto, then choose scaled.cif or integrated.cif
         if self.params.mmcif.hklout in (None, Auto, "auto"):

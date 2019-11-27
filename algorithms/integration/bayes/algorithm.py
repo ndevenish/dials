@@ -2,13 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 
 class IntegrationAlgorithm(object):
-    """A class to perform bayesian integration"""
+    """A class to perform bayesian integration."""
 
     def __init__(self, **kwargs):
         pass
 
     def __call__(self, reflections, image_volume=None):
-        """Process the reflections.
+        """
+        Process the reflections.
 
         :param reflections: The reflections to integrate
         :return: The list of integrated reflections

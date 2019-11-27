@@ -21,7 +21,7 @@ def test_register_scaling_observers():
     """Test the registering of the standard scaling observers."""
 
     class Scaler(Subject):
-        """Test scaler class"""
+        """Test scaler class."""
 
         def __init__(self):
             super(Scaler, self).__init__(
@@ -33,7 +33,7 @@ def test_register_scaling_observers():
             )
 
     class TestScript(Subject):
-        """Test script class"""
+        """Test script class."""
 
         def __init__(self):
             super(TestScript, self).__init__(
@@ -288,7 +288,8 @@ def test_MergingStatisticsObserver():
     assert "scale_vs_batch" in observer.data
 
     class MockResolution(object):
-        """A Mock class for ResolutionPlotsAndStats and IntensityStatisticsPlots."""
+        """A Mock class for ResolutionPlotsAndStats and
+        IntensityStatisticsPlots."""
 
         def __init__(self, *_, **__):
             self.binner = mock.Mock()
@@ -307,11 +308,11 @@ def test_MergingStatisticsObserver():
             return "return_tables"
 
         def generate_resolution_dependent_plots(self, *_):
-            """Mock method for namesake in IntensityStatisticsPlots"""
+            """Mock method for namesake in IntensityStatisticsPlots."""
             return {"cc_one_half": {"data": [{}, {}, {}, {}]}}
 
         def generate_miscellanous_plots(self, *_):
-            """Mock method for namesake in IntensityStatisticsPlots"""
+            """Mock method for namesake in IntensityStatisticsPlots."""
             return {"misc_plots": []}
 
     with mock.patch(

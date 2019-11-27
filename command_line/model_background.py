@@ -92,14 +92,10 @@ phil_scope = parse(
 
 
 class ImageGenerator(object):
-    """
-    Generate diagnostic images
-    """
+    """Generate diagnostic images."""
 
     def __init__(self, model):
-        """
-        Init the model
-        """
+        """Init the model."""
         import matplotlib
 
         matplotlib.use("Agg")
@@ -108,9 +104,7 @@ class ImageGenerator(object):
     def _save_plot(
         self, name, filename, extractor_fn, bounded=True, colorbar=True, vmax=None
     ):
-        """
-        Save the image
-        """
+        """Save the image."""
         from matplotlib import pylab
 
         for i, model in enumerate(self.model):
@@ -138,53 +132,37 @@ class ImageGenerator(object):
             pylab.savefig("%s_%d.png" % (filename, i), dpi=600, bbox_inches="tight")
 
     def save_min(self, filename):
-        """
-        Save the min image
-        """
+        """Save the min image."""
         self._save_plot("min", filename, lambda m: m.min_image)
 
     def save_max(self, filename):
-        """
-        Save the max image
-        """
+        """Save the max image."""
         self._save_plot("max", filename, lambda m: m.max_image)
 
     def save_mean(self, filename):
-        """
-        Save the mean image
-        """
+        """Save the mean image."""
         self._save_plot("mean", filename, lambda m: m.mean)
 
     def save_variance(self, filename):
-        """
-        Save the variance image
-        """
+        """Save the variance image."""
         self._save_plot("variance", filename, lambda m: m.variance)
 
     def save_dispersion(self, filename):
-        """
-        Save the dispersion image
-        """
+        """Save the dispersion image."""
         self._save_plot("dispersion", filename, lambda m: m.dispersion, vmax=2)
 
     def save_mask(self, filename):
-        """
-        Save the dispersion image
-        """
+        """Save the dispersion image."""
         self._save_plot(
             "mask", filename, lambda m: m.mask, bounded=False, colorbar=False
         )
 
     def save_model(self, filename):
-        """
-        Save the model image
-        """
+        """Save the model image."""
         self._save_plot("model", filename, lambda m: m.model)
 
     def save_polar_model(self, filename):
-        """
-        Save the polar model image
-        """
+        """Save the polar model image."""
         self._save_plot("polar model", filename, lambda m: m.polar_model, bounded=False)
 
 

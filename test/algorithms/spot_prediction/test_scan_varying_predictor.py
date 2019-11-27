@@ -1,7 +1,5 @@
-"""
-Test prediction of reflections using the scan-varying reflection
-predictor.
-"""
+"""Test prediction of reflections using the scan-varying reflection
+predictor."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -29,7 +27,7 @@ from cctbx.sgtbx import space_group, space_group_symbols
 
 
 def setup_models(args):
-    """setup the experimental models"""
+    """setup the experimental models."""
 
     # Setup experimental models
     master_phil = parse(
@@ -76,7 +74,7 @@ def setup_models(args):
 
 
 def ref_gen_static(experiments):
-    """Generate some reflections using the static predictor"""
+    """Generate some reflections using the static predictor."""
 
     beam = experiments[0].beam
     crystal = experiments[0].crystal
@@ -109,7 +107,7 @@ def ref_gen_static(experiments):
 
 
 def ref_gen_varying(experiments):
-    """Generate some reflections using the scan varying predictor"""
+    """Generate some reflections using the scan varying predictor."""
 
     beam = experiments[0].beam
     crystal = experiments[0].crystal
@@ -132,7 +130,7 @@ def ref_gen_varying(experiments):
 
 
 def sort_refs(reflections):
-    """Sort reflections by Miller index and entering flag"""
+    """Sort reflections by Miller index and entering flag."""
 
     refs_sorted = sorted(reflections.rows(), key=lambda x: x["entering"])
     refs_sorted = sorted(refs_sorted, key=lambda x: x["miller_index"][2])

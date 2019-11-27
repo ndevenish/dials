@@ -1,7 +1,5 @@
-"""
-Analysis of the origin of the diffraction pattern based on indexed and
-measured intensities.
-"""
+"""Analysis of the origin of the diffraction pattern based on indexed and
+measured intensities."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -36,7 +34,8 @@ def offset_miller_indices(indices, offset):
 def compute_miller_set_correlation(
     ms_a, ms_b, map_to_asu=False, merge_equivalents=False
 ):
-    """Compute correlation between two miller arrays.
+    """
+    Compute correlation between two miller arrays.
 
     Args:
       ms_a (cctbx.miller.array): Input miller.array `a`.

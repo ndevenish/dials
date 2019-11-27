@@ -4,21 +4,17 @@ from dials.util import tabulate
 
 
 class Array(object):
-    """
-    A class to represent an array
-    """
+    """A class to represent an array."""
 
     def __init__(self):
-        """
-        Initialise the array
-        """
+        """Initialise the array."""
         self.name = ""
         self.title = ""
         self.data = None
 
     def as_dict(self):
         """
-        Return as a dictionary
+        Return as a dictionary.
 
         :return: The dictionary
         """
@@ -32,7 +28,7 @@ class Array(object):
 
     def as_str(self, prefix=""):
         """
-        Return as a string
+        Return as a string.
 
         :return: The string
         """
@@ -40,14 +36,10 @@ class Array(object):
 
 
 class Table(object):
-    """
-    A class to represent a table
-    """
+    """A class to represent a table."""
 
     def __init__(self):
-        """
-        Initialize the table
-        """
+        """Initialize the table."""
         self.name = ""
         self.title = ""
         self.cols = []
@@ -55,7 +47,7 @@ class Table(object):
 
     def as_dict(self):
         """
-        Return as a dictionary
+        Return as a dictionary.
 
         :return: The dictionary
         """
@@ -81,7 +73,7 @@ class Table(object):
 
     def as_str(self, prefix=""):
         """
-        Return the table as a string
+        Return the table as a string.
 
         :return: The string
         """
@@ -93,20 +85,16 @@ class Table(object):
 
 
 class Report(object):
-    """
-    A class to represent the report
-    """
+    """A class to represent the report."""
 
     def __init__(self):
-        """
-        Initialize the tables
-        """
+        """Initialize the tables."""
         self.tables = []
         self.arrays = []
 
     def add_array(self, array):
         """
-        Add an array to the report
+        Add an array to the report.
 
         :param array: The array to add
         """
@@ -114,7 +102,7 @@ class Report(object):
 
     def add_table(self, table):
         """
-        Add a table to the report
+        Add a table to the report.
 
         :param table: The table to add
         """
@@ -122,7 +110,7 @@ class Report(object):
 
     def combine(self, other):
         """
-        Combine two reports
+        Combine two reports.
 
         :param other: The other report
         """
@@ -131,7 +119,7 @@ class Report(object):
 
     def as_dict(self):
         """
-        Return the report as a dictionary
+        Return the report as a dictionary.
 
         :return: The dictionary
         """
@@ -144,7 +132,7 @@ class Report(object):
 
     def as_str(self, prefix=""):
         """
-        Return the report as a string
+        Return the report as a string.
 
         :return: The string
         """
@@ -152,7 +140,7 @@ class Report(object):
 
     def as_json(self):
         """
-        Save the report as a json file
+        Save the report as a json file.
 
         :return: The json string
         """
@@ -162,7 +150,7 @@ class Report(object):
 
     def as_xml(self):
         """
-        Save the report as an xml file
+        Save the report as an xml file.
 
         :return: The XML string
         """
@@ -197,7 +185,7 @@ class Report(object):
 
     def as_file(self, filename):
         """
-        Export as a file (either json or xml depending on extension
+        Export as a file (either json or xml depending on extension.
 
         :param filename: The filename
         """

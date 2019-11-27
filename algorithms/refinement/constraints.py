@@ -41,7 +41,7 @@ phil_scope = parse(phil_str)
 
 class EqualShiftConstraint(object):
     """A single constraint between parameters of the same type in different
-    parameterisations"""
+    parameterisations."""
 
     def __init__(self, indices, parameter_vector):
 
@@ -153,7 +153,7 @@ class ConstraintManager(object):
 
 class SparseConstraintManager(ConstraintManager):
     def constrain_jacobian(self, jacobian):
-        """sparse matrix version of constrain_jacobian"""
+        """sparse matrix version of constrain_jacobian."""
 
         # select unconstrained columns only
         unconstr_block = jacobian.select_columns(self._unconstrained_idx)
@@ -179,8 +179,8 @@ class SparseConstraintManager(ConstraintManager):
 
 
 class ConstraintManagerFactory(object):
-    """Build equal shift constraints as requested in params and package into
-    a constraints manager to be linked to the Refinery"""
+    """Build equal shift constraints as requested in params and package into a
+    constraints manager to be linked to the Refinery."""
 
     def __init__(self, refinement_phil, pred_param, sparse=False):
 
@@ -191,7 +191,7 @@ class ConstraintManagerFactory(object):
 
     def build_constraint(self, constraint_scope, parameterisation, model_type):
         """Create a constraint for a single parameter specified by
-        constraint_scope"""
+        constraint_scope."""
 
         if constraint_scope.id is None:
             # get one experiment id for each parameterisation to apply to all

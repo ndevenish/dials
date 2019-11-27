@@ -449,8 +449,8 @@ class Model(ProfileModelExt):
         self, reflections, crystal, beam, detector, goniometer=None, scan=None, **kwargs
     ):
         """
-        Given an experiment and list of reflections, compute the partiality of the
-        reflections
+        Given an experiment and list of reflections, compute the partiality of
+        the reflections.
 
         :param reflections: The reflection table
         :param crystal: The crystal model
@@ -485,8 +485,9 @@ class Model(ProfileModelExt):
         sigma_b_multiplier=2.0,
         **kwargs
     ):
-        """Given an experiment and list of reflections, compute the
-        bounding box of the reflections on the detector (and image frames).
+        """
+        Given an experiment and list of reflections, compute the bounding box
+        of the reflections on the detector (and image frames).
 
         :param reflections: The reflection table
         :param crystal: The crystal model
@@ -571,7 +572,7 @@ class Model(ProfileModelExt):
 
     def fitting_class(self):
         """
-        Get the profile fitting algorithm associated with this profile model
+        Get the profile fitting algorithm associated with this profile model.
 
         :return: The profile fitting class
         """

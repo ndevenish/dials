@@ -20,13 +20,11 @@ logger = logging.getLogger(__name__)
 
 
 class FinalizeModel(object):
-    """
-    A class to finalize the background model
-    """
+    """A class to finalize the background model."""
 
     def __init__(self, experiments, filter_type="median", kernel_size=10, niter=100):
         """
-        Initialize the finalizer
+        Initialize the finalizer.
 
         :param experiments: The experiment list
         :param kernel_size: The median filter kernel size
@@ -54,7 +52,7 @@ class FinalizeModel(object):
 
     def finalize(self, data, mask):
         """
-        Finalize the model
+        Finalize the model.
 
         :param data: The data array
         :param mask: The mask array
@@ -148,9 +146,7 @@ class FinalizeModel(object):
 
 
 class BackgroundModellerResult(object):
-    """
-    A class to contain the modelling result
-    """
+    """A class to contain the modelling result."""
 
     def __init__(
         self,
@@ -163,9 +159,7 @@ class BackgroundModellerResult(object):
         model=None,
         polar_model=None,
     ):
-        """
-        Init the result
-        """
+        """Init the result."""
         self.mean = mean
         self.variance = variance
         self.dispersion = dispersion
@@ -261,13 +255,11 @@ class BackgroundModellerExecutor(object):
 
 
 class BackgroundModeller(object):
-    """
-    A class to help with background modelling
-    """
+    """A class to help with background modelling."""
 
     def __init__(self, experiments, reflections, params):
         """
-        Initialize the modeller
+        Initialize the modeller.
 
         :param experiments: The experiment list
         :param reflections: The reflections to process
@@ -285,9 +277,7 @@ class BackgroundModeller(object):
         self.model = None
 
     def compute(self):
-        """
-        Integrate the data
-        """
+        """Integrate the data."""
         from dials.algorithms.integration.image_integrator import ProcessorImage
         from dials.util.command_line import heading
 

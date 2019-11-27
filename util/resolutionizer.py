@@ -20,8 +20,12 @@ logger = logging.getLogger(__name__)
 
 
 def poly_residual(xp, y, params):
-    """Compute the residual between the observations y[i] and sum_j
-    params[j] x[i]^j. For efficiency, x[i]^j are pre-calculated in xp."""
+    """
+    Compute the residual between the observations y[i] and sum_j params[j]
+    x[i]^j.
+
+    For efficiency, x[i]^j are pre-calculated in xp.
+    """
 
     c = len(y)
 
@@ -31,9 +35,12 @@ def poly_residual(xp, y, params):
 
 
 def poly_gradients(xp, y, params):
-    """Compute the gradient of the residual w.r.t. the parameters, N.B.
-    will be performed using a finite difference method. N.B. this should
-    be trivial to do algebraicly."""
+    """
+    Compute the gradient of the residual w.r.t.
+
+    the parameters, N.B. will be performed using a finite difference
+    method. N.B. this should be trivial to do algebraicly.
+    """
 
     eps = 1.0e-6
 
@@ -53,8 +60,12 @@ def poly_gradients(xp, y, params):
 
 
 class poly_fitter(object):
-    """A class to do the polynomial fit. This will fit observations y
-    at points x with a polynomial of order n."""
+    """
+    A class to do the polynomial fit.
+
+    This will fit observations y at points x with a polynomial of order
+    n.
+    """
 
     def __init__(self, points, values, order):
         self.x = flex.double([1.0 for j in range(order)])
@@ -88,9 +99,13 @@ class poly_fitter(object):
 
 
 def fit(x, y, order):
-    """Fit the values y(x) then return this fit. x, y should
-    be iterables containing floats of the same size. The order is the order
-    of polynomial to use for this fit. This will be useful for e.g. I/sigma."""
+    """
+    Fit the values y(x) then return this fit.
+
+    x, y should be iterables containing floats of the same size. The
+    order is the order of polynomial to use for this fit. This will be
+    useful for e.g. I/sigma.
+    """
 
     logger.debug("fitter: %s %s %s", (x, y, order))
     pf = poly_fitter(x, y, order)
@@ -129,9 +144,13 @@ def tanh_fit(x, y, iqr_multiplier=None):
 
 
 def log_fit(x, y, order):
-    """Fit the values log(y(x)) then return exp() to this fit. x, y should
-    be iterables containing floats of the same size. The order is the order
-    of polynomial to use for this fit. This will be useful for e.g. I/sigma."""
+    """
+    Fit the values log(y(x)) then return exp() to this fit.
+
+    x, y should be iterables containing floats of the same size. The
+    order is the order of polynomial to use for this fit. This will be
+    useful for e.g. I/sigma.
+    """
 
     ly = [math.log(_y) for _y in y]
 
@@ -142,9 +161,13 @@ def log_fit(x, y, order):
 
 
 def log_inv_fit(x, y, order):
-    """Fit the values log(1 / y(x)) then return the inverse of this fit.
-    x, y should be iterables, the order of the polynomial for the transformed
-    fit needs to be specified. This will be useful for e.g. Rmerge."""
+    """
+    Fit the values log(1 / y(x)) then return the inverse of this fit.
+
+    x, y should be iterables, the order of the polynomial for the
+    transformed fit needs to be specified. This will be useful for e.g.
+    Rmerge.
+    """
 
     ly = [math.log(1.0 / _y) for _y in y]
 
@@ -636,10 +659,13 @@ class Resolutionizer(object):
         return r_isigma
 
     def resolution_completeness(self, limit=None):
-        """Compute a resolution limit where completeness < 0.5 (limit if
-        set) or the full extent of the data. N.B. this completeness is
-        with respect to the *maximum* completeness in a shell, to reflect
-        triclinic cases."""
+        """
+        Compute a resolution limit where completeness < 0.5 (limit if set) or
+        the full extent of the data.
+
+        N.B. this completeness is with respect to the *maximum*
+        completeness in a shell, to reflect triclinic cases.
+        """
 
         if limit is None:
             limit = self._params.completeness
@@ -681,8 +707,8 @@ class Resolutionizer(object):
         return r_comp
 
     def resolution_cc_half(self, limit=None):
-        """Compute a resolution limit where cc_half < 0.5 (limit if
-        set) or the full extent of the data."""
+        """Compute a resolution limit where cc_half < 0.5 (limit if set) or the
+        full extent of the data."""
 
         if limit is None:
             limit = self._params.cc_half
@@ -763,8 +789,8 @@ class Resolutionizer(object):
         return r_cc
 
     def resolution_cc_ref(self, limit=None):
-        """Compute a resolution limit where cc_ref < 0.5 (limit if
-        set) or the full extent of the data."""
+        """Compute a resolution limit where cc_ref < 0.5 (limit if set) or the
+        full extent of the data."""
 
         if limit is None:
             limit = self._params.cc_ref

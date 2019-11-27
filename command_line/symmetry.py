@@ -113,7 +113,7 @@ output {
 
 def map_to_minimum_cell(experiments, reflections, max_delta):
     """
-    Map experiments and reflections to the minimum cell
+    Map experiments and reflections to the minimum cell.
 
     Map to the minimum cell via the best cell, which appears to guarantee that the
     resulting minimum cells are consistent.
@@ -143,7 +143,7 @@ def map_to_minimum_cell(experiments, reflections, max_delta):
 
 def symmetry(experiments, reflection_tables, params=None):
     """
-    Run symmetry analysis
+    Run symmetry analysis.
 
     Args:
         experiments: An experiment list.

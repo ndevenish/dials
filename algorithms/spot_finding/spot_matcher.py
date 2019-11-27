@@ -8,7 +8,7 @@ class SpotMatcher(object):
 
     def __init__(self, max_separation=2):
         """
-        Setup the algorithm
+        Setup the algorithm.
 
         :param max_separation: Max pixel dist between predicted and observed spot
         """
@@ -106,7 +106,7 @@ class SpotMatcher(object):
 
     def _filter_duplicates(self, index, nn, dist):
         """
-        Filter the matches to remove duplicates
+        Filter the matches to remove duplicates.
 
         :param index: The indices of valid spots
         :param nn: The nearest neighbour indices

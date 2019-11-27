@@ -1,6 +1,5 @@
-"""
-Test derivatives typed up in dials_regression/doc/notes/prediction/stills_prediction_nave3.pdf
-"""
+"""Test derivatives typed up in
+dials_regression/doc/notes/prediction/stills_prediction_nave3.pdf."""
 
 from __future__ import absolute_import, division, print_function
 
@@ -39,7 +38,8 @@ class Predictor(object):
         self.update()
 
     def update(self):
-        """Build predictor objects for the current geometry of each Experiment"""
+        """Build predictor objects for the current geometry of each
+        Experiment."""
 
         self._predictor = StillsReflectionPredictor(
             self._experiment, spherical_relp=True
@@ -49,9 +49,7 @@ class Predictor(object):
         )
 
     def predict(self, reflections):
-        """
-        Predict for all reflections
-        """
+        """Predict for all reflections."""
 
         self._predictor.for_reflection_table(reflections, self._UB)
         return reflections
@@ -59,7 +57,8 @@ class Predictor(object):
 
 # Simplied equivalent of a PredictionParameterisation class for this test
 class AnalyticalGradients(object):
-    """A class to implement the analytical gradient calculation in the document"""
+    """A class to implement the analytical gradient calculation in the
+    document."""
 
     def __init__(
         self,

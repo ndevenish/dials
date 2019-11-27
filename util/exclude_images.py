@@ -1,8 +1,6 @@
-"""
-Functions for handling exclusion of images ranges from scans based on a
-command line option, as well as obtaining a selection to use for selecting
-the corresponding reflections.
-"""
+"""Functions for handling exclusion of images ranges from scans based on a
+command line option, as well as obtaining a selection to use for selecting the
+corresponding reflections."""
 from __future__ import absolute_import, division, print_function
 from dials.array_family import flex
 from orderedset import OrderedSet
@@ -22,9 +20,12 @@ phil_scope = iotbx.phil.parse(
 
 
 def exclude_image_ranges_from_scans(experiments, exclude_images):
-    """Using an exclude_images phil option, modify the valid image ranges for each
-    experiment in the scan (if it exists). Requires experiment identifiers to be
-    set already."""
+    """
+    Using an exclude_images phil option, modify the valid image ranges for each
+    experiment in the scan (if it exists).
+
+    Requires experiment identifiers to be set already.
+    """
     experiments = set_initial_valid_image_ranges(experiments)
     ranges_to_remove = _parse_exclude_images_commands(exclude_images, experiments)
     experiments = _remove_ranges_from_valid_image_ranges(experiments, ranges_to_remove)
@@ -32,7 +33,8 @@ def exclude_image_ranges_from_scans(experiments, exclude_images):
 
 
 def get_valid_image_ranges(experiments):
-    """Extract valid image ranges from experiments, returning None if no scan"""
+    """Extract valid image ranges from experiments, returning None if no
+    scan."""
     valid_images_ranges = []
     for exp in experiments:
         if exp.scan:
@@ -43,9 +45,12 @@ def get_valid_image_ranges(experiments):
 
 
 def set_initial_valid_image_ranges(experiments):
-    """Set the valid_image_range for each experiment to be the scan image range.
-    Kept separate from dxtbx.scan object as requires experiment indentifiers.
-    Also this function can be called for a mix of sequences and scanless experiments.
+    """
+    Set the valid_image_range for each experiment to be the scan image range.
+
+    Kept separate from dxtbx.scan object as requires experiment
+    indentifiers. Also this function can be called for a mix of
+    sequences and scanless experiments.
     """
     for exp in experiments:
         if exp.scan:
@@ -57,8 +62,9 @@ def set_initial_valid_image_ranges(experiments):
 
 
 def get_selection_for_valid_image_ranges(reflection_table, experiment):
-    """Determine a selection for the reflection table corresponding to reflections
-    that are located in valid image ranges (according to zobs.px.value)."""
+    """Determine a selection for the reflection table corresponding to
+    reflections that are located in valid image ranges (according to
+    zobs.px.value)."""
     if experiment.scan:
         valid_ranges = experiment.scan.get_valid_image_ranges(experiment.identifier)
         if valid_ranges:
@@ -74,11 +80,13 @@ def get_selection_for_valid_image_ranges(reflection_table, experiment):
 
 
 def _parse_exclude_images_commands(commands, experiments):
-    """Parse a list of list of command line options.
+    """
+    Parse a list of list of command line options.
 
     e.g. commands = [['1:101:200'], ['0:201:300']]
     or commands = [[101:200]] allowable for a single experiment.
-    builds and returns a list of tuples (exp_id, (start, stop))"""
+    builds and returns a list of tuples (exp_id, (start, stop))
+    """
     ranges_to_remove = []
     for com in commands:
         vals = com[0].split(":")
@@ -101,9 +109,12 @@ def _parse_exclude_images_commands(commands, experiments):
 
 
 def _remove_ranges_from_valid_image_ranges(experiments, ranges_to_remove):
-    """Update the valid_image_ranges for each experiment in the scans. Uses set
-    arithmetic to determine image ranges to keep and sets a new list of ranges in
-    the scan.valid_image_ranges dict."""
+    """
+    Update the valid_image_ranges for each experiment in the scans.
+
+    Uses set arithmetic to determine image ranges to keep and sets a new
+    list of ranges in the scan.valid_image_ranges dict.
+    """
     for r in ranges_to_remove:
         exp = experiments[experiments.find(r[0])]
         if not exp.scan:

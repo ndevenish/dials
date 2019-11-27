@@ -36,7 +36,7 @@ class ProcessorImageBase(object):
     @property
     def executor(self):
         """
-        Get the executor
+        Get the executor.
 
         :return: The executor
         """
@@ -45,7 +45,7 @@ class ProcessorImageBase(object):
     @executor.setter
     def executor(self, function):
         """
-        Set the executor
+        Set the executor.
 
         :param function: The executor
         """
@@ -113,9 +113,7 @@ class ProcessorImageBase(object):
 
 
 class Result(object):
-    """
-    A class representing a processing result.
-    """
+    """A class representing a processing result."""
 
     def __init__(self, index, reflections):
         """
@@ -151,13 +149,11 @@ class Dataset(object):
 
 
 class Task(object):
-    """
-    A class to perform a null task.
-    """
+    """A class to perform a null task."""
 
     def __init__(self, index, frames, reflections, experiments, params, executor):
         """
-        Initialise the task
+        Initialise the task.
 
         :param index: The index of the processing job
         :param frames: The frames to process
@@ -260,9 +256,7 @@ class Task(object):
 
 
 class ManagerImage(object):
-    """
-    A class to manage processing book-keeping
-    """
+    """A class to manage processing book-keeping."""
 
     def __init__(self, experiments, reflections, params):
         """
@@ -289,9 +283,7 @@ class ManagerImage(object):
         self.time = dials.algorithms.integration.TimingInfo()
 
     def initialize(self):
-        """
-        Initialise the processing
-        """
+        """Initialise the processing."""
         # Get the start time
         start_time = time()
 
@@ -316,9 +308,7 @@ class ManagerImage(object):
         self.time.initialize = time() - start_time
 
     def task(self, index):
-        """
-        Get a task.
-        """
+        """Get a task."""
         return Task(
             index=index,
             frames=self.manager.frames(index),
@@ -329,16 +319,12 @@ class ManagerImage(object):
         )
 
     def tasks(self):
-        """
-        Iterate through the tasks.
-        """
+        """Iterate through the tasks."""
         for i in range(len(self)):
             yield self.task(i)
 
     def accumulate(self, result):
-        """
-        Accumulate the results.
-        """
+        """Accumulate the results."""
         self.manager.accumulate(result.index, result.reflections)
         if result.data is not None:
             self.executor.accumulate(result.index, result.data)
@@ -347,9 +333,7 @@ class ManagerImage(object):
         self.time.total += result.total_time
 
     def finalize(self):
-        """
-        Finalize the processing and finish.
-        """
+        """Finalize the processing and finish."""
         # Get the start time
         start_time = time()
 
@@ -389,9 +373,7 @@ class ManagerImage(object):
         return ""
 
     def _split_reflections(self):
-        """
-        Split the reflections into partials or over job boundaries
-        """
+        """Split the reflections into partials or over job boundaries."""
 
         # Optionally split the reflection table into partials, otherwise,
         # split over job boundaries
@@ -420,21 +402,15 @@ class ProcessorImage(ProcessorImageBase):
 
 
 class InitializerRot(object):
-    """
-    A pre-processing class for oscillation data.
-    """
+    """A pre-processing class for oscillation data."""
 
     def __init__(self, experiments, params):
-        """
-        Initialise the pre-processor.
-        """
+        """Initialise the pre-processor."""
         self.experiments = experiments
         self.params = params
 
     def __call__(self, reflections):
-        """
-        Do some pre-processing.
-        """
+        """Do some pre-processing."""
         # Compute some reflection properties
         reflections.compute_zeta_multi(self.experiments)
         reflections.compute_d(self.experiments)
@@ -451,21 +427,15 @@ class InitializerRot(object):
 
 
 class FinalizerRot(object):
-    """
-    A post-processing class for oscillation data.
-    """
+    """A post-processing class for oscillation data."""
 
     def __init__(self, experiments, params):
-        """
-        Initialise the post processor.
-        """
+        """Initialise the post processor."""
         self.experiments = experiments
         self.params = params
 
     def __call__(self, reflections):
-        """
-        Do some post processing.
-        """
+        """Do some post processing."""
 
         # Compute the corrections
         reflections.compute_corrections(self.experiments)

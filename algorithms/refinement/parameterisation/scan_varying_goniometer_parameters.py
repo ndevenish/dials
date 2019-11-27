@@ -60,7 +60,7 @@ class ScanVaryingGoniometerParameterisation(
         return
 
     def compose(self, t):
-        """calculate state and derivatives for model at image number t"""
+        """calculate state and derivatives for model at image number t."""
 
         # Extract setting matrix from the initial state
         iS0 = self._initial_state
@@ -103,7 +103,7 @@ class ScanVaryingGoniometerParameterisation(
         return
 
     def get_state(self):
-        """Return setting matrix [S] at image number t"""
+        """Return setting matrix [S] at image number t."""
 
         # only a single goniometer is parameterised here, so no multi_state_elt
         # argument is allowed

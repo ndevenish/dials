@@ -16,11 +16,12 @@ logger = logging.getLogger("dials")
 def run_systematic_absences_checks(
     experiments, merged_reflections, significance_level=0.95
 ):
-    """Check for systematic absences in the data for the laue group.
+    """
+    Check for systematic absences in the data for the laue group.
 
-    Using a reflection table containing merged data, test screw axes and score
-    possible space groups. The crystals are updated with the most likely space
-    group.
+    Using a reflection table containing merged data, test screw axes and
+    score possible space groups. The crystals are updated with the most
+    likely space group.
     """
     # Get the laue class from the space group.
     space_group = experiments[0].crystal.get_space_group()

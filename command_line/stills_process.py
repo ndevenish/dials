@@ -823,7 +823,7 @@ class Processor(object):
         self.debug_write("integrate_ok_%d" % len(integrated), "done")
 
     def pre_process(self, experiments):
-        """Add any pre-processing steps here"""
+        """Add any pre-processing steps here."""
         pass
 
     def find_spots(self, experiments):
@@ -1154,8 +1154,9 @@ class Processor(object):
 
     def write_integration_pickles(self, integrated, experiments, callback=None):
         """
-        Write a serialized python dictionary with integrated intensities and other information
-        suitible for use by cxi.merge or prime.postrefine.
+        Write a serialized python dictionary with integrated intensities and
+        other information suitible for use by cxi.merge or prime.postrefine.
+
         @param integrated Reflection table with integrated intensities
         @param experiments Experiment list. One integration pickle for each experiment will be created.
         @param callback Deriving classes can use callback to make further modifications to the dictionary
@@ -1267,7 +1268,7 @@ class Processor(object):
         logger.info(" time taken: %g" % (time.time() - st))
 
     def finalize(self):
-        """Perform any final operations"""
+        """Perform any final operations."""
         if self.params.output.composite_output:
             if self.params.mp.composite_stride is not None:
                 assert self.params.mp.method == "mpi"

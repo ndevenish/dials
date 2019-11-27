@@ -10,8 +10,8 @@ from dials.viewer.viewer_low_level_util import (
 
 class show_3d(object):
     """
-
-    This is a useful class for developers to view 3D flex array(s) at low level code
+    This is a useful class for developers to view 3D flex array(s) at low level
+    code.
 
     It opens a WxPython `Frame` with sliced layers of the array(s).
 

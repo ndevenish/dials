@@ -1,8 +1,6 @@
 # coding: utf-8
-"""
-This module defines a number of general plots, which may be relevant to
-for reports of several programs.
-"""
+"""This module defines a number of general plots, which may be relevant to for
+reports of several programs."""
 from __future__ import absolute_import, division, print_function
 
 from collections import OrderedDict
@@ -143,7 +141,7 @@ https://doi.org/10.1107/S0907444910014836
 
 
 class ResolutionPlotterMixin(object):
-    """Define additional helper methods for plotting"""
+    """Define additional helper methods for plotting."""
 
     @staticmethod
     def _d_star_sq_to_d_ticks(d_star_sq, nticks):
@@ -457,9 +455,9 @@ class ResolutionPlotsAndStats(ResolutionPlotterMixin):
     Use iotbx dataset statistics objects to make plots and tables for reports.
 
     This class allows the generation of plots of various properties as a
-    function of resolution as well as a statistics table and summary table,
-    using the data from two iotbx.dataset_statistics objects, with
-    anomalous=False/True.
+    function of resolution as well as a statistics table and summary
+    table, using the data from two iotbx.dataset_statistics objects,
+    with anomalous=False/True.
     """
 
     def __init__(
@@ -476,7 +474,8 @@ class ResolutionPlotsAndStats(ResolutionPlotterMixin):
         self.is_centric = is_centric
 
     def make_all_plots(self):
-        """Make a dictionary containing all available resolution-dependent plots."""
+        """Make a dictionary containing all available resolution-dependent
+        plots."""
         d = OrderedDict()
         d.update(self.cc_one_half_plot())
         d.update(self.i_over_sig_i_plot())
@@ -1009,7 +1008,8 @@ https://doi.org/10.1107/S0907444905036693
 
     @staticmethod
     def del_anom_normal_plot(intensities, strong_cutoff=0.0):
-        """Make a normal probability plot of the normalised anomalous differences."""
+        """Make a normal probability plot of the normalised anomalous
+        differences."""
         diff_array = intensities.anomalous_differences()
         if not diff_array.data().size():
             return {}

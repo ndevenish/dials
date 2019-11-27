@@ -2,10 +2,11 @@
 Definitions of outlier rejection algorithms.
 
 These algorithms use the Ih_table datastructures to perform calculations
-in groups of symmetry equivalent reflections. Two functions are provided,
-reject_outliers, to reject outlier and set flags given a reflection table
-and experiment object, and determine_outlier_index_arrays, which takes an
-Ih_table and returns flex.size_t index arrays of the outlier positions.
+in groups of symmetry equivalent reflections. Two functions are
+provided, reject_outliers, to reject outlier and set flags given a
+reflection table and experiment object, and
+determine_outlier_index_arrays, which takes an Ih_table and returns
+flex.size_t index arrays of the outlier positions.
 """
 from __future__ import absolute_import, division, print_function
 
@@ -181,12 +182,17 @@ Outlier rejection algorithms require an Ih_table with nblocks = 1"""
         return final_outlier_arrays
 
     def _do_outlier_rejection(self):
-        """Add indices (w.r.t. the Ih_table data) to self._outlier_indices."""
+        """
+        Add indices (w.r.t.
+
+        the Ih_table data) to self._outlier_indices.
+        """
         raise NotImplementedError()
 
 
 class TargetedOutlierRejection(OutlierRejectionBase):
-    """Implementation of an outlier rejection algorithm against a target.
+    """
+    Implementation of an outlier rejection algorithm against a target.
 
     This algorithm requires a target Ih_table in addition to an Ih_table
     for the dataset under investigation. Normalised deviations are
@@ -204,7 +210,11 @@ Targeted outlier rejection requires a target Ih_table with nblocks = 1"""
         super(TargetedOutlierRejection, self).__init__(Ih_table, zmax)
 
     def _do_outlier_rejection(self):
-        """Add indices (w.r.t. the Ih_table data) to self._outlier_indices."""
+        """
+        Add indices (w.r.t.
+
+        the Ih_table data) to self._outlier_indices.
+        """
         Ih_table = self._Ih_table_block
         target = self._target_Ih_table_block
         target_asu_Ih_dict = dict(
@@ -242,14 +252,19 @@ Targeted outlier rejection requires a target Ih_table with nblocks = 1"""
 
 
 class SimpleNormDevOutlierRejection(OutlierRejectionBase):
-    """Algorithm using normalised deviations from the weighted intensity means.
+    """
+    Algorithm using normalised deviations from the weighted intensity means.
 
-    In this case, the weighted mean is calculated from all reflections in
-    the symmetry group excluding the test reflection.
+    In this case, the weighted mean is calculated from all reflections
+    in the symmetry group excluding the test reflection.
     """
 
     def _do_outlier_rejection(self):
-        """Add indices (w.r.t. the Ih_table data) to self._outlier_indices."""
+        """
+        Add indices (w.r.t.
+
+        the Ih_table data) to self._outlier_indices.
+        """
         Ih_table = self._Ih_table_block
         intensity = Ih_table.intensities
         g = Ih_table.inverse_scale_factors
@@ -277,14 +292,19 @@ class SimpleNormDevOutlierRejection(OutlierRejectionBase):
 
 
 class NormDevOutlierRejection(OutlierRejectionBase):
-    """Algorithm using normalised deviations from the weighted intensity means.
+    """
+    Algorithm using normalised deviations from the weighted intensity means.
 
-    In this case, the weighted mean is calculated from all reflections in
-    the symmetry group excluding the test reflection.
+    In this case, the weighted mean is calculated from all reflections
+    in the symmetry group excluding the test reflection.
     """
 
     def _do_outlier_rejection(self):
-        """Add indices (w.r.t. the Ih_table data) to self._outlier_indices."""
+        """
+        Add indices (w.r.t.
+
+        the Ih_table data) to self._outlier_indices.
+        """
         outlier_indices, other_potential_outliers = self._round_of_outlier_rejection()
         self._outlier_indices.extend(outlier_indices)
         internal_potential_outliers = other_potential_outliers

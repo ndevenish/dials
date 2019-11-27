@@ -205,9 +205,7 @@ class Script(object):
             self.reflections = [filtered_reflections]
 
     def read_experiments(self, experiments, reflections):
-        """
-        Get information from experiments and reflections
-        """
+        """Get information from experiments and reflections."""
 
         # Get space group and unit cell
         space_group = None
@@ -265,9 +263,7 @@ class Script(object):
         )
 
     def read_mtzfile(self, filename):
-        """
-        Read the mtz file
-        """
+        """Read the mtz file."""
         # Read the mtz file
         reader = any_reflection_file(filename)
 
@@ -314,10 +310,12 @@ class Script(object):
 
     @staticmethod
     def sort_deltacchalf_values(delta_cchalf_i, results_summary):
-        """Return the sorted datasets and cchalf values.
+        """
+        Return the sorted datasets and cchalf values.
 
-        Also add the sorted lists to the results summary. Datasets are sorted
-        from low to high based on deltacchalf values."""
+        Also add the sorted lists to the results summary. Datasets are
+        sorted from low to high based on deltacchalf values.
+        """
         datasets = list(delta_cchalf_i.keys())
         sorted_index = sorted(
             range(len(datasets)), key=lambda x: delta_cchalf_i[datasets[x]]
@@ -463,7 +461,8 @@ class Script(object):
     def remove_datasets_below_cutoff(
         experiments, reflections, ids_to_remove, results_summary
     ):
-        """Remove the datasets with ids in ids_to_remove.
+        """
+        Remove the datasets with ids in ids_to_remove.
 
         Remove from the experiemnts and reflections and add information to the
         results summary dict.

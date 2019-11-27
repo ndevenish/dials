@@ -36,7 +36,7 @@ dials.precommitbx.nagger.nag()
 
 
 def _install_dials_autocompletion():
-    """generate bash.sh and SConscript file in /build/dials/autocomplete"""
+    """generate bash.sh and SConscript file in /build/dials/autocomplete."""
     import libtbx.load_env
     import os  # required due to cctbx weirdness
 
