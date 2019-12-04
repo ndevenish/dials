@@ -106,7 +106,7 @@ class spot_wrapper(object):
         print("ZeroMQ binding requested at", endpoint)
         self.zmq_context = zmq.Context()
         self.zmq_socket = self.zmq_context.socket(zmq.PULL)
-        self.zmq_socket.bind("tcp://127.0.0.1:5557")
+        self.zmq_socket.bind(endpoint)
         self._zmq_thread = ZMQEventListener(self.zmq_socket, self.frame)
         self._zmq_thread.start()
 
