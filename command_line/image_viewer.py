@@ -1,3 +1,5 @@
+# LIBTBX_PRE_DISPATCHER_INCLUDE_SH export PHENIX_GUI_ENVIRONMENT=1
+
 from __future__ import absolute_import, division, print_function
 
 import sys
@@ -5,7 +7,8 @@ import sys
 import dials.util.log
 import iotbx.phil
 
-# LIBTBX_PRE_DISPATCHER_INCLUDE_SH export PHENIX_GUI_ENVIRONMENT=1
+from dials.util.image_viewer.spotfinder_wrap import spot_wrapper
+
 
 help_message = """
 
@@ -114,29 +117,9 @@ load_models = True
 )
 
 
-class Script(object):
-    """Class to run script."""
-
-    def __init__(self, params, experiments, reflections):
-        """Setup the script."""
-
-        # Filename data
-        self.params = params
-        self.experiments = experiments
-        self.reflections = reflections
-        self.wrapper = None
-
-    def __call__(self):
-        """Run the script."""
-        from dials.array_family import flex  # noqa
-
-        self.view()
-
-    def view(self):
-        from dials.util.image_viewer.spotfinder_wrap import spot_wrapper
-
-        self.wrapper = spot_wrapper(params=self.params)
-        self.wrapper.display(experiments=self.experiments, reflections=self.reflections)
+def show_image_viewer(params, experiments, reflections):
+    wrapper = spot_wrapper(params=params)
+    wrapper.display(experiments=experiments, reflections=reflections)
 
 
 if __name__ == "__main__":
@@ -189,7 +172,4 @@ if __name__ == "__main__":
 
         params.mask = easy_pickle.load(params.mask)
 
-    runner = Script(params=params, reflections=reflections, experiments=experiments)
-
-    # Run the script
-    runner()
+    show_image_viewer(params=params, reflections=reflections, experiments=experiments)
