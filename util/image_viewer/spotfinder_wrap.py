@@ -2,6 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 from .slip_viewer.frame import chooser_wrapper as _chooser_wrapper
 
+import wx
+
+import threading
+import time
+
+from .viewer_tools import ZeroMQEvent
+
 try:
     import resource
     import platform
@@ -47,6 +54,7 @@ class spot_wrapper(object):
     def __init__(self, params):
         self.params = params
         self.frame = None
+        self._zmq_thread = None
 
     def display(self, experiments, reflections):
         import wx
@@ -73,11 +81,65 @@ class spot_wrapper(object):
                 self.frame.add_file_name_or_data(chooser_wrapper(imageset, idx))
         # Make sure we load the first image as the current one
         self.frame.load_image(chooser_wrapper(imagesets[0], 0))
+
+        # If ZMQ required, setup the endpoint to dispatch messages to wx
+        if self.params.zmq_endpoint is not None:
+            self._setup_zmq_endpoint(self.params.zmq_endpoint)
+
         #   debug_memory_usage()
         app.MainLoop()
+
+        self._shutdown_zmq_endpoint()
 
     def load_image(self, filename):
         from dials.util.spotfinder_frame import create_load_image_event
 
         if self.frame is not None:
             create_load_image_event(self.frame, filename)
+
+    def _setup_zmq_endpoint(self, endpoint):
+        try:
+            import zmq
+        except ImportError:
+            print("ZMQ Endpoint requested but zeroMQ not installed; aborting")
+            raise RuntimeError("ZeroMQ not present")
+        print("ZeroMQ binding requested at", endpoint)
+        self.zmq_context = zmq.Context()
+        self.zmq_socket = self.zmq_context.socket(zmq.PULL)
+        self.zmq_socket.bind("tcp://127.0.0.1:5557")
+        self._zmq_thread = ZMQEventListener(self.zmq_socket, self.frame)
+        self._zmq_thread.start()
+
+    def _shutdown_zmq_endpoint(self):
+        print("Shutting down ZMQ endpoint")
+        # Wait for the thread to end
+        if self._zmq_thread is not None:
+            self._zmq_thread.stop = True
+            self._zmq_thread.join()
+
+        self.zmq_socket.close()
+
+
+class ZMQEventListener(threading.Thread):
+    def __init__(self, socket, target, *args, **kwargs):
+        super(ZMQEventListener, self).__init__(*args, **kwargs)
+        self.stop = False
+        self.socket = socket
+        self.target = target
+
+    def run(self):
+        print("Running in thread with socket ", self.socket)
+        while not self.stop:
+            event_count = self.socket.poll(timeout=0)
+            for _ in range(event_count):
+                message = self.socket.recv_json()
+                print("Recieved Message: ", message)
+                self._handle_message(message)
+            time.sleep(0.1)
+
+    def _handle_message(self, message):
+        evt = ZeroMQEvent(message=message)
+        # Create the event
+        # evt = SomeNewEvent(attr1="hello", attr2=654)
+        # Post the event
+        wx.PostEvent(self.target, evt)
