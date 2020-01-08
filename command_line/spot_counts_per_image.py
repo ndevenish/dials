@@ -43,6 +43,19 @@ id = None
 )
 
 
+def print_remerged_table(imageset_numbers, image_numbers, stats):
+    """Generates and prints a PIA table with inserted imageset information"""
+
+    rows = per_image_analysis.table(stats)
+
+    # Edit this table to insert the imageset/image number columns
+    rows[0] = ["Imageset", "IImage"] + rows[0]
+    for i in range(1, len(rows)):
+        rows[i] = [imageset_numbers[i - 1], image_numbers[i - 1]] + rows[i]
+
+    print(tabulate(rows, headers="firstrow"))
+
+
 def run(args):
     usage = "dials.spot_counts_per_image [options] imported.expt strong.refl"
 
@@ -104,12 +117,27 @@ def run(args):
         )
         all_stats.append(stats)
 
+    # Store the imageset number and image number for every row
+    summary_imageset_number = []
+    summary_image_number = []
+
     # transpose stats
     summary_table = {attrib: [] for attrib in per_image_analysis.Stats._fields}
-    for s in all_stats:
+    for i, s in enumerate(all_stats):
         for attrib, value in s._asdict().items():
             summary_table[attrib].extend(value)
-    per_image_analysis.print_table(per_image_analysis.Stats(**summary_table))
+        # Make a boatload of assumptions about image/imageset number mapping
+        summary_imageset_number.extend([i + 1] * len(value))
+        summary_image_number.extend(list(range(1, len(value) + 1)))
+
+    # # Because we don't want to change PIA code, reconstruct the imageset/image
+    # # numbers from the known order and size of imagesets
+    # for imageset in imageset_expts:
+    print_remerged_table(
+        summary_imageset_number,
+        summary_image_number,
+        per_image_analysis.Stats(**summary_table),
+    )
 
     # FIXME this is now probably nonsense...
     overall_stats = per_image_analysis.stats_single_image(
