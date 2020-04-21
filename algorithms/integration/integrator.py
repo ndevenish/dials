@@ -1021,7 +1021,7 @@ class Integrator(object):
         itt.task_begin(itt_domain, "reflection_initialization")
         # Initialize the reflections
         self.initialize_reflections(self.experiments, self.params, self.reflections)
-        itt.task_end()
+        itt.task_end(itt_domain)
 
         # Check if we want to do some profile fitting
         fitting_class = [e.profile.fitting_class() for e in self.experiments]
@@ -1190,7 +1190,7 @@ class Integrator(object):
 
                 # Set to the finalized fitter
                 profile_fitter = finalized_profile_fitter
-            itt.task_end()
+            itt.task_end(itt_domain)
 
         logger.info("=" * 80)
         logger.info("")
@@ -1213,21 +1213,21 @@ class Integrator(object):
         # Process the reflections
         self.reflections, _, time_info = processor.process()
 
-        itt.task_end()
+        itt.task_end(itt_domain)
         itt.task_begin(itt_domain, "finalization")
 
         # Finalize the reflections
         self.reflections, self.experiments = self.finalize_reflections(
             self.reflections, self.experiments, self.params
         )
-        itt.task_end()
+        itt.task_end(itt_domain)
         itt.task_begin(itt_domain, "report_generation")
 
         # Create the integration report
         self.integration_report = IntegrationReport(self.experiments, self.reflections)
         logger.info("")
         logger.info(self.integration_report.as_str(prefix=" "))
-        itt.task_end()
+        itt.task_end(itt_domain)
 
         # Print the time info
         logger.info("Timing information for integration")
