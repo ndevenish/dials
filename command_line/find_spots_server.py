@@ -5,6 +5,7 @@ import json
 import logging
 import sys
 import time
+import urllib.parse
 from multiprocessing import Process
 
 import libtbx.phil
@@ -264,8 +265,13 @@ class handler(server_base.BaseHTTPRequestHandler):
             global stop
             stop = True
             return
+
         filename = s.path.split(";")[0]
         params = s.path.split(";")[1:]
+
+        # If we're passing a url through, then unquote and ignore leading /
+        if "%3A//" in filename:
+            filename = urllib.parse.unquote(filename[1:])
 
         d = {"image": filename}
 
