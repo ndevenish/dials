@@ -2,12 +2,10 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
-#### Python and general cctbx imports
 from cctbx.sgtbx import space_group, space_group_symbols
 from libtbx.phil import parse
 from scitbx.math import five_number_summary
 
-#### dials imports
 from dials.array_family import flex
 
 ##### Import model builder
