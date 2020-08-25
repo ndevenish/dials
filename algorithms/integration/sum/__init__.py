@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 import typing
 
 from dials_algorithms_integration_sum_ext import sum_image_volume
+
 from dials_algorithms_integration_sum_ext import *  # noqa: F403; lgtm
 
 __all__ = (  # noqa: F405

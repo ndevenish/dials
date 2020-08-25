@@ -8,10 +8,12 @@
 #
 from __future__ import absolute_import, division, print_function
 
-import libtbx
-from dials.algorithms.refinement import DialsRefineConfigError
-from scitbx.array_family import flex
 import logging
+
+import libtbx
+from scitbx.array_family import flex
+
+from dials.algorithms.refinement import DialsRefineConfigError
 
 logger = logging.getLogger(__name__)
 from dials.algorithms.refinement.engine import DisableMPmixin

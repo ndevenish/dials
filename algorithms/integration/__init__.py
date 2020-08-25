@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
+
 from dials.util import tabulate
 
 from dials_algorithms_integration_ext import *  # noqa: F403; lgtm

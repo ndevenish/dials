@@ -1,4 +1,4 @@
-from __future__ import print_function, division
+from __future__ import division, print_function
 
 # Ok to delete this file on May 1, 2020
 print(

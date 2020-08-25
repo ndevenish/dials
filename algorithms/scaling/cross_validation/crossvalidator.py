@@ -6,13 +6,15 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 from copy import deepcopy
+
 import pkg_resources
+import six
+
+from libtbx import phil
+from libtbx.table_utils import simple_table
+from scitbx.array_family import flex
 
 from dials.algorithms.scaling.observers import register_merging_stats_observers
-from libtbx.table_utils import simple_table
-from libtbx import phil
-from scitbx.array_family import flex
-import six
 
 
 class CrossValidator(object):
