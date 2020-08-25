@@ -1,3 +1,4 @@
+# isort: skip
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -41,7 +42,6 @@ from .prediction_parameters_stills import (
     SphericalRelpStillsPredictionParameterisationSparse,
 )
 
-# PHIL
 from libtbx.phil import parse
 from dials.algorithms.refinement.parameterisation.autoreduce import (
     phil_str as autoreduce_phil_str,

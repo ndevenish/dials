@@ -1,3 +1,4 @@
+# isort: skip
 """
 Test refinement of beam, detector and crystal orientation parameters using
 generated reflection positions from ideal geometry, repeating tests with both a
@@ -5,7 +6,6 @@ single panel detector, and a geometrically identical 3x3 panel detector,
 ensuring the results are the same.
 """
 
-# Python and cctbx imports
 from __future__ import absolute_import, division, print_function
 from collections import namedtuple
 import pytest
