@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import math
+
 
 class ReflectionBlockIntegratorStills(object):
     """A class to perform the integration."""
@@ -64,8 +66,6 @@ class IntegratorStills(object):
                 # predicted = self._filter_reflections(params, exlist, predicted) # FIXME
 
             predicted = self._match_with_reference(predicted, reference)
-
-            import math
 
             from annlib_ext import AnnAdaptor
 

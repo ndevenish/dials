@@ -11,6 +11,7 @@ import itertools
 import logging
 import operator
 import os
+from time import time
 
 import six
 import six.moves.cPickle as pickle
@@ -828,8 +829,6 @@ class _(object):
         :param nthreads: The number of threads to use
         :return: A tuple containing read time and extract time
         """
-        from time import time
-
         from dials.model.data import make_image
 
         assert "shoebox" in self

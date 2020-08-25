@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import sys
 
 import iotbx.phil
 
@@ -125,6 +126,4 @@ def filter_reflections(reflections, depth):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import math
+from random import randint, seed
 
 import numpy as np
 
@@ -158,8 +159,6 @@ def test(dials_data):
 
 
 def generate_reflections(detector, beam, scan, experiment, num):
-    from random import randint, seed
-
     from dials.algorithms.shoebox import MaskCode
     from dials.array_family import flex
 

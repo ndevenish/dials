@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import os  # required due to cctbx weirdness
+
 import libtbx.pkg_utils
 
 import dials.precommitbx.nagger
@@ -57,8 +59,6 @@ def _create_dials_env_script():
     write dials environment setup script and clobber cctbx setup scripts
     does nothing unless a file named 'dials' exists above the build/ directory
     """
-    import os
-
     import libtbx.load_env
 
     filename = abs(libtbx.env.build_path.dirname() / "dials")
@@ -125,8 +125,6 @@ unset LIBTBX_BUILD
 
 def _install_dials_autocompletion():
     """generate bash.sh and SConscript file in /build/dials/autocomplete"""
-    import os  # required due to cctbx weirdness
-
     import libtbx.load_env
 
     # Find the dials source directory

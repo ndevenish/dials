@@ -12,11 +12,10 @@ cctbx.python tst_orientation_refinement.py \
 from __future__ import absolute_import, division, print_function
 
 import sys
+from math import pi
 
 
 def test(args=[]):
-    from math import pi
-
     from cctbx.sgtbx import space_group, space_group_symbols
 
     # Symmetry constrained parameterisation for the unit cell

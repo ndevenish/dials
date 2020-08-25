@@ -4,6 +4,7 @@ import copy
 import glob
 import logging
 import os
+import socket
 import sys
 import tarfile
 import time
@@ -824,8 +825,6 @@ class Processor(object):
             )
 
     def debug_start(self, tag):
-        import socket
-
         self.debug_str = "%s,%s" % (socket.gethostname(), tag)
         self.debug_str += ",%s,%s,%s\n"
         self.debug_write("start")

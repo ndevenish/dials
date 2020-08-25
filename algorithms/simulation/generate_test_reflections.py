@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 import itertools
 import math
 import random
+import sys
 
 from libtbx.phil import parse
 
@@ -419,8 +420,6 @@ def main(params):
 
 
 if __name__ == "__main__":
-    import sys
-
     from libtbx.phil import command_line
 
     cmd = command_line.argument_interpreter(master_params=master_phil)

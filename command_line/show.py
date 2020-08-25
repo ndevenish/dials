@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 import collections
 import os
+import sys
 
 import numpy as np
 
@@ -692,6 +693,4 @@ def show_reflections(
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

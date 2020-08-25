@@ -3,6 +3,8 @@ Tests for outlier rejection.
 """
 from __future__ import absolute_import, division, print_function
 
+import copy
+
 import pytest
 from mock import Mock
 
@@ -237,7 +239,6 @@ def test_limit_outlier_weights():
     rt2["miller_index"] = flex.miller_index([(0, 0, 1)] * rt.size())
 
     table = IhTable([rt, rt2], space_group("P 1"))
-    import copy
 
     new_weights = limit_outlier_weights(
         copy.deepcopy(table.Ih_table_blocks[0].weights),

@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 
 import gzip
 import io
+import sys
 
 import six
 
@@ -98,6 +99,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

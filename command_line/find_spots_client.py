@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from multiprocessing.pool import ThreadPool as thread_pool
+
 from future import standard_library
 
 standard_library.install_aliases()
@@ -91,8 +93,6 @@ def work_all(
     grid=None,
     nproc=None,
 ):
-    from multiprocessing.pool import ThreadPool as thread_pool
-
     if nproc is None:
         nproc = _nproc()
     pool = thread_pool(processes=nproc)

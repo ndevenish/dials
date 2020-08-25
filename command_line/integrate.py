@@ -23,6 +23,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import sys
+from math import pi
 
 from libtbx.phil import parse
 
@@ -247,7 +248,6 @@ def sample_predictions(experiments, predicted, params):
     # this code is very similar to David's code in algorithms/refinement/reflection_manager.py!
 
     # constants
-    from math import pi
 
     RAD2DEG = 180.0 / pi
 

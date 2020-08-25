@@ -2,13 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+import os
+import sys
+from os.path import exists, join
+
 
 def get_cwd():
     """
     Get the current working directory
     """
-    import sys
-
     return sys.argv[1]
 
 
@@ -16,8 +18,6 @@ def get_tid():
     """
     Get the task id
     """
-    import os
-
     # FIXME At the moment, there is no portable way to know the task id through
     # drmaa. This is really annoying. So we have to use the SGE_TASK_ID.
     # Therefore, this will only work for SGE. We can probably add support for
@@ -30,7 +30,6 @@ def get_tid():
 
 if __name__ == "__main__":
     import traceback
-    from os.path import exists, join
     from time import sleep
 
     import six.moves.cPickle as pickle

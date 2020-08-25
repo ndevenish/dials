@@ -1,5 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
+import os
+import subprocess
+
 # DIALS version numbers are constructed from
 #  1. a common prefix
 __dials_version_format = "DIALS %s"
@@ -10,9 +13,6 @@ __dials_version_default = "3.dev"
 
 
 def get_git_version(dials_path, treat_merges_as_single_commit=False):
-    import os
-    import subprocess
-
     version = None
     with open(os.devnull, "w") as devnull:
         # Obtain name of the current branch. If this fails then the other commands will probably also fail
@@ -91,8 +91,6 @@ def dials_version():
     version = None
 
     try:
-        import os
-
         dials_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         version_file = os.path.join(dials_path, ".gitversion")
 

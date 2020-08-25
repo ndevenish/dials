@@ -3,9 +3,11 @@
 from __future__ import absolute_import, division, print_function
 
 import copy
+import errno
 import itertools
 import math
 from collections import OrderedDict
+from os import makedirs
 
 import numpy as np
 
@@ -110,9 +112,6 @@ phil_scope = libtbx.phil.parse(
 
 def ensure_directory(path):
     """Make the directory if not already there."""
-    import errno
-    from os import makedirs
-
     try:
         makedirs(path)
     except OSError as e:

@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import math
+from random import uniform
 
 from dials.algorithms.profile_model.modeller import EmpiricalProfileModeller
 
@@ -121,8 +122,6 @@ class Test(object):
         return result
 
     def generate_identical_non_negative_profiles(self):
-        from random import uniform
-
         from dials.array_family import flex
 
         rlist = flex.reflection_table(1000)
@@ -142,8 +141,6 @@ class Test(object):
         return rlist, profiles, profile
 
     def generate_systematically_offset_profiles(self):
-        from random import uniform
-
         from dials.array_family import flex
 
         rlist = flex.reflection_table(1000)

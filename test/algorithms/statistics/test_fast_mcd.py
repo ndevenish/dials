@@ -2,6 +2,8 @@
 algorithm"""
 from __future__ import absolute_import, division, print_function
 
+import os
+
 
 def test_maha():
 
@@ -206,7 +208,6 @@ def test_fast_mcd_large(dials_regression):
     flex.set_random_seed(42)
 
     # test large dataset algorithm
-    import os
 
     data_pth = os.path.join(
         dials_regression, "refinement_test_data", "outlier_rejection", "residuals.dat"

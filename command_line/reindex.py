@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 
 import copy
 import os
+import sys
 
 import six.moves.cPickle as pickle
 
@@ -352,6 +353,4 @@ experiments file must also be specified with the option: reference= """
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

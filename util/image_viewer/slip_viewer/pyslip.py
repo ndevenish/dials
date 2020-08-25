@@ -21,6 +21,7 @@ difficulty for most uses is to generate the map tiles.
 from __future__ import absolute_import, division, print_function
 
 import glob
+import json
 import math
 import os
 import sys
@@ -482,8 +483,6 @@ class Resource(object):
 
         if not self.filename:
             raise Exception("Write() called but no filename supplied")
-
-        import json
 
         json.dump(
             self.layers,
