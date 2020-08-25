@@ -1,4 +1,4 @@
-# isort: skip
+# isort: skip_file
 """
 Test refinement of beam, detector and crystal orientation parameters using
 generated reflection positions from ideal geometry, repeating tests with both a
