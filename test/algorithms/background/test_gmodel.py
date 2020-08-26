@@ -2,12 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import procrunner
 import pytest
+import six.moves.cPickle as pickle
 
 
 @pytest.fixture
 def model(tmpdir):
-    import six.moves.cPickle as pickle
-
     from dials.algorithms.background.gmodel import StaticBackgroundModel
     from dials.array_family import flex
 

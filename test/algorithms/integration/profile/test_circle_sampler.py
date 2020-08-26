@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function
 import math
 import random
 
+import six.moves.cPickle as pickle
+
 
 def test_getters():
     from dials.algorithms.profile_model.modeller import CircleSampler
@@ -258,8 +260,6 @@ def test_z_index():
 
 
 def test_pickle():
-    import six.moves.cPickle as pickle
-
     from dials.algorithms.profile_model.modeller import CircleSampler
 
     width = 1000

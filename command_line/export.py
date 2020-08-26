@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function
 import logging
 import sys
 
+from six.moves import cStringIO as StringIO
+
 from iotbx.phil import parse
 from libtbx import Auto
 
@@ -272,7 +274,6 @@ def export_mtz(params, experiments, reflections):
         )
 
     m = export_mtz(reflections[0], experiments, params)
-    from six.moves import cStringIO as StringIO
 
     summary = StringIO()
     m.show_summary(out=summary)

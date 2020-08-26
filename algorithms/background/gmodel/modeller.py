@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+import six.moves.cPickle as pickle
+
 from dials.util.phil import parse
 
 logger = logging.getLogger(__name__)
@@ -115,8 +117,6 @@ class Creator(object):
         self.background = self.modeller.compute()
         self.modeller = None
         if self.params.debug.output:
-            import six.moves.cPickle as pickle
-
             filename = self.params.debug.filename
             logger.info("Writing background model to %s" % filename)
             with open(filename, "wb") as outfile:

@@ -4,6 +4,8 @@ import logging
 import math
 import os
 
+import six.moves.cPickle as pickle
+
 import libtbx
 
 from dials.array_family import flex
@@ -738,8 +740,6 @@ class SpotFinder(object):
         :param experiments: The experiments to process
         :return: The observed spots
         """
-        import six.moves.cPickle as pickle
-
         from dxtbx.format.image import ImageBool
 
         # Loop through all the experiments and get the unique imagesets

@@ -2,6 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
+import six.moves.cPickle as pickle
+
 import iotbx.phil
 from scitbx.array_family import flex
 
@@ -118,8 +120,6 @@ def estimate_gain(imageset, kernel_size=(10, 10), output_gain_map=None, max_imag
     if output_gain_map:
         if len(gains) > 1:
             raw_data = imageset.get_raw_data(0)
-
-        import six.moves.cPickle as pickle
 
         # write the gain map
         gain_map = flex.double(flex.grid(raw_data[0].all()), gain0)

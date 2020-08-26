@@ -6,6 +6,8 @@ import os
 import sys
 from os.path import exists, join
 
+import six.moves.cPickle as pickle
+
 
 def get_cwd():
     """
@@ -31,8 +33,6 @@ def get_tid():
 if __name__ == "__main__":
     import traceback
     from time import sleep
-
-    import six.moves.cPickle as pickle
 
     # Get the task id and the current working directory
     tid = get_tid()

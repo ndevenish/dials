@@ -5,6 +5,8 @@ import math
 import random
 import sys
 
+import six.moves.cPickle as pickle
+
 from libtbx.phil import parse
 
 master_phil = parse(
@@ -404,8 +406,6 @@ def main(params):
 
     overestimates = rlist.select(flex.size_t(overestimates))
     underestimates = rlist.select(flex.size_t(underestimates))
-
-    import six.moves.cPickle as pickle
 
     # now pickle these, perhaps
     if params.output.under:
