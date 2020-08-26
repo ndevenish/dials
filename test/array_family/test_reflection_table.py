@@ -706,9 +706,9 @@ def test_serialize():
     table["col2"] = flex.double(c2)
     table["col3"] = flex.std_string(c3)
 
-    # Pickle, then unpickle
     import six.moves.cPickle as pickle
 
+    # Pickle, then unpickle
     obj = pickle.dumps(table)
     new_table = pickle.loads(obj)
     assert new_table.is_consistent()

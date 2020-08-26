@@ -404,10 +404,10 @@ def main(params):
 
     overestimates = rlist.select(flex.size_t(overestimates))
     underestimates = rlist.select(flex.size_t(underestimates))
-    # now pickle these, perhaps
 
     import six.moves.cPickle as pickle
 
+    # now pickle these, perhaps
     if params.output.under:
         with open(params.output.under, "wb") as fh:
             pickle.dump(underestimates, fh, pickle.HIGHEST_PROTOCOL)
