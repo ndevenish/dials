@@ -17,6 +17,8 @@ import urllib.request
 
 import libtbx.phil
 
+from dxtbx.model.crystal import CrystalFactory
+
 
 def work(host, port, filename, params):
     conn = http.client.HTTPConnection(host, port)
@@ -53,8 +55,6 @@ def response_to_xml(d):
         return "<response>\n%s\n</response>" % d["error"]
 
     if "lattices" in d:
-        from dxtbx.model.crystal import CrystalFactory
-
         for lattice in d["lattices"]:
             crystal = CrystalFactory.from_dict(lattice["crystal"])
             response = "\n".join(

@@ -103,9 +103,9 @@ def test_run(dials_regression, tmpdir):
         result_new.experiments[0].crystal.get_unit_cell().parameters(), abs=1e-6
     )
 
-    # Now test refinement gradients are correct
     from dxtbx.model.experiment_list import Experiment, ExperimentList
 
+    # Now test refinement gradients are correct
     old_exps = ExperimentList(
         [
             Experiment(

@@ -13,6 +13,8 @@ import iotbx.phil
 from cctbx import sgtbx
 from rstbx.symmetry.constraints import parameter_reduction
 
+from dxtbx.serialize import load
+
 from dials.algorithms.indexing.assign_indices import AssignIndicesGlobal
 from dials.array_family import flex
 from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
@@ -184,8 +186,6 @@ def run(args):
 
     reference_crystal = None
     if params.reference.experiments is not None:
-        from dxtbx.serialize import load
-
         reference_experiments = load.experiment_list(
             params.reference.experiments, check_format=False
         )

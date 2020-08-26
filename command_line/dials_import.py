@@ -17,6 +17,7 @@ from dxtbx.model.experiment_list import (
     ExperimentListFactory,
     ExperimentListTemplateImporter,
 )
+from dxtbx.serialize import load
 
 from dials.util import Sorry, show_mail_on_error
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
@@ -279,8 +280,6 @@ class ReferenceGeometryUpdater(object):
         reference_detector = None
         reference_beam = None
         if params.input.reference_geometry is not None:
-            from dxtbx.serialize import load
-
             experiments = None
             experiments = load.experiment_list(
                 params.input.reference_geometry, check_format=False

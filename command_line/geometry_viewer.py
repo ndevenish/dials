@@ -18,6 +18,7 @@ from scitbx.array_family import flex
 from scitbx.math import minimum_covering_sphere
 
 from dxtbx.model import MultiAxisGoniometer
+from dxtbx.model.goniometer import GoniometerFactory
 
 from dials.util import wx_viewer
 
@@ -640,7 +641,6 @@ def run(args):
             params.detector_distance = detector[0].get_directed_distance()
 
     if gonio is not None and not isinstance(gonio, MultiAxisGoniometer):
-        from dxtbx.model.goniometer import GoniometerFactory
 
         gonio = GoniometerFactory.multi_axis(
             axes=flex.vec3_double((gonio.get_rotation_axis(),)),

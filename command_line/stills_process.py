@@ -17,6 +17,9 @@ from six import BytesIO
 from libtbx.phil import parse
 from libtbx.utils import Abort, Sorry
 
+import dxtbx
+from dxtbx.imageset import ImageSetFactory
+from dxtbx.model import Detector
 from dxtbx.model.experiment_list import (
     Experiment,
     ExperimentList,
@@ -273,8 +276,6 @@ def do_import(filename, load_models=True):
     if len(experiments) == 0:
         raise Abort("Could not load %s" % filename)
 
-    from dxtbx.imageset import ImageSetFactory
-
     all_experiments = ExperimentList()
     for experiment in experiments:
         # Convert from ImageSequence to ImageSet, if needed
@@ -318,16 +319,12 @@ class Script(object):
         if self.params.input.reference_geometry is None:
             return
 
-        from dxtbx.model.experiment_list import ExperimentListFactory
-
         try:
             ref_experiments = ExperimentListFactory.from_json_file(
                 self.params.input.reference_geometry, check_format=False
             )
         except Exception:
             try:
-                import dxtbx
-
                 img = dxtbx.load(self.params.input.reference_geometry)
             except Exception:
                 raise Sorry(
@@ -503,8 +500,6 @@ class Script(object):
                         continue
 
                     if self.reference_detector is not None:
-                        from dxtbx.model import Detector
-
                         experiment = item[1][0]
                         imageset = experiment.imageset
                         imageset.set_detector(
@@ -577,8 +572,6 @@ class Script(object):
                         continue
 
                     if self.reference_detector is not None:
-                        from dxtbx.model import Detector
-
                         imageset = experiments[0].imageset
                         imageset.set_detector(
                             Detector.from_dict(self.reference_detector.to_dict())
@@ -738,7 +731,6 @@ class Processor(object):
 
         if params.output.composite_output:
             assert composite_tag is not None
-            from dxtbx.model.experiment_list import ExperimentList
 
             # self.all_strong_reflections = flex.reflection_table() # no composite strong pickles yet
             self.all_indexed_experiments = ExperimentList()
@@ -1172,8 +1164,6 @@ class Processor(object):
                 )()
 
         if self.params.significance_filter.enable:
-            from dxtbx.model.experiment_list import ExperimentList
-
             from dials.algorithms.integration.stills_significance_filter import (
                 SignificanceFilter,
             )
