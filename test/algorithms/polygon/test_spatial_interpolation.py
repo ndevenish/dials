@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import random
+from math import cos, pi, sin, sqrt
 
 from dials.algorithms.polygon.spatial_interpolation import (
     regrid_grid_to_irregular_grid,
@@ -139,8 +140,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_known_orientation():
-        from math import cos, pi, sin, sqrt
-
         from scitbx import matrix
         from scitbx.array_family import flex
 
@@ -180,8 +179,6 @@ class TestRegridIrregularToRegular(object):
 
     @staticmethod
     def test_conservation_of_counts():
-        from math import cos, pi, sin
-
         from scitbx import matrix
         from scitbx.array_family import flex
 
@@ -348,8 +345,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_known_orientation():
-        from math import cos, pi, sin, sqrt
-
         from scitbx import matrix
         from scitbx.array_family import flex
 
@@ -387,8 +382,6 @@ class TestRegridRegularToIrregular(object):
 
     @staticmethod
     def test_conservation_of_counts():
-        from math import cos, pi, sin
-
         from scitbx import matrix
         from scitbx.array_family import flex
 

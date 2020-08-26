@@ -1,10 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
+import os
+import sys
+
 
 def version():
-    import os
-    import sys
-
     import dials
     from dials.util.version import dials_version
 

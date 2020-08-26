@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from random import randint, random
+
 
 class Test_Centroid(object):
     EPS = 1e-7
@@ -105,8 +107,6 @@ class Test_Centroid(object):
 
     @classmethod
     def generate_data(cls):
-        from random import randint, random
-
         from scitbx.array_family import flex
 
         # Generate a 3d array of pixels and points

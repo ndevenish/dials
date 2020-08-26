@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import random
+from math import pi
 
 import pytest
 
@@ -403,8 +404,6 @@ def test_reflection_manager():
 
 @pytest.mark.parametrize("nproc", [1, 2])
 def test_integrator_3d(dials_data, nproc):
-    from math import pi
-
     from dxtbx.model.experiment_list import ExperimentListFactory
 
     from dials.algorithms.profile_model.gaussian_rs import Model
@@ -443,8 +442,6 @@ def test_integrator_3d(dials_data, nproc):
 
 
 def test_summation(dials_data):
-    from math import pi
-
     from dxtbx.model.experiment_list import ExperimentListFactory
 
     from dials.algorithms.profile_model.gaussian_rs import Model

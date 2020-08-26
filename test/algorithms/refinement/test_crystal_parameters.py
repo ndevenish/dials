@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import random
+import textwrap
 from math import pi
 
 from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
@@ -18,9 +20,6 @@ from dials.algorithms.refinement.refinement_helpers import (
 
 
 def test():
-    import random
-    import textwrap
-
     from cctbx.uctbx import unit_cell
     from libtbx.test_utils import approx_equal
 

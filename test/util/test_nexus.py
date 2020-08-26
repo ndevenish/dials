@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
+from os.path import join
+
 
 def test_run(dials_regression, run_in_tmpdir):
-    from os.path import join
-
     from dxtbx.model.experiment_list import ExperimentListFactory
 
     from dials.array_family import flex

@@ -7,6 +7,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 from collections import OrderedDict
+from math import exp, pi
 
 import numpy as np
 from scipy.optimize import least_squares
@@ -1082,7 +1083,6 @@ https://doi.org/10.1107/S0907444905036693
         n = y.size()
         width = histy.slot_centers()[1] - histy.slot_centers()[0]
         gaussian = []
-        from math import exp, pi
 
         for x in histy.slot_centers():
             gaussian.append(n * width * exp(-(x ** 2) / 2.0) / ((2.0 * pi) ** 0.5))

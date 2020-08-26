@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from math import ceil, pi
 
 from libtbx.phil import parse
 
@@ -99,8 +100,6 @@ phil_scope = parse(
 class Model(ProfileModelExt):
     def __init__(self, params, n_sigma, sigma_b, sigma_m, deg=False):
         """Initialise with the parameters."""
-        from math import pi
-
         self.params = params
         self._n_sigma = n_sigma
         if deg:
@@ -155,8 +154,6 @@ class Model(ProfileModelExt):
 
     def sigma_b(self, index=None, deg=True):
         """Return sigma_b."""
-        from math import pi
-
         if index is None:
             sigma_b = self._sigma_b
         else:
@@ -167,8 +164,6 @@ class Model(ProfileModelExt):
 
     def sigma_m(self, index=None, deg=True):
         """Return sigma_m."""
-        from math import pi
-
         if index is None:
             sigma_m = self._sigma_m
         else:
@@ -590,8 +585,6 @@ class Model(ProfileModelExt):
 
         # Define a function to create the fitting class
         def wrapper(experiment):
-            from math import ceil
-
             from dials.algorithms.profile_model.gaussian_rs import (
                 GaussianRSProfileModeller,
             )

@@ -1,5 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
+import json
+import os
+
 
 class html_report(object):
     def __init__(self, external_dependencies="remote"):
@@ -48,8 +51,6 @@ class html_report(object):
             katex_css = '<link rel="stylesheet" href="%s/katex.min.css">' % katex_dir
 
         elif self.external_dependencies == "embed":
-            import os
-
             import libtbx.load_env
 
             css_dir = libtbx.env.find_in_repositories("dials/static/css")
@@ -287,8 +288,6 @@ class plotly_graph(object):
         self._div_id = div_id
 
     def javascript(self):
-        import json
-
         json_str = json.dumps(self._json_data)
         javascript = """
   <script>

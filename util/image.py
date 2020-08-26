@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 import numpy as np
 
 
@@ -45,8 +47,6 @@ class reader:
 
 
 if __name__ == "__main__":
-    import sys
-
     handle = reader()
     handle.read_file(sys.argv[1])
     image = handle.get_data()

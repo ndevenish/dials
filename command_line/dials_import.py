@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 from collections import namedtuple
+from copy import deepcopy
 
 import six
 import six.moves.cPickle as pickle
@@ -323,8 +324,6 @@ class ManualGeometryUpdater(object):
         """
         Override the parameters
         """
-        from copy import deepcopy
-
         from dxtbx.imageset import ImageSequence, ImageSetFactory
         from dxtbx.model import (
             BeamFactory,

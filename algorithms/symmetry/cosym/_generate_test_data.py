@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import random
+
 import scitbx.matrix
 import scitbx.random
 from cctbx import crystal, sgtbx
@@ -74,9 +76,6 @@ def generate_test_data(
     twin_fractions=None,
     map_to_minimum=True,
 ):
-
-    import random
-
     if seed is not None:
         flex.set_random_seed(seed)
         random.seed(seed)

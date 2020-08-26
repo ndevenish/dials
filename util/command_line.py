@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 import time
+from math import ceil
 
 from dials.util import debug_console
 
@@ -75,8 +76,6 @@ class ProgressBar:
 
     def update(self, fpercent):
         """Update the progress bar with a percentage."""
-        from math import ceil
-
         # do not update if not a tty
         if not sys.stdout.isatty():
             return

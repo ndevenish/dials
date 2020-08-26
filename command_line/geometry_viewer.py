@@ -3,6 +3,10 @@
 from __future__ import absolute_import, division, print_function
 
 import copy
+import math
+import os
+import sys
+import time
 
 import wx
 
@@ -90,8 +94,6 @@ class render_3d(object):
 
         distance = self.settings.detector_distance
         if distance:
-            import math
-
             from scitbx import matrix
 
             p_id = detector.get_panel_intersection(beam.get_s0())
@@ -188,8 +190,6 @@ class render_3d(object):
             self.set_reflection_points()
 
     def set_reflection_points(self):
-        import time
-
         t0 = time.time()
         predicted = self.predict()
         if predicted is None:
@@ -578,9 +578,6 @@ class GeometryWindow(wx_viewer.show_points_and_lines_mixin):
 
 
 def run(args):
-
-    import os
-
     from dials.util.options import OptionParser, flatten_experiments
 
     usage = "dials.geometry_viewer [options] models.expt"
@@ -672,6 +669,4 @@ def run(args):
 
 
 if __name__ == "__main__":
-    import sys
-
     run(sys.argv[1:])

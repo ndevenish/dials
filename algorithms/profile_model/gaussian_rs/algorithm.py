@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+from math import ceil
+
 
 class GaussianRSMaskCalculatorFactory(object):
     """
@@ -58,8 +60,6 @@ class GaussianRSReferenceCalculatorFactory(object):
         """
         Create the intensity calculator
         """
-        from math import ceil
-
         from dials.algorithms.integration.parallel_integrator import (
             GaussianRSReferenceCalculator,
         )

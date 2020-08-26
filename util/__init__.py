@@ -2,7 +2,10 @@ from __future__ import absolute_import, division, print_function
 
 import contextlib
 import functools
+import multiprocessing
 import sys
+import threading
+from datetime import datetime
 
 import six
 import tabulate as _tabulate
@@ -91,10 +94,6 @@ def debug_context_manager(original_context_manager, name="", log_func=None):
         def log_func(output):
             sys.stderr.write(output)
             sys.stderr.flush()
-
-    import multiprocessing
-    import threading
-    from datetime import datetime
 
     class DCM(object):
         def __init__(self, name, log_func):

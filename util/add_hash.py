@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
+import sys
+
 
 def enhash(e, h, k, l):
     return e * (2 ** 30) + (h + 512) * (2 ** 20) + (k + 512) * (2 ** 10) + (l + 512)
@@ -26,8 +28,6 @@ def add_hash(integrated_data):
 
 
 if __name__ == "__main__":
-    import sys
-
     if len(sys.argv) != 2:
         raise RuntimeError("%s strong.refl" % sys.argv[0])
 

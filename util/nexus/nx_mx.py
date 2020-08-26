@@ -3,6 +3,8 @@ from __future__ import absolute_import, division, print_function
 import collections
 import math
 from copy import deepcopy
+from os.path import abspath
+from time import strftime
 
 import numpy as np
 
@@ -439,8 +441,6 @@ def dump_crystal(entry, crystal, scan):
 
 
 def dump_details(entry):
-    from time import strftime
-
     # Program info
     entry["program_name"] = "dials.export_nxmx"
     entry["program_name"].attrs["version"] = 1
@@ -764,8 +764,6 @@ def dump(entry, experiments, params):
             if experiment.scan is not None:
                 nx_dials["template"].attrs["range"] = experiment.scan.get_image_range()
         else:
-            from os.path import abspath
-
             if isinstance(experiment.imageset, ImageSequence):
                 template = abspath(experiment.imageset.get_template())
                 nx_dials["template"] = template

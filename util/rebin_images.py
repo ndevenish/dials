@@ -1,13 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
 import binascii
+import gzip
 import os
 import random
 
 
 def gz_open(filename, mode):
-    import gzip
-
     return gzip.GzipFile(filename, mode)
 
 
