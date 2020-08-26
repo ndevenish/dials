@@ -9,6 +9,7 @@ Usage: dials.plot_Fo_vs_Fc hklin=refined.mtz
 from __future__ import absolute_import, division, print_function
 
 import sys
+from functools import partial
 from math import sqrt
 
 import matplotlib
@@ -235,8 +236,6 @@ class Script(object):
             # Set the model_fit function using the determined intercept
             def hyperbola(x, c):
                 return flex.sqrt(flex.pow2(x) + c)
-
-            from functools import partial
 
             self.model_fit = partial(hyperbola, c=intercept)
 

@@ -3,13 +3,11 @@ difference calculations"""
 
 from __future__ import absolute_import, division, print_function
 
+import random
 from math import pi
 
 
 def test(args=[]):
-    # Python and cctbx imports
-    import random
-
     from cctbx.sgtbx import space_group, space_group_symbols
     from libtbx.phil import parse
     from libtbx.test_utils import approx_equal

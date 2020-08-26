@@ -8,6 +8,7 @@ standard_library.install_aliases()
 import http.client
 import json
 import os
+import select
 import socket as pysocket
 import sys
 import urllib.error
@@ -206,7 +207,6 @@ grid = None
 )
 
 if __name__ == "__main__":
-    import select
 
     mixed_args = sys.argv[1:]
     if os.name != "nt":

@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import copy
 import errno
 import itertools
+import json
 import math
 from collections import OrderedDict
 from os import makedirs
@@ -2332,8 +2333,6 @@ class Analyser(object):
                 f.write(html.encode("utf-8", "xmlcharrefreplace"))
 
         if self.params.output.json is not None:
-            import json
-
             print("Writing json data to: %s" % self.params.output.json)
             with open(self.params.output.json, "wb") as f:
                 json.dump(json_data, f)

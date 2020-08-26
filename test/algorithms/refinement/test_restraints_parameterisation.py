@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 
 import os
 import random
+from copy import deepcopy
 
 import pytest
 
@@ -187,9 +188,8 @@ def test_two_triclinic_crystals():
     mydetector = models.detector
     mygonio = models.goniometer
     mycrystal = models.crystal
-    # duplicate the crystal
-    from copy import deepcopy
 
+    # duplicate the crystal
     mycrystal2 = deepcopy(mycrystal)
     mybeam = models.beam
 
@@ -305,9 +305,9 @@ def test_two_triclinic_crystals():
 def test_10_crystals_with_stills_parameterisation(dials_regression):
     """Test with multiple crystals, and a stills refiner"""
 
-    # The phil scope
     from dials.algorithms.refinement.refiner import phil_scope
 
+    # The phil scope
     user_phil = parse(
         """
   refinement
@@ -401,9 +401,9 @@ def test_10_crystals_with_stills_parameterisation(dials_regression):
 
 def test_group_restraint_with_multiple_crystals_and_a_stills_refiner(dials_regression):
 
-    # The phil scope
     from dials.algorithms.refinement.refiner import phil_scope
 
+    # The phil scope
     user_phil = parse(
         """
   refinement

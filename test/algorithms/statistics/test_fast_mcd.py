@@ -2,6 +2,8 @@
 algorithm"""
 from __future__ import absolute_import, division, print_function
 
+import random
+
 
 def test_maha():
 
@@ -67,7 +69,6 @@ def test_maha():
 def test_fast_mcd_small():
     # set random seeds to try to avoid assertion errors due to occasionally
     # finding less common solutions
-    import random
 
     from scitbx.array_family import flex
 
@@ -194,14 +195,12 @@ def test_fast_mcd_small():
 
 
 def test_fast_mcd_large(dials_regression):
-    # set random seeds to try to avoid assertion errors due to occasionally
-    # finding less common solutions
-    import random
-
     from scitbx.array_family import flex
 
     from dials.algorithms.statistics.fast_mcd import FastMCD
 
+    # set random seeds to try to avoid assertion errors due to occasionally
+    # finding less common solutions
     random.seed(42)
     flex.set_random_seed(42)
 

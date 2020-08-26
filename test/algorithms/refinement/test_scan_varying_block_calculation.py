@@ -4,6 +4,7 @@ https://github.com/dials/dials/issues/511"""
 
 from __future__ import absolute_import, division, print_function
 
+from copy import deepcopy
 from math import pi
 
 import pytest
@@ -16,8 +17,6 @@ from dials.algorithms.refinement.reflection_manager import BlockCalculator
 
 
 def create_experiments(image_start=1):
-
-    # Create models
     from libtbx.phil import parse
 
     overrides = """geometry.parameters.crystal.a.length.range = 10 50
@@ -38,9 +37,9 @@ def create_experiments(image_start=1):
     crystal = models.crystal
     beam = models.beam
 
-    # Build a mock scan for a 72 degree sequence
     from dxtbx.model import ScanFactory
 
+    # Build a mock scan for a 72 degree sequence
     sf = ScanFactory()
     scan = sf.make_scan(
         image_range=(image_start, image_start + 720 - 1),
@@ -127,8 +126,6 @@ def test_per_width_and_per_image_are_equivalent():
         assert z == pytest.approx(z2)
 
     # Set blocks with per_width
-    from copy import deepcopy
-
     block_calculator = BlockCalculator(experiments, deepcopy(reflections))
     im_width = experiments[0].scan.get_oscillation(deg=False)[1]
     r_pw = block_calculator.per_width(im_width, deg=False)

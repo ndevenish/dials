@@ -5,11 +5,11 @@ Only the crystal is perturbed while the beam and detector are known.
 
 from __future__ import absolute_import, division, print_function
 
+from copy import deepcopy
+from math import pi
+
 
 def test(args=[]):
-    # Python and cctbx imports
-    from math import pi
-
     from cctbx.sgtbx import space_group, space_group_symbols
 
     # Symmetry constrained parameterisation for the unit cell
@@ -134,8 +134,6 @@ def test(args=[]):
     xluc_param.set_param_vals(X)
 
     # keep track of the target crystal model to compare with refined
-    from copy import deepcopy
-
     target_crystal = deepcopy(crystal)
 
     #############################

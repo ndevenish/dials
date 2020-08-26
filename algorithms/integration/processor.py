@@ -33,7 +33,7 @@ from dials_algorithms_integration_integrator_ext import (
 try:
     import resource
 except ImportError:
-    # resource does not exist on non-Linux, so can't float the import
+    # resource does not exist on non-Linux
     resource = None
 
 __all__ = [

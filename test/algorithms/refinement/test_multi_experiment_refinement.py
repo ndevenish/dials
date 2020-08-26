@@ -4,14 +4,13 @@ A simple test of refinement using two crystals.
 
 from __future__ import absolute_import, division, print_function
 
+from math import pi
+
 import pytest
 
 
 @pytest.mark.slow
 def test(args=[]):
-    # Python and cctbx imports
-    from math import pi
-
     from cctbx.sgtbx import space_group, space_group_symbols
 
     # Symmetry constrained parameterisation for the unit cell

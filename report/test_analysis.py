@@ -1,6 +1,8 @@
 """Tests for dials.report.analysis module"""
 from __future__ import absolute_import, division, print_function
 
+import copy
+
 import pytest
 from mock import mock
 
@@ -137,8 +139,6 @@ def test_reflections_to_batch_properties(
     assert batch_data == [{"range": (1, 10), "id": 0}]
 
     # now try a two experiment dataset in a combined table.
-    import copy
-
     reflections_2 = copy.deepcopy(reflections)
     reflections_2["id"] = flex.int(9, 2)
     reflections.extend(reflections_2)
