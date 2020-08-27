@@ -2,11 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 import logging
+import math
 from dials.util import tabulate
 
 from dials.array_family import flex
 from scitbx import matrix
-from math import sqrt, pi
 from scitbx.math import five_number_summary
 from dials.algorithms.refinement.reflection_manager import ReflectionManager
 from dials.algorithms.refinement.prediction.managed_predictors import (
@@ -19,9 +19,7 @@ from dials.algorithms.refinement.parameterisation.prediction_parameters import (
 
 logger = logging.getLogger(__name__)
 
-# constants
-RAD2DEG = 180.0 / pi
-DEG2RAD = pi / 180.0
+DEG2RAD = math.pi / 180.0
 
 
 class ConstantTwoThetaWeightingStrategy(object):
@@ -91,7 +89,7 @@ class TwoThetaReflectionManager(ReflectionManager):
         rows = []
         row_data = five_number_summary(twotheta_resid)
         rows.append(
-            ["2theta_c - 2theta_o (deg)"] + ["%.4g" % (e * RAD2DEG) for e in row_data]
+            ["2theta_c - 2theta_o (deg)"] + ["%.4g" % math.degrees(e) for e in row_data]
         )
         row_data = five_number_summary(w_2theta)
         rows.append(
@@ -193,7 +191,7 @@ class TwoThetaTarget(Target):
         resid_2theta = flex.sum(reflections["2theta_resid2"])
         n = len(reflections)
 
-        rmsds = (sqrt(resid_2theta / n),)
+        rmsds = (math.sqrt(resid_2theta / n),)
         return rmsds
 
     def achieved(self):

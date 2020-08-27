@@ -41,9 +41,6 @@ phil_str = """
 """
 phil_scope = parse(phil_str)
 
-# constants
-RAD_TO_DEG = 180.0 / math.pi
-
 
 class TargetFactory(object):
     @staticmethod

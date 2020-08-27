@@ -8,8 +8,6 @@ import math
 from dials.array_family import flex
 from scitbx.math.periodogram import Periodogram
 
-RAD2DEG = 180.0 / math.pi
-
 
 class CentroidAnalyser(object):
     def __init__(self, reflections, av_callback=flex.mean, debug=False):
@@ -54,7 +52,7 @@ class CentroidAnalyser(object):
                 # can't do anything, just keep an empty dictionary
                 self._results.append({})
                 continue
-            phi_obs_deg = ref_this_exp["xyzobs.mm.value"].parts()[2] * RAD2DEG
+            phi_obs_deg = math.degrees(ref_this_exp["xyzobs.mm.value"].parts()[2])
             phi_range = flex.min(phi_obs_deg), flex.max(phi_obs_deg)
             phi_width = phi_range[1] - phi_range[0]
             ideal_block_size = 1.0
@@ -132,7 +130,7 @@ class CentroidAnalyser(object):
                 x_resid = ref_this_exp["x_resid"]
                 y_resid = ref_this_exp["y_resid"]
                 phi_resid = ref_this_exp["phi_resid"]
-                phi_obs_deg = ref_this_exp["xyzobs.mm.value"].parts()[2] * RAD2DEG
+                phi_obs_deg = math.degrees(ref_this_exp["xyzobs.mm.value"].parts()[2])
                 xr_per_blk = flex.double()
                 yr_per_blk = flex.double()
                 pr_per_blk = flex.double()

@@ -1,14 +1,10 @@
 from __future__ import absolute_import, division, print_function
 from scitbx.array_family import flex
 from scitbx import sparse
-from math import pi
 from dials_refinement_helpers_ext import CalculateCellGradients
 import logging
 
 logger = logging.getLogger(__name__)
-
-DEG2RAD = pi / 180.0
-RAD2DEG = 180.0 / pi
 
 
 class DerivedParameterTie(object):

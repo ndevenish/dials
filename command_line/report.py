@@ -32,8 +32,6 @@ from dials.util.command_line import Command
 from dials.util.batch_handling import batch_manager
 
 
-RAD2DEG = 180 / math.pi
-
 help_message = """
 
 Generates a html report given the output of various DIALS programs
@@ -934,7 +932,7 @@ class CentroidAnalyser(object):
 
         dx = xc - xo
         dy = yc - yo
-        dphi = (zc - zo) * RAD2DEG
+        dphi = math.degrees(zc - zo)
 
         if dphi.all_approx_equal(dphi[0]):
             # probably still images, no z residuals
@@ -946,7 +944,7 @@ class CentroidAnalyser(object):
         rmsd_x = flex.double()
         rmsd_y = flex.double()
         rmsd_phi = flex.double()
-        phi_obs_deg = RAD2DEG * zo
+        phi_obs_deg = math.degrees(zo)
         phi = []
 
         for i_phi in range(
