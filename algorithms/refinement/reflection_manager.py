@@ -25,8 +25,6 @@ from scitbx.math import five_number_summary
 
 logger = logging.getLogger(__name__)
 
-# constants
-RAD2DEG = 180.0 / math.pi
 DEG2RAD = math.pi / 180.0
 
 # PHIL
@@ -136,7 +134,7 @@ class BlockCalculator(object):
         """Set blocks for all experiments according to a constant width"""
 
         if deg:
-            width *= DEG2RAD
+            width = math.degrees(width)
         self._create_block_columns()
 
         # get observed phi in radians
@@ -394,7 +392,7 @@ class ReflectionManager(object):
 
         # set up the reflection inclusion criteria
         self._close_to_spindle_cutoff = close_to_spindle_cutoff  # close to spindle
-        self._trim_scan_edges = DEG2RAD * trim_scan_edges  # close to the scan edge
+        self._trim_scan_edges = math.radians(trim_scan_edges)  # close to the scan edge
         self._outlier_detector = outlier_detector  # for outlier rejection
         self._nref_per_degree = nref_per_degree  # random subsets
         self._max_sample_size = max_sample_size  # sample size ceiling
@@ -609,7 +607,7 @@ class ReflectionManager(object):
             # set sample size according to nref_per_degree (per experiment)
             if exp.scan and self._nref_per_degree:
                 sequence_range_rad = exp.scan.get_oscillation_range(deg=False)
-                width = abs(sequence_range_rad[1] - sequence_range_rad[0]) * RAD2DEG
+                width = math.degrees(abs(sequence_range_rad[1] - sequence_range_rad[0]))
                 if self._nref_per_degree is libtbx.Auto:
                     # For multi-turn, set sample size to the greater of the approx nref
                     # in a single turn and 100 reflections per degree
@@ -698,7 +696,9 @@ class ReflectionManager(object):
         row_data = five_number_summary(y_resid)
         rows.append(["Yc - Yo (mm)"] + ["%.4g" % e for e in row_data])
         row_data = five_number_summary(phi_resid)
-        rows.append(["Phic - Phio (deg)"] + ["%.4g" % (e * RAD2DEG) for e in row_data])
+        rows.append(
+            ["Phic - Phio (deg)"] + ["%.4g" % math.degrees(e) for e in row_data]
+        )
         row_data = five_number_summary(w_x)
         rows.append(["X weights"] + ["%.4g" % e for e in row_data])
         row_data = five_number_summary(w_y)
@@ -788,7 +788,7 @@ class StillsReflectionManager(ReflectionManager):
         row_data = five_number_summary(y_resid)
         rows.append(["Yc - Yo (mm)"] + ["%.4g" % e for e in row_data])
         row_data = five_number_summary(delpsi)
-        rows.append(["DeltaPsi (deg)"] + ["%.4g" % (e * RAD2DEG) for e in row_data])
+        rows.append(["DeltaPsi (deg)"] + ["%.4g" % math.degrees(e) for e in row_data])
         row_data = five_number_summary(w_x)
         rows.append(["X weights"] + ["%.4g" % e for e in row_data])
         row_data = five_number_summary(w_y)

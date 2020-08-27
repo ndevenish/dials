@@ -103,8 +103,6 @@ refinement
     process_includes=True,
 )
 
-RAD2DEG = 180 / math.pi
-
 
 def _copy_experiments_for_refining(experiments):
     """
@@ -803,23 +801,26 @@ class Refiner(object):
 
         logger.info("\nRefinement steps:")
 
-        rmsd_multipliers = []
+        unit_converters = []
         header = ["Step", "Nref"]
         for (name, units) in zip(self._target.rmsd_names, self._target.rmsd_units):
             if units == "mm":
                 header.append(name + "\n(mm)")
-                rmsd_multipliers.append(1.0)
+                # Don't convert mm
+                unit_converters.append(lambda x: x)
             elif units == "rad":  # convert radians to degrees for reporting
                 header.append(name + "\n(deg)")
-                rmsd_multipliers.append(RAD2DEG)
+                unit_converters.append(math.degrees)
             else:  # leave unknown units alone
                 header.append(name + "\n(" + units + ")")
 
         rows = []
         for i in range(self._refinery.history.get_nrows()):
             rmsds = [
-                r * m
-                for (r, m) in zip(self._refinery.history["rmsd"][i], rmsd_multipliers)
+                converter(r)
+                for (r, converter) in zip(
+                    self._refinery.history["rmsd"][i], unit_converters
+                )
             ]
             rows.append(
                 [str(i), str(self._refinery.history["num_reflections"][i])]
@@ -843,24 +844,25 @@ class Refiner(object):
 
         logger.info("\nRMSDs for out-of-sample (free) reflections:")
 
-        rmsd_multipliers = []
+        unit_converters = []
         header = ["Step", "Nref"]
         for (name, units) in zip(self._target.rmsd_names, self._target.rmsd_units):
             if units == "mm":
                 header.append(name + "\n(mm)")
-                rmsd_multipliers.append(1.0)
+                # Don't convert mm
+                unit_converters.append(lambda x: x)
             elif units == "rad":  # convert radians to degrees for reporting
                 header.append(name + "\n(deg)")
-                rmsd_multipliers.append(RAD2DEG)
+                unit_converters.append(math.degrees)
             else:  # leave unknown units alone
                 header.append(name + "\n(" + units + ")")
 
         rows = []
         for i in range(self._refinery.history.get_nrows()):
             rmsds = [
-                r * m
-                for r, m in zip(
-                    self._refinery.history["out_of_sample_rmsd"][i], rmsd_multipliers
+                converter(r)
+                for r, converter in zip(
+                    self._refinery.history["out_of_sample_rmsd"][i], unit_converters
                 )
             ]
             rows.append([str(i), str(nref)] + ["%.5g" % e for e in rmsds])
@@ -924,7 +926,7 @@ class Refiner(object):
                 elif name == "RMSD_Phi" and units == "rad":
                     rmsds.append(rmsd * images_per_rad)
                 elif units == "rad":
-                    rmsds.append(rmsd * RAD2DEG)
+                    rmsds.append(math.degrees(rmsd))
             rows.append([str(iexp), str(num)] + ["%.5g" % r for r in rmsds])
 
         if len(rows) > 0:
@@ -988,7 +990,7 @@ class Refiner(object):
                     elif name == "RMSD_Phi" and units == "rad":
                         rmsds.append(rmsd * images_per_rad)
                     elif name == "RMSD_DeltaPsi" and units == "rad":
-                        rmsds.append(rmsd * RAD2DEG)
+                        rmsds.append(math.degrees(rmsd))
                 rows.append([str(ipanel), str(num)] + ["%.5g" % r for r in rmsds])
 
             if len(rows) > 0:
