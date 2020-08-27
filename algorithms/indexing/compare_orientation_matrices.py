@@ -31,7 +31,7 @@ def difference_rotation_matrix_axis_angle(crystal_a, crystal_b, target_angle=0):
         R_ab = U_b * U_a.transpose()
         axis_angle = r3_rotation_axis_and_angle_from_matrix(R_ab)
         axis = axis_angle.axis
-        angle = axis_angle.angle() * 180.0 / math.pi
+        angle = math.degrees(axis_angle.angle())
         for sign in (+1, -1):
             if abs(sign * angle - target_angle) < abs(best_angle - target_angle):
                 best_angle = sign * angle

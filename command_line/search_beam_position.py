@@ -332,7 +332,7 @@ def run_dps(experiment, spots_mm, max_cell):
             (
                 spot["xyzobs.mm.value"][0],
                 spot["xyzobs.mm.value"][1],
-                spot["xyzobs.mm.value"][2] * 180.0 / math.pi,
+                math.degrees(spot["xyzobs.mm.value"][2]),
             )
         )
 

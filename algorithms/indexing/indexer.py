@@ -489,7 +489,7 @@ class Indexer(object):
         if self.params.sigma_phi_deg is not None:
             var_x, var_y, _ = self.reflections["xyzobs.mm.variance"].parts()
             var_phi_rad = flex.double(
-                var_x.size(), (math.pi / 180 * self.params.sigma_phi_deg) ** 2
+                var_x.size(), math.radians(self.params.sigma_phi_deg) ** 2
             )
             self.reflections["xyzobs.mm.variance"] = flex.vec3_double(
                 var_x, var_y, var_phi_rad

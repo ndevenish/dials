@@ -142,7 +142,7 @@ class Script(object):
             axis = imageset.get_goniometer().get_rotation_axis()
             osc_range = imageset.get_scan(i).get_oscillation_range()
             print("Oscillation range: %.2f - %.2f" % (osc_range[0], osc_range[1]))
-            angle = (osc_range[0] + osc_range[1]) / 2 / 180 * math.pi
+            angle = math.radians(osc_range[0] + osc_range[1]) / 2
             if not self.reverse_phi:
                 # the pixel is in S AFTER rotation. Thus we have to rotate BACK.
                 angle *= -1

@@ -207,7 +207,7 @@ def export_sadabs(integrated_data, experiment_list, params):
 
             x = x_mm * scl_x
             y = y_mm * scl_y
-            z = (z_rad * 180 / math.pi - phi_start) / phi_range
+            z = (math.degrees(z_rad) - phi_start) / phi_range
 
             fout.write(
                 "%4d%4d%4d%8.2f%8.2f%4d%8.5f%8.5f%8.5f%8.5f%8.5f%8.5f"

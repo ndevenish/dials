@@ -11,8 +11,8 @@ def test_simulation(dials_data):
         check_format=False,
     )
 
-    sigma_b = 0.058 * math.pi / 180
-    sigma_m = 0.157 * math.pi / 180
+    sigma_b = math.radians(0.058)
+    sigma_m = math.radians(0.157)
     n_sigma = 3
 
     N = 100

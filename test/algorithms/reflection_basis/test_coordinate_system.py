@@ -19,7 +19,7 @@ def xdscoordinates():
         "s0": (0.013141995425357206, 0.002199999234194632, 1.4504754950989514),
         "s1": (-0.01752795848400313, -0.24786554213968193, 1.4290948735525306),
         "m2": (0.999975, -0.001289, -0.006968),
-        "phi": 5.83575672475 * math.pi / 180,
+        "phi": math.radians(5.83575672475),
     }
     coords["cs"] = CoordinateSystem(
         coords["m2"], coords["s0"], coords["s1"], coords["phi"]
@@ -100,7 +100,7 @@ def beamvector():
         "s0": (0.013141995425357206, 0.002199999234194632, 1.4504754950989514),
         "s1": (-0.01752795848400313, -0.24786554213968193, 1.4290948735525306),
         "m2": (0.999975, -0.001289, -0.006968),
-        "phi": 5.83575672475 * math.pi / 180,
+        "phi": math.radians(5.83575672475),
     }
     bv["cs"] = CoordinateSystem(bv["m2"], bv["s0"], bv["s1"], bv["phi"])
     return bv
@@ -152,7 +152,7 @@ def rotationangle():
         "s0": (0.013141995425357206, 0.002199999234194632, 1.4504754950989514),
         "s1": (-0.01752795848400313, -0.24786554213968193, 1.4290948735525306),
         "m2": (0.999975, -0.001289, -0.006968),
-        "phi": 5.83575672475 * math.pi / 180,
+        "phi": math.radians(5.83575672475),
     }
 
     ra["cs"] = CoordinateSystem(ra["m2"], ra["s0"], ra["s1"], ra["phi"])
@@ -172,7 +172,7 @@ def test_from_rotation_angle_coordinate_of_phi(rotationangle):
 
 def test_from_rotation_angle_e3_coordinate_approximation(rotationangle):
     # Select a random rotation from phi
-    phi_dash = rotationangle["phi"] + (2.0 * random.random() - 1.0) * math.pi / 180
+    phi_dash = rotationangle["phi"] + math.radians(2.0 * random.random() - 1.0)
 
     # Calculate the XDS coordinate, this class uses an approximation
     # for c3 = zeta * (phi' - phi)
@@ -259,8 +259,8 @@ def test_to_beamvector_forward_and_reverse_transform(beamvector):
 
 def test_forward_and_backward(rotationangle):
     # Set the parameters
-    min_shift = -20.0 * math.pi / 180.0
-    max_shift = +20.0 * math.pi / 180.0
+    min_shift = math.radians(-20.0)
+    max_shift = math.radians(+20.0)
     range_shift = max_shift - min_shift
 
     def random_shift():
@@ -324,7 +324,7 @@ def test_far_out_coordinates(rotationangle):
 
 def test_e3_coordinate_approximation(rotationangle):
     # Select a random rotation from phi
-    phi_dash = rotationangle["phi"] + (2.0 * random.random() - 1.0) * math.pi / 180
+    phi_dash = rotationangle["phi"] + math.radians(2.0 * random.random() - 1.0)
 
     # Calculate the XDS coordinate, this class uses an approximation
     # for c3 = zeta * (phi' - phi)

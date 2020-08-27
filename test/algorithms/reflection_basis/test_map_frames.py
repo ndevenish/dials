@@ -26,8 +26,8 @@ def test_map_frames_forward(dials_data):
 
     # Set the delta_divergence/mosaicity
     n_sigma = 3
-    sigma_divergence = 0.060 * math.pi / 180
-    mosaicity = 0.154 * math.pi / 180
+    sigma_divergence = math.radians(0.060)
+    mosaicity = math.radians(0.154)
     delta_divergence = n_sigma * sigma_divergence
     delta_mosaicity = n_sigma * mosaicity
 
@@ -116,8 +116,8 @@ def test_map_frames_reverse(dials_data):
 
     # Set the delta_divergence/mosaicity
     n_sigma = 3
-    sigma_divergence = 0.060 * math.pi / 180
-    mosaicity = 0.154 * math.pi / 180
+    sigma_divergence = math.radians(0.060)
+    mosaicity = math.radians(0.154)
     delta_divergence = n_sigma * sigma_divergence
     delta_mosaicity = n_sigma * mosaicity
 
@@ -212,8 +212,8 @@ def test_map_forward_reverse(dials_data):
 
     # Set the delta_divergence/mosaicity
     n_sigma = 3
-    sigma_divergence = 0.060 * math.pi / 180
-    mosaicity = 0.154 * math.pi / 180
+    sigma_divergence = math.radians(0.060)
+    mosaicity = math.radians(0.154)
     delta_divergence = n_sigma * sigma_divergence
     delta_mosaicity = n_sigma * mosaicity
 

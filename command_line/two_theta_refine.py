@@ -336,10 +336,10 @@ class Script(object):
         used_reflections = refiner.get_matches()
         block["_cell_measurement_reflns_used"] = len(used_reflections)
         block["_cell_measurement_theta_min"] = (
-            flex.min(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.min(used_reflections["2theta_obs.rad"])) / 2
         )
         block["_cell_measurement_theta_max"] = (
-            flex.max(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.max(used_reflections["2theta_obs.rad"])) / 2
         )
         block["_diffrn_reflns_number"] = len(used_reflections)
         miller_span = miller.index_span(used_reflections["miller_index"])
@@ -352,10 +352,10 @@ class Script(object):
         block["_diffrn_reflns_limit_l_min"] = min_l
         block["_diffrn_reflns_limit_l_max"] = max_l
         block["_diffrn_reflns_theta_min"] = (
-            flex.min(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.min(used_reflections["2theta_obs.rad"])) / 2
         )
         block["_diffrn_reflns_theta_max"] = (
-            flex.max(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.max(used_reflections["2theta_obs.rad"])) / 2
         )
 
         cif = iotbx.cif.model.cif()
@@ -392,10 +392,10 @@ class Script(object):
         used_reflections = refiner.get_matches()
         block["_cell_measurement.reflns_used"] = len(used_reflections)
         block["_cell_measurement.theta_min"] = (
-            flex.min(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.min(used_reflections["2theta_obs.rad"])) / 2
         )
         block["_cell_measurement.theta_max"] = (
-            flex.max(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.max(used_reflections["2theta_obs.rad"])) / 2
         )
         block["_diffrn_reflns.number"] = len(used_reflections)
         miller_span = miller.index_span(used_reflections["miller_index"])
@@ -408,10 +408,10 @@ class Script(object):
         block["_diffrn_reflns.limit_l_min"] = min_l
         block["_diffrn_reflns.limit_l_max"] = max_l
         block["_diffrn_reflns.theta_min"] = (
-            flex.min(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.min(used_reflections["2theta_obs.rad"])) / 2
         )
         block["_diffrn_reflns.theta_max"] = (
-            flex.max(used_reflections["2theta_obs.rad"]) * 180 / math.pi / 2
+            math.degrees(flex.max(used_reflections["2theta_obs.rad"])) / 2
         )
 
         cif = iotbx.cif.model.cif()

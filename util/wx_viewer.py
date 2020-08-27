@@ -391,7 +391,7 @@ class wxGLWindow(wx.glcanvas.GLCanvas):
         if self.w < self.h:
             h *= self.h / max(1, self.w)
         assert 0 < self.field_of_view_y < 90
-        z -= h / math.tan(self.field_of_view_y * math.pi / 180 / 2)
+        z -= h / math.tan(math.radians(self.field_of_view_y) / 2)
         return x, y, z
 
     def initialize_modelview(self, eye_vector=None, angle=None):
@@ -528,7 +528,7 @@ class wxGLWindow(wx.glcanvas.GLCanvas):
             scale < 0
             and r
             < d
-            * math.sin(self.field_of_view_y * math.pi / 180 / 2)
+            * math.sin(math.radians(self.field_of_view_y) / 2)
             * self.min_viewport_use_fraction
         ):
             pass  # far limit
@@ -860,7 +860,7 @@ class show_points_and_lines_mixin(wxGLWindow):
             gl.glColor3f(gray, gray, gray)
             gl.glBegin(gl.GL_POLYGON)
             for i in range(360):
-                a = i * math.pi / 180
+                a = math.radians(i)
                 rs = r * math.sin(a)
                 rc = r * math.cos(a)
                 gl.glVertex3f(c[0], c[1] + rs, c[2] + rc)

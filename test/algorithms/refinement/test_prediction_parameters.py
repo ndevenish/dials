@@ -134,7 +134,7 @@ def test():
     obs_refs["xyzobs.mm.value"] = obs_refs["xyzcal.mm"]
 
     # Invent some variances for the centroid positions of the simulated data
-    im_width = 0.1 * math.pi / 180.0
+    im_width = math.radians(0.1)
     px_size = mydetector[0].get_pixel_size()
     var_x = flex.double(len(obs_refs), (px_size[0] / 2.0) ** 2)
     var_y = flex.double(len(obs_refs), (px_size[1] / 2.0) ** 2)

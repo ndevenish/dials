@@ -279,7 +279,7 @@ def test_ScanVaryingCrystalOrientationParameterisation_intervals(
 
     # compare analytical and finite difference derivatives at image 50
     an_ds_dp = xl_op.get_ds_dp()
-    fd_ds_dp = get_fd_gradients(xl_op, [1.0e-6 * math.pi / 180] * num_param)
+    fd_ds_dp = get_fd_gradients(xl_op, [math.radians(1.0e-6)] * num_param)
 
     null_mat = matrix.sqr((0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
     for e, f in zip(an_ds_dp, fd_ds_dp):
@@ -303,7 +303,7 @@ def test_ScanVaryingCrystalOrientationParameterisation_intervals(
 
         xl_op.set_time_point(t)
         an_ds_dp = xl_op.get_ds_dp()
-        fd_ds_dp = get_fd_gradients(xl_op, [1.0e-6 * math.pi / 180] * num_param)
+        fd_ds_dp = get_fd_gradients(xl_op, [math.radians(1.0e-6)] * num_param)
         for e, f in zip(an_ds_dp, fd_ds_dp):
             assert approx_equal((e - f), null_mat, eps=1.0e-6)
 
@@ -374,7 +374,7 @@ def test_ScanVaryingCrystalOrientationParameterisation_random(plots=False):
 
         # compare analytical and finite difference derivatives
         xl_op_an_ds_dp = xl_op.get_ds_dp()
-        xl_op_fd_ds_dp = get_fd_gradients(xl_op, [1.0e-6 * math.pi / 180] * num_param)
+        xl_op_fd_ds_dp = get_fd_gradients(xl_op, [math.radians(1.0e-6)] * num_param)
 
         for j in range(num_param):
             assert approx_equal(

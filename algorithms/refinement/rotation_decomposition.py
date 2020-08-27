@@ -130,7 +130,7 @@ def solve_r3_rotation_for_angles_given_axes(
         # cos(phi3) = u.R3u
         phi3 = math.atan2(u.dot(R3u.cross(e3)), u.dot(R3u))
         if deg:
-            phi1, phi2, phi3 = tuple([x * 180 / math.pi for x in (phi1, phi2, phi3)])
+            phi1, phi2, phi3 = tuple([math.degrees(x) for x in (phi1, phi2, phi3)])
         solutions.append((phi1, phi2, phi3))
 
     if return_both_solutions:

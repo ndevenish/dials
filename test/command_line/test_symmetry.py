@@ -262,12 +262,12 @@ def _make_input_for_exclude_tests(exclude_images=True):
     refls1 = flex.reflection_table()
     refls2 = flex.reflection_table()
     refls1["xyzobs.mm.value"] = flex.vec3_double(
-        [(0.0, 0.0, 10.0 * math.pi / 180.0), (0.0, 0.0, 370.0 * math.pi / 180.0)]
+        [(0.0, 0.0, math.radians(10.0)), (0.0, 0.0, math.radians(370.0))]
     )
     refls1["xyzobs.px.value"] = flex.vec3_double([(0.0, 0.0, 10.0), (0.0, 0.0, 370.0)])
     refls1["i"] = flex.int([0, 1])
     refls2["xyzobs.mm.value"] = flex.vec3_double(
-        [(0.0, 0.0, -10.0 * math.pi / 180.0), (0.0, 0.0, -370.0 * math.pi / 180.0)]
+        [(0.0, 0.0, math.radians(-10.0)), (0.0, 0.0, math.radians(-370.0))]
     )
     refls2["xyzobs.px.value"] = flex.vec3_double([(0.0, 0.0, 10.0), (0.0, 0.0, 370.0)])
     refls2["i"] = flex.int([0, 1])

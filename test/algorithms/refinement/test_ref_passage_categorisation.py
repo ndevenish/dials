@@ -71,7 +71,7 @@ def test():
     sequence_range = myscan.get_oscillation_range(deg=False)
     assert sequence_range == pytest.approx((0.0, math.pi / 6.0))
     im_width = myscan.get_oscillation(deg=False)[1]
-    assert im_width == pytest.approx(0.1 * math.pi / 180.0)
+    assert im_width == pytest.approx(math.radians(0.1))
 
     # Create an ExperimentList for ScansRayPredictor
     experiments = ExperimentList()

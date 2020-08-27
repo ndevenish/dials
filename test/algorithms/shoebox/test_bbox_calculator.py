@@ -27,8 +27,8 @@ def setup(dials_data):
 
     # Set the delta_divergence/mosaicity
     n_sigma = 5
-    sigma_divergence = 0.060 * math.pi / 180
-    mosaicity = 0.154 * math.pi / 180
+    sigma_divergence = math.radians(0.060)
+    mosaicity = math.radians(0.154)
     fixture["delta_divergence"] = n_sigma * sigma_divergence
     fixture["delta_mosaicity"] = n_sigma * mosaicity
 

@@ -683,7 +683,7 @@ class _Tiles(object):
 
     def get_detector_2theta(self):
         try:
-            two_theta = self.raw_image.twotheta * math.pi / 180
+            two_theta = math.radians(self.raw_image.twotheta)
         except AttributeError:
             two_theta = 0
 

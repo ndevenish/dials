@@ -96,7 +96,7 @@ def dR_from_axis_and_angle_py(axis, angle, deg=False):
 
     assert axis.n in ((3, 1), (1, 3))
     if deg:
-        angle *= math.pi / 180
+        angle = math.radians(angle)
     axis = -1.0 * axis.normalize()
     ca, sa = math.cos(angle), math.sin(angle)
 

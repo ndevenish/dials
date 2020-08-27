@@ -18,7 +18,6 @@ from .strategy import Strategy
 logger = logging.getLogger(__name__)
 
 TWO_PI = 2.0 * math.pi
-FIVE_DEG = TWO_PI * 5.0 / 360.0
 
 
 class CompleteGraph(object):
@@ -409,7 +408,7 @@ class LowResSpotMatch(Strategy):
             # same line of indices from the origin
             angle_diff = cand["clock_angle"] - seed["clock_angle"]
             angle_diff = abs(((angle_diff + math.pi) % TWO_PI) - math.pi)
-            if angle_diff < FIVE_DEG:
+            if math.degrees(angle_diff) < 5:
                 continue
 
             # Calculate the plane normal for the plane containing the seed and stem.

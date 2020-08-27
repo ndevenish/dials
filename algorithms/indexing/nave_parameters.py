@@ -36,7 +36,7 @@ class NaveParameters(object):
 
         for iid, experiment in enumerate(self.experiments):
             excursion_rad = RR["delpsical.rad"].select(RR["id"] == iid)
-            delta_psi_deg = excursion_rad * 180.0 / math.pi
+            delta_psi_deg = math.degrees(excursion_rad)
             logger.info("")
             logger.info("%s %s", flex.max(delta_psi_deg), flex.min(delta_psi_deg))
             mean_excursion = flex.mean(delta_psi_deg)
@@ -89,7 +89,7 @@ class NaveParameters(object):
             s_ang = 1.0 / (2 * solution[0])
             logger.info("Best LSQ fit Scheerer domain size is %9.2f ang", s_ang)
 
-            k_degrees = solution[1] * 180.0 / math.pi
+            k_degrees = math.degrees(solution[1])
             logger.info(
                 "The LSQ full mosaicity is %8.5f deg; half-mosaicity %9.5f",
                 2 * k_degrees,
@@ -112,13 +112,13 @@ class NaveParameters(object):
             )
             logger.info(
                 "ML: mosaicity FW=%4.2f deg, Dsize=%5.0fA on %d spots",
-                M.x[1] * 180.0 / math.pi,
+                math.degrees(M.x[1]),
                 2.0 / M.x[0],
                 len(two_thetas),
             )
             tan_phi_rad_ML = dspacings / (2.0 / M.x[0])
-            tan_phi_deg_ML = tan_phi_rad_ML * 180.0 / math.pi
-            tan_outer_deg_ML = tan_phi_deg_ML + 0.5 * M.x[1] * 180.0 / math.pi
+            tan_phi_deg_ML = math.degrees(tan_phi_rad_ML)
+            tan_outer_deg_ML = tan_phi_deg_ML + math.degrees(0.5 * M.x[1])
 
             # Only set the flags for those reflections that were indexed for this lattice
             self.nv_acceptance_flags.set_selected(
@@ -142,7 +142,7 @@ class NaveParameters(object):
 
                 plt.title(
                     "ML: mosaicity FW=%4.2f deg, Dsize=%5.0fA on %d spots"
-                    % (M.x[1] * 180.0 / math.pi, 2.0 / M.x[0], len(two_thetas))
+                    % (math.degrees(M.x[1]), 2.0 / M.x[0], len(two_thetas))
                 )
                 plt.plot(two_thetas, tan_phi_deg_ML, "r.")
                 plt.plot(two_thetas, -tan_phi_deg_ML, "r.")
@@ -158,7 +158,7 @@ class NaveParameters(object):
             self.green_curve_area = green_curve_area(two_thetas, tan_outer_deg_ML)
             logger.info("The green curve area is %s", self.green_curve_area)
 
-            crystal.set_half_mosaicity_deg(M.x[1] * 180.0 / (2.0 * math.pi))
+            crystal.set_half_mosaicity_deg(math.degrees(M.x[1] / 2.0))
             crystal.set_domain_size_ang(2.0 / M.x[0])
             self._ML_full_mosaicity_rad = M.x[1]
             self._ML_domain_size_ang = 2.0 / M.x[0]

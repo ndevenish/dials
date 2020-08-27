@@ -97,7 +97,7 @@ def write_par_file(file_name, experiment):
     # BEAM_DIVERGENCE=
     # This value is approximately arctan(spot diameter/DETECTOR_DISTANCE)
     profile = experiment.profile
-    spot_diameter = math.tan(profile.delta_b() * math.pi / 180) * distance
+    spot_diameter = math.tan(math.radians(profile.delta_b())) * distance
     spot_diameter_px = spot_diameter * detector[0].get_pixel_size()[0]
 
     # determine parameters for RASTER keyword

@@ -48,7 +48,7 @@ def test_forward(dials_data):
 
     # Set some parameters
     sigma_divergence = beam.get_sigma_divergence(deg=False)
-    mosaicity = 0.157 * math.pi / 180
+    mosaicity = math.radians(0.157)
     n_sigma = 3
     grid_size = 7
     delta_divergence = n_sigma * sigma_divergence
@@ -243,7 +243,7 @@ def test_forward_no_model(dials_data):
 
     # Set some parameters
     sigma_divergence = beam.get_sigma_divergence(deg=False)
-    mosaicity = 0.157 * math.pi / 180
+    mosaicity = math.radians(0.157)
     n_sigma = 3
     grid_size = 20
     delta_divergence = n_sigma * sigma_divergence

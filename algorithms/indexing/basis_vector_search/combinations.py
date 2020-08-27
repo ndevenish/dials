@@ -41,7 +41,7 @@ def candidate_orientation_matrices(basis_vectors, max_combinations=None):
         combinations = combinations[:max_combinations]
 
     half_pi = 0.5 * math.pi
-    min_angle = 20 / 180 * math.pi  # 20 degrees, arbitrary cutoff
+    min_angle = math.radians(20)  # 20 degrees, arbitrary cutoff
     for i, j, k in combinations:
         a = basis_vectors[i]
         b = basis_vectors[j]

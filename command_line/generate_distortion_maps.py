@@ -104,8 +104,7 @@ def ellipse_matrix_form(phi, l1, l2):
     where the first axis makes an angle phi with the X axis and the scale factors
     for the axes are l1 and l2.
     See https://www.le.ac.uk/users/dsgp1/COURSES/TOPICS/quadrat.pdf"""
-    deg2rad = math.pi / 180.0
-    phi *= deg2rad
+    phi = math.radians(phi)
     cphi = math.cos(phi)
     sphi = math.sin(phi)
 

@@ -146,9 +146,9 @@ class Script(object):
             solutions.extend(sol_minus)
 
         if not solutions:
-            sys.exit("Impossible two theta: %.3f," % (two_theta * 180.0 / math.pi))
+            sys.exit("Impossible two theta: %.3f," % (math.degrees(two_theta)))
 
-        logger.info("Maximum two theta: %.3f," % (two_theta * 180.0 / math.pi))
+        logger.info("Maximum two theta: %.3f," % (math.degrees(two_theta)))
         logger.info("%d solutions found" % len(solutions))
 
         names = tuple(

@@ -16,8 +16,8 @@ def test(dials_data):
 
     # Set the delta_divergence/mosaicity
     n_sigma = 5
-    sigma_b = 0.060 * math.pi / 180
-    sigma_m = 0.154 * math.pi / 180
+    sigma_b = math.radians(0.060)
+    sigma_m = math.radians(0.154)
 
     from dials.algorithms.profile_model.gaussian_rs import Model
 

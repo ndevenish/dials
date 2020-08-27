@@ -208,7 +208,7 @@ class KaptonAbsorption(object):
         self.height_mm = height_mm  # tool controlled
         self.thickness_mm = thickness_mm  # tool controlled
         self.half_width_mm = half_width_mm  # tool controlled
-        self.angle_rad = rotation_angle_deg * math.pi / 180.0  # tool controlled
+        self.angle_rad = math.radians(rotation_angle_deg)  # tool controlled
         self.detector_dist_mm = detector_dist_mm
         self.pixel_size_mm = pixel_size_mm
         self.wavelength_ang = wavelength_ang

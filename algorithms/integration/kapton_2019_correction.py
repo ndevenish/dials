@@ -27,7 +27,7 @@ class KaptonTape_2019(object):
         self.thickness_mm = t = thickness_mm  # plugin controlled
         self.half_width_mm = w = half_width_mm  # plugin controlled
         self.tape_depth_mm = a = half_width_mm * 20.0  # Big number in mm
-        self.angle_rad = rotation_angle_deg * math.pi / 180.0  # plugin controlled
+        self.angle_rad = math.radians(rotation_angle_deg)  # plugin controlled
         self.wavelength_ang = wavelength_ang
         self.num_pixels = 5000  # number of pixels to put in fictitious kapton faces
         # Now set up the kapton physical model using dxtbx detector objects

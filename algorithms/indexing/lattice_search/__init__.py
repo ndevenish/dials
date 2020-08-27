@@ -199,7 +199,7 @@ class LatticeSearch(indexer.Indexer):
                         # only use reflections from the first 360 degrees of the scan
                         sel.set_selected(
                             (imageset_id == i_expt)
-                            & (zo > ((start * math.pi / 180) + 2 * math.pi)),
+                            & (zo > (math.radians(start) + 2 * math.pi)),
                             False,
                         )
                 experiments.append(

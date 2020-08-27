@@ -58,7 +58,7 @@ def setup_models(args):
     sequence_range = scan.get_oscillation_range(deg=False)
     im_width = scan.get_oscillation(deg=False)[1]
     assert sequence_range == (0.0, math.pi)
-    assert approx_equal(im_width, 1.0 * math.pi / 180.0)
+    assert approx_equal(im_width, math.radians(1.0))
 
     experiments = ExperimentList()
     experiments.append(

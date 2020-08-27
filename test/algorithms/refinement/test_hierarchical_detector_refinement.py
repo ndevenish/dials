@@ -49,7 +49,7 @@ def generate_reflections(experiments):
     obs_refs["xyzobs.mm.value"] = obs_refs["xyzcal.mm"]
 
     # Invent some variances for the centroid positions of the simulated data
-    im_width = 0.1 * math.pi / 180.0
+    im_width = math.radians(0.1)
     px_size = detector[0].get_pixel_size()
     var_x = flex.double(len(obs_refs), (px_size[0] / 2.0) ** 2)
     var_y = flex.double(len(obs_refs), (px_size[1] / 2.0) ** 2)
@@ -100,7 +100,7 @@ def test1(dials_regression):
     sequence_range = scan.get_oscillation_range(deg=False)
     im_width = scan.get_oscillation(deg=False)[1]
     assert sequence_range == (0.0, math.pi)
-    assert im_width == pytest.approx(0.1 * math.pi / 180.0)
+    assert im_width == pytest.approx(math.radians(0.1))
 
     from dxtbx.model.experiment_list import ExperimentList, Experiment
 

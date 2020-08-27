@@ -1326,7 +1326,6 @@ class SpotFrame(XrayFrame):
         vector_text_data = []
         detector = self.pyslip.tiles.raw_image.get_detector()
         scan = self.pyslip.tiles.raw_image.get_scan()
-        to_degrees = 180 / math.pi
         # self.prediction_colours = ["#a6cee3", "#1f78b4", "#b2df8a", "#33a02c",
         # "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00",
         # "#cab2d6"] * 10
@@ -1508,7 +1507,7 @@ class SpotFrame(XrayFrame):
                     frame_numbers = ref_list["xyzcal.px"].parts()[2]
                 else:
                     phi = ref_list["xyzcal.mm"].parts()[2]
-                    frame_numbers = scan.get_array_index_from_angle(phi * to_degrees)
+                    frame_numbers = scan.get_array_index_from_angle(math.degrees(phi))
                 n = 0  # buffer
                 for i_expt in range(flex.max(ref_list["id"]) + 1):
                     expt_sel = ref_list["id"] == i_expt

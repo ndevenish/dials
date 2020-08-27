@@ -118,9 +118,7 @@ def test_versus_brute_force():
     # find the observed indices
     ra = rotation_angles(dmin, ub_beg, wavelength, axis)
     obs_indices, obs_angles = ra.observed_indices_and_angles_from_angle_range(
-        phi_start_rad=0.0 * math.pi / 180.0,
-        phi_end_rad=1.0 * math.pi / 180.0,
-        indices=indices,
+        phi_start_rad=0.0, phi_end_rad=math.radians(1.0), indices=indices,
     )
 
     # r = reeke_model(ub_beg, ub_end, axis, s0, dmin, 1.0)

@@ -198,7 +198,7 @@ class ComputeEsdReflectingRange(object):
             # something like this
             #
             # if scan.get_num_images() == 1:
-            #   self.sigma = 0.5 * scan.get_oscillation_range()[1] * math.pi / 180.0
+            #   self.sigma = math.radians(0.5 * scan.get_oscillation_range()[1])
             #   return
             #
             # is used... @JMP please could we discuss? assert best method to get
@@ -212,8 +212,8 @@ class ComputeEsdReflectingRange(object):
 
             # Set the starting values to try 1, 3 degrees seems sensible for
             # crystal mosaic spread
-            start = 1 * math.pi / 180
-            stop = 3 * math.pi / 180
+            start = math.radians(1)
+            stop = math.radians(3)
             starting_simplex = [flex.double([start]), flex.double([stop])]
 
             # Initialise the optimizer
@@ -322,8 +322,8 @@ class ComputeEsdReflectingRange(object):
 
             # Set the starting values to try 1, 3 degrees seems sensible for
             # crystal mosaic spread
-            start = math.log(0.1 * math.pi / 180)
-            stop = math.log(1 * math.pi / 180)
+            start = math.log(math.radians(0.1))
+            stop = math.log(math.radians(1))
             starting_simplex = [flex.double([start]), flex.double([stop])]
 
             # Initialise the optimizer
@@ -388,7 +388,7 @@ class ComputeEsdReflectingRange(object):
                 # L += flex.sum(nj * flex.log(zj)) - kj * Z
                 # L += flex.sum(nj * flex.log(zj)) - kj * math.log(Z)
                 L += flex.sum(nj * flex.log(zj)) - kj * math.log(Z) + math.log(Z)
-            logger.debug("Sigma M: %f, log(L): %f", sigma_m * 180 / math.pi, L)
+            logger.debug("Sigma M: %f, log(L): %f", math.degrees(sigma_m), L)
 
             # Return the logarithm of r
             return -L
@@ -560,8 +560,8 @@ class ProfileModelCalculator(object):
 
             self._sigma_m = reflecting_range.sigma()
 
-        logger.info(" sigma b: %f degrees", self._sigma_b * 180 / math.pi)
-        logger.info(" sigma m: %f degrees", self._sigma_m * 180 / math.pi)
+        logger.info(" sigma b: %f degrees", math.degrees(self._sigma_b))
+        logger.info(" sigma m: %f degrees", math.degrees(self._sigma_m))
 
     def sigma_b(self):
         """Return the E.S.D beam divergence."""
@@ -660,8 +660,8 @@ class ScanVaryingProfileModelCalculator(object):
             logger.info(
                 "Computing profile model for frame %d: sigma_b = %.4f degrees, sigma_m = %.4f degrees",
                 i,
-                beam_divergence.sigma() * 180 / math.pi,
-                reflecting_range.sigma() * 180 / math.pi,
+                math.degrees(beam_divergence.sigma()),
+                math.degrees(reflecting_range.sigma()),
             )
 
             # Set the sigmas
@@ -711,13 +711,13 @@ class ScanVaryingProfileModelCalculator(object):
             logger.info(
                 "Smoothed profile model for frame %d: sigma_b = %.4f degrees, sigma_m = %.4f degrees",
                 i,
-                self._sigma_b[i] * 180 / math.pi,
-                self._sigma_m[i] * 180 / math.pi,
+                math.degrees(self._sigma_b[i]),
+                math.degrees(self._sigma_m[i]),
             )
 
         # Print the mean parameters
-        logger.info(" sigma b: %f degrees", mean_sigma_b * 180 / math.pi)
-        logger.info(" sigma m: %f degrees", mean_sigma_m * 180 / math.pi)
+        logger.info(" sigma b: %f degrees", math.degrees(mean_sigma_b))
+        logger.info(" sigma m: %f degrees", math.degrees(mean_sigma_m))
 
     def num(self):
         """The number of reflections used."""

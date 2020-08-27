@@ -16,10 +16,7 @@ def test_shoebox_memory_is_a_reasonable_guesstimate(dials_data):
 
     exlist = ExperimentListFactory.from_json_file(path)[0]
     exlist.profile = Model(
-        None,
-        n_sigma=3,
-        sigma_b=0.024 * math.pi / 180.0,
-        sigma_m=0.044 * math.pi / 180.0,
+        None, n_sigma=3, sigma_b=math.radians(0.024), sigma_m=math.radians(0.044),
     )
 
     rlist = flex.reflection_table.from_predictions(exlist)

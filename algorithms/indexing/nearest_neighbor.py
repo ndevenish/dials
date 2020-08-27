@@ -28,7 +28,7 @@ class NeighborAnalysis(object):
         else:
             entering_flags = flex.bool(reflections.size(), True)
         rs_vectors = reflections["rlp"]
-        phi_deg = reflections["xyzobs.mm.value"].parts()[2] * (180 / math.pi)
+        phi_deg = math.degrees(reflections["xyzobs.mm.value"].parts()[2])
 
         d_spacings = flex.double()
         # nearest neighbor analysis

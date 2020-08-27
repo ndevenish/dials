@@ -51,9 +51,7 @@ def test():
 
         # compare analytical and finite difference derivatives
         an_ds_dp = gonp.get_ds_dp()
-        fd_ds_dp = get_fd_gradients(
-            gonp, [1.0e-5 * math.pi / 180, 1.0e-5 * math.pi / 180]
-        )
+        fd_ds_dp = get_fd_gradients(gonp, [math.radians(1.0e-5), math.radians(1.0e-5)])
 
         null_mat = matrix.sqr((0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
         for j in range(2):
