@@ -24,9 +24,6 @@ def test(dials_regression):
     )
 
     # Symmetry constrained parameterisation for the unit cell
-    DEG2RAD = math.pi / 180.0
-    RAD2DEG = 180.0 / math.pi
-
     master_phil = parse(
         """
       include scope dials.test.algorithms.refinement.geometry_phil
@@ -130,9 +127,9 @@ def test(dials_regression):
     B = matrix.sqr(crystal.get_B())
     O = (B.transpose()).inverse()
     a, b, c, aa, bb, cc = crystal.get_unit_cell().parameters()
-    aa *= DEG2RAD
-    bb *= DEG2RAD
-    cc *= DEG2RAD
+    aa = math.radians(aa)
+    bb = math.radians(bb)
+    cc = math.radians(cc)
     Ut = matrix.sqr(crystal.get_U()).transpose()
     avec, bvec, cvec = [Ut * vec for vec in crystal.get_real_space_vectors()]
 
@@ -219,9 +216,9 @@ def test(dials_regression):
         # print
         # print "CELL ANGLES"
 
-        daa_dp = RAD2DEG * (dbv_dp.dot(dalpha_db) + dcv_dp.dot(dalpha_dc))
-        dbb_dp = RAD2DEG * (dav_dp.dot(dbeta_da) + dcv_dp.dot(dbeta_dc))
-        dcc_dp = RAD2DEG * (dav_dp.dot(dgamma_da) + dbv_dp.dot(dgamma_db))
+        daa_dp = math.degrees(dbv_dp.dot(dalpha_db) + dcv_dp.dot(dalpha_dc))
+        dbb_dp = math.degrees(dav_dp.dot(dbeta_da) + dcv_dp.dot(dbeta_dc))
+        dcc_dp = math.degrees(dav_dp.dot(dgamma_da) + dbv_dp.dot(dgamma_db))
 
         # print "d[alpha]/dp{2} analytical: {0:.5f} FD: {1:.5f}".format(daa_dp, fd_grad[i]['daa_dp'], i)
         # print "d[beta]/dp{2} analytical: {0:.5f} FD: {1:.5f}".format(dbb_dp, fd_grad[i]['dbb_dp'], i)

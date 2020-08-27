@@ -279,7 +279,6 @@ def test_scan_varying(raypredictor):
     # Fn to loop through hkl applying a prediction function to each and testing
     # the results are the same as those from the ScanStaticRayPredictor
     def test_each_hkl(hkl_list, predict_fn):
-        DEG2RAD = math.pi / 180.0
         count = 0
         for hkl in hkl_list:
             ray = predict_fn(hkl)
@@ -288,7 +287,7 @@ def test_scan_varying(raypredictor):
                 ref = frame0_refs.select(frame0_refs["miller_index"] == hkl)[0]
                 assert ref["entering"] == ray.entering
                 assert ref["phi"] == pytest.approx(
-                    ray.angle * DEG2RAD, abs=1e-6
+                    math.radians(ray.angle), abs=1e-6
                 )  # ray angle is in degrees (!)
                 assert ref["s1"] == pytest.approx(ray.s1, abs=1e-6)
         # ensure all reflections were matched

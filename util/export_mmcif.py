@@ -16,7 +16,6 @@ from libtbx import Auto
 from scitbx.array_family import flex
 
 logger = logging.getLogger(__name__)
-RAD2DEG = 180.0 / math.pi
 
 
 class MMCIFOutputFile(object):
@@ -265,7 +264,7 @@ class MMCIFOutputFile(object):
             variables_present.extend(["intensity.prf.value", "intensity.prf.sigma"])
 
         # Should always exist
-        reflections["angle"] = reflections["xyzcal.mm"].parts()[2] * RAD2DEG
+        reflections["angle"] = math.degrees(reflections["xyzcal.mm"].parts()[2])
         variables_present.extend(["angle"])
 
         if "partiality" in reflections:
