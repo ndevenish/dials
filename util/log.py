@@ -2,6 +2,7 @@ import logging.config
 import os
 import sys
 import time
+from typing import Any, Callable
 
 try:
     from colorlog import ColoredFormatter
@@ -170,3 +171,42 @@ class LoggingContext(object):
         if self.level is not None:
             self.logger.setLevel(self.old_level)
         # implicit return of None => don't swallow exceptions
+
+
+class LazyEvaluate:
+    """
+    Wrap a function for lazy-conversion for logging output.
+
+    Function will be evaluated once, only on type conversion. Combined with
+    feature of logging calls that only type-convert if the message is
+    handled, helps prevent expensive evaluations when unnecessary.
+
+    >>> logger.info("%s", LazyEvaluate(lambda: some_expensive_fun()))
+
+    Args:
+        function: The no-argument callable to evaluate
+    """
+
+    def __init__(self, function: Callable[[], Any]):
+        self._function = function
+        self._evaluated = False
+        self._value = None
+
+    def evaluate(self) -> None:
+        self._value = self._function()
+        self._evaluated = True
+
+    def __str__(self):
+        if not self._evaluated:
+            self.evaluate()
+        return str(self._value)
+
+    def __int__(self):
+        if not self._evaluated:
+            self.evaluate()
+        return int(self._value)
+
+    def __float__(self):
+        if not self._evaluated:
+            self.evaluate()
+        return float(self._value)

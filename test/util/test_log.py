@@ -35,3 +35,24 @@ def test_LoggingContext():
     # check logging levels are as they were before
     assert idx_logger.getEffectiveLevel() == logging.DEBUG
     assert dials_logger.getEffectiveLevel() == logging.DEBUG
+
+
+def test_lazyevaluate():
+    calls = []
+    values = [1]
+
+    def _lazy_function():
+        """Register the call and return the dynamic value"""
+        calls.append(values[-1])
+        return values[-1]
+
+    l = dials.util.log.LazyEvaluate(_lazy_function)
+    assert not calls
+    assert str(l) == "1"
+    assert calls == [1]
+    # Check that the result is cached
+    values.append(2)
+    assert int(l) == 1
+    assert str(l) == "1"
+    assert float(l) == 1.0
+    assert calls == [1]
