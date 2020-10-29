@@ -14,6 +14,7 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include <scitbx/array_family/tiny_types.h>
 #include <scitbx/array_family/ref_reductions.h>
 #include <dials/error.h>
@@ -992,7 +993,7 @@ namespace dials { namespace algorithms {
 
       // Allocate the buffer
       std::size_t element_size = sizeof(Data<double>);
-      buffer_.resize(element_size * image_size[0] * image_size[1]);
+      buffer_.reset(new unsigned char[element_size * image_size[0] * image_size[1]]);
     }
 
     /**
@@ -1001,7 +1002,7 @@ namespace dials { namespace algorithms {
      * @param mask The mask array
      */
     template <typename T>
-    void compute_sat(af::ref<Data<T> > table,
+    void compute_sat(Data<T> table[],
                      const af::const_ref<T, af::c_grid<2> > &src,
                      const af::const_ref<bool, af::c_grid<2> > &mask) {
       // Largest value to consider
@@ -1041,7 +1042,7 @@ namespace dials { namespace algorithms {
      * @param dst The output array
      */
     template <typename T>
-    void compute_dispersion_threshold(af::ref<Data<T> > table,
+    void compute_dispersion_threshold(const Data<T> table[],
                                       const af::const_ref<T, af::c_grid<2> > &src,
                                       const af::const_ref<bool, af::c_grid<2> > &mask,
                                       af::ref<bool, af::c_grid<2> > dst) {
@@ -1111,7 +1112,7 @@ namespace dials { namespace algorithms {
      * @param dst The output array
      */
     template <typename T>
-    void compute_dispersion_threshold(af::ref<Data<T> > table,
+    void compute_dispersion_threshold(const Data<T> table[],
                                       const af::const_ref<T, af::c_grid<2> > &src,
                                       const af::const_ref<bool, af::c_grid<2> > &mask,
                                       const af::const_ref<double, af::c_grid<2> > &gain,
@@ -1206,7 +1207,7 @@ namespace dials { namespace algorithms {
      * @param dst The output array
      */
     template <typename T>
-    void compute_final_threshold(af::ref<Data<T> > table,
+    void compute_final_threshold(const Data<T> table[],
                                  const af::const_ref<T, af::c_grid<2> > &src,
                                  const af::const_ref<bool, af::c_grid<2> > &mask,
                                  af::ref<bool, af::c_grid<2> > dst) {
@@ -1280,7 +1281,7 @@ namespace dials { namespace algorithms {
      * @param dst The output array
      */
     template <typename T>
-    void compute_final_threshold(af::ref<Data<T> > table,
+    void compute_final_threshold(const Data<T> table[],
                                  const af::const_ref<T, af::c_grid<2> > &src,
                                  const af::const_ref<bool, af::c_grid<2> > &mask,
                                  const af::const_ref<double, af::c_grid<2> > &gain,
@@ -1363,11 +1364,12 @@ namespace dials { namespace algorithms {
       DIALS_ASSERT(src.accessor().all_eq(mask.accessor()));
       DIALS_ASSERT(src.accessor().all_eq(dst.accessor()));
 
-      // Get the table
-      DIALS_ASSERT(sizeof(T) <= sizeof(double));
+      // Validate that we aren't larger than the preallocated table size
+      static_assert(sizeof(T) <= sizeof(double),
+                    "Template type too large for preallocated table");
 
       // Cast the buffer to the table type
-      af::ref<Data<T> > table(reinterpret_cast<Data<T> *>(&buffer_[0]), buffer_.size());
+      Data<T> *table = reinterpret_cast<Data<T> *>(buffer_.get());
 
       // compute the summed area table
       compute_sat(table, src, mask);
@@ -1409,7 +1411,7 @@ namespace dials { namespace algorithms {
       DIALS_ASSERT(sizeof(T) <= sizeof(double));
 
       // Cast the buffer to the table type
-      af::ref<Data<T> > table((Data<T> *)&buffer_[0], buffer_.size());
+      Data<T> *table = reinterpret_cast<Data<T> *>(buffer_.get());
 
       // compute the summed area table
       compute_sat(table, src, mask);
@@ -1436,7 +1438,7 @@ namespace dials { namespace algorithms {
     double nsig_s_;
     double threshold_;
     int min_count_;
-    std::vector<char> buffer_;
+    std::unique_ptr<unsigned char[]> buffer_;
   };
 
 }}  // namespace dials::algorithms

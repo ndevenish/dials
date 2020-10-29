@@ -147,7 +147,8 @@ namespace dials { namespace algorithms { namespace boost_python {
       .def("value_mask", &DispersionExtendedThresholdDebug::value_mask)
       .def("final_mask", &DispersionExtendedThresholdDebug::final_mask);
 
-    class_<DispersionExtendedThreshold>("DispersionExtendedThreshold", no_init)
+    class_<DispersionExtendedThreshold, boost::noncopyable>(
+      "DispersionExtendedThreshold", no_init)
       .def(init<int2, int2, double, double, double, int>())
       /* .def("__call__", &DispersionExtendedThreshold::threshold<int>) */
       .def("__call__", &DispersionExtendedThreshold::threshold<double>)
