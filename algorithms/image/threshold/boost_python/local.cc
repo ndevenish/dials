@@ -64,7 +64,7 @@ namespace dials { namespace algorithms { namespace boost_python {
     local_threshold_suite<float>();
     local_threshold_suite<double>();
 
-    class_<DispersionThreshold>("DispersionThreshold", no_init)
+    class_<DispersionThreshold, boost::noncopyable>("DispersionThreshold", no_init)
       .def(init<int2, int2, double, double, double, int>())
       .def("__call__", &DispersionThreshold::threshold<int>)
       .def("__call__", &DispersionThreshold::threshold<double>)
