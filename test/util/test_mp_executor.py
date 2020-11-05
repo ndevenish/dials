@@ -33,7 +33,7 @@ def _do_long_function(i):
 
 
 def test_batch_processor_easy_mp_passthrough():
-    with BatchExecutor("multiprocessing", max_workers=5, njobs=1) as e:
+    with BatchExecutor("easymp_multiprocessing", max_workers=5, njobs=1) as e:
         futs = []
         start = time.time()
         for i in range(5):
@@ -44,6 +44,7 @@ def test_batch_processor_easy_mp_passthrough():
         duration = time.time() - start
         assert duration < 7
 
+        # Now test through the 'map' function
         start = time.time()
         result = e.map(_do_long_function, range(5))
         assert list(result) == [0, 2, 4, 6, 8]

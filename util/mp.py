@@ -1,17 +1,13 @@
-from __future__ import absolute_import, division, print_function
-
-import os
 import ctypes
 import logging
 import math
-import multiprocessing
 import os
 import pickle
 import threading
 import time
-import warnings
 from collections import namedtuple
-from concurrent.futures import Executor, Future, ThreadPoolExecutor
+from concurrent.futures import Executor, Future, ProcessPoolExecutor, ThreadPoolExecutor
+from typing import Optional
 
 import future.moves.itertools as itertools
 import psutil
@@ -285,29 +281,68 @@ def terminate_thread(thread):
         raise SystemError("PyThreadState_SetAsyncExc failed")
 
 
-def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs):
+def BatchExecutor(
+    method: str = "multiprocessing",
+    max_workers: Optional[int] = None,
+    njobs: int = 1,
+    **kwargs
+) -> Executor:
     """
     Execute tasks in parallel via a variety of methods.
 
     Args:
         method:
-            The method to use. If None, then "multiprocessing" will be
-            used if nprocs is None or nprocs > 1, otherwise "threads"
-            will be used with a single executor to effectively process
-            the jobs serially.
-        nprocs:
-            The number of tasks to process concurrently. If nprocs is
-            None or not given, it will default depending on the method:
-                threads:
-                    The number of processors on the machine, multiplied
-                    by 5, assuming that ThreadPoolExecutor is often used
-                    to overlap I/O instead of CPU work and the number of
-                    workers should be higher than the number of workers
-                    for multiprocessing.
-                multiprocessing:
-                    It will default to the number of processors on the machine.
-                other:
-                    It will default to 1, assuming that njobs are being specified.
+            The method to use. Can be several special values, or anything
+            accepted by easy_mp:
+                None
+                    "multiprocessing" will be used if max_workers=None or
+                    nprocs > 1, otherwise "threads" will be used with a
+                    single executor to effectively process the jobs
+                    serially. This is to preserve the previous behaviour
+                    from passed-through user parameters.
+                "multiprocessing" (default)
+                    ProcessPoolExecutor will be used to create a pool of
+                    multiprocessing workers.
+                "threads"
+                    ThreadPoolExecutor will be used to create a pool of
+                    threads.
+                "serial"
+                    Serially executes functions immediately upon
+                    submission.
+                "easymp_multiprocessing"
+                    Passes "multiprocessing" through to the underlying,
+                    wrapped easy_mp. Diagnotistic, for debugging issues
+                    that might arise from different behaviour.
+
+                Anything else will be passed through to a wrapper that
+                abstracts out the libtbx.easy_mp parallel map behaviour
+                to an executor interface.
+
+        max_workers:
+            The number of tasks to process concurrently. If max_workers
+            is None, it will default depending on the method:
+                "multiprocessing":
+                    The number of available processors on the machine,
+                    as determined by available_cores().
+                "threads":
+                    The number of available processors on the machine,
+                    multiplied by 5, assuming that ThreadPoolExecutor is
+                    often used to overlap I/O instead of CPU work and
+                    the number of workers should be higher than the
+                    number of workers for multiprocessing.
+                other methods:
+                    The value for max_workers will default to 1,
+                    assuming that either njobs is specified or the
+                    parallel environment is otherwise passed through in
+                    optional keyword-arguments.
+
+        njobs:
+            The number of "Jobs", passed through to easy_mp. This
+            must be 1 for methods "threads" and "multiprocessing".
+
+        **kwargs:
+            Other keywords, passed through to easy_mp if the method is
+            not "threads" or "multiprocessing".
     """
     # Work out default methods
     if not method and max_workers == 1:
@@ -315,43 +350,32 @@ def BatchExecutor(method="multiprocessing", max_workers=None, njobs=1, **kwargs)
     elif not method:
         method = "multiprocessing"
 
-    # Work out default number of workers
+    # Work out default number of workers - use same logic as Process/ThreadPoolExecutor
+    # except use our "available cores" method instead of raw CPU count
     if method == "threads" and not max_workers:
-        max_workers = min(32, (multiprocessing.cpu_count() or 1) + 4)
-    elif method == "multiprocessing" and not max_workers:
-        max_workers = multiprocessing.cpu_count()
+        max_workers = min(32, (available_cores() or 1) + 4)
+    elif "multiprocessing" in method and not max_workers:
+        max_workers = available_cores()
     elif not max_workers:
         max_workers = 1
 
-    # Validate njobs
+    # Validate njobs isn't set when it doesn't make sense
     if method in {"threads", "multiprocessing"} and njobs != 1:
         raise ValueError("Can not specify njobs with method '{}'".format(method))
-
-    # Inherit behaviour of windows multiprocessing for now, until we understand
-    # why it was implemented and why easy_mp doesn't work (can probably work to
-    # remove once Python3 with ProcessPoolExecutor)
-    if (
-        os.name == "nt"
-        and method == "multiprocessing"
-        and (max_workers > 1 or njobs > 1)
-    ):
-        logger.warning(
-            """
-*******************************************************************************
-Multiprocessing is not available on windows. Setting nproc = 1, njobs = 1
-*******************************************************************************
-"""
-        )
-        max_workers = 1
-        njobs = 1
 
     if method == "threads":
         print("DEBUG: Running tasks in threads n={}".format(max_workers))
         return ThreadPoolExecutor(max_workers=max_workers)
+    elif method == "multiprocessing":
+        return ProcessPoolExecutor(max_workers=max_workers)
     elif method == "serial":
         assert max_workers == 1 and njobs == 1
         print("DEBUG: Running tasks serially on submit")
         return _SerialExecutor()
+
+    # Allow _explicit_ passing through to easy_mp while we are developing
+    if method.startswith("easymp_"):
+        method = method[len("easymp_") :]
 
     print("DEBUG: Running tasks with parallel map wrapper")
     return _WrapBatchParallelMap(method, max_workers, njobs, **kwargs)
@@ -361,8 +385,12 @@ class _SerialExecutor(Executor):
     """Shim executor that runs everything serially"""
 
     def submit(self, fn, *args, **kwargs):
-        # For debugging, try to pickle function
-        pickle.dumps(fn)
+        # For debugging, try to pickle function - it won't work in other
+        # methods otherwise
+        try:
+            pickle.dumps(fn)
+        except pickle.PicklingError:
+            raise ValueError("Function to execute is not pickleable")
 
         fut = Future()
         try:
