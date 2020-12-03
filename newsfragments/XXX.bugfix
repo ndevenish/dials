@@ -1,0 +1,1 @@
+Fix error vith multiple lattices in ``dials.reciprocal_lattice_viewer`` when using wxPython 4.1+
