@@ -1,0 +1,8 @@
+add_python_library( dials_algorithms_polygon_ext boost_python/polygon_ext.cc )
+target_link_libraries( dials_algorithms_polygon_ext PUBLIC cctbx scitbx_boost_python )
+
+add_python_library( dials_algorithms_polygon_spatial_interpolation_ext
+    boost_python/spatial_interpolation_ext.cc )
+target_link_libraries( dials_algorithms_polygon_spatial_interpolation_ext PUBLIC cctbx scitbx_boost_python )
+
+add_subdirectory(clip)

@@ -1,0 +1,12 @@
+add_python_library( dials_array_family_flex_ext
+    boost_python/flex_int6.cc
+    boost_python/flex_shoebox.cc
+    boost_python/flex_centroid.cc
+    boost_python/flex_intensity.cc
+    boost_python/flex_observation.cc
+    boost_python/flex_reflection_table.cc
+    boost_python/flex_unit_cell.cc
+    boost_python/flex_shoebox_extractor.cc
+    boost_python/flex_binner.cc
+    boost_python/flex_ext.cc )
+target_link_libraries( dials_array_family_flex_ext PUBLIC cctbx scitbx_boost_python )
