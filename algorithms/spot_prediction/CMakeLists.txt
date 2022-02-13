@@ -11,4 +11,4 @@ Python_add_library( dials_algorithms_spot_prediction_ext MODULE
     boost_python/pixel_labeller.cc
     boost_python/pixel_to_miller_index.cc
     boost_python/spot_prediction_ext.cc )
-target_link_libraries( dials_algorithms_spot_prediction_ext PUBLIC cctbx scitbx_boost_python )
+target_link_libraries( dials_algorithms_spot_prediction_ext PUBLIC CCTBX::cctbx scitbx_boost_python )

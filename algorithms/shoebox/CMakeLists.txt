@@ -6,4 +6,4 @@ Python_add_library( dials_algorithms_shoebox_ext MODULE
     boost_python/mask_overlapping.cc
     boost_python/mask_builder.cc
     boost_python/shoebox_ext.cc )
-target_link_libraries( dials_algorithms_shoebox_ext PUBLIC ann scitbx_boost_python cctbx )
+target_link_libraries( dials_algorithms_shoebox_ext PUBLIC ann scitbx_boost_python CCTBX::cctbx )

@@ -8,4 +8,4 @@ Python_add_library( dials_model_data_ext MODULE
     boost_python/ray.cc
     boost_python/image.cc
     boost_python/data_ext.cc )
-target_link_libraries( dials_model_data_ext PUBLIC cctbx scitbx_boost_python )
+target_link_libraries( dials_model_data_ext PUBLIC CCTBX::cctbx scitbx_boost_python )
