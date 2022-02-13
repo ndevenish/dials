@@ -1,2 +1,2 @@
-add_python_library( dials_algorithms_filter_ext boost_python/filter_ext.cc )
+Python_add_library( dials_algorithms_filter_ext MODULE boost_python/filter_ext.cc )
 target_link_libraries( dials_algorithms_filter_ext PUBLIC cctbx scitbx_boost_python )

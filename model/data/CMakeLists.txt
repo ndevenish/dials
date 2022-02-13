@@ -1,4 +1,4 @@
-add_python_library( dials_model_data_ext
+Python_add_library( dials_model_data_ext MODULE
     boost_python/image_volume.cc
     boost_python/adjacency_list.cc
     boost_python/shoebox.cc

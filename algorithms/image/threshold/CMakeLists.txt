@@ -1,4 +1,4 @@
-add_python_library( dials_algorithms_image_threshold_ext
+Python_add_library( dials_algorithms_image_threshold_ext MODULE
     boost_python/unimodal.cc
     boost_python/local.cc
     boost_python/threshold_ext.cc )

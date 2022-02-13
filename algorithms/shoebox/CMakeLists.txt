@@ -1,4 +1,4 @@
-add_python_library( dials_algorithms_shoebox_ext
+Python_add_library( dials_algorithms_shoebox_ext MODULE
     boost_python/mask_code.cc
     boost_python/find_overlapping.cc
     boost_python/overload_checker.cc

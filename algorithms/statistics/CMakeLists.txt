@@ -1,3 +1,3 @@
-add_python_library( dials_algorithms_statistics_ext
+Python_add_library( dials_algorithms_statistics_ext MODULE
     boost_python/statistics_ext.cc )
 target_link_libraries( dials_algorithms_statistics_ext PUBLIC cctbx scitbx_boost_python )

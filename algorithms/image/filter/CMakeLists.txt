@@ -1,4 +1,4 @@
-add_python_library( dials_algorithms_image_filter_ext
+Python_add_library( dials_algorithms_image_filter_ext MODULE
     boost_python/summed_area.cc
     boost_python/mean_and_variance.cc
     boost_python/index_of_dispersion_filter.cc

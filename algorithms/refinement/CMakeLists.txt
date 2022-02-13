@@ -1,7 +1,7 @@
 add_library( shared_outlier_helpers OBJECT boost_python/outlier_helpers.cc )
 target_link_libraries( shared_outlier_helpers PUBLIC scitbx_boost_python Boost::boost cctbx Boost::python )
 
-add_python_library( dials_refinement_helpers_ext
+Python_add_library( dials_refinement_helpers_ext MODULE
     boost_python/parameterisation_helpers.cc
     boost_python/gallego_yezzi.cc
     boost_python/mahalanobis.cc

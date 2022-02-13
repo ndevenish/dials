@@ -1,4 +1,4 @@
-add_python_library( dials_algorithms_spot_prediction_ext
+Python_add_library( dials_algorithms_spot_prediction_ext MODULE
     boost_python/index_generator.cc
     boost_python/reeke_index_generator.cc
     boost_python/scan_varying_helpers.cc
