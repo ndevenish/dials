@@ -7,4 +7,4 @@ Python_add_library( dials_algorithms_image_filter_ext MODULE
     boost_python/distance.cc
     boost_python/anisotropic_diffusion.cc
     boost_python/filter_ext.cc )
-target_link_libraries( dials_algorithms_image_filter_ext PUBLIC CCTBX::cctbx scitbx_boost_python )
+target_link_libraries( dials_algorithms_image_filter_ext PUBLIC CCTBX::cctbx Boost::python )

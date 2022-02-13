@@ -9,4 +9,4 @@ Python_add_library( dials_array_family_flex_ext MODULE
     boost_python/flex_shoebox_extractor.cc
     boost_python/flex_binner.cc
     boost_python/flex_ext.cc )
-target_link_libraries( dials_array_family_flex_ext PUBLIC CCTBX::cctbx scitbx_boost_python )
+target_link_libraries( dials_array_family_flex_ext PUBLIC CCTBX::cctbx Boost::python )
