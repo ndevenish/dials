@@ -13,7 +13,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
 find_package(CCTBX COMPONENTS cctbx scitbx REQUIRED)
-find_package(HDF5 REQUIRED)
+find_package(DXTBX REQUIRED)
+# find_package(HDF5 REQUIRED)
 
 # Find the boost::python library for this version of python
 find_package(Boost COMPONENTS "python${Python_VERSION_MAJOR}${Python_VERSION_MINOR}" REQUIRED)
@@ -29,10 +30,12 @@ endif()
 # Put the libraries into lib/ so that we can run this in-place in a TBX install
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}/lib")
 
+# We depend on including header sources from above this current directory.
+# This currently means this _must_ be in a "dials" folder. This is unstable,
+# but will be dealt with when we move to src/ layout.
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-
-
-
+link_libraries(DXTBX::DXTBX)
 
 # add_tbx_module( dials INTERFACE )
 # target_include_directories( dials INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/.. )

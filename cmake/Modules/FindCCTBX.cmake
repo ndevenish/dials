@@ -55,7 +55,8 @@ function(_cctbx_determine_libtbx_build_dir)
     execute_process(COMMAND ${Python_EXECUTABLE} -c "import libtbx.load_env; print(abs(libtbx.env.build_path))"
                     RESULT_VARIABLE _LOAD_ENV_RESULT
                     OUTPUT_VARIABLE _LOAD_LIBTBX_BUILD_DIR
-                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    ERROR_QUIET)
 
     if (NOT ${_LOAD_ENV_RESULT})
         # We found it via python import
@@ -112,7 +113,7 @@ function(_cctbx_read_module MODULE)
         if(NOT _dist_path)
             continue()
         endif()
-        list(APPEND _dist_paths "${_dist_path}/include")
+        list(APPEND _dist_paths "${_dist_path}")
         if (EXISTS "${_dist_path}/include")
             list(APPEND _include_paths "${_dist_path}/include")
         else()
@@ -122,12 +123,12 @@ function(_cctbx_read_module MODULE)
     endforeach()
     list(REMOVE_DUPLICATES _include_paths)
     list(REMOVE_DUPLICATES _dist_paths)
-
     target_include_directories(${_target} INTERFACE ${_include_paths})
+    set(CCTBX_${MODULE}_DIST "${_dist_paths}" PARENT_SCOPE)
 
     # Find if this module has a "base" library, and any sub-libraries
     file(READ "${CMAKE_CURRENT_LIST_DIR}/../module_libraries.json" _modules_libs)
-    string(JSON _module_libs GET "${_modules_libs}" "${MODULE}")
+    string(JSON _module_libs ERROR_VARIABLE _no_module_libs GET "${_modules_libs}" "${MODULE}")
     if (_module_libs)
         # We have actual libraries to import as imported libraries
         # iterate over every key: value in the object
