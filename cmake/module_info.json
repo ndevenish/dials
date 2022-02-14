@@ -1,6 +1,6 @@
 {
   "libraries": {
-    "annlib_adaptbx": { "base": "ann" },
+    "annlib": { "base": "ann" },
     "ccp4io": { "base": "ccp4io" },
     "cctbx": { "base": "cctbx", "sgtbx::direct_space_asu": "cctbx_sgtbx_asu" },
     "fast_linalg": { "base": "fast_linalg" },
@@ -19,6 +19,7 @@
     "xfel": { "legacy_scale": "legacy_scale", "mono_sim": "xfel_mono_sim" }
   },
   "includes": {
+    "annlib": ["include", "#build/annlib_adaptbx/include"],
     "ccp4io": ["libccp4/ccp4"]
   }
 }

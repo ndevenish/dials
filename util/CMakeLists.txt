@@ -3,4 +3,4 @@ target_link_libraries( dials_util_ext PUBLIC Boost::python CCTBX::cctbx CCTBX::c
 
 Python_add_library( dials_util_streambuf_test_ext MODULE
     boost_python/streambuf_test_ext.cpp )
-target_link_libraries( dials_util_streambuf_test_ext PUBLIC ccp4io Boost::python CCTBX::cctbx )
+target_link_libraries( dials_util_streambuf_test_ext PUBLIC Boost::python CCTBX::cctbx )
