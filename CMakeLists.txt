@@ -12,7 +12,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generate compile_commands.json
 set(CMAKE_CXX_STANDARD 11)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
-find_package(CCTBX COMPONENTS cctbx scitbx REQUIRED)
+find_package(CCTBX COMPONENTS cctbx scitbx ccp4io REQUIRED)
 find_package(DXTBX REQUIRED)
 # find_package(HDF5 REQUIRED)
 

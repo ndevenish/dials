@@ -96,39 +96,75 @@ function(_cctbx_read_module MODULE)
     string(JSON _include_paths GET "${_env_json}" include_path)
     string(JSON _lib_path GET "${_env_json}" lib_path)
 
-    # Work out what paths need to be included for this module
+    # Read the metainfo database - we might have extra information we need to inject
+    file(READ "${CMAKE_CURRENT_LIST_DIR}/../module_info.json" _modules_db)
+    # Read a list of libraries that this module exports
+    string(JSON _module_libs     ERROR_VARIABLE _error GET "${_modules_db}" "libraries" "${MODULE}")
+    # Read the extra include paths for this module
+    string(JSON _module_includes_array ERROR_VARIABLE _error GET "${_modules_db}" "includes" "${MODULE}")
+    if (_module_includes_array)
+        # Convert this array to a CMake list
+        string(JSON _n_includes LENGTH "${_module_includes_array}")
+        math(EXPR _n_includes "${_n_includes} - 1")  # CMake RANGE is inclusive
+        foreach( _n RANGE "${_n_includes}")
+            string(JSON _include GET "${_module_includes_array}" "${_n}")
+            list(APPEND _module_includes "${_include}")
+        endforeach()
+    endif()
+
+    # Work out what dist paths need to be consulted for this module
     string(JSON _n_dist_paths LENGTH "${_module_json}" dist_paths)
-    math(EXPR _n_dist_paths "${_n_dist_paths} - 1")
-    # We need to account for:
-    # Algorithm: if folder has an include/ subdir:
-    #               use that
-    #            else:
-    #               use the path above
-    # - this accounts for most cases, and it seems unlikely that we will
-    #   be importing uniquely from modules that this doesn't cover. There
-    #   was an exhaustive mapping list in tbx2cmake but the new installed
-    #   layout confuses that somewhat.
+    math(EXPR _n_dist_paths "${_n_dist_paths} - 1")  # CMake RANGE is inclusive
+
+    # We need to work out include/ directories for this module.
+    #
+    # Algorithm: For every listed dist path:
+    #               if the module_info database contains an entry for this module:
+    #                   use those
+    #               else if folder has an include/ subdir:
+    #                   use that
+    #               else:
+    #                   use the parent of the dist path above
     foreach(_n RANGE "${_n_dist_paths}")
         string(JSON _dist_path GET "${_module_json}" dist_paths ${_n})
         if(NOT _dist_path)
             continue()
         endif()
         list(APPEND _dist_paths "${_dist_path}")
-        if (EXISTS "${_dist_path}/include")
-            list(APPEND _include_paths "${_dist_path}/include")
+        # If we don't have a specific include-path override for this,
+        # then use the dist-paths as roots for the include paths
+        if (_module_includes)
+            message(DEBUG "${MODULE} has override include paths")
+            # Try appending every includes dir
+            foreach(_include "${_module_includes}")
+                # Build up a full path for this
+                cmake_path(APPEND _dist_path "${_include}" OUTPUT_VARIABLE _full_include)
+                cmake_path(ABSOLUTE_PATH _full_include NORMALIZE)
+                # We might have multiple dist paths. Only use include dirs that exist.
+                if(EXISTS "${_full_include}")
+                    message(DEBUG "Adding include path: ${_full_include}")
+                    list(APPEND _include_paths "${_full_include}")
+                endif()
+            endforeach()
         else()
-            cmake_path(GET _dist_path PARENT_PATH _result)
-            list(APPEND _include_paths "${_result}")
+            # We didn't have any speciic override. If include/ exists
+            # then use that, otherwise use the module parent directory.
+            if (EXISTS "${_dist_path}/include")
+                list(APPEND _include_paths "${_dist_path}/include")
+            else()
+                cmake_path(GET _dist_path PARENT_PATH _result)
+                list(APPEND _include_paths "${_result}")
+            endif()
         endif()
     endforeach()
     list(REMOVE_DUPLICATES _include_paths)
     list(REMOVE_DUPLICATES _dist_paths)
     target_include_directories(${_target} INTERFACE ${_include_paths})
+    message(DEBUG "Include directories: ${_include_paths}")
     set(CCTBX_${MODULE}_DIST "${_dist_paths}" PARENT_SCOPE)
 
     # Find if this module has a "base" library, and any sub-libraries
-    file(READ "${CMAKE_CURRENT_LIST_DIR}/../module_libraries.json" _modules_libs)
-    string(JSON _module_libs ERROR_VARIABLE _no_module_libs GET "${_modules_libs}" "${MODULE}")
+    # string(JSON _modules_libs GET "${_modules_libs}" "libraries")
     if (_module_libs)
         # We have actual libraries to import as imported libraries
         # iterate over every key: value in the object

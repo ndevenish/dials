@@ -41,8 +41,6 @@ else()
 endif()
 
 if (DXTBX_DIR)
-    message(STATUS "Found dxtbx: ${DXTBX_DIR}")
-
     add_library(DXTBX::DXTBX INTERFACE IMPORTED)
     cmake_path(GET DXTBX_DIR PARENT_PATH _dxtbx_include_root)
     target_include_directories(DXTBX::DXTBX INTERFACE "${_dxtbx_include_root}")
