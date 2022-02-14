@@ -19,7 +19,7 @@ if (NOT TARGET Python::Interpreter)
 endif()
 
 message(DEBUG "Looking for dxtbx build dir via importing in python")
-execute_process(COMMAND ${Python_EXECUTABLE} -c "import dxtbx, pathlib; print(Path(dxtbx.__file__).parent.resolve())"
+execute_process(COMMAND ${Python_EXECUTABLE} -c "import dxtbx, pathlib; print(pathlib.Path(dxtbx.__file__).parent.resolve())"
                 RESULT_VARIABLE _IMPORT_RESULT
                 OUTPUT_VARIABLE _IMPORT_DIR
                 OUTPUT_STRIP_TRAILING_WHITESPACE
