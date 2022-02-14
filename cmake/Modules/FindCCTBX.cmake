@@ -202,7 +202,7 @@ if (NOT CCTBX_BUILD_DIR)
     _cctbx_determine_libtbx_build_dir()
 endif()
 # Make this absolute, in case it was specified as relative
-cmake_path(ABSOLUTE_PATH CCTBX_BUILD_DIR BASE_DIRECTORY "${CMAKE_BINARY_DIR}")
+cmake_path(ABSOLUTE_PATH CCTBX_BUILD_DIR BASE_DIRECTORY "${CMAKE_BINARY_DIR}" NORMALIZE)
 
 if (CCTBX_BUILD_DIR)
     message(DEBUG "Using build dir ${CCTBX_BUILD_DIR}")
