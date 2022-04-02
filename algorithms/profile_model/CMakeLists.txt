@@ -11,3 +11,13 @@ target_link_libraries( dials_algorithms_profile_model_gaussian_rs_ext PUBLIC CCT
 Python_add_library( dials_algorithms_profile_model_gaussian_rs_transform_ext MODULE
     gaussian_rs/transform/boost_python/transform_ext.cc )
 target_link_libraries( dials_algorithms_profile_model_gaussian_rs_transform_ext PUBLIC CCTBX::cctbx Boost::python )
+
+Python_add_library(
+    dials_algorithms_profile_model_ellipsoid_ext
+    ellipsoid/boost_python/ext.cc
+)
+target_link_libraries(
+    dials_algorithms_profile_model_ellipsoid_ext
+    PUBLIC
+    CCTBX::cctbx Boost::python
+)
