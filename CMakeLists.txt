@@ -6,18 +6,19 @@ project(dials)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # General cmake environment configuration
+include(CoverageBuildConfiguration) # Custom module to make turning coverage on easy
 include(SetDefaultBuildRelWithDebInfo) # Default builds to release with debug info
 include(AlwaysColourCompilation) # Always show coloured compiler output
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Generate compile_commands.json
 set(CMAKE_CXX_STANDARD 11)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
 find_package(CCTBX COMPONENTS cctbx scitbx ccp4io annlib REQUIRED)
 find_package(DXTBX REQUIRED)
-# find_package(HDF5 REQUIRED)
 
 # Find the boost::python library for this version of python
-find_package(Boost COMPONENTS "python${Python_VERSION_MAJOR}${Python_VERSION_MINOR}" REQUIRED)
+find_package(Boost COMPONENTS thread "python${Python_VERSION_MAJOR}${Python_VERSION_MINOR}" REQUIRED)
 
 # Create Boost::python alias so we don't need to carry the python version around
 if(NOT TARGET Boost::python )
