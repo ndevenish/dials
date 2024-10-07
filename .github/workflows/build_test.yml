@@ -28,7 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_MINIMUM_VERSION }}
-      - shell: bash
+      - name: Prepare for Base Environment
+        shell: bash
         run: |
           OS="$(python -c "print('${{ runner.os }}'.lower())")"
           echo "ninja
@@ -54,7 +55,8 @@ jobs:
       - name: Build
         shell: bash
         run: python modules/dials/installer/bootstrap.py build ${BOOTSTRAP_FLAGS} ${BOOTSTRAP_BUILD_FLAGS}
-      - name: "Prepare for dials-data cache restoration"
+      - name: Prepare for cache restoration
+        shell: bash
         run: |
           set -x
           find . -name "dials.data*"
@@ -72,10 +74,11 @@ jobs:
             ${{ env.CURRENT_WEEK }}-${{ env.DIALS_DATA_VERSION }}-
           path: ${{ github.workspace }}/data
       - name: Run pytest
-        uses: pavelzw/pytest-action@v2
+        uses: pavelzw/pytest-action@510c5e90c360a185039bea56ce8b3e7e51a16507 # v2.2.0
         with:
           verbose: true
           emoji: false
           job-summary: true
           custom-arguments: modules/dials --regression
           click-to-expand: true
+          custom-pytest: ${{ matrix.buildsys == 'CMake' && 'pytest' || 'libtbx.python -mpytest' }}
