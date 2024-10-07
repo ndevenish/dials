@@ -12,14 +12,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        os: [ubuntu, macOS, windows]
         buildsys: [CMake, libtbx]
         exclude:
-          - os: macOS-latest
+          - os: macOS
             buildsys: libtbx
-          - os: windows-latest
+          - os: windows
             buildsys: libtbx
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -41,17 +41,19 @@ jobs:
           else
             echo "BOOTSTRAP_BUILD_FLAGS=--config-flags='-DCMAKE_UNITY_BUILD=true'" >> $GITHUB_ENV
           fi
+          echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
+          echo "$(pwd)/conda_base/Scripts" >> $GITHUB_PATH
+      - name: Install Base Environment
+        shell: bash
+        run: |
           python modules/dials/installer/bootstrap.py update base \
             --python "${{ matrix.buildsys == 'CMake' && env.PYTHON_TESTING_VERSION || env.PYTHON_MINIMUM_VERSION }}" \
             ${BOOTSTRAP_FLAGS}
-          echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
-          echo "$(pwd)/conda_base/Scripts" >> $GITHUB_PATH
       - if: runner.os != 'Windows'
         run: echo "CMAKE_GENERATOR=Ninja" >> $GITHUB_ENV
-      - run: |
-          python modules/dials/installer/bootstrap.py build \
-              ${BOOTSTRAP_FLAGS} \
-              ${BOOTSTRAP_BUILD_FLAGS}
+      - name: Build
+        shell: bash
+        run: python modules/dials/installer/bootstrap.py build ${BOOTSTRAP_FLAGS} ${BOOTSTRAP_BUILD_FLAGS}
       - name: "Prepare for dials-data cache restoration"
         run: |
           set -x
