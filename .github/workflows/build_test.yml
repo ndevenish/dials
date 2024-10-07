@@ -81,4 +81,4 @@ jobs:
           job-summary: true
           custom-arguments: modules/dials --regression
           click-to-expand: true
-          custom-pytest: ${{ matrix.buildsys == 'CMake' && 'pytest' || 'libtbx.python -mpytest' }}
+          custom-pytest: ${{ matrix.buildsys == 'CMake' && 'pytest' || 'build/bin/libtbx.python -mpytest' }}
