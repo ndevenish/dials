@@ -6,7 +6,6 @@ env:
   # Testing version is used for everything else
   PYTHON_TESTING_VERSION: "3.12"
 
-
 jobs:
   # Standard, multi-platform build using CMake and prebuilt CCTBX
   build_test:
@@ -37,6 +36,22 @@ jobs:
           echo "$(pwd)/conda_base/Scripts" >> $GITHUB_PATH
       - if: runner.os != 'Windows'
         run: echo "CMAKE_GENERATOR=Ninja" >> $GITHUB_ENV
+      - name: "Prepare for dials-data cache restoration"
+        run: |
+          echo "DIALS_DATA_VERSION_FULL=$(dials.data info -v | grep version.full)" >> $GITHUB_ENV
+          echo "DIALS_DATA_VERSION=$(dials.data info -v | grep version.major_minor)" >> $GITHUB_ENV
+          echo "DIALS_DATA=${PWD}/data" >> $GITHUB_ENV
+          echo "CURRENT_WEEK=$(date +W%W)" >> $GITHUB_ENV
+          echo "TODAY_ISO=$(date +%Y%m%d)" >> $GITHUB_ENV
+      - name: Restore Cache
+        uses: actions/cache@v4
+        with:
+          key: "${{ env.CURRENT_WEEK }}-${{ env.DIALS_DATA_VERSION }}-${{ env.TODAY_ISO }}-${{ env.DIALS_DATA_VERSION_FULL }}"
+          restore-keys: |
+            ${{ env.CURRENT_WEEK }}-${{ env.DIALS_DATA_VERSION }}-${{ env.TODAY_ISO }}-
+            ${{ env.CURRENT_WEEK }}-${{ env.DIALS_DATA_VERSION }}-
+          path: ${{ github.workspace }}/data
+
       - run: python modules/dials/installer/bootstrap.py build --config-flags='-DCMAKE_UNITY_BUILD=true'
       - name: Run pytest
         uses: pavelzw/pytest-action@v2
@@ -44,7 +59,7 @@ jobs:
           verbose: true
           emoji: false
           job-summary: true
-          custom-arguments: modules/dials
+          custom-arguments: modules/dials --regression
           click-to-expand: true
 
   # Also run a full libtbx-bootstrap build
