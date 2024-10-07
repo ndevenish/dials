@@ -1113,6 +1113,7 @@ add_subdirectory(dials)
     extra_args = extra_args or []
     if os.name == "nt":
         extra_args.append("-DPython_ROOT_DIR=" + conda_base_root)
+    sys.stdout.flush()
     run_indirect_command(
         cmake_exe,
         [
