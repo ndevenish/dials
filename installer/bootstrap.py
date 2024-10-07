@@ -1033,7 +1033,8 @@ def refresh_build_cmake():
     )
 
 
-def configure_build_cmake():
+def configure_build_cmake(extra_args):
+    # type: (list[str] | None) -> None
     cmake_exe = _get_cmake_exe()
     python_exe = _get_base_python()
 
@@ -1104,7 +1105,7 @@ add_subdirectory(dials)
     # run_indirect runs inside the build folder with an activated environment
     conda_base_root = os.path.join(os.path.abspath("."), "conda_base")
     assert os.path.isdir(conda_base_root)
-    extra_args = []
+    extra_args = extra_args or []
     if os.name == "nt":
         extra_args.append("-DPython_ROOT_DIR=" + conda_base_root)
     run_indirect_command(
@@ -1255,9 +1256,9 @@ def run():
     )
     parser.add_argument(
         "--config-flags",
-        help="""Pass flags to the configuration step. Flags should
+        help="""Pass flags to the configuration step (CMake or libtbx). Flags should
 be passed separately with quotes to avoid confusion (e.g
---config_flags="--build=debug" --config_flags="--another_flag")""",
+--config-flags="--build=debug" --config-flags="--another_flag")""",
         action="append",
         default=[],
     )
@@ -1311,7 +1312,7 @@ be passed separately with quotes to avoid confusion (e.g
     if "build" in options.actions:
         if options.cmake:
             refresh_build_cmake()
-            configure_build_cmake()
+            configure_build_cmake(options.config_flags)
             make_build_cmake()
         else:
             configure_build(options.config_flags)
