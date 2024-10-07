@@ -7,13 +7,18 @@ env:
   PYTHON_TESTING_VERSION: "3.12"
 
 jobs:
-  # Standard, multi-platform build using CMake and prebuilt CCTBX
   build_test:
     name: Build/Test
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
+        buildsys: [CMake, libtbx]
+        exclude:
+          - os: macOS-latest
+            buildsys: libtbx
+          - os: windows-latest
+            buildsys: libtbx
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
@@ -22,7 +27,7 @@ jobs:
           path: modules/dials
       - uses: actions/setup-python@v5
         with:
-          python-version: "${{ env.PYTHON_TESTING_VERSION }}"
+          python-version: ${{ env.PYTHON_MINIMUM_VERSION }}
       - shell: bash
         run: |
           OS="$(python -c "print('${{ runner.os }}'.lower())")"
@@ -31,14 +36,26 @@ jobs:
           dials-data
           pytest-cov
           pytest-timeout" >> modules/dials/.conda-envs/${OS}.txt
-          python modules/dials/installer/bootstrap.py update base --python "${{ env.PYTHON_TESTING_VERSION }}"
+          if [[ ${{ matrix.buildsys }} == 'libtbx' ]]; then
+            echo "BOOTSTRAP_FLAGS=--libtbx" >> $GITHUB_ENV
+          else
+            echo "BOOTSTRAP_BUILD_FLAGS=--config-flags='-DCMAKE_UNITY_BUILD=true'" >> $GITHUB_ENV
+          fi
+          python modules/dials/installer/bootstrap.py update base \
+            --python "${{ matrix.buildsys == 'CMake' && env.PYTHON_TESTING_VERSION || env.PYTHON_MINIMUM_VERSION }}" \
+            ${BOOTSTRAP_FLAGS}
           echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
           echo "$(pwd)/conda_base/Scripts" >> $GITHUB_PATH
       - if: runner.os != 'Windows'
         run: echo "CMAKE_GENERATOR=Ninja" >> $GITHUB_ENV
-      - run: python modules/dials/installer/bootstrap.py build --config-flags='-DCMAKE_UNITY_BUILD=true'
+      - run: |
+          python modules/dials/installer/bootstrap.py build \
+              ${BOOTSTRAP_FLAGS} \
+              ${BOOTSTRAP_BUILD_FLAGS}
       - name: "Prepare for dials-data cache restoration"
         run: |
+          set -x
+          find . -name "dials.data*"
           echo "DIALS_DATA_VERSION_FULL=$(dials.data info -v | grep version.full)" >> $GITHUB_ENV
           echo "DIALS_DATA_VERSION=$(dials.data info -v | grep version.major_minor)" >> $GITHUB_ENV
           echo "DIALS_DATA=${PWD}/data" >> $GITHUB_ENV
@@ -59,35 +76,4 @@ jobs:
           emoji: false
           job-summary: true
           custom-arguments: modules/dials --regression
-          click-to-expand: true
-
-  # Also run a full libtbx-bootstrap build
-  libtbx_build:
-    name: Full Bootstrap Build/Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          path: modules/dials
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "${{ env.PYTHON_MINIMUM_VERSION }}"
-      - shell: bash
-        run: |
-          OS="$(python -c "print('${{ runner.os }}'.lower())")"
-          echo "pytest-md
-          dials-data
-          pytest-timeout" >> modules/dials/.conda-envs/${OS}.txt
-          python modules/dials/installer/bootstrap.py update base --libtbx --python "${{ env.PYTHON_TESTING_VERSION }}"
-          echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
-      - run: python modules/dials/installer/bootstrap.py build --libtbx
-      - name: Run pytest
-        uses: pavelzw/pytest-action@510c5e90c360a185039bea56ce8b3e7e51a16507 # (v2.2.0)
-        with:
-          verbose: true
-          emoji: false
-          job-summary: true
-          custom-arguments: modules/dials
-          custom-pytest: build/bin/libtbx.python -m pytest
           click-to-expand: true
