@@ -1,0 +1,79 @@
+on: push
+
+env:
+  # Python minimum version is used for testing full libtbx-bootstrap
+  PYTHON_MINIMUM_VERSION: "3.9"
+  # Testing version is used for everything else
+  PYTHON_TESTING_VERSION: "3.12"
+
+
+jobs:
+  # Standard, multi-platform build using CMake and prebuilt CCTBX
+  build_test:
+    name: Build/Test
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: modules/dials
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ env.PYTHON_TESTING_VERSION }}"
+      - shell: bash
+        run: |
+          OS="$(python -c "print('${{ runner.os }}'.lower())")"
+          echo "ninja
+          pytest-md
+          dials-data
+          pytest-cov
+          pytest-timeout" >> modules/dials/.conda-envs/${OS}.txt
+          python modules/dials/installer/bootstrap.py update base --python "${{ env.PYTHON_TESTING_VERSION }}"
+          echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
+          echo "$(pwd)/conda_base/Scripts" >> $GITHUB_PATH
+      - if: runner.os != 'Windows'
+        run: echo "CMAKE_GENERATOR=Ninja" >> $GITHUB_ENV
+      - run: python modules/dials/installer/bootstrap.py build --config-flags='-DCMAKE_UNITY_BUILD=true'
+      - name: Run pytest
+        uses: pavelzw/pytest-action@v2
+        with:
+          verbose: true
+          emoji: false
+          job-summary: true
+          custom-arguments: modules/dials
+          click-to-expand: true
+
+  # Also run a full libtbx-bootstrap build
+  libtbx_build:
+    name: Full Bootstrap Build/Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: modules/dials
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ env.PYTHON_MINIMUM_VERSION }}"
+      - shell: bash
+        run: |
+          OS="$(python -c "print('${{ runner.os }}'.lower())")"
+          echo "pytest-md
+          dials-data
+          pytest-timeout" >> modules/dials/.conda-envs/${OS}.txt
+          python modules/dials/installer/bootstrap.py update base --libtbx --python "${{ env.PYTHON_TESTING_VERSION }}"
+          echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
+      - run: python modules/dials/installer/bootstrap.py build --libtbx
+      - name: Run pytest
+        uses: pavelzw/pytest-action@510c5e90c360a185039bea56ce8b3e7e51a16507 # (v2.2.0)
+        with:
+          verbose: true
+          emoji: false
+          job-summary: true
+          custom-arguments: modules/dials
+          custom-pytest: build/bin/libtbx.python -m pytest
+          click-to-expand: true
