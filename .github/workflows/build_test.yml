@@ -43,7 +43,10 @@ jobs:
             echo "BOOTSTRAP_BUILD_FLAGS=--config-flags='-DCMAKE_UNITY_BUILD=true'" >> $GITHUB_ENV
           fi
           echo "$(pwd)/conda_base/bin" >> $GITHUB_PATH
+          # These needed by windows
           echo "$(pwd)/conda_base/Scripts" >> $GITHUB_PATH
+          echo "$(pwd)/conda_base/Library/bin" >> $GITHUB_PATH
+          echo "$(pwd)/conda_base/" >> $GITHUB_PATH
       - name: Install Base Environment
         shell: bash
         run: |
