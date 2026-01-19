@@ -1,7 +1,7 @@
 repos:
 # Syntax validation and some basic sanity checks
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.1.0
+  rev: v6.0.0
   hooks:
   - id: check-merge-conflict
   - id: check-ast
@@ -16,7 +16,7 @@ repos:
 
 # Automatically sort imports
 - repo: https://github.com/PyCQA/isort
-  rev: 5.10.1
+  rev: 7.0.0
   hooks:
   - id: isort
     args: [
@@ -33,8 +33,8 @@ repos:
     exclude: ^installer/
 
 # Automatic source code formatting
-- repo: https://github.com/psf/black
-  rev: 22.1.0
+- repo: https://github.com/psf/black-pre-commit-mirror
+  rev: 26.1.0
   hooks:
   - id: black
     args: [--safe, --quiet]
@@ -42,14 +42,14 @@ repos:
     types: [file]
 
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v13.0.1
+  rev: v21.1.8
   hooks:
   - id: clang-format
     files: \.c(c|pp|xx)?$|\.h(pp)?$
 
 # Linting
 - repo: https://github.com/PyCQA/flake8
-  rev: 4.0.1
+  rev: 7.3.0
   hooks:
   - id: flake8
     additional_dependencies: ['flake8-comprehensions==3.8.0']
