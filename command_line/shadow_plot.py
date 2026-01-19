@@ -6,12 +6,12 @@ from __future__ import annotations
 import json
 import sys
 
+import dials.util
+from dials.util import Sorry
+
 import libtbx
 import libtbx.phil
 from scitbx.array_family import flex
-
-import dials.util
-from dials.util import Sorry
 
 help_message = """
 Generate a 1d or 2d goniometer detector shadow plot for a given experiment list.
@@ -23,8 +23,7 @@ Examples::
   dials.shadow_plot models.expt mode=2d
 """
 
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
 oscillation_range = None
   .type = floats(size=2)
 step_size = auto
@@ -41,8 +40,7 @@ output {
   size_inches = None
     .type = floats(value_min=0, size=2)
 }
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

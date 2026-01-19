@@ -5,15 +5,14 @@ import functools
 import os
 
 import pytest
-
-from cctbx import sgtbx, uctbx
-from dxtbx.model import Crystal
-from dxtbx.serialize import load
-
 from dials.algorithms.indexing import model_evaluation
 from dials.algorithms.indexing.assign_indices import AssignIndicesGlobal
 from dials.algorithms.refinement.refiner import phil_scope as refine_phil
 from dials.array_family import flex
+
+from cctbx import sgtbx, uctbx
+from dxtbx.model import Crystal
+from dxtbx.serialize import load
 
 
 def test_ModelRank():
@@ -209,7 +208,7 @@ def test_filter_doubled_cell():
         fraction_indexed=None,
         hkl_offset=None,
     )
-    for (m1, m2, m3) in (
+    for m1, m2, m3 in (
         (2, 1, 1),
         (1, 2, 1),
         (1, 1, 2),

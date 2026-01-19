@@ -62,13 +62,11 @@ class _Extension:
 
         exts = cls.extensions()
         if exts:
-            algorithm = parse(
-                f"""
+            algorithm = parse(f"""
         algorithm = {' '.join(ext_names(exts))}
           .help = "The choice of algorithm"
           .type = choice
-      """
-            )
+      """)
             main_scope.adopt_scope(algorithm)
             for ext in exts:
                 if hasattr(ext, "phil"):

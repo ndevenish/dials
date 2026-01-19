@@ -3,12 +3,12 @@ from __future__ import annotations
 import json
 import sys
 
-import iotbx.phil
-
 import dials.util
 from dials.algorithms.spot_finding import per_image_analysis
 from dials.util import tabulate
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+
+import iotbx.phil
 
 help_message = """
 
@@ -23,8 +23,7 @@ Examples::
   dials.spot_counts_per_image imported.expt strong.refl plot=per_image.png
 """
 
-phil_scope = iotbx.phil.parse(
-    """\
+phil_scope = iotbx.phil.parse("""\
 resolution_analysis = True
   .type = bool
 plot = None
@@ -37,8 +36,7 @@ joint_json = True
   .type = bool
 id = None
   .type = int(value_min=0)
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

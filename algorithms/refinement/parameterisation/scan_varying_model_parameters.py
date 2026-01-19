@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from scitbx.array_family import flex
-
 from dials.algorithms.refinement.parameterisation.model_parameters import (
     ModelParameterisation,
     Parameter,
 )
+
+from scitbx.array_family import flex
+
 from dials_refinement_helpers_ext import GaussianSmoother as GS
 
 # reusable PHIL string for options affecting scan-varying parameterisation

@@ -27,7 +27,7 @@ namespace dials { namespace algorithms {
   namespace detail {
 
     template <typename T>
-    T median(const af::const_ref<T> &x) {
+    T median(const af::const_ref<T>& x) {
       af::shared<T> temp(x.begin(), x.end());
       std::nth_element(temp.begin(), temp.begin() + temp.size() / 2, temp.end());
       return temp[temp.size() / 2];
@@ -36,7 +36,7 @@ namespace dials { namespace algorithms {
   }  // namespace detail
 
   template <typename T>
-  void create_from_arrays(const af::const_ref<T, af::c_grid<3> > &data,
+  void create_from_arrays(const af::const_ref<T, af::c_grid<3> >& data,
                           af::ref<T, af::c_grid<3> > background,
                           af::ref<int, af::c_grid<3> > mask) {
     DIALS_ASSERT(data.accessor().all_eq(background.accessor()));
@@ -88,9 +88,9 @@ namespace dials { namespace algorithms {
         DIALS_ASSERT(sbox[i].is_consistent());
         create_from_arrays(
           sbox[i].data.const_ref(), sbox[i].background.ref(), sbox[i].mask.ref());
-      } catch (scitbx::error const &) {
+      } catch (scitbx::error const&) {
         success[i] = false;
-      } catch (dials::error const &) {
+      } catch (dials::error const&) {
         success[i] = false;
       }
     }
@@ -130,9 +130,9 @@ namespace dials { namespace algorithms {
 
         // Need to set the background in volume
         v.set_background(b, bgrd.const_ref());
-      } catch (scitbx::error const &) {
+      } catch (scitbx::error const&) {
         success[i] = false;
-      } catch (dials::error const &) {
+      } catch (dials::error const&) {
         success[i] = false;
       }
     }

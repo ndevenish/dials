@@ -9,8 +9,6 @@ from __future__ import annotations
 
 import logging
 
-from libtbx import Auto, phil
-
 from dials.algorithms.scaling.error_model.error_model import BasicErrorModel
 from dials.algorithms.scaling.model.components.scale_components import (
     LinearDoseDecay,
@@ -37,6 +35,9 @@ from dials.algorithms.scaling.plots import (
 )
 from dials.algorithms.scaling.scaling_utilities import sph_harm_table
 from dials.array_family import flex
+
+from libtbx import Auto, phil
+
 from dials_scaling_ext import (
     calc_lookup_index,
     calc_theta_phi,
@@ -53,19 +54,15 @@ correction.fix = None
     .help = "If specified, this correction will not be refined in this scaling run"
 """
 
-kb_model_phil_str = (
-    """\
+kb_model_phil_str = """\
 decay_correction = True
     .type = bool
     .help = "Option to turn off decay correction (for physical/array/KB
             default models)."
     .expert_level = 1
-"""
-    + base_model_phil_str
-)
+""" + base_model_phil_str
 
-dose_decay_model_phil_str = (
-    """\
+dose_decay_model_phil_str = """\
 scale_interval = 2.0
     .type = float(value_min=1.0)
     .help = "Rotation (phi) interval between model parameters for the scale"
@@ -107,13 +104,10 @@ fix_initial = True
             "constrain the initial parameter for more reliable parameter and"
             "scale factor error estimates."
     .expert_level = 2
-"""
-    + base_model_phil_str
-)
+""" + base_model_phil_str
 
 
-physical_model_phil_str = (
-    """\
+physical_model_phil_str = """\
 scale_interval = auto
     .type = float(value_min=1.0)
     .help = "Rotation (phi) interval between model parameters for the scale"
@@ -176,12 +170,9 @@ fix_initial = True
             "constrain the initial parameter for more reliable parameter and"
             "scale factor error estimates."
     .expert_level = 2
-"""
-    + base_model_phil_str
-)
+""" + base_model_phil_str
 
-array_model_phil_str = (
-    """\
+array_model_phil_str = """\
 decay_correction = True
     .type = bool
     .help = "Option to turn off decay correction (a 2D grid of parameters as"
@@ -218,9 +209,7 @@ n_modulation_bins = 20
     .help = "Number of bins in each dimension (applied to both x and y) for"
             "binning the detector position for the modulation correction."
     .expert_level = 2
-"""
-    + base_model_phil_str
-)
+""" + base_model_phil_str
 
 autos = [Auto, "auto", "Auto"]
 
@@ -448,7 +437,6 @@ def _add_absorption_component_to_physically_derived_model(model, reflection_tabl
 
 
 class DoseDecay(ScalingModelBase):
-
     """A model similar to the physical model, where an exponential decay
     component is used plus a relative B-factor per sweep, with no absorption
     surface by default. Most suitable for multi-crystal datasets."""
@@ -634,8 +622,8 @@ class DoseDecay(ScalingModelBase):
         """Create a :obj:`PhysicalScalingModel` from a dictionary."""
         if obj["__id__"] != cls.id_:
             raise RuntimeError(f"expected __id__ {cls.id_}, got {obj['__id__']}")
-        (s_params, d_params, abs_params, B) = (None, None, None, None)
-        (s_params_sds, d_params_sds, a_params_sds, B_sd) = (None, None, None, None)
+        s_params, d_params, abs_params, B = (None, None, None, None)
+        s_params_sds, d_params_sds, a_params_sds, B_sd = (None, None, None, None)
         configdict = obj["configuration_parameters"]
         if "scale" in configdict["corrections"]:
             s_params = flex.double(obj["scale"]["parameters"])
@@ -900,8 +888,8 @@ class PhysicalScalingModel(ScalingModelBase):
         """Create a :obj:`PhysicalScalingModel` from a dictionary."""
         if obj["__id__"] != cls.id_:
             raise RuntimeError(f"expected __id__ {cls.id_}, got {obj['__id__']}")
-        (s_params, d_params, abs_params) = (None, None, None)
-        (s_params_sds, d_params_sds, a_params_sds) = (None, None, None)
+        s_params, d_params, abs_params = (None, None, None)
+        s_params_sds, d_params_sds, a_params_sds = (None, None, None)
         configdict = obj["configuration_parameters"]
         if "scale" in configdict["corrections"]:
             s_params = flex.double(obj["scale"]["parameters"])
@@ -1151,9 +1139,9 @@ class ArrayScalingModel(ScalingModelBase):
         n_time_param, time_norm_fac, time_rot_int = initialise_smooth_input(
             osc_range, one_osc_width, params.decay_interval
         )
-        (xvalues, yvalues, _) = reflections["xyzobs.px.value"].parts()
-        (xmax, xmin) = (flex.max(xvalues) + 0.001, flex.min(xvalues) - 0.001)
-        (ymax, ymin) = (flex.max(yvalues) + 0.001, flex.min(yvalues) - 0.001)
+        xvalues, yvalues, _ = reflections["xyzobs.px.value"].parts()
+        xmax, xmin = (flex.max(xvalues) + 0.001, flex.min(xvalues) - 0.001)
+        ymax, ymin = (flex.max(yvalues) + 0.001, flex.min(yvalues) - 0.001)
 
         parameters_dict = {}
 
@@ -1234,8 +1222,8 @@ class ArrayScalingModel(ScalingModelBase):
         if obj["__id__"] != cls.id_:
             raise RuntimeError(f"expected __id__ {cls.id_}, got {obj['__id__']}")
         configdict = obj["configuration_parameters"]
-        (dec_params, abs_params, mod_params) = (None, None, None)
-        (d_params_sds, a_params_sds, m_params_sds) = (None, None, None)
+        dec_params, abs_params, mod_params = (None, None, None)
+        d_params_sds, a_params_sds, m_params_sds = (None, None, None)
         if "decay" in configdict["corrections"]:
             dec_params = flex.double(obj["decay"]["parameters"])
             if "est_standard_devs" in obj["decay"]:
@@ -1313,8 +1301,8 @@ class KBScalingModel(ScalingModelBase):
         if obj["__id__"] != cls.id_:
             raise RuntimeError(f"expected __id__ {cls.id_}, got {obj['__id__']}")
         configdict = obj["configuration_parameters"]
-        (s_params, d_params) = (None, None)
-        (s_params_sds, d_params_sds) = (None, None)
+        s_params, d_params = (None, None)
+        s_params_sds, d_params_sds = (None, None)
         if "scale" in configdict["corrections"]:
             s_params = flex.double(obj["scale"]["parameters"])
             if "est_standard_devs" in obj["scale"]:

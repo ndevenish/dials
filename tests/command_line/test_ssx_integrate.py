@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import procrunner
 import pytest
-
-from dxtbx.serialize import load
-
 from dials.array_family import flex
 from dials.command_line.ssx_integrate import run_integration, working_phil
 from dials.util.options import ArgumentParser
+
+from dxtbx.serialize import load
 
 # Note that tests are grouped and run serially, to stop many processes trying to
 # extract data from images at same time, which appears to lead to race

@@ -1,7 +1,6 @@
 """Test analytical calculation of gradients of the target function versus finite
 difference calculations"""
 
-
 from __future__ import annotations
 
 
@@ -9,16 +8,6 @@ def test(args=[]):
     # Python and cctbx imports
     import random
     from math import pi
-
-    from cctbx.sgtbx import space_group, space_group_symbols
-
-    # We will set up a mock scan and a mock experiment list
-    from dxtbx.model import ScanFactory
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-    from libtbx.phil import parse
-    from libtbx.test_utils import approx_equal
-    from scitbx import matrix
-    from scitbx.array_family import flex
 
     from dials.algorithms.refinement.parameterisation.beam_parameters import (
         BeamParameterisation,
@@ -53,6 +42,16 @@ def test(args=[]):
 
     # Experimental model builder
     from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+    from cctbx.sgtbx import space_group, space_group_symbols
+
+    # We will set up a mock scan and a mock experiment list
+    from dxtbx.model import ScanFactory
+    from dxtbx.model.experiment_list import Experiment, ExperimentList
+    from libtbx.phil import parse
+    from libtbx.test_utils import approx_equal
+    from scitbx import matrix
+    from scitbx.array_family import flex
 
     # Local functions
     def random_direction_close_to(vector, sd=0.5):

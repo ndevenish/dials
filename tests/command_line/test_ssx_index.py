@@ -3,10 +3,9 @@ from __future__ import annotations
 import os.path
 
 import procrunner
+from dials.command_line.ssx_index import run
 
 from dxtbx.serialize import load
-
-from dials.command_line.ssx_index import run
 
 
 def test_ssx_index_reference_geometry(dials_data, tmp_path):

@@ -2,16 +2,15 @@ from __future__ import annotations
 
 import functools
 
-from orderedset import OrderedSet
-
-from dxtbx.model.experiment_list import ExperimentList
-from libtbx.phil import parse
-
 import dials.util
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.export_mtz import match_wavelengths
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+from orderedset import OrderedSet
+
+from dxtbx.model.experiment_list import ExperimentList
+from libtbx.phil import parse
 
 help_message = """
 

@@ -5,12 +5,11 @@ from __future__ import annotations
 import logging
 import math
 
+from dials.algorithms.symmetry.absences.plots import plot_screw_axes
+from dials.util.observer import Observer, Subject, singleton
 from jinja2 import ChoiceLoader, Environment, PackageLoader
 
 from scitbx.array_family import flex
-
-from dials.algorithms.symmetry.absences.plots import plot_screw_axes
-from dials.util.observer import Observer, Subject, singleton
 
 logger = logging.getLogger("dials.space_group")
 

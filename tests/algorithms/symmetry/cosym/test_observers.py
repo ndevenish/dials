@@ -3,7 +3,6 @@ from __future__ import annotations
 from unittest import mock
 
 import numpy as np
-
 from dials.algorithms.symmetry.cosym import observers
 
 

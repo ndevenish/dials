@@ -13,7 +13,14 @@ import logging
 import math
 from typing import List
 
+import dials.util
 import numpy as np
+from dials.algorithms.indexing.symmetry import find_matching_symmetry
+from dials.algorithms.symmetry import symmetry_base
+from dials.algorithms.symmetry.cosym import engine as cosym_engine
+from dials.algorithms.symmetry.cosym import target
+from dials.algorithms.symmetry.laue_group import ScoreCorrelationCoefficient
+from dials.util.observer import Subject
 from sklearn.neighbors import NearestNeighbors
 
 import iotbx.phil
@@ -21,18 +28,9 @@ from cctbx import sgtbx
 from libtbx import Auto
 from scitbx import matrix
 
-import dials.util
-from dials.algorithms.indexing.symmetry import find_matching_symmetry
-from dials.algorithms.symmetry import symmetry_base
-from dials.algorithms.symmetry.cosym import engine as cosym_engine
-from dials.algorithms.symmetry.cosym import target
-from dials.algorithms.symmetry.laue_group import ScoreCorrelationCoefficient
-from dials.util.observer import Subject
-
 logger = logging.getLogger(__name__)
 
-phil_scope = iotbx.phil.parse(
-    """\
+phil_scope = iotbx.phil.parse("""\
 
 normalisation = kernel quasi *ml_iso ml_aniso
   .type = choice
@@ -101,8 +99,7 @@ nproc = None
   .type = int(value_min=1)
   .help = "Deprecated"
   .deprecated = True
-"""
-)
+""")
 
 
 class CosymAnalysis(symmetry_base, Subject):

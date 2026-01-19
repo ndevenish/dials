@@ -68,7 +68,6 @@ class IntegratorStills:
             import math
 
             from annlib_ext import AnnAdaptor
-
             from dials.array_family import flex
 
             matcheddata = predicted.select(

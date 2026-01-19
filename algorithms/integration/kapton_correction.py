@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import math
 
-from iotbx import phil
-from scitbx import matrix
-
 from dials.algorithms.shoebox import MaskCode
 from dials.array_family import flex
+
+from iotbx import phil
+from scitbx import matrix
 
 absorption_defs = """
   absorption_correction
@@ -460,18 +460,22 @@ class image_kapton_correction:
             ), "Kapton param sigmas must be nonnegative"
             self.kapton_params_maxes = [
                 [
-                    self.kapton_params[i] + self.kapton_params_sigmas[j]
-                    if j == i
-                    else self.kapton_params[i]
+                    (
+                        self.kapton_params[i] + self.kapton_params_sigmas[j]
+                        if j == i
+                        else self.kapton_params[i]
+                    )
                     for i in range(4)
                 ]
                 for j in range(4)
             ]
             self.kapton_params_mins = [
                 [
-                    max(self.kapton_params[i] - self.kapton_params_sigmas[j], 0.001)
-                    if j == i
-                    else self.kapton_params[i]
+                    (
+                        max(self.kapton_params[i] - self.kapton_params_sigmas[j], 0.001)
+                        if j == i
+                        else self.kapton_params[i]
+                    )
                     for i in range(3)
                 ]
                 + [a]
@@ -561,7 +565,7 @@ class image_kapton_correction:
         if plot:
             from matplotlib import pyplot as plt
 
-            for (title, data) in [("corrections", corrections), ("sigmas", sigmas)]:
+            for title, data in [("corrections", corrections), ("sigmas", sigmas)]:
                 plt.hist(data, 20)
                 plt.title(title)
                 plt.show()

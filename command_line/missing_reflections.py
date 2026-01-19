@@ -19,9 +19,6 @@ import logging
 import sys
 from typing import List
 
-import libtbx.phil
-from cctbx import uctbx
-
 import dials.util.log
 from dials.report.analysis import scaled_data_as_miller_array
 from dials.util import missing_reflections, tabulate
@@ -29,10 +26,12 @@ from dials.util.filter_reflections import filtered_arrays_from_experiments_refle
 from dials.util.options import ArgumentParser, flatten_experiments, flatten_reflections
 from dials.util.version import dials_version
 
+import libtbx.phil
+from cctbx import uctbx
+
 logger = logging.getLogger("dials.missing_reflections")
 
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
     min_component_size = 0
       .type = int(value_min=0)
       .help = "Only show connected regions larger than or equal to this."
@@ -40,8 +39,7 @@ phil_scope = libtbx.phil.parse(
       .type = float(value_min=0)
     d_max = None
       .type = float(value_min=0)
-    """
-)
+    """)
 
 
 @dials.util.show_mail_handle_errors()

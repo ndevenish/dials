@@ -29,17 +29,13 @@ def test_available_cores_condor_job_ad(monkeypatch, tmp_path):
     assert dials.util.mp.available_cores() == true_cores
 
     # Now write something sensible to the file
-    job_ad.write_text(
-        f"""\
+    job_ad.write_text(f"""\
 CpusProvisioned = {true_cores + 1}
-"""
-    )
+""")
     assert dials.util.mp.available_cores() == true_cores + 1
 
     # Now check it is robust against parsing failures
-    job_ad.write_text(
-        """\
+    job_ad.write_text("""\
 CpusProvisioned =
-"""
-    )
+""")
     assert dials.util.mp.available_cores() == true_cores

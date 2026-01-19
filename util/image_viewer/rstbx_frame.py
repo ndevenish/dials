@@ -5,13 +5,12 @@ import pickle
 
 import wx
 import wx.lib.colourselect
+from dials.util import Sorry
 
 import rstbx.viewer.display
 import wxtbx.plots
 from libtbx.utils import to_unicode
 from wxtbx import bitmaps, icons
-
-from dials.util import Sorry
 
 # Instance to bind external update event to an event handler
 EVT_EXTERNAL_UPDATE = wx.PyEventBinder(wx.NewEventType(), 0)

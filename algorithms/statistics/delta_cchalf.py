@@ -4,9 +4,9 @@ import logging
 from collections import defaultdict
 from math import floor, sqrt
 
-from cctbx import crystal, miller
-
 from dials.array_family import flex
+
+from cctbx import crystal, miller
 
 logger = logging.getLogger("dials.command_line.compute_delta_cchalf")
 

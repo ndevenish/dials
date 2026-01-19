@@ -4,15 +4,14 @@ import logging
 import math
 import pickle
 
-import psutil
-
-from libtbx import Auto
-
 import dials.algorithms.integration
+import psutil
 from dials.algorithms.integration.processor import NullTask, execute_parallel_task
 from dials.array_family import flex
 from dials.util import tabulate
 from dials.util.mp import multi_node_parallel_map
+
+from libtbx import Auto
 
 # Need this import first because loads extension that parallel_integrator_ext
 # relies on - it assumes the binding for EmpiricalProfileModeller exists
@@ -293,8 +292,7 @@ def _assert_enough_memory(required_memory, max_memory_usage):
     assert max_memory_usage <= 1.0, "maximum memory usage must be <= 1"
     limit_memory = total_memory * max_memory_usage
     if required_memory > limit_memory:
-        raise RuntimeError(
-            f"""
+        raise RuntimeError(f"""
     There was a problem allocating memory for image data. Possible solutions
     include increasing the percentage of memory allowed for shoeboxes or
     decreasing the block size. This could also be caused by a highly mosaic
@@ -302,8 +300,7 @@ def _assert_enough_memory(required_memory, max_memory_usage):
       Total system memory: {total_memory / 1000000000.0:.1f} GB
       Limit image memory: {limit_memory / 1000000000.0:.1f} GB
       Required image memory: {required_memory / 1000000000.0:.1f} GB
-    """
-        )
+    """)
     else:
         logger.info("Allocating %.1f MB memory", required_memory / 1e6)
 
@@ -685,14 +682,11 @@ class IntegrationManager:
             else:
                 raise RuntimeError(f"Unknown block_size unit {block.units!r}")
             if block_size > max_block_size:
-                raise RuntimeError(
-                    """
+                raise RuntimeError("""
           The requested block size (%s) is larger than the maximum allowable block
           size (%s). Either decrease the requested block size or increase the
           amount of available memory.
-        """
-                    % (block_size, max_block_size)
-                )
+        """ % (block_size, max_block_size))
         block.size = block_size
         block.units = "frames"
 
@@ -1156,14 +1150,11 @@ class ReferenceCalculatorManager:
             else:
                 raise RuntimeError(f"Unknown block_size unit {block.units!r}")
             if block_size > max_block_size:
-                raise RuntimeError(
-                    """
+                raise RuntimeError("""
           The requested block size (%s) is larger than the maximum allowable block
           size (%s). Either decrease the requested block size or increase the
           amount of available memory.
-        """
-                    % (block_size, max_block_size)
-                )
+        """ % (block_size, max_block_size))
         block.size = block_size
         block.units = "frames"
 

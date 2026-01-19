@@ -17,14 +17,6 @@ from unittest.mock import Mock
 
 import numpy as np
 import pkg_resources
-
-import iotbx.merging_statistics
-from cctbx import crystal, miller, uctbx
-from dxtbx.model import Experiment
-from dxtbx.util import ersatz_uuid4
-from iotbx import cif, mtz, pdb
-from libtbx import Auto, phil
-
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.model.model import KBScalingModel, PhysicalScalingModel
 from dials.algorithms.scaling.scaling_utilities import (
@@ -34,6 +26,13 @@ from dials.algorithms.scaling.scaling_utilities import (
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.options import ArgumentParser
+
+import iotbx.merging_statistics
+from cctbx import crystal, miller, uctbx
+from dxtbx.model import Experiment
+from dxtbx.util import ersatz_uuid4
+from iotbx import cif, mtz, pdb
+from libtbx import Auto, phil
 
 logger = logging.getLogger("dials")
 
@@ -249,15 +248,11 @@ def create_Ih_table(
     Allow an unequal number of experiments and reflections, as only need to
     extract one space group value (can optionally check all same if many)."""
     if selections:
-        assert len(selections) == len(
-            reflections
-        ), """Must have an equal number of
+        assert len(selections) == len(reflections), """Must have an equal number of
     reflection tables and selections in the input lists."""
     space_group_0 = experiments[0].crystal.get_space_group()
     for experiment in experiments:
-        assert (
-            experiment.crystal.get_space_group() == space_group_0
-        ), """The space
+        assert experiment.crystal.get_space_group() == space_group_0, """The space
     groups of all experiments must be equal."""
     input_tables = []
     indices_lists = []

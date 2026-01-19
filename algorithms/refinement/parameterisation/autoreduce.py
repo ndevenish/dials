@@ -4,10 +4,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from dials.algorithms.refinement import DialsRefineConfigError
+
 from libtbx.phil import parse
 from scitbx.array_family import flex
-
-from dials.algorithms.refinement import DialsRefineConfigError
 
 phil_str = """
       min_nref_per_parameter = 5
@@ -36,6 +36,7 @@ phil_str = """
         .type = choice
 """
 phil_scope = parse(phil_str)
+
 
 # A callback for PredictionParameterisation.get_gradients which will give
 # the positions of reflections associated with a particular parameter

@@ -6,14 +6,13 @@ import gzip
 import io
 import warnings
 
-import iotbx.phil
-from dxtbx.model import ExperimentList
-
 import dials.util
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 
-phil_scope = iotbx.phil.parse(
-    """
+import iotbx.phil
+from dxtbx.model import ExperimentList
+
+phil_scope = iotbx.phil.parse("""
 output {
   csv = rl.csv
     .type = path
@@ -25,8 +24,7 @@ output {
     .type = int
     .help = 'Decimal places for output, 0 => %f'
 }
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

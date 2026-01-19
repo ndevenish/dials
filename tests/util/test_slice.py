@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import copy
 
-from dxtbx.model import Experiment, ExperimentList, Scan
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from dials.array_family import flex
 from dials.util.slice import slice_experiments, slice_reflections
+
+from dxtbx.model import Experiment, ExperimentList, Scan
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test_slice_experiments():

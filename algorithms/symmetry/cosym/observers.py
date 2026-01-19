@@ -6,12 +6,11 @@ from __future__ import annotations
 
 import json
 
-from jinja2 import ChoiceLoader, Environment, PackageLoader
-
 from dials.algorithms.clustering.observers import UnitCellAnalysisObserver
 from dials.algorithms.symmetry.cosym import SymmetryAnalysis
 from dials.algorithms.symmetry.cosym.plots import plot_coords, plot_rij_histogram
 from dials.util.observer import Observer, singleton
+from jinja2 import ChoiceLoader, Environment, PackageLoader
 
 
 def register_default_cosym_observers(script):

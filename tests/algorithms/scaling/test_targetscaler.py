@@ -9,15 +9,14 @@ from __future__ import annotations
 from math import log
 
 import pytest
-
-from dxtbx.model import Crystal, Experiment, ExperimentList
-from libtbx import phil
-
 from dials.algorithms.scaling.model.model import KBScalingModel
 from dials.algorithms.scaling.scaler_factory import TargetScalerFactory
 from dials.algorithms.scaling.scaling_library import scale_against_target
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+
+from dxtbx.model import Crystal, Experiment, ExperimentList
+from libtbx import phil
 
 
 def generated_target_refl():
@@ -141,4 +140,4 @@ def test_scale_against_target(KB_test_param):
     ) == pytest.approx([(4.0 ** (-1.0 / 3.0)) / 2.0])
     assert list(
         targetscaler.unscaled_scalers[0].components["decay"].parameters
-    ) == pytest.approx([(log(4.0) * 8.0 / 3.0)])
+    ) == pytest.approx([log(4.0) * 8.0 / 3.0])

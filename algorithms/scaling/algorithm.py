@@ -348,11 +348,9 @@ class ScaleAndFilterAlgorithm(ScalingAlgorithm):
             params.filtering.deltacchalf.mode == "dataset"
             and self.scaler.id_ != "multi"
         ):
-            raise ValueError(
-                """\
+            raise ValueError("""\
 Whole dataset deltacchalf scaling and filtering can only be performed in
-multi-dataset scaling mode (not single dataset or scaling against a reference)"""
-            )
+multi-dataset scaling mode (not single dataset or scaling against a reference)""")
 
     def run(self):
         """Run cycles of scaling and filtering."""
@@ -365,9 +363,11 @@ multi-dataset scaling mode (not single dataset or scaling against a reference)""
 
                 if counter == 1:
                     results.initial_expids_and_image_ranges = [
-                        (exp.identifier, exp.scan.get_image_range())
-                        if exp.scan
-                        else None
+                        (
+                            (exp.identifier, exp.scan.get_image_range())
+                            if exp.scan
+                            else None
+                        )
                         for exp in self.experiments
                     ]
 

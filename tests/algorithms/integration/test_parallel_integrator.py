@@ -6,10 +6,9 @@ import os
 import pickle
 
 import pytest
+from dials.array_family import flex
 
 from dxtbx.model.experiment_list import ExperimentListFactory
-
-from dials.array_family import flex
 
 
 @pytest.fixture(scope="module")

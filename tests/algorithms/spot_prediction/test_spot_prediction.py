@@ -10,16 +10,16 @@ from scitbx import matrix
 
 class SpotPredictor:
     def __init__(self, dials_regression):
-        import dxtbx
-        from iotbx.xds import integrate_hkl, xparm
-        from rstbx.cftbx.coordinate_frame_converter import coordinate_frame_converter
-
         from dials.algorithms.spot_prediction import (
             IndexGenerator,
             ScanStaticRayPredictor,
             ray_intersection,
         )
         from dials.util import ioutil
+
+        import dxtbx
+        from iotbx.xds import integrate_hkl, xparm
+        from rstbx.cftbx.coordinate_frame_converter import coordinate_frame_converter
 
         # The XDS files to read from
         integrate_filename = os.path.join(

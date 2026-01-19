@@ -4,7 +4,6 @@ import json
 
 import procrunner
 import pytest
-
 from dials.command_line import estimate_resolution as cmdline
 
 

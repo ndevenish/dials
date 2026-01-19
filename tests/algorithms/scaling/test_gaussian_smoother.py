@@ -3,7 +3,6 @@ from __future__ import annotations
 from math import exp
 
 import pytest
-
 from dials.algorithms.scaling.model.components.smooth_scale_components import (
     GaussianSmoother2D,
     GaussianSmoother3D,

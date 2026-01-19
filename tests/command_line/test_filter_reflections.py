@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import procrunner
 import pytest
-
 from dials.array_family import flex
 
 

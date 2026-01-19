@@ -38,19 +38,18 @@ import logging
 import os
 import sys
 
-from jinja2 import ChoiceLoader, Environment, PackageLoader
-
-from cctbx import crystal, miller
-from iotbx import mtz
-from libtbx import phil
-from scitbx.array_family import flex
-
 from dials.command_line.symmetry import median_unit_cell
 from dials.pychef import Statistics, batches_to_dose, interpret_images_to_doses_options
 from dials.util import log, resolution_analysis, show_mail_handle_errors
 from dials.util.filter_reflections import filter_reflection_table
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+from jinja2 import ChoiceLoader, Environment, PackageLoader
+
+from cctbx import crystal, miller
+from iotbx import mtz
+from libtbx import phil
+from scitbx.array_family import flex
 
 try:
     from typing import List
@@ -99,7 +98,6 @@ include scope dials.pychef.phil_scope
 
 
 class PychefRunner:
-
     """Class to prepare input data and run the pychef algorithm."""
 
     def __init__(self, intensities, dose, params):
@@ -215,12 +213,16 @@ class PychefRunner:
         )
         logger.info(
             "Interpreting data using:\n  starting_doses=%s\n  dose_per_image=%s",
-            ", ".join("%s" % i for i in start_doses)
-            if len(set(start_doses)) > 1
-            else f" all {start_doses[0]}",
-            ", ".join("%s" % i for i in doses_per_image)
-            if len(set(doses_per_image)) > 1
-            else f" all {doses_per_image[0]}",
+            (
+                ", ".join("%s" % i for i in start_doses)
+                if len(set(start_doses)) > 1
+                else f" all {start_doses[0]}"
+            ),
+            (
+                ", ".join("%s" % i for i in doses_per_image)
+                if len(set(doses_per_image)) > 1
+                else f" all {doses_per_image[0]}"
+            ),
         )
 
         for expt, starting_dose, dose_per_img in zip(

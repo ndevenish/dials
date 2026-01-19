@@ -21,15 +21,14 @@ import wx
 
 matplotlib.use("WXAgg")
 
+import dials.util
+import dials.util.log
+from dials.util.options import ArgumentParser
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
 from matplotlib.backends.backend_wxagg import (
     NavigationToolbar2WxAgg as NavigationToolbar,
 )
 from matplotlib.figure import Figure
-
-import dials.util
-import dials.util.log
-from dials.util.options import ArgumentParser
 
 
 class ProfilesFrame(wx.Frame):

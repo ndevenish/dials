@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.array_family import flex
 from dials.model.experiment.profile import ProfileModelExt
 
+from libtbx.phil import parse
+
 logger = logging.getLogger(__name__)
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   gaussian_rs
   {
@@ -92,8 +91,7 @@ phil_scope = parse(
 
     }
   }
-"""
-)
+""")
 
 
 class Model(ProfileModelExt):
@@ -356,11 +354,9 @@ class Model(ProfileModelExt):
                     )
                 )
         if not len(reflections) > 0:
-            raise RuntimeError(
-                """
+            raise RuntimeError("""
         No reflections remaining for profile modelling.
-      """
-            )
+      """)
 
         # Check the override parameters
         if [
@@ -426,11 +422,11 @@ class Model(ProfileModelExt):
         :param goniometer: The goniometer model
         :param scan: The scan model
         """
-        from dxtbx.model.experiment_list import Experiment
-
         from dials.algorithms.spot_prediction.reflection_predictor import (
             ReflectionPredictor,
         )
+
+        from dxtbx.model.experiment_list import Experiment
 
         predict = ReflectionPredictor(
             Experiment(

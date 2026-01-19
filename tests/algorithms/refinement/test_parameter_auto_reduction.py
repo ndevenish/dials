@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import pytest
-
-from dxtbx.model import Detector
-
 from dials.algorithms.refinement import DialsRefineConfigError
-from dials.algorithms.refinement.parameterisation.autoreduce import AutoReduce
+from dials.algorithms.refinement.parameterisation.autoreduce import (
+    AutoReduce,
+)
 from dials.algorithms.refinement.parameterisation.autoreduce import (
     phil_scope as ar_phil_scope,
 )
@@ -18,7 +17,9 @@ from dials.algorithms.refinement.parameterisation.prediction_parameters_stills i
 from dials.algorithms.refinement.prediction.managed_predictors import (
     StillsExperimentsPredictor,
 )
-from dials.algorithms.refinement.reflection_manager import ReflectionManagerFactory
+from dials.algorithms.refinement.reflection_manager import (
+    ReflectionManagerFactory,
+)
 from dials.algorithms.refinement.reflection_manager import (
     phil_scope as refman_phil_scope,
 )
@@ -26,6 +27,8 @@ from dials.tests.algorithms.refinement.test_multi_panel_detector_parameterisatio
     make_panel_in_array,
 )
 from dials.tests.algorithms.refinement.test_stills_prediction_parameters import _Test
+
+from dxtbx.model import Detector
 
 
 @pytest.fixture(scope="session")

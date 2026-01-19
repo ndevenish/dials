@@ -4,14 +4,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.model_parameters import (
     ModelParameterisation,
     Parameter,
 )
 from dials.algorithms.refinement.refinement_helpers import CrystalOrientationCompose
+
+from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
 
 
 class CrystalOrientationMixin:

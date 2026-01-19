@@ -90,9 +90,9 @@ def test_nearest_n():
 
 
 def test_weights():
-    from scitbx import matrix
-
     from dials.algorithms.profile_model.modeller import SingleSampler
+
+    from scitbx import matrix
 
     scan_range = (2, 12)
     nz = 2

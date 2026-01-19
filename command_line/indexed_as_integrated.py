@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import logging
 
-import iotbx.phil
-
 import dials.util
 from dials.array_family import flex
 from dials.util import log
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+import iotbx.phil
 
 help_message = """
 Small modifications to an indexed spot list to allow it to be treated as if
@@ -16,16 +16,14 @@ it were integrated, for rapid feedback analysis. Do not use output data for
 structure solution or refinement.
 """
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 output {
   reflections = pseudo_integrated.refl
     .type = path
   log = "dials.indexed_as_integrated.log"
     .type = path
 }
-"""
-)
+""")
 
 
 logger = logging.getLogger("dials.command_line.indexed_as_integrated")

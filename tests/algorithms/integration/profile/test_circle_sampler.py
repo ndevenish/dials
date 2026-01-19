@@ -31,9 +31,9 @@ def test_getters():
 
 
 def test_detector_area():
-    from scitbx.array_family import flex
-
     from dials.algorithms.profile_model.modeller import CircleSampler
+
+    from scitbx.array_family import flex
 
     width = 1000
     height = 1000
@@ -177,9 +177,9 @@ def test_nearest_n():
 
 
 def test_weights():
-    from scitbx import matrix
-
     from dials.algorithms.profile_model.modeller import CircleSampler
+
+    from scitbx import matrix
 
     width = 1000
     height = 1000

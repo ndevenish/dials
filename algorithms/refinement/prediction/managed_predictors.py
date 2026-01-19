@@ -6,17 +6,16 @@
   the naive assumption that the relp is already in reflecting position
 """
 
-
 from __future__ import annotations
 
 from math import pi
-
-from scitbx.array_family import flex
 
 from dials.algorithms.spot_prediction import ScanStaticRayPredictor
 from dials.algorithms.spot_prediction import ScanStaticReflectionPredictor as sc
 from dials.algorithms.spot_prediction import ScanVaryingReflectionPredictor as sv
 from dials.algorithms.spot_prediction import StillsReflectionPredictor as st
+
+from scitbx.array_family import flex
 
 # constants
 TWO_PI = 2.0 * pi

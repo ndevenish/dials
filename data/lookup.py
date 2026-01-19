@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from libtbx.phil import parse
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
 lookup
   .help = "Parameters specifying lookup file path"
@@ -12,5 +11,4 @@ lookup
     .help = "The path to the mask file."
     .type = str
 }
-"""
-)
+""")

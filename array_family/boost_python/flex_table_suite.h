@@ -41,7 +41,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   struct column_to_object_visitor : public boost::static_visitor<object> {
     template <typename T>
-    object operator()(T &col) {
+    object operator()(T& col) {
       return object(col);
     }
   };
@@ -53,7 +53,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     std::size_t n_;
     element_to_object_visitor(std::size_t n) : n_(n) {}
     template <typename T>
-    object operator()(T &col) {
+    object operator()(T& col) {
       return object(col[n_]);
     }
   };
@@ -69,7 +69,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
         : index(index_), item(item_) {}
 
     template <typename T>
-    void operator()(T &column) {
+    void operator()(T& column) {
       DIALS_ASSERT(index < column.size());
       column[index] = extract<typename T::value_type>(item);
     }
@@ -80,18 +80,18 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct extend_column_visitor : public boost::static_visitor<void> {
-    T &self;
+    T& self;
     typename T::key_type key;
     typename T::size_type na, nb;
 
-    extend_column_visitor(T &self_,
+    extend_column_visitor(T& self_,
                           typename T::key_type key_,
                           typename T::size_type na_,
                           typename T::size_type nb_)
         : self(self_), key(key_), na(na_), nb(nb_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U self_column = self[key];
       DIALS_ASSERT(na + nb == self_column.size());
       for (typename T::size_type i = 0; i < nb; ++i) {
@@ -105,14 +105,14 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct update_column_visitor : public boost::static_visitor<void> {
-    T &self;
+    T& self;
     typename T::key_type key;
 
-    update_column_visitor(T &self_, typename T::key_type key_)
+    update_column_visitor(T& self_, typename T::key_type key_)
         : self(self_), key(key_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       self.erase(key);
       U self_column = self[key];
       DIALS_ASSERT(self_column.size() == other_column.size());
@@ -128,17 +128,17 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct copy_to_slice_visitor : public boost::static_visitor<void> {
-    T &self;
+    T& self;
     typename T::key_type key;
     scitbx::boost_python::adapted_slice slice;
 
-    copy_to_slice_visitor(T &self_,
+    copy_to_slice_visitor(T& self_,
                           typename T::key_type key_,
                           scitbx::boost_python::adapted_slice slice_)
         : self(self_), key(key_), slice(slice_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U self_column = self[key];
       for (std::size_t i = 0, j = slice.start; i < self.nrows(); ++i, j += slice.step) {
         DIALS_ASSERT(i < self_column.size());
@@ -153,19 +153,19 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct copy_from_slice_visitor : public boost::static_visitor<void> {
-    T &self;
+    T& self;
     typename T::key_type key;
     scitbx::boost_python::adapted_slice slice;
     typename T::size_type num;
 
-    copy_from_slice_visitor(T &self_,
+    copy_from_slice_visitor(T& self_,
                             typename T::key_type key_,
                             scitbx::boost_python::adapted_slice slice_,
                             std::size_t num_)
         : self(self_), key(key_), slice(slice_), num(num_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U self_column = self[key];
       for (std::size_t i = 0, j = slice.start; i < num; ++i, j += slice.step) {
         DIALS_ASSERT(j < self_column.size());
@@ -180,14 +180,14 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct copy_column_visitor : public boost::static_visitor<void> {
-    T &result;
+    T& result;
     typename T::key_type key;
 
-    copy_column_visitor(T &result_, typename T::key_type key_)
+    copy_column_visitor(T& result_, typename T::key_type key_)
         : result(result_), key(key_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U result_column = result[key];
       DIALS_ASSERT(result_column.size() == other_column.size());
       for (std::size_t i = 0; i < other_column.size(); ++i) {
@@ -201,17 +201,17 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct copy_from_indices_visitor : public boost::static_visitor<void> {
-    T &result;
+    T& result;
     typename T::key_type key;
     af::const_ref<std::size_t> index;
 
-    copy_from_indices_visitor(T &result_,
+    copy_from_indices_visitor(T& result_,
                               typename T::key_type key_,
                               af::const_ref<std::size_t> index_)
         : result(result_), key(key_), index(index_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U result_column = result[key];
       DIALS_ASSERT(result_column.size() == index.size());
       for (std::size_t i = 0; i < index.size(); ++i) {
@@ -225,17 +225,17 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct copy_to_indices_visitor : public boost::static_visitor<void> {
-    T &result;
+    T& result;
     typename T::key_type key;
     af::const_ref<std::size_t> index;
 
-    copy_to_indices_visitor(T &result_,
+    copy_to_indices_visitor(T& result_,
                             typename T::key_type key_,
                             af::const_ref<std::size_t> index_)
         : result(result_), key(key_), index(index_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U result_column = result[key];
       DIALS_ASSERT(other_column.size() == index.size());
       for (std::size_t i = 0; i < index.size(); ++i) {
@@ -249,19 +249,19 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct copy_to_indices_with_mask_visitor : public boost::static_visitor<void> {
-    T &result;
+    T& result;
     typename T::key_type key;
     af::const_ref<std::size_t> index;
     af::const_ref<bool> mask;
 
-    copy_to_indices_with_mask_visitor(T &result_,
+    copy_to_indices_with_mask_visitor(T& result_,
                                       typename T::key_type key_,
                                       af::const_ref<std::size_t> index_,
                                       af::const_ref<bool> mask_)
         : result(result_), key(key_), index(index_), mask(mask_) {}
 
     template <typename U>
-    void operator()(const U &other_column) {
+    void operator()(const U& other_column) {
       U result_column = result[key];
       DIALS_ASSERT(other_column.size() == index.size());
       for (std::size_t i = 0; i < index.size(); ++i) {
@@ -278,10 +278,10 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
   struct reorder_visitor : public boost::static_visitor<void> {
     af::const_ref<std::size_t> index;
 
-    reorder_visitor(const af::const_ref<std::size_t> &index_) : index(index_) {}
+    reorder_visitor(const af::const_ref<std::size_t>& index_) : index(index_) {}
 
     template <typename T>
-    void operator()(T &column) {
+    void operator()(T& column) {
       std::vector<typename T::value_type> temp(column.begin(), column.end());
       DIALS_ASSERT(index.size() == column.size());
       for (std::size_t i = 0; i < index.size(); ++i) {
@@ -295,9 +295,9 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct compare_index {
-    const T &v_;
+    const T& v_;
 
-    compare_index(const T &v) : v_(v) {}
+    compare_index(const T& v) : v_(v) {}
 
     template <typename U>
     bool operator()(U a, U b) {
@@ -318,7 +318,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     }
 
     template <typename T>
-    void operator()(const T &col) {
+    void operator()(const T& col) {
       std::sort(index.begin(), index.end(), compare_index<T>(col));
     }
   };
@@ -329,10 +329,10 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
   struct remove_if_flag_visitor : public boost::static_visitor<void> {
     af::const_ref<bool> flags;
 
-    remove_if_flag_visitor(const af::const_ref<bool> &flags_) : flags(flags_) {}
+    remove_if_flag_visitor(const af::const_ref<bool>& flags_) : flags(flags_) {}
 
     template <typename T>
-    void operator()(T &col) {
+    void operator()(T& col) {
       for (std::size_t i = 0, j = 0; i < col.size(); ++i) {
         if (!flags[i]) {
           col[j++] = col[i];
@@ -347,7 +347,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns The column table
    */
   template <typename T>
-  T *make_flex_table(list columns) {
+  T* make_flex_table(list columns) {
     T self;
     object obj(self);
     for (std::size_t i = 0; i < len(columns); ++i) {
@@ -364,7 +364,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns The boost python object with the column data
    */
   template <typename T>
-  object getitem_column(T &self, const typename T::key_type &key) {
+  object getitem_column(T& self, const typename T::key_type& key) {
     typename T::mapped_type column = self[key].variant();
     column_to_object_visitor visitor;
     return column.apply_visitor(visitor);
@@ -376,7 +376,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param key The name of the column
    */
   template <typename T>
-  void delitem_column(T &self, const typename T::key_type &key) {
+  void delitem_column(T& self, const typename T::key_type& key) {
     self.erase(key);
   }
 
@@ -387,9 +387,9 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param data The column data
    */
   template <typename T, typename U>
-  void setitem_column(T &self,
-                      const typename T::key_type &key,
-                      const af::const_ref<U> &data) {
+  void setitem_column(T& self,
+                      const typename T::key_type& key,
+                      const af::const_ref<U>& data) {
     self.erase(key);
     DIALS_ASSERT(self.ncols() == 0 || data.size() == self.nrows());
     self.resize(data.size());
@@ -403,7 +403,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param n The position of the row
    */
   template <typename T>
-  dict getitem_row(const T &self, typename T::size_type n) {
+  dict getitem_row(const T& self, typename T::size_type n) {
     typedef typename T::const_iterator iterator;
     if (n >= self.nrows()) {
       scitbx::boost_python::raise_index_error();
@@ -422,7 +422,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param n The index of the row
    */
   template <typename T>
-  void delitem_row(T &self, typename T::size_type n) {
+  void delitem_row(T& self, typename T::size_type n) {
     if (n >= self.nrows()) {
       scitbx::boost_python::raise_index_error();
     }
@@ -436,7 +436,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param row The row data to set
    */
   template <typename T>
-  void setitem_row(T &self, typename T::size_type n, dict row) {
+  void setitem_row(T& self, typename T::size_type n, dict row) {
     if (n >= self.nrows()) {
       scitbx::boost_python::raise_index_error();
     }
@@ -459,7 +459,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns A new table with the chosen elements
    */
   template <typename T>
-  T getitem_slice(const T &self, slice s) {
+  T getitem_slice(const T& self, slice s) {
     typedef typename T::const_iterator iterator;
     scitbx::boost_python::adapted_slice as(s, self.nrows());
     T result(as.size);
@@ -476,7 +476,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param flags The list of flags
    */
   template <typename T>
-  void remove_if_flag(T &self, const af::const_ref<bool> &flags) {
+  void remove_if_flag(T& self, const af::const_ref<bool>& flags) {
     DIALS_ASSERT(flags.size() == self.nrows());
     std::size_t n = std::count(flags.begin(), flags.end(), false);
     typedef typename T::iterator iterator;
@@ -493,7 +493,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param s The slice
    */
   template <typename T>
-  void delitem_slice(T &self, slice s) {
+  void delitem_slice(T& self, slice s) {
     scitbx::boost_python::adapted_slice as(s, self.nrows());
     if (as.step == 1) {
       self.erase(as.start, as.size);
@@ -515,7 +515,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table whose elements to set
    */
   template <typename T>
-  void setitem_slice(T &self, slice s, const T &other) {
+  void setitem_slice(T& self, slice s, const T& other) {
     typedef typename T::const_iterator iterator;
     DIALS_ASSERT(self.is_consistent());
     DIALS_ASSERT(other.is_consistent());
@@ -532,7 +532,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param key The key to check for
    */
   template <typename T>
-  bool has_key(const T &self, const typename T::key_type &key) {
+  bool has_key(const T& self, const typename T::key_type& key) {
     return self.count(key) == 1;
   }
 
@@ -542,7 +542,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param row The row to add
    */
   template <typename T>
-  void append(T &self, dict row) {
+  void append(T& self, dict row) {
     self.resize(self.nrows() + 1);
     setitem_row(self, self.nrows() - 1, row);
   }
@@ -554,7 +554,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param row The row to insert
    */
   template <typename T>
-  void insert(T &self, typename T::size_type n, dict row) {
+  void insert(T& self, typename T::size_type n, dict row) {
     self.insert(n);
     setitem_row(self, n, row);
   }
@@ -563,7 +563,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * Extend the identifiers
    */
   template <typename T>
-  void reflection_table_extend_identifiers(T &self, const T &other) {
+  void reflection_table_extend_identifiers(T& self, const T& other) {
     typedef typename T::experiment_map_type::const_iterator const_iterator;
     typedef typename T::experiment_map_type::iterator iterator;
     for (const_iterator it = other.experiment_identifiers()->begin();
@@ -585,7 +585,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void extend(T &self, const T &other) {
+  void extend(T& self, const T& other) {
     typedef typename T::const_iterator iterator;
     typename T::size_type ns = self.nrows();
     typename T::size_type no = other.nrows();
@@ -606,7 +606,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void update(T &self, const T &other) {
+  void update(T& self, const T& other) {
     typedef typename T::const_iterator iterator;
     if (self.ncols() == 0) {
       self.resize(other.nrows());
@@ -625,7 +625,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns The new table with the requested rows
    */
   template <typename T>
-  T select_rows_index(const T &self, const af::const_ref<std::size_t> &index) {
+  T select_rows_index(const T& self, const af::const_ref<std::size_t>& index) {
     // Check that indices are valid
     std::size_t nrows = self.nrows();
     for (std::size_t i = 0; i < index.size(); ++i) {
@@ -667,7 +667,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns The new table with the requested rows
    */
   template <typename T>
-  T select_rows_flags(const T &self, const af::const_ref<bool> &flags) {
+  T select_rows_flags(const T& self, const af::const_ref<bool>& flags) {
     DIALS_ASSERT(self.nrows() == flags.size());
     af::shared<std::size_t> index;
     for (std::size_t i = 0; i < flags.size(); ++i) {
@@ -683,7 +683,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns The new table with the requested columns
    */
   template <typename T>
-  T select_cols_keys(const T &self, const af::const_ref<std::string> &keys) {
+  T select_cols_keys(const T& self, const af::const_ref<std::string>& keys) {
     T result(self.nrows());
     for (std::size_t i = 0; i < keys.size(); ++i) {
       copy_column_visitor<T> visitor(result, keys[i]);
@@ -701,7 +701,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns The new table with the requested columns
    */
   template <typename T>
-  T select_cols_tuple(const T &self, boost::python::tuple keys) {
+  T select_cols_tuple(const T& self, boost::python::tuple keys) {
     af::shared<std::string> keys_array;
     for (std::size_t i = 0; i < len(keys); ++i) {
       keys_array.push_back(extract<std::string>(keys[i]));
@@ -710,7 +710,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
   }
 
   template <typename T>
-  T select_using_experiment(T &self, dxtbx::model::Experiment expt) {
+  T select_using_experiment(T& self, dxtbx::model::Experiment expt) {
     typedef typename T::experiment_map_type::const_iterator const_iterator;
 
     std::string identifier = expt.get_identifier();
@@ -742,7 +742,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
   }
 
   template <typename T>
-  T select_using_experiments(T &self, dxtbx::model::ExperimentList expts) {
+  T select_using_experiments(T& self, dxtbx::model::ExperimentList expts) {
     typedef typename T::experiment_map_type::const_iterator const_iterator;
     typedef dxtbx::model::ExperimentList::shared_type::const_iterator
       expt_const_iterator;
@@ -784,9 +784,9 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void set_selected_rows_index(T &self,
-                               const af::const_ref<std::size_t> &index,
-                               const T &other) {
+  void set_selected_rows_index(T& self,
+                               const af::const_ref<std::size_t>& index,
+                               const T& other) {
     typedef typename T::const_iterator iterator;
     DIALS_ASSERT(index.size() == other.nrows());
     for (iterator it = other.begin(); it != other.end(); ++it) {
@@ -803,10 +803,10 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void set_selected_rows_index_mask(T &self,
-                                    const af::const_ref<std::size_t> &index,
-                                    const af::const_ref<bool> &mask,
-                                    const T &other) {
+  void set_selected_rows_index_mask(T& self,
+                                    const af::const_ref<std::size_t>& index,
+                                    const af::const_ref<bool>& mask,
+                                    const T& other) {
     typedef typename T::const_iterator iterator;
     DIALS_ASSERT(index.size() == other.nrows());
     DIALS_ASSERT(index.size() == mask.size());
@@ -823,9 +823,9 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void set_selected_rows_flags(T &self,
-                               const af::const_ref<bool> &flags,
-                               const T &other) {
+  void set_selected_rows_flags(T& self,
+                               const af::const_ref<bool>& flags,
+                               const T& other) {
     DIALS_ASSERT(self.nrows() == flags.size());
     af::shared<std::size_t> index;
     for (std::size_t i = 0; i < flags.size(); ++i) {
@@ -841,9 +841,9 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void set_selected_cols_keys(T &self,
-                              const af::const_ref<std::string> &keys,
-                              const T &other) {
+  void set_selected_cols_keys(T& self,
+                              const af::const_ref<std::string>& keys,
+                              const T& other) {
     DIALS_ASSERT(self.nrows() == other.nrows());
     for (std::size_t i = 0; i < keys.size(); ++i) {
       copy_column_visitor<T> visitor(self, keys[i]);
@@ -860,7 +860,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param other The other table
    */
   template <typename T>
-  void set_selected_cols_tuple(T &self, boost::python::tuple keys, const T &other) {
+  void set_selected_cols_tuple(T& self, boost::python::tuple keys, const T& other) {
     af::shared<std::string> keys_array;
     for (std::size_t i = 0; i < len(keys); ++i) {
       keys_array.push_back(extract<std::string>(keys[i]));
@@ -874,7 +874,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param flags The array of boolean flags
    */
   template <typename T>
-  void del_selected_rows_flags(T &self, const af::const_ref<bool> &flags) {
+  void del_selected_rows_flags(T& self, const af::const_ref<bool>& flags) {
     remove_if_flag(self, flags);
   }
 
@@ -884,7 +884,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param index The index array
    */
   template <typename T>
-  void del_selected_rows_index(T &self, const af::const_ref<std::size_t> &index) {
+  void del_selected_rows_index(T& self, const af::const_ref<std::size_t>& index) {
     af::shared<bool> flags(self.nrows(), false);
     for (std::size_t i = 0; i < index.size(); ++i) {
       DIALS_ASSERT(index[i] < flags.size());
@@ -899,7 +899,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param keys The columns to delete
    */
   template <typename T>
-  void del_selected_cols_keys(T &self, const af::const_ref<std::string> &keys) {
+  void del_selected_cols_keys(T& self, const af::const_ref<std::string>& keys) {
     for (std::size_t i = 0; i < keys.size(); ++i) {
       self.erase(keys[i]);
     }
@@ -911,7 +911,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param keys The key array
    */
   template <typename T>
-  void del_selected_cols_tuple(T &self, boost::python::tuple keys) {
+  void del_selected_cols_tuple(T& self, boost::python::tuple keys) {
     af::shared<std::string> keys_array;
     for (std::size_t i = 0; i < len(keys); ++i) {
       keys_array.push_back(extract<std::string>(keys[i]));
@@ -938,7 +938,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @returns A list of python types.
    */
   template <typename T>
-  list types(const T &self) {
+  list types(const T& self) {
     list result;
     boost::mpl::for_each<typename T::mapped_type::types>(type_appender(result));
     return result;
@@ -950,7 +950,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param indices The array of indices
    */
   template <typename T>
-  void reorder(T &self, const af::const_ref<std::size_t> &index) {
+  void reorder(T& self, const af::const_ref<std::size_t>& index) {
     typedef typename T::iterator iterator;
     DIALS_ASSERT(self.is_consistent());
     reorder_visitor visitor(index);
@@ -966,7 +966,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * @param reverse True/False reverse the sort
    */
   template <typename T>
-  void sort(T &self, typename T::key_type key, bool reverse) {
+  void sort(T& self, typename T::key_type key, bool reverse) {
     af::shared<std::size_t> index(self.nrows());
     sort_visitor visitor(index.ref());
     typename T::mapped_type col = self[key];
@@ -981,7 +981,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * Perform a shallow copy
    */
   template <typename T>
-  T copy(const T &self) {
+  T copy(const T& self) {
     DIALS_ASSERT(self.is_consistent());
     return T(self);
   }
@@ -990,7 +990,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    * Perform a deep copy
    */
   template <typename T>
-  T deepcopy(const T &self, dict obj) {
+  T deepcopy(const T& self, dict obj) {
     typedef typename T::const_iterator iterator;
     T result(self.nrows());
     for (iterator it = self.begin(); it != self.end(); ++it) {
@@ -1017,8 +1017,8 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     typedef typename T::const_iterator base_iterator;
     typedef ptrdiff_t difference_type;
     typedef typename T::key_type value_type;
-    typedef const value_type *pointer;
-    typedef const value_type &reference;
+    typedef const value_type* pointer;
+    typedef const value_type& reference;
 
     key_iterator(base_iterator it) : it_(it) {}
 
@@ -1026,7 +1026,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return it_->first;
     }
 
-    key_iterator &operator++() {
+    key_iterator& operator++() {
       ++it_;
       return *this;
     }
@@ -1037,11 +1037,11 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return result;
     }
 
-    bool operator==(const key_iterator &rhs) const {
+    bool operator==(const key_iterator& rhs) const {
       return it_ == rhs.it_;
     }
 
-    bool operator!=(const key_iterator &rhs) const {
+    bool operator!=(const key_iterator& rhs) const {
       return !(*this == rhs);
     }
 
@@ -1060,7 +1060,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     typedef ptrdiff_t difference_type;
     typedef std::forward_iterator_tag iterator_category;
     typedef object value_type;
-    typedef const value_type *pointer;
+    typedef const value_type* pointer;
     typedef const value_type reference;
 
     column_iterator(base_iterator it) : it_(it) {}
@@ -1070,7 +1070,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return boost::python::make_tuple(it_->first, it_->second.apply_visitor(visitor));
     }
 
-    column_iterator &operator++() {
+    column_iterator& operator++() {
       ++it_;
       return *this;
     }
@@ -1081,11 +1081,11 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return result;
     }
 
-    bool operator==(const column_iterator &rhs) const {
+    bool operator==(const column_iterator& rhs) const {
       return it_ == rhs.it_;
     }
 
-    bool operator!=(const column_iterator &rhs) const {
+    bool operator!=(const column_iterator& rhs) const {
       return !(*this == rhs);
     }
 
@@ -1103,11 +1103,11 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     typedef ptrdiff_t difference_type;
     typedef std::forward_iterator_tag iterator_category;
     typedef dict value_type;
-    typedef const value_type *pointer;
+    typedef const value_type* pointer;
     typedef const value_type reference;
     typedef typename T::mapped_type mapped_type;
 
-    row_iterator(const T &self, std::size_t index) : index_(index) {
+    row_iterator(const T& self, std::size_t index) : index_(index) {
       typedef typename T::const_iterator iterator;
       for (iterator it = self.begin(); it != self.end(); ++it) {
         keys.push_back(it->first);
@@ -1124,7 +1124,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return result;
     }
 
-    row_iterator &operator++() {
+    row_iterator& operator++() {
       ++index_;
       return *this;
     }
@@ -1135,11 +1135,11 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return result;
     }
 
-    bool operator==(const row_iterator &rhs) const {
+    bool operator==(const row_iterator& rhs) const {
       return index_ == rhs.index_;
     }
 
-    bool operator!=(const row_iterator &rhs) const {
+    bool operator!=(const row_iterator& rhs) const {
       return !(*this == rhs);
     }
 
@@ -1154,12 +1154,12 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename Iterator>
   struct make_iterator {
-    static Iterator begin(const typename Iterator::table_type &self) {
+    static Iterator begin(const typename Iterator::table_type& self) {
       DIALS_ASSERT(self.is_consistent());
       return Iterator(self.begin());
     }
 
-    static Iterator end(const typename Iterator::table_type &self) {
+    static Iterator end(const typename Iterator::table_type& self) {
       return Iterator(self.end());
     }
 
@@ -1174,12 +1174,12 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
    */
   template <typename T>
   struct make_iterator<row_iterator<T> > {
-    static row_iterator<T> begin(const T &self) {
+    static row_iterator<T> begin(const T& self) {
       DIALS_ASSERT(self.is_consistent());
       return row_iterator<T>(self, 0);
     }
 
-    static row_iterator<T> end(const T &self) {
+    static row_iterator<T> end(const T& self) {
       return row_iterator<T>(self, self.nrows());
     }
 
@@ -1197,7 +1197,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     typedef T flex_table_type;
     typedef typename T::const_iterator const_iterator;
 
-    static boost::python::tuple getstate(const flex_table_type &self) {
+    static boost::python::tuple getstate(const flex_table_type& self) {
       DIALS_ASSERT(self.is_consistent());
       unsigned int version = 1;
 
@@ -1212,7 +1212,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
       return boost::python::make_tuple(version, self.nrows(), self.ncols(), columns);
     }
 
-    static void setstate(flex_table_type &self, boost::python::tuple state) {
+    static void setstate(flex_table_type& self, boost::python::tuple state) {
       DIALS_ASSERT(boost::python::len(state) == 4);
       DIALS_ASSERT(extract<unsigned int>(state[0]) == 1);
       std::size_t nrows = extract<std::size_t>(state[1]);
@@ -1243,7 +1243,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     class_<T> table_class;
     setitem_column_generator(class_<T> table_class_) : table_class(table_class_) {}
     template <typename U>
-    void operator()(const U &x) {
+    void operator()(const U& x) {
       table_class.def("__setitem__",
                       &setitem_column<T, typename U::value_type>,
                       return_internal_reference<>());
@@ -1259,7 +1259,7 @@ namespace dials { namespace af { namespace boost_python { namespace flex_table_s
     typedef class_<flex_table_type> class_type;
     typedef typename flex_table_type::mapped_type flex_types;
 
-    static class_type wrap(const char *name) {
+    static class_type wrap(const char* name) {
       class_type flex_table_class(name);
       flex_table_class.def(init<std::size_t>())
         .def("__init__", make_constructor(&make_flex_table<flex_table_type>))

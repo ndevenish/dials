@@ -1,13 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
-from cctbx.sgtbx import space_group, space_group_symbols
-from dxtbx.model import ScanFactory
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from scitbx.math import five_number_summary
-
 from dials.algorithms.refinement.parameterisation.beam_parameters import (
     BeamParameterisation,
 )
@@ -30,6 +23,12 @@ from dials.algorithms.refinement.prediction.managed_predictors import (
 from dials.algorithms.spot_prediction import IndexGenerator
 from dials.array_family import flex
 from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from dxtbx.model import ScanFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from scitbx.math import five_number_summary
 
 
 class _Test:

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import random
 
+from dials.algorithms.clustering.unit_cell import UnitCellCluster
+
 from cctbx import sgtbx
 from scitbx.array_family import flex
-
-from dials.algorithms.clustering.unit_cell import UnitCellCluster
 
 
 def test_unit_cell():

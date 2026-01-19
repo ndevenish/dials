@@ -9,12 +9,6 @@ from unittest.mock import MagicMock, Mock, patch
 
 import numpy as np
 import pytest
-from scipy.sparse import csc_matrix
-
-from dxtbx.model import Crystal, Experiment, Scan
-from libtbx import phil
-from scitbx import sparse
-
 from dials.algorithms.scaling.active_parameter_managers import (
     multi_active_parameter_manager,
 )
@@ -25,6 +19,11 @@ from dials.algorithms.scaling.scaler import SingleScaler
 from dials.algorithms.scaling.target_function import ScalingTarget, ScalingTargetFixedIH
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+from scipy.sparse import csc_matrix
+
+from dxtbx.model import Crystal, Experiment, Scan
+from libtbx import phil
+from scitbx import sparse
 
 
 @pytest.fixture
@@ -351,9 +350,7 @@ def test_target_gradient_calculation_finite_difference(
         grad = target.calculate_gradients(scaler.Ih_table.blocked_data_list[0])
         res, _ = target.compute_residuals(scaler.Ih_table.blocked_data_list[0])
 
-        assert (
-            res > 1e-8
-        ), """residual should not be zero, or the gradient test
+        assert res > 1e-8, """residual should not be zero, or the gradient test
         below will not really be working!"""
 
         # Now compare to finite difference

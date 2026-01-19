@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from dials.algorithms.indexing.ssx.analysis import (
     combine_results_dicts,
     generate_html_report,

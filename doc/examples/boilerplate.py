@@ -9,13 +9,6 @@ from __future__ import annotations
 import logging
 import sys
 
-# We need to parse command-line arguments to PHIL scopes.
-import libtbx.phil
-
-# Information about the experiment geometry and meta-data are recorded in
-# dxtbx.model.Experiment objects, collated in ExperimentList objects.
-from dxtbx.model import ExperimentList
-
 # All command-line DIALS programs should run with dials.util.show_mail_handle_errors.
 import dials.util
 
@@ -35,6 +28,13 @@ from dials.util.options import ArgumentParser, flatten_experiments, flatten_refl
 # Useful to know what version of DIALS we are running
 from dials.util.version import dials_version
 
+# We need to parse command-line arguments to PHIL scopes.
+import libtbx.phil
+
+# Information about the experiment geometry and meta-data are recorded in
+# dxtbx.model.Experiment objects, collated in ExperimentList objects.
+from dxtbx.model import ExperimentList
+
 try:
     from typing import List
 except ImportError:
@@ -45,8 +45,7 @@ except ImportError:
 logger = logging.getLogger("dials.boilerplate")
 
 # Define the master PHIL scope for this program.
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
     output {
         reflections = stronger.refl
             .type = path
@@ -58,8 +57,7 @@ phil_scope = libtbx.phil.parse(
       .type = bool
     integer_parameter = 0
       .type = int
-    """
-)
+    """)
 
 
 def do_boilerplate(

@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import pytest
+from dials.algorithms.symmetry.laue_group import CorrelationCoefficientAccumulator
 
 from scitbx.array_family import flex
-
-from dials.algorithms.symmetry.laue_group import CorrelationCoefficientAccumulator
 
 
 def test_correlation_coefficient_accumulator():

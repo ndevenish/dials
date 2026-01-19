@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from scitbx.array_family import flex
-
 from dials.algorithms.statistics import BinnedStatistics
+
+from scitbx.array_family import flex
 
 
 def test_partitions():

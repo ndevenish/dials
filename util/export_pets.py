@@ -4,17 +4,16 @@ import logging
 
 import gemmi
 import numpy as np
-
-from dxtbx.model.experiment_list import ExperimentList
-from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
-from scitbx import matrix
-from scitbx.math import r3_rotation_axis_and_angle_from_matrix
-
 from dials.algorithms.refinement.rotation_decomposition import (
     solve_r3_rotation_for_angles_given_axes,
 )
 from dials.array_family import flex
 from dials.command_line.frame_orientations import extract_experiment_data
+
+from dxtbx.model.experiment_list import ExperimentList
+from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
+from scitbx import matrix
+from scitbx.math import r3_rotation_axis_and_angle_from_matrix
 
 logger = logging.getLogger(__name__)
 

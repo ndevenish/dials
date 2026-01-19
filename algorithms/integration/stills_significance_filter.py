@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import math
 
-from cctbx.crystal import symmetry
-from libtbx.phil import parse
-
 from dials.array_family import flex
 from dials.util import tabulate
+
+from cctbx.crystal import symmetry
+from libtbx.phil import parse
 
 """
 Class to find a reasonable cutoff for integration based on work in LABELIT.
@@ -14,8 +14,7 @@ Bins the reflection table by resolution, then finds the first bin that goes
 under a given I/sigI limit.  Cuts the data at that point.
 """
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 significance_filter
   .expert_level=1
 {
@@ -36,8 +35,7 @@ significance_filter
     .help = I/sigI cutoff. Reflections in and past the first bin that falls \
             below this cutoff will not be retained
 }
-"""
-)
+""")
 
 
 class SignificanceFilter:

@@ -4,10 +4,9 @@ from os import path
 
 import procrunner
 import pytest
+from dials.command_line.modify_geometry import phil_scope, update
 
 from dxtbx.serialize import load
-
-from dials.command_line.modify_geometry import phil_scope, update
 
 
 def test_run(dials_regression, tmp_path):

@@ -3,13 +3,6 @@ from __future__ import annotations
 from unittest.mock import MagicMock, Mock
 
 import pytest
-
-from dxtbx import flumpy
-from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
-from dxtbx.model.experiment_list import ExperimentList
-from libtbx import phil
-from scitbx import sparse
-
 from dials.algorithms.scaling.basis_functions import RefinerCalculator
 from dials.algorithms.scaling.parameter_handler import ScalingParameterManagerGenerator
 from dials.algorithms.scaling.scaler import (
@@ -25,6 +18,12 @@ from dials.algorithms.scaling.scaling_utilities import calculate_prescaling_corr
 from dials.algorithms.scaling.target_function import ScalingTarget
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+
+from dxtbx import flumpy
+from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
+from dxtbx.model.experiment_list import ExperimentList
+from libtbx import phil
+from scitbx import sparse
 
 
 def side_effect_update_var(variances, intensities):

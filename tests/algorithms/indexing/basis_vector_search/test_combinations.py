@@ -3,14 +3,14 @@ from __future__ import annotations
 import copy
 import logging
 
+from dials.algorithms.indexing.basis_vector_search import FFT1D, combinations
+from dials.algorithms.indexing.symmetry import find_matching_symmetry
+
 import scitbx.matrix
 from cctbx import crystal, sgtbx, uctbx
 from cctbx.sgtbx.lattice_symmetry import metric_subgroups
 from dxtbx.model import Crystal
 from scitbx.math import euler_angles_as_matrix
-
-from dials.algorithms.indexing.basis_vector_search import FFT1D, combinations
-from dials.algorithms.indexing.symmetry import find_matching_symmetry
 
 
 def test_combinations(setup_rlp):

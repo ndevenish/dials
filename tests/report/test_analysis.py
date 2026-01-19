@@ -5,11 +5,6 @@ from __future__ import annotations
 from unittest import mock
 
 import pytest
-
-from cctbx import miller
-from dxtbx.model import Crystal
-from dxtbx.serialize import load
-
 from dials.algorithms.scaling.scaling_library import (
     merging_stats_from_scaled_array,
     scaled_data_as_miller_array,
@@ -24,6 +19,10 @@ from dials.report.analysis import (
     scales_vs_batch,
     table_1_summary,
 )
+
+from cctbx import miller
+from dxtbx.model import Crystal
+from dxtbx.serialize import load
 
 
 @pytest.fixture

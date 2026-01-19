@@ -7,9 +7,6 @@ from __future__ import annotations
 from unittest.mock import Mock
 
 import pytest
-
-from dxtbx.model import Crystal, Experiment
-
 from dials.algorithms.scaling.combine_intensities import (
     MultiDatasetIntensityCombiner,
     SingleDatasetIntensityCombiner,
@@ -17,6 +14,8 @@ from dials.algorithms.scaling.combine_intensities import (
 )
 from dials.algorithms.scaling.scaling_utilities import calculate_prescaling_correction
 from dials.array_family import flex
+
+from dxtbx.model import Crystal, Experiment
 
 
 @pytest.fixture(scope="module")

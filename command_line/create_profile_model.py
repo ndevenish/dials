@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.util import show_mail_handle_errors
+
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials.command_line.create_profile_model")
 
@@ -104,12 +104,10 @@ class Script:
         assert len(matched) == len(predicted)
         assert matched.count(True) <= len(reflections)
         if matched.count(True) == 0:
-            raise Sorry(
-                """
+            raise Sorry("""
         Invalid input for reference reflections.
         Zero reference spots were matched to predictions
-      """
-            )
+      """)
         elif len(unmatched) != 0:
             logger.info("")
             logger.info("*" * 80)
@@ -155,13 +153,10 @@ class Script:
             reference.del_selected(~mask)
             logger.info(" removing %d unindexed reflections", mask.count(False))
         if len(reference) == 0:
-            raise Sorry(
-                """
+            raise Sorry("""
         Invalid input for reference reflections.
         Expected > %d indexed spots, got %d
-      """
-                % (0, len(reference))
-            )
+      """ % (0, len(reference)))
         mask = reference.get_flags(reference.flags.centroid_outlier)
         if mask.count(True) > 0:
             rubbish.extend(reference.select(mask))
@@ -176,13 +171,10 @@ class Script:
             logger.info(" removing %d reflections with hkl (0,0,0)", mask.count(True))
         mask = reference["id"] < 0
         if mask.count(True) > 0:
-            raise Sorry(
-                """
+            raise Sorry("""
         Invalid input for reference reflections.
         %d reference spots have an invalid experiment id
-      """
-                % mask.count(True)
-            )
+      """ % mask.count(True))
         logger.info(" using %d indexed reflections", len(reference))
         logger.info(" found %d junk reflections", len(rubbish))
 

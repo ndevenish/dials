@@ -7,16 +7,16 @@ import copy
 import os
 import sys
 
-import iotbx.phil
-from cctbx import sgtbx
-from rstbx.symmetry.constraints import parameter_reduction
-
 import dials.util
 from dials.algorithms.indexing.assign_indices import AssignIndicesGlobal
 from dials.algorithms.scaling.scaling_library import determine_best_unit_cell
 from dials.array_family import flex
 from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+
+import iotbx.phil
+from cctbx import sgtbx
+from rstbx.symmetry.constraints import parameter_reduction
 
 help_message = """
 
@@ -157,9 +157,9 @@ def reindex_experiments(experiments, cb_op, space_group=None):
 
 @dials.util.show_mail_handle_errors()
 def run(args=None):
-    import libtbx.load_env
-
     from dials.util import Sorry
+
+    import libtbx.load_env
 
     usage = "dials.reindex [options] indexed.expt indexed.refl"
 
@@ -214,10 +214,8 @@ def run(args=None):
     if params.reference.reflections is not None:
         # First check that we have everything as expected for the reference reindexing
         if params.reference.experiments is None:
-            raise Sorry(
-                """For reindexing against a reference dataset, a reference
-experiments file must also be specified with the option: reference.experiments= """
-            )
+            raise Sorry("""For reindexing against a reference dataset, a reference
+experiments file must also be specified with the option: reference.experiments= """)
         if not os.path.exists(params.reference.reflections):
             raise Sorry("Could not locate reference dataset reflection file")
 

@@ -7,9 +7,6 @@ from __future__ import annotations
 from unittest.mock import Mock
 
 import pytest
-
-from scitbx import sparse
-
 from dials.algorithms.scaling.active_parameter_managers import (
     ParameterManagerGenerator,
     active_parameter_manager,
@@ -22,6 +19,8 @@ from dials.algorithms.scaling.parameter_handler import (
 )
 from dials.algorithms.scaling.target_function import ScalingTarget
 from dials.array_family import flex
+
+from scitbx import sparse
 
 
 def mock_component():

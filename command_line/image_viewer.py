@@ -6,11 +6,11 @@ from __future__ import annotations
 import pickle
 import sys
 
-import iotbx.phil
-
 import dials.util.log
 from dials.util.image_viewer.spotfinder_wrap import spot_wrapper
 from dials.util.options import ArgumentParser, flatten_experiments, flatten_reflections
+
+import iotbx.phil
 
 help_message = """
 

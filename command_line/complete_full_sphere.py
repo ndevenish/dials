@@ -7,16 +7,16 @@ import logging
 import math
 import sys
 
-from cctbx import crystal, miller
-from dxtbx.model import ExperimentList
-from libtbx.phil import parse
-from scitbx import matrix
-
 from dials.algorithms.refinement import rotation_decomposition
 from dials.algorithms.shadowing.filter import filter_shadowed_reflections
 from dials.array_family import flex
 from dials.util import log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, flatten_experiments
+
+from cctbx import crystal, miller
+from dxtbx.model import ExperimentList
+from libtbx.phil import parse
+from scitbx import matrix
 
 logger = logging.getLogger("dials.command_line.complete_full_sphere")
 
@@ -27,16 +27,14 @@ region of reciprocal space, given an already recorded data set.
 dials.complete_full_sphere [resolution=1.6] models.expt
 """
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 resolution = 0.0
   .type = float
   .help = "Resolution of diffraction for blind region calculation"
 shadow = True
   .type = bool
   .help = "Consider shadowing in calculating overall completeness"
-"""
-)
+""")
 
 
 class Script:

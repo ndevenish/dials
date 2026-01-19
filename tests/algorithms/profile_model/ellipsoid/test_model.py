@@ -4,11 +4,6 @@ from math import sqrt
 
 import numpy as np
 import pytest
-from numpy.linalg import norm
-
-from dxtbx import flumpy
-from scitbx import matrix
-
 from dials.algorithms.profile_model.ellipsoid import chisq_quantile
 from dials.algorithms.profile_model.ellipsoid.model import (
     Simple1ProfileModel,
@@ -22,6 +17,10 @@ from dials.algorithms.profile_model.ellipsoid.parameterisation import (
 )
 from dials.algorithms.spot_prediction import IndexGenerator
 from dials.array_family import flex
+from numpy.linalg import norm
+
+from dxtbx import flumpy
+from scitbx import matrix
 
 
 @pytest.fixture

@@ -16,12 +16,6 @@ import json
 import logging
 import sys
 
-from jinja2 import ChoiceLoader, Environment, PackageLoader
-
-import libtbx.phil
-from dxtbx import flumpy
-from iotbx import phil
-
 from dials.algorithms.scaling.combine_intensities import combine_intensities
 from dials.algorithms.scaling.error_model.engine import run_error_model_refinement
 from dials.algorithms.scaling.error_model.error_model import (
@@ -44,6 +38,11 @@ from dials.report.plots import i_over_sig_i_vs_i_plot
 from dials.util import log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+from jinja2 import ChoiceLoader, Environment, PackageLoader
+
+import libtbx.phil
+from dxtbx import flumpy
+from iotbx import phil
 
 try:
     from typing import List

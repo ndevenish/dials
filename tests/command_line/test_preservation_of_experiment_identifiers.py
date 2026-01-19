@@ -1,11 +1,11 @@
 """Test for the preservation of identifiers in dials processing."""
+
 from __future__ import annotations
 
 import procrunner
+from dials.array_family import flex
 
 from dxtbx.serialize import load
-
-from dials.array_family import flex
 
 
 def test_preservation_of_identifiers(dials_data, tmpdir):

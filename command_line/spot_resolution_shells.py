@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import libtbx.phil
-
 import dials.util
+
+import libtbx.phil
 
 help_message = """
 
@@ -13,12 +13,10 @@ Examples::
   dials.spot_resolution_shells models.expt strong.refl
 """
 
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
   shells = 100
     .type = int(value_min=1)
-"""
-)
+""")
 
 
 def settings():

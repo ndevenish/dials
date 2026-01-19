@@ -3,13 +3,14 @@ from __future__ import annotations
 import logging
 import math
 
+from dials.algorithms import indexing
+
 from cctbx import crystal, uctbx, xray
 from libtbx import libtbx, phil
 from scitbx import fftpack, matrix
 from scitbx.array_family import flex
 
 import dials_algorithms_indexing_ext
-from dials.algorithms import indexing
 
 from .strategy import Strategy
 from .utils import group_vectors, is_approximate_integer_multiple

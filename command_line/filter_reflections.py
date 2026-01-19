@@ -8,14 +8,14 @@ import token
 from operator import itemgetter
 from tokenize import TokenError, generate_tokens, untokenize
 
-from cctbx import uctbx
-from libtbx.phil import parse
-
 from dials.algorithms.integration import filtering
 from dials.array_family import flex
 from dials.util import Sorry, log, show_mail_handle_errors, tabulate
 from dials.util.filter_reflections import SumAndPrfIntensityReducer, SumIntensityReducer
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+
+from cctbx import uctbx
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials")
 

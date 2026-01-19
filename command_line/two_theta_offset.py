@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from itertools import combinations
 
+import dials.util
+from dials.util.options import ArgumentParser, flatten_experiments
+
 from libtbx.phil import parse
 from scitbx import matrix
 from scitbx.math import r3_rotation_axis_and_angle_from_matrix
-
-import dials.util
-from dials.util.options import ArgumentParser, flatten_experiments
 
 help_message = """
 

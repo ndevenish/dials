@@ -23,12 +23,12 @@ def generate_integration_report(experiment, reflections, n_resolution_bins=20):
     """
     Generate the integration report
     """
-    from cctbx import crystal, miller
-
     from dials.algorithms.statistics import (
         pearson_correlation_coefficient,
         spearman_correlation_coefficient,
     )
+
+    from cctbx import crystal, miller
 
     def overall_report(data):
         # Start by adding some overall numbers

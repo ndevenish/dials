@@ -3,16 +3,15 @@ from __future__ import annotations
 import json
 import os
 
+import dials.util.masking
 import procrunner
 import pytest
+from dials.algorithms.shadowing.filter import filter_shadowed_reflections
+from dials.array_family import flex
 
 import libtbx
 from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.serialize import load
-
-import dials.util.masking
-from dials.algorithms.shadowing.filter import filter_shadowed_reflections
-from dials.array_family import flex
 
 
 @pytest.mark.parametrize(

@@ -3,13 +3,13 @@ from __future__ import annotations
 import logging
 from math import isclose
 
-from cctbx import crystal, miller
-from iotbx.shelx.write_ins import LATT_SYMM
-
 from dials.algorithms.scaling.scaling_library import determine_best_unit_cell
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.filter_reflections import filter_reflection_table
+
+from cctbx import crystal, miller
+from iotbx.shelx.write_ins import LATT_SYMM
 
 logger = logging.getLogger(__name__)
 

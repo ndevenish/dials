@@ -100,9 +100,7 @@ def test_symmetry_analysis():
         analysis.best_solution.subgroup["best_subsym"].space_group().type().number()
         == 148
     )  # R -3 :H
-    assert (
-        str(analysis)
-        == """\
+    assert str(analysis) == """\
 Scoring individual symmetry elements
 +--------------+--------+------+-----+-----------------+
 |   likelihood |   Z-CC |   CC |     | Operator        |
@@ -129,7 +127,6 @@ Unit cell: (98.33, 98.33, 135.99, 90, 90, 120)
 Reindex operator: b-c,-a+c,a+b+c
 Laue group probability: 0.995
 Laue group confidence: 0.994"""
-    )
 
     d = analysis.as_dict()
     assert d["sym_op_scores"][0] == {

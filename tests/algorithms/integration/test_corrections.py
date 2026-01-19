@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from dxtbx.model.experiment_list import ExperimentListFactory
-from scitbx import matrix
-
 from dials.algorithms.integration import Corrections, CorrectionsMulti
 from dials.array_family import flex
+
+from dxtbx.model.experiment_list import ExperimentListFactory
+from scitbx import matrix
 
 
 def test_run(dials_data):

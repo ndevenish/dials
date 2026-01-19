@@ -5,10 +5,6 @@ Tests for dials.util.multi_dataset_handling functions
 from __future__ import annotations
 
 import pytest
-
-from dxtbx.model import Experiment, ExperimentList
-from dxtbx.serialize import load
-
 from dials.array_family import flex
 from dials.tests.util import (
     mock_reflection_file_object,
@@ -22,6 +18,9 @@ from dials.util.multi_dataset_handling import (
     sort_tables_to_experiments_order,
     update_imageset_ids,
 )
+
+from dxtbx.model import Experiment, ExperimentList
+from dxtbx.serialize import load
 
 
 @pytest.fixture

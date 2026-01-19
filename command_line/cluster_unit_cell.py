@@ -6,13 +6,6 @@ from __future__ import annotations
 import functools
 import os
 
-import iotbx.mtz
-import iotbx.phil
-from cctbx import crystal
-from dxtbx.model import ExperimentList
-from xfel.clustering.cluster import Cluster
-from xfel.clustering.cluster_groups import unit_cell_info
-
 import dials.util
 from dials.array_family import flex
 from dials.util.multi_dataset_handling import (
@@ -21,11 +14,17 @@ from dials.util.multi_dataset_handling import (
 )
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 
+import iotbx.mtz
+import iotbx.phil
+from cctbx import crystal
+from dxtbx.model import ExperimentList
+from xfel.clustering.cluster import Cluster
+from xfel.clustering.cluster_groups import unit_cell_info
+
 help_message = """
 """
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 threshold = 5000
   .type = float(value_min=0)
   .help = 'Threshold value for the clustering'
@@ -42,8 +41,7 @@ output.clusters = False
     .type = bool
     .help = "If True, clusters will be split at the threshold value and a pair"
             "of output files will be created for each cluster"
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

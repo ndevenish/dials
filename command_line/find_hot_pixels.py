@@ -3,10 +3,10 @@ from __future__ import annotations
 import logging
 import pickle
 
-import iotbx.phil
-
 import dials.util
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+
+import iotbx.phil
 
 logger = logging.getLogger("dials.command_line.find_hot_pixels")
 

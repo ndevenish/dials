@@ -2,10 +2,6 @@ from __future__ import annotations
 
 from math import pi
 
-from dxtbx.model import Crystal
-from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalOrientationParameterisation,
     CrystalUnitCellParameterisation,
@@ -14,6 +10,10 @@ from dials.algorithms.refinement.refinement_helpers import (
     get_fd_gradients,
     random_param_shift,
 )
+
+from dxtbx.model import Crystal
+from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
 
 
 def test():

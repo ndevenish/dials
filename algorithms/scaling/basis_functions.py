@@ -6,9 +6,10 @@ the parameters
 
 from __future__ import annotations
 
+from dials.array_family import flex
+
 from scitbx import sparse
 
-from dials.array_family import flex
 from dials_scaling_ext import row_multiply
 
 

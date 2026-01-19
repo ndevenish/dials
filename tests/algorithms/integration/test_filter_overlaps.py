@@ -4,9 +4,9 @@ import os
 
 
 def test_for_overlaps(dials_regression):
-    from cctbx.array_family import flex
-
     from dials.algorithms.shoebox import MaskCode
+
+    from cctbx.array_family import flex
 
     code_fgd = MaskCode.Foreground | MaskCode.Valid
 

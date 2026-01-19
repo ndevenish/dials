@@ -8,6 +8,17 @@ from math import pi, sqrt
 
 import numpy as np
 import pytest
+from dials.algorithms.scaling.scaling_library import create_scaling_model
+from dials.algorithms.scaling.scaling_utilities import (
+    Reasons,
+    align_axis_along_z,
+    calc_crystal_frame_vectors,
+    calculate_prescaling_correction,
+    quasi_normalisation,
+    set_wilson_outliers,
+)
+from dials.array_family import flex
+from dials.util.options import ArgumentParser
 
 from dxtbx.model import (
     Beam,
@@ -21,17 +32,6 @@ from dxtbx.serialize import load
 from libtbx import phil
 from scitbx.sparse import matrix  # noqa: F401 - Needed to call calc_theta_phi
 
-from dials.algorithms.scaling.scaling_library import create_scaling_model
-from dials.algorithms.scaling.scaling_utilities import (
-    Reasons,
-    align_axis_along_z,
-    calc_crystal_frame_vectors,
-    calculate_prescaling_correction,
-    quasi_normalisation,
-    set_wilson_outliers,
-)
-from dials.array_family import flex
-from dials.util.options import ArgumentParser
 from dials_scaling_ext import (
     calc_lookup_index,
     calc_theta_phi,
@@ -511,9 +511,9 @@ def test_equality_of_two_harmonic_table_methods(dials_data):
         "s0_lookup": s0_lookup_index,
         "s1_lookup": s1_lookup_index,
     }
-    experiment.scaling_model.components[
-        "absorption"
-    ].coefficients_list = coefficients_list
+    experiment.scaling_model.components["absorption"].coefficients_list = (
+        coefficients_list
+    )
     assert experiment.scaling_model.components["absorption"]._mode == "memory"
     experiment.scaling_model.components["absorption"].update_reflection_data()
     absorption = experiment.scaling_model.components["absorption"]

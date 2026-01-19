@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from dials.algorithms.indexing import DialsIndexError
+
 from cctbx.array_family import flex
 
 import dials_algorithms_indexing_ext as ext
-from dials.algorithms.indexing import DialsIndexError
 
 
 class AssignIndicesStrategy:

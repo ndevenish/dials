@@ -3,17 +3,9 @@ Test prediction of reflections using the scan-varying reflection
 predictor.
 """
 
-
 from __future__ import annotations
 
 import math
-
-from cctbx.sgtbx import space_group, space_group_symbols
-from dxtbx.model import ScanFactory
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from libtbx.test_utils import approx_equal
-from scitbx.array_family import flex
 
 from dials.algorithms.refinement.prediction.managed_predictors import (
     ScansExperimentsPredictor,
@@ -21,6 +13,13 @@ from dials.algorithms.refinement.prediction.managed_predictors import (
 )
 from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
 from dials.tests.algorithms.refinement import setup_geometry
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from dxtbx.model import ScanFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from scitbx.array_family import flex
 
 
 def setup_models(args):
@@ -147,7 +146,7 @@ def test():
 
     assert len(refs1_sorted) == len(refs2_sorted)
 
-    for (r1, r2) in zip(refs1_sorted, refs2_sorted):
+    for r1, r2 in zip(refs1_sorted, refs2_sorted):
         assert r1["miller_index"] == r2["miller_index"]
         dz = r1["xyzcal.px"][2] - r2["xyzcal.px"][2]
         assert abs(dz) < 0.01

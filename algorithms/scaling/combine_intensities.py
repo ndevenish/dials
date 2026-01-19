@@ -6,12 +6,12 @@ from __future__ import annotations
 
 import logging
 
-import boost_adaptbx.boost.python
-from cctbx import crystal, miller
-
 from dials.algorithms.scaling.scaling_utilities import DialsMergingStatisticsError
 from dials.array_family import flex
 from dials.util import tabulate
+
+import boost_adaptbx.boost.python
+from cctbx import crystal, miller
 
 miller_ext = boost_adaptbx.boost.python.import_ext("cctbx_miller_ext")
 logger = logging.getLogger("dials")

@@ -3,9 +3,9 @@ from __future__ import annotations
 import binascii
 import os
 
-from scitbx.array_family import flex
-
 from dials.util.ext import scale_down_array
+
+from scitbx.array_family import flex
 
 
 def scale_down_array_py(image, scale_factor):

@@ -8,19 +8,17 @@ import logging
 from math import ceil, exp, log
 
 import numpy as np
+from dials.array_family import flex
+from dials.util import tabulate
 from scipy.stats import norm
 
 from dxtbx import flumpy
 from iotbx import phil
 from scitbx import sparse
 
-from dials.array_family import flex
-from dials.util import tabulate
-
 logger = logging.getLogger("dials")
 
-phil_scope = phil.parse(
-    """
+phil_scope = phil.parse("""
     error_model = *basic None
         .type = choice
         .help = "The error model to use."
@@ -71,8 +69,7 @@ phil_scope = phil.parse(
                 "If no groups are specified here, this is interpreted to mean"
                 "that all sweeps should share a common error model."
 
-    """
-)
+    """)
 
 
 def calc_sigmaprime(x, Ih_table) -> np.array:
@@ -94,7 +91,6 @@ def calc_deltahl(Ih_table, n_h, sigmaprime) -> np.array:
 
 
 class ErrorModelRegressionAPM:
-
     """Parameter manager for error model minimisation using the linear
     regression method.
 
@@ -162,7 +158,6 @@ class ErrorModelRegressionAPM:
 
 
 class ErrorModelA_APM:
-
     """Parameter manager for minimising A component with individual minimizer"""
 
     def __init__(self, model):
@@ -183,7 +178,6 @@ class ErrorModelA_APM:
 
 
 class ErrorModelB_APM:
-
     """Parameter manager for minimising Bcomponent with individual minimizer"""
 
     def __init__(self, model):
@@ -206,7 +200,6 @@ class ErrorModelB_APM:
 
 
 class ErrorModelBinner:
-
     """A binner for the error model data.
 
     Data are binned based on Ih, and methods are available for
@@ -349,7 +342,6 @@ class ErrorModelBinner:
 
 
 class BComponent:
-
     """The basic error model B parameter component"""
 
     def __init__(self, initial_value=0.02):
@@ -358,7 +350,6 @@ class BComponent:
 
 
 class AComponent:
-
     """The basic error model A parameter component"""
 
     def __init__(self, initial_value=1.00):
@@ -367,7 +358,6 @@ class AComponent:
 
 
 class BasicErrorModel:
-
     """Definition of a basic two-parameter error model."""
 
     min_reflections_required = 250
@@ -375,7 +365,6 @@ class BasicErrorModel:
     id_ = "basic"
 
     def __init__(self, a=None, b=None, basic_params=None):
-
         """
         A basic two-parameter error model s'^2 = a^2(s^2 + (bI)^2)
 
@@ -521,13 +510,13 @@ class BasicErrorModel:
                 "  Type: basic",
                 f"  Parameters: a = {a:.5f}, b = {b:.5f}",
                 "  Error model formula: "
-                + "\u03C3"
+                + "\u03c3"
                 + "'"
                 + "\xb2"
                 + " = a"
                 + "\xb2"
                 + "("
-                + "\u03C3\xb2"
+                + "\u03c3\xb2"
                 " + (bI)" + "\xb2" + ")",
                 "  estimated I/sigma asymptotic limit: %s" % ISa,
                 "",

@@ -8,6 +8,9 @@ import lzma
 import math
 import time
 
+import dials.util.version
+from dials.util.filter_reflections import filter_reflection_table
+
 import iotbx.cif.model
 from cctbx import crystal as cctbxcrystal
 from cctbx import miller
@@ -15,9 +18,6 @@ from cctbx.sgtbx import bravais_types
 from iotbx.merging_statistics import dataset_statistics
 from libtbx import Auto
 from scitbx.array_family import flex
-
-import dials.util.version
-from dials.util.filter_reflections import filter_reflection_table
 
 logger = logging.getLogger(__name__)
 RAD2DEG = 180.0 / math.pi

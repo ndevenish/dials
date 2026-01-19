@@ -72,8 +72,7 @@ def nag():
 
     try:
         with open(hookfile, "w") as fh:
-            fh.write(
-                """#!/bin/bash
+            fh.write("""#!/bin/bash
 echo
 echo Please install the DIALS pre-commit hooks before committing into the DIALS
 echo repository. These hooks run simple static code analysis to catch common
@@ -93,8 +92,7 @@ echo
 if [ -z "$DIALS_WITHOUT_PRECOMMITS" ]; then
   exit 1
 fi
-"""
-            )
+""")
             mode = os.fstat(fh.fileno()).st_mode
             mode |= stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
             os.fchmod(fh.fileno(), stat.S_IMODE(mode))

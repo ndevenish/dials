@@ -3,14 +3,14 @@ from __future__ import annotations
 import logging
 import math
 
-from cctbx.sgtbx.bravais_types import bravais_lattice
-from dxtbx.model import Crystal
-from scitbx.array_family import flex
-
 from dials.algorithms.indexing.compare_orientation_matrices import (
     difference_rotation_matrix_axis_angle,
 )
 from dials.algorithms.indexing.symmetry import find_matching_symmetry
+
+from cctbx.sgtbx.bravais_types import bravais_lattice
+from dxtbx.model import Crystal
+from scitbx.array_family import flex
 
 logger = logging.getLogger(__name__)
 

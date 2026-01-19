@@ -6,16 +6,6 @@ from __future__ import annotations
 
 from math import pi
 
-from cctbx.sgtbx import space_group, space_group_symbols
-from cctbx.uctbx import unit_cell
-from dxtbx.model import ScanFactory
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from libtbx.test_utils import approx_equal
-from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
-from scitbx import matrix
-from scitbx.array_family import flex
-
 import dials.tests.algorithms.refinement.setup_geometry as setup_geometry
 from dials.algorithms.refinement.parameterisation.beam_parameters import (
     BeamParameterisation,
@@ -33,6 +23,16 @@ from dials.algorithms.refinement.prediction.managed_predictors import (
 )
 from dials.algorithms.refinement.refiner import RefinerFactory, phil_scope
 from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from cctbx.uctbx import unit_cell
+from dxtbx.model import ScanFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
+from scitbx.array_family import flex
 
 
 def test(args=[]):

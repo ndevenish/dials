@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import copy
 
+from dials.array_family import flex
+
 import libtbx.phil
 from scitbx import matrix
 
-from dials.array_family import flex
-
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
 reverse_phi = False
   .type = bool
   .optional = True
@@ -46,8 +45,7 @@ experiment_ids = None
 black_background = True
   .type = bool
   .help = "Switch between black or white background"
-"""
-)
+""")
 
 
 class Render3d:

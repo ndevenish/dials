@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import pytest
+from dials.algorithms.indexing import symmetry
 
 import scitbx.matrix
 from cctbx import crystal, sgtbx, uctbx
 from cctbx.sgtbx import bravais_types
 from dxtbx.model import Crystal
-
-from dials.algorithms.indexing import symmetry
 
 
 @pytest.mark.parametrize("space_group_symbol", bravais_types.acentric)

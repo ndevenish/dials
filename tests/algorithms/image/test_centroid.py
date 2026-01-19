@@ -9,9 +9,9 @@ class Test_Centroid:
         self.calculate_gold()
 
     def test_centroid_points2d(self):
-        from scitbx import matrix
-
         from dials.algorithms.image.centroid import centroid_points
+
+        from scitbx import matrix
 
         centroid = centroid_points(self.pixels2d.as_1d(), self.points2d.as_1d())
 
@@ -22,9 +22,9 @@ class Test_Centroid:
         )
 
     def test_centroid_points3d(self):
-        from scitbx import matrix
-
         from dials.algorithms.image.centroid import centroid_points
+
+        from scitbx import matrix
 
         centroid = centroid_points(self.pixels3d.as_1d(), self.points3d.as_1d())
 
@@ -35,9 +35,9 @@ class Test_Centroid:
         )
 
     def test_centroid_image2d(self):
-        from scitbx import matrix
-
         from dials.algorithms.image.centroid import centroid_image
+
+        from scitbx import matrix
 
         centroid = centroid_image(self.pixels2d)
 
@@ -48,9 +48,9 @@ class Test_Centroid:
         )
 
     def test_centroid_image3d(self):
-        from scitbx import matrix
-
         from dials.algorithms.image.centroid import centroid_image
+
+        from scitbx import matrix
 
         centroid = centroid_image(self.pixels3d)
 
@@ -61,9 +61,9 @@ class Test_Centroid:
         )
 
     def test_centroid_masked_image2d(self):
-        from scitbx import matrix
-
         from dials.algorithms.image.centroid import centroid_image
+
+        from scitbx import matrix
 
         centroid = centroid_image(self.pixels2d, self.mask2d)
 
@@ -75,9 +75,9 @@ class Test_Centroid:
         )
 
     def test_centroid_masked_image3d(self):
-        from scitbx import matrix
-
         from dials.algorithms.image.centroid import centroid_image
+
+        from scitbx import matrix
 
         centroid = centroid_image(self.pixels3d, self.mask3d)
 
@@ -89,9 +89,9 @@ class Test_Centroid:
         )
 
     def test_centroid_bias(self):
-        from scitbx.array_family import flex
-
         from dials.algorithms.image.centroid import centroid_image
+
+        from scitbx.array_family import flex
 
         pixels = flex.double(flex.grid(5, 5), 0)
         pixels[1, 2] = 5

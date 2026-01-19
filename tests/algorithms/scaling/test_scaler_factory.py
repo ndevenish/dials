@@ -7,10 +7,6 @@ from __future__ import annotations
 from unittest.mock import MagicMock, Mock
 
 import pytest
-
-from dxtbx.model import Crystal
-from libtbx import phil
-
 from dials.algorithms.scaling.error_model.error_model import BasicErrorModel
 from dials.algorithms.scaling.scaler import (
     MultiScaler,
@@ -26,6 +22,9 @@ from dials.algorithms.scaling.scaler_factory import (
 )
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+
+from dxtbx.model import Crystal
+from libtbx import phil
 
 
 def generated_refl(not_integrated=False, idval=0):

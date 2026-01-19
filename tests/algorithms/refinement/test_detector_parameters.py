@@ -4,10 +4,6 @@ import random
 import textwrap
 from math import cos, pi, sin, sqrt
 
-from dxtbx.model import BeamFactory, Detector, DetectorFactory, Panel
-from libtbx.test_utils import approx_equal
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.detector_parameters import (
     DetectorParameterisationMultiPanel,
     DetectorParameterisationSinglePanel,
@@ -16,6 +12,10 @@ from dials.algorithms.refinement.refinement_helpers import (
     get_fd_gradients,
     random_param_shift,
 )
+
+from dxtbx.model import BeamFactory, Detector, DetectorFactory, Panel
+from libtbx.test_utils import approx_equal
+from scitbx import matrix
 
 
 def random_panel(lim=(0, 50)):

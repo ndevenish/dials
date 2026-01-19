@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import math
 
-from cctbx import sgtbx, uctbx
-from iotbx import ccp4_map, phil
-from scitbx.array_family import flex
-
 import dials.algorithms.rs_mapper as recviewer
 import dials.util
 from dials.util import Sorry
 from dials.util.options import ArgumentParser, flatten_experiments
+
+from cctbx import sgtbx, uctbx
+from iotbx import ccp4_map, phil
+from scitbx.array_family import flex
 
 help_message = """
 This program reconstructs reciprocal space from diffraction images. The orientation matrix is not necessary; only diffraction geometry is required.

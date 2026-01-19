@@ -166,7 +166,7 @@ class _Tiles:
     MaxTileList = 512
 
     def __init__(self, filename):
-        (self.tile_size_x, self.tile_size_y) = (256, 256)
+        self.tile_size_x, self.tile_size_y = (256, 256)
         self.levels = [-3, -2, -1, 0, 1, 2, 3, 4, 5]
 
         # set min and max tile levels
@@ -432,7 +432,7 @@ class _Tiles:
         # output fast and slow picture coordinates in units of detector pixels
         # slow is pointing down (x).  fast is pointing right (y).
 
-        (size1, size2) = (self.flex_image.size1(), self.flex_image.size2())
+        size1, size2 = (self.flex_image.size1(), self.flex_image.size2())
 
         return (
             (size2 / 2.0) - (self.center_x_lon - longitude),
@@ -442,7 +442,7 @@ class _Tiles:
     def picture_fast_slow_to_lon_lat(self, pic_fast_pixel, pic_slow_pixel):
         # inverse of the preceding function
 
-        (size1, size2) = (self.flex_image.size1(), self.flex_image.size2())
+        size1, size2 = (self.flex_image.size1(), self.flex_image.size2())
 
         return (
             (size2 / 2.0) - self.center_x_lon - pic_fast_pixel,

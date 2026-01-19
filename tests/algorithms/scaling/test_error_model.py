@@ -8,10 +8,6 @@ import math
 
 import numpy as np
 import pytest
-
-from cctbx.sgtbx import space_group
-from libtbx import phil
-
 from dials.algorithms.scaling.error_model.engine import ErrorModelRefinery
 from dials.algorithms.scaling.error_model.error_model import (
     BasicErrorModel,
@@ -23,6 +19,9 @@ from dials.algorithms.scaling.error_model.error_model_target import ErrorModelTa
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+
+from cctbx.sgtbx import space_group
+from libtbx import phil
 
 
 @pytest.fixture()

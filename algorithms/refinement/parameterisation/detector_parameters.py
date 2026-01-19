@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from functools import reduce
 
-from scitbx import matrix
-from scitbx.array_family import flex
-
 from dials.algorithms.refinement.parameterisation.model_parameters import (
     ModelParameterisation,
     Parameter,
@@ -15,6 +12,9 @@ from dials.algorithms.refinement.refinement_helpers import (
     get_panel_groups_at_depth,
     get_panel_ids_at_root,
 )
+
+from scitbx import matrix
+from scitbx.array_family import flex
 
 
 class DetectorMixin:
@@ -1139,10 +1139,10 @@ class DetectorParameterisationHierarchical(DetectorParameterisationMultiPanel):
             # Loop over attached Panel matrices, using the helper class to calculate
             # derivatives of the d matrix in each case and store them.
             i = igp * 6
-            for (panel_id, offset, dir1_new_basis, dir2_new_basis) in zip(
+            for panel_id, offset, dir1_new_basis, dir2_new_basis in zip(
                 pnl_ids, offsets, dir1s, dir2s
             ):
 
-                self._multi_state_derivatives[panel_id][
-                    i : (i + 6)
-                ] = pgc.derivatives_for_panel(offset, dir1_new_basis, dir2_new_basis)
+                self._multi_state_derivatives[panel_id][i : (i + 6)] = (
+                    pgc.derivatives_for_panel(offset, dir1_new_basis, dir2_new_basis)
+                )

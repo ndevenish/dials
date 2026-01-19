@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import iotbx.phil
-
 import dials.util
 from dials.util import Sorry
 
-master_phil_scope = iotbx.phil.parse(
-    """
+import iotbx.phil
+
+master_phil_scope = iotbx.phil.parse("""
 scan_range = None
   .help = "The range of images to use in indexing. Number of arguments"
           "must be a factor of two. Specifying \"0 0\" will use all images"
@@ -30,20 +29,19 @@ output {
   marker_size = 10
     .type = float(value_min=0)
 }
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()
 def run(args=None):
     usage = "dials.plot_reflections models.expt observations.refl [options]"
-    from scitbx import matrix
-    from scitbx.array_family import flex
-
     from dials.util.options import (
         ArgumentParser,
         reflections_and_experiments_from_files,
     )
+
+    from scitbx import matrix
+    from scitbx.array_family import flex
 
     parser = ArgumentParser(
         usage=usage,

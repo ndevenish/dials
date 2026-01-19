@@ -3,9 +3,6 @@ from __future__ import annotations
 from unittest import mock
 
 import pytest
-
-from dxtbx.serialize import load
-
 from dials.algorithms.scaling.observers import (
     ScalingHTMLContextManager,
     make_error_model_plots,
@@ -18,6 +15,8 @@ from dials.algorithms.scaling.observers import (
 )
 from dials.algorithms.scaling.scaling_library import scaled_data_as_miller_array
 from dials.array_family import flex
+
+from dxtbx.serialize import load
 
 
 @pytest.fixture
@@ -67,13 +66,10 @@ def test_make_scaling_model_plots(test_data):
 def test_print_scaling_model_error_summary(test_data):
     _, expts, __ = test_data
     msg = print_scaling_model_error_summary(expts)
-    assert (
-        msg
-        == """Warning: Over half (83.67%) of model parameters have significant
+    assert msg == """Warning: Over half (83.67%) of model parameters have significant
 uncertainty (sigma/abs(parameter) > 0.5), which could indicate a
 poorly-determined scaling problem or overparameterisation.
 """
-    )
 
 
 def test_make_outlier_plots(test_data):

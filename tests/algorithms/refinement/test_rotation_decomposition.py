@@ -1,17 +1,16 @@
 """Test decomposition of rotation matrices around arbitrary axes"""
 
-
 from __future__ import annotations
 
 import math
 import random
 
-from libtbx.test_utils import approx_equal
-from scitbx import matrix
-
 from dials.algorithms.refinement.rotation_decomposition import (
     solve_r3_rotation_for_angles_given_axes,
 )
+
+from libtbx.test_utils import approx_equal
+from scitbx import matrix
 
 
 def _test_rotation_matrices(phi1, phi2, phi3):

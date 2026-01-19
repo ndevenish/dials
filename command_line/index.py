@@ -8,15 +8,15 @@ import copy
 import logging
 import sys
 
-import iotbx.phil
-from dxtbx.model.experiment_list import ExperimentList
-
 from dials.algorithms.indexing import DialsIndexError, indexer
 from dials.array_family import flex
 from dials.util import log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.slice import slice_reflections
 from dials.util.version import dials_version
+
+import iotbx.phil
+from dxtbx.model.experiment_list import ExperimentList
 
 logger = logging.getLogger("dials.command_line.index")
 
@@ -89,17 +89,13 @@ output {
 )
 
 # override default refinement parameters
-phil_overrides = phil_scope.fetch(
-    source=iotbx.phil.parse(
-        """\
+phil_overrides = phil_scope.fetch(source=iotbx.phil.parse("""\
 refinement {
     reflections {
         reflections_per_degree=100
     }
 }
-"""
-    )
-)
+"""))
 
 working_phil = phil_scope.fetch(sources=[phil_overrides])
 

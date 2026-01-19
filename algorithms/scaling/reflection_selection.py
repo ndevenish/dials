@@ -68,10 +68,6 @@ import logging
 from math import floor
 
 import numpy as np
-
-from dxtbx import flumpy
-from scitbx import sparse
-
 from dials.algorithms.scaling.scaling_utilities import (
     BadDatasetForScalingException,
     Reasons,
@@ -79,11 +75,14 @@ from dials.algorithms.scaling.scaling_utilities import (
 from dials.array_family import flex
 from dials.util import tabulate
 
+from dxtbx import flumpy
+from scitbx import sparse
+
 logger = logging.getLogger("dials")
 
 
 def _build_class_matrix(class_index, class_matrix, offset=0):
-    for (i, val) in enumerate(class_index, start=offset):
+    for i, val in enumerate(class_index, start=offset):
         class_matrix[val, i] = 1.0
     return class_matrix
 
@@ -98,11 +97,9 @@ def _select_groups_on_Isigma_cutoff(Ih_table, cutoff=2.0):
     sel = avg_Isigma > cutoff
     sel2 = n > 1
     if not sel2.any():
-        raise SystemExit(
-            """
+        raise SystemExit("""
 Could not find any cross-dataset connected reflections with multiplicity > 1,
-scaling not possible."""
-        )
+scaling not possible.""")
     sel &= sel2
     if not sel.any():
         logger.warning(
@@ -113,11 +110,9 @@ Reducing Isigma_cutoff to zero to attempt continuation.""",
         )
         sel = avg_Isigma > 0.0 & sel2
         if not sel.any():
-            raise SystemExit(
-                """
+            raise SystemExit("""
 Could not find any cross-dataset connected groups with <I/sI> > 0,
-scaling not possible."""
-            )
+scaling not possible.""")
     sel_Ih_table = Ih_table.select_on_groups(sel)
     return sel_Ih_table
 

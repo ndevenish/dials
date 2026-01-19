@@ -4,11 +4,11 @@ from __future__ import annotations
 def test_run(dials_regression, run_in_tmpdir):
     from os.path import join
 
-    from dxtbx.model.experiment_list import ExperimentListFactory
-
     from dials.array_family import flex
     from dials.command_line.export import phil_scope
     from dials.util.nexus import dump, load
+
+    from dxtbx.model.experiment_list import ExperimentListFactory
 
     path = join(dials_regression, "nexus_test_data")
 

@@ -4,9 +4,6 @@ import copy
 import logging
 import math
 
-import libtbx
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-
 from dials.algorithms.indexing import DialsIndexError, DialsIndexRefineError
 from dials.algorithms.indexing.indexer import Indexer
 from dials.algorithms.indexing.known_orientation import IndexerKnownOrientation
@@ -14,6 +11,9 @@ from dials.algorithms.indexing.lattice_search import BasisVectorSearch, LatticeS
 from dials.algorithms.indexing.nave_parameters import NaveParameters
 from dials.array_family import flex
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
+
+import libtbx
+from dxtbx.model.experiment_list import Experiment, ExperimentList
 
 logger = logging.getLogger(__name__)
 

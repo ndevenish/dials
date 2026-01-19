@@ -271,7 +271,7 @@ class RingSettingsPanel(wx.Panel):
         assert map_rel is True
         if len(data) == 0:
             return
-        (lon, lat, place, radius, colour, x_off, y_off, pdata) = data[0]
+        lon, lat, place, radius, colour, x_off, y_off, pdata = data[0]
 
         scale = 2**self._pyslip.tiles.zoom_level
 
@@ -282,8 +282,8 @@ class RingSettingsPanel(wx.Panel):
             pass
         dc.SetPen(wx.Pen(colour))
         dc.SetBrush(wx.Brush(colour, wx.TRANSPARENT))
-        for (lon, lat, place, radius, colour, x_off, y_off, pdata) in data:
-            (x, y) = self._pyslip.ConvertGeo2View((lon, lat))
+        for lon, lat, place, radius, colour, x_off, y_off, pdata in data:
+            x, y = self._pyslip.ConvertGeo2View((lon, lat))
             dc.DrawCircle(x, y, radius * scale)
 
     def DrawRing(self):

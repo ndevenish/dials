@@ -4,18 +4,18 @@ import copy
 import logging
 import os
 
-import dxtbx.model
-import libtbx.phil
-from cctbx.miller import map_to_asu
-from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
-from scitbx import matrix
-
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.filter_reflections import (
     FilteringReductionMethods,
     filter_reflection_table,
 )
+
+import dxtbx.model
+import libtbx.phil
+from cctbx.miller import map_to_asu
+from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
+from scitbx import matrix
 
 try:
     from typing import Tuple

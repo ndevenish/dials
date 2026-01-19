@@ -2,17 +2,15 @@
 for scan-varying refinement. This exercises the issue originally flagged in
 https://github.com/dials/dials/issues/511"""
 
-
 from __future__ import annotations
 
 from math import pi
 
 import pytest
+from dials.algorithms.refinement.reflection_manager import BlockCalculator
 
 from dxtbx.model.experiment_list import Experiment, ExperimentList
 from scitbx.array_family import flex
-
-from dials.algorithms.refinement.reflection_manager import BlockCalculator
 
 
 def create_experiments(image_start=1):
@@ -71,13 +69,13 @@ def create_experiments(image_start=1):
 
 def generate_reflections(experiments):
 
-    from cctbx.sgtbx import space_group, space_group_symbols
-
     from dials.algorithms.refinement.prediction.managed_predictors import (
         ScansExperimentsPredictor,
         ScansRayPredictor,
     )
     from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+
+    from cctbx.sgtbx import space_group, space_group_symbols
 
     detector = experiments[0].detector
     crystal = experiments[0].crystal

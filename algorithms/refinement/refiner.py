@@ -1,20 +1,14 @@
 """Refiner is the refinement module public interface. RefinerFactory is
 what should usually be used to construct a Refiner."""
 
-
 from __future__ import annotations
 
 import copy
 import logging
 import math
 
-import psutil
-
-import libtbx
-from dxtbx.model.experiment_list import ExperimentList
-from libtbx.phil import parse
-
 import dials.util
+import psutil
 from dials.algorithms.refinement import DialsRefineConfigError
 from dials.algorithms.refinement.constraints import ConstraintManagerFactory
 from dials.algorithms.refinement.engine import AdaptLstbx, refinery_phil_str
@@ -32,7 +26,9 @@ from dials.algorithms.refinement.prediction.managed_predictors import (
     ExperimentsPredictorFactory,
 )
 from dials.algorithms.refinement.refinement_helpers import ordinal_number, string_sel
-from dials.algorithms.refinement.reflection_manager import ReflectionManagerFactory
+from dials.algorithms.refinement.reflection_manager import (
+    ReflectionManagerFactory,
+)
 from dials.algorithms.refinement.reflection_manager import (
     phil_str as reflections_phil_str,
 )
@@ -40,6 +36,10 @@ from dials.algorithms.refinement.restraints import RestraintsParameterisation
 from dials.algorithms.refinement.target import TargetFactory
 from dials.algorithms.refinement.target import phil_str as target_phil_str
 from dials.array_family import flex
+
+import libtbx
+from dxtbx.model.experiment_list import ExperimentList
+from libtbx.phil import parse
 
 logger = logging.getLogger(__name__)
 
@@ -97,8 +97,7 @@ refinement
   }
 
 }
-"""
-    % format_data,
+""" % format_data,
     process_includes=True,
 )
 
@@ -781,8 +780,8 @@ class Refiner:
             idx = flex.bool(sel).iselection()
             sub_corrmat = flex.double(flex.grid(num_cols, num_cols))
 
-            for (i, x) in enumerate(idx):
-                for (j, y) in enumerate(idx):
+            for i, x in enumerate(idx):
+                for j, y in enumerate(idx):
                     sub_corrmat[i, j] = corrmat[x, y]
 
             corrmats[k] = sub_corrmat
@@ -801,7 +800,7 @@ class Refiner:
 
         rmsd_multipliers = []
         header = ["Step", "Nref"]
-        for (name, units) in zip(self._target.rmsd_names, self._target.rmsd_units):
+        for name, units in zip(self._target.rmsd_names, self._target.rmsd_units):
             if units == "mm":
                 header.append(name + "\n(mm)")
                 rmsd_multipliers.append(1.0)
@@ -841,7 +840,7 @@ class Refiner:
 
         rmsd_multipliers = []
         header = ["Step", "Nref"]
-        for (name, units) in zip(self._target.rmsd_names, self._target.rmsd_units):
+        for name, units in zip(self._target.rmsd_names, self._target.rmsd_units):
             if units == "mm":
                 header.append(name + "\n(mm)")
                 rmsd_multipliers.append(1.0)
@@ -871,7 +870,7 @@ class Refiner:
         logger.info("\nRMSDs by experiment:")
 
         header = ["Exp\nid", "Nref"]
-        for (name, units) in zip(self._target.rmsd_names, self._target.rmsd_units):
+        for name, units in zip(self._target.rmsd_names, self._target.rmsd_units):
             if name == "RMSD_X" or name == "RMSD_Y" and units == "mm":
                 header.append(name + "\n(px)")
             elif name == "RMSD_Phi" and units == "rad":
@@ -910,7 +909,7 @@ class Refiner:
                 continue  # skip experiments where rmsd cannot be calculated
             num = self._target.get_num_matches_for_experiment(iexp)
             rmsds = []
-            for (name, units, rmsd) in zip(
+            for name, units, rmsd in zip(
                 self._target.rmsd_names, self._target.rmsd_units, raw_rmsds
             ):
                 if name == "RMSD_X" and units == "mm":
@@ -948,7 +947,7 @@ class Refiner:
             logger.info("\nDetector %s RMSDs by panel:", idetector + 1)
 
             header = ["Panel\nid", "Nref"]
-            for (name, units) in zip(self._target.rmsd_names, self._target.rmsd_units):
+            for name, units in zip(self._target.rmsd_names, self._target.rmsd_units):
                 if name == "RMSD_X" or name == "RMSD_Y" and units == "mm":
                     header.append(name + "\n(px)")
                 elif (
@@ -974,7 +973,7 @@ class Refiner:
                 if raw_rmsds is None:
                     continue  # skip panels where rmsd cannot be calculated
                 rmsds = []
-                for (name, units, rmsd) in zip(
+                for name, units, rmsd in zip(
                     self._target.rmsd_names, self._target.rmsd_units, raw_rmsds
                 ):
                     if name == "RMSD_X" and units == "mm":

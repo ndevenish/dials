@@ -5,16 +5,15 @@ import json
 
 import procrunner
 import pytest
+from dials.array_family import flex
+from dials.command_line.slice_sequence import slice_experiments, slice_reflections
+from dials.util.multi_dataset_handling import assign_unique_identifiers
 
 import iotbx.cif
 from cctbx import sgtbx, uctbx
 from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.serialize import load
 from iotbx import mtz
-
-from dials.array_family import flex
-from dials.command_line.slice_sequence import slice_experiments, slice_reflections
-from dials.util.multi_dataset_handling import assign_unique_identifiers
 
 
 def run_export(export_format, dials_data, tmp_path):

@@ -1,16 +1,14 @@
 """Tests for dials.merge command line program."""
 
-
 from __future__ import annotations
 
 import procrunner
 import pytest
+from dials.array_family import flex
 
 from cctbx import uctbx
 from dxtbx.serialize import load
 from iotbx import mtz
-
-from dials.array_family import flex
 
 
 def validate_mtz(mtz_file, expected_labels, unexpected_labels=None):

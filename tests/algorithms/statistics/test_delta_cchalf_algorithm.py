@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from unittest import mock
 
-from dxtbx.model import Crystal, Experiment, ExperimentList, Scan
-
 from dials.algorithms.statistics.cc_half_algorithm import CCHalfFromDials
 from dials.array_family import flex
 from dials.command_line.compute_delta_cchalf import phil_scope
+
+from dxtbx.model import Crystal, Experiment, ExperimentList, Scan
 
 
 def generated_exp(n=1):

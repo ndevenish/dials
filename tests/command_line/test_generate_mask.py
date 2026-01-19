@@ -3,13 +3,12 @@ from __future__ import annotations
 import pickle
 
 import pytest
-
-from dxtbx.model import ExperimentList
-from libtbx import phil
-
 from dials.command_line.dials_import import ImageImporter
 from dials.command_line.dials_import import phil_scope as import_phil_scope
 from dials.command_line.generate_mask import generate_mask, phil_scope
+
+from dxtbx.model import ExperimentList
+from libtbx import phil
 
 
 @pytest.fixture(
@@ -110,9 +109,7 @@ def test_generate_mask_with_ice_rings(experiments_masks, tmpdir):
 def test_generate_mask_with_untrusted_polygon_and_pixels(experiments_masks, tmpdir):
     experiments, masks = experiments_masks
 
-    params = phil_scope.fetch(
-        phil.parse(
-            """
+    params = phil_scope.fetch(phil.parse("""
 untrusted {
   polygon = 100 100 100 200 200 200 200 100
 }
@@ -121,9 +118,7 @@ untrusted {
 }
 untrusted {
   pixel = 1 1
-}"""
-        )
-    ).extract()
+}""")).extract()
 
     with tmpdir.as_cwd():
         generate_mask(experiments, params)
@@ -197,15 +192,11 @@ def test_generate_mask_trusted_range(dials_data, tmpdir):
 def test_generate_whole_panel_mask(experiments_masks, tmpdir):
     experiments, masks = experiments_masks
 
-    params = phil_scope.fetch(
-        phil.parse(
-            """
+    params = phil_scope.fetch(phil.parse("""
 untrusted {
   panel = 0
 }
-"""
-        )
-    ).extract()
+""")).extract()
 
     with tmpdir.as_cwd():
         generate_mask(experiments, params)

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import numpy as np
 import wx
-
 from dials.array_family import flex
+
 from dials_viewer_ext import rgb_img
 
 

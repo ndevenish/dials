@@ -5,13 +5,12 @@ from unittest.mock import Mock
 import numpy as np
 import pandas as pd
 import pytest
+from dials.algorithms.scaling.Ih_table import IhTable, IhTableBlock, map_indices_to_asu
+from dials.array_family import flex
 
 from cctbx.sgtbx import space_group, uctbx
 from dxtbx import flumpy
 from scitbx import sparse
-
-from dials.algorithms.scaling.Ih_table import IhTable, IhTableBlock, map_indices_to_asu
-from dials.array_family import flex
 
 
 @pytest.fixture()

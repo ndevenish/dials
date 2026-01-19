@@ -4,17 +4,16 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional
 
 import numpy as np
-from numpy.linalg import norm
-
-from dxtbx import flumpy
-from scitbx import linalg, matrix
-
 from dials.algorithms.profile_model.ellipsoid import mosaicity_from_eigen_decomposition
 from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalOrientationParameterisation,
     CrystalUnitCellParameterisation,
 )
 from dials.array_family import flex
+from numpy.linalg import norm
+
+from dxtbx import flumpy
+from scitbx import linalg, matrix
 
 
 class BaseParameterisation(ABC):

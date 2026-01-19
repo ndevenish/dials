@@ -4,16 +4,15 @@ import math
 from random import randint, seed
 
 import numpy as np
-
-from dxtbx.model.experiment_list import ExperimentList
-from scitbx import matrix
-
 from dials.algorithms.profile_model.gaussian_rs import (
     CoordinateSystem,
     MaskCalculator3D,
 )
 from dials.algorithms.shoebox import MaskCode
 from dials.array_family import flex
+
+from dxtbx.model.experiment_list import ExperimentList
+from scitbx import matrix
 
 
 def test(dials_data):
@@ -152,7 +151,7 @@ def generate_reflections(detector, beam, scan, experiment, num):
         phi = scan.get_angle_from_array_index(z, deg=False)
         beam_vector[i] = s1
         xyzcal_px[i] = (x, y, z)
-        (x, y) = detector[0].pixel_to_millimeter((x, y))
+        x, y = detector[0].pixel_to_millimeter((x, y))
         xyzcal_mm[i] = (x, y, phi)
         panel[i] = 0
 

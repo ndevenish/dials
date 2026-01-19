@@ -21,12 +21,11 @@ class Sort:
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
-
         from dials.util.options import ArgumentParser
 
-        phil_scope = parse(
-            """
+        from libtbx.phil import parse
+
+        phil_scope = parse("""
 
             key = 'miller_index'
                 .type = str
@@ -40,8 +39,7 @@ class Sort:
             output = sorted.refl
                 .type = str
                 .help = "The output reflection filename"
-            """
-        )
+            """)
 
         usage = "dials.sort_reflections [options] observations.refl"
 

@@ -4,6 +4,8 @@ from math import pi
 
 import wx
 from annlib_ext import AnnAdaptorSelfInclude
+from dials.util import wx_viewer
+from dials.util.reciprocal_lattice import Render3d
 from wx.lib.agw import floatspin
 
 import gltbx
@@ -18,9 +20,6 @@ from wxtbx.segmentedctrl import (
     SegmentedRadioControl,
     SegmentedToggleControl,
 )
-
-from dials.util import wx_viewer
-from dials.util.reciprocal_lattice import Render3d
 
 phil_scope = libtbx.phil.parse(
     """
@@ -562,7 +561,7 @@ class RLVWindow(wx_viewer.show_points_and_lines_mixin):
         self.minimum_covering_sphere = minimum_covering_sphere(self.points.select(isel))
 
     def draw_cross_at(self, xyz, color=(1, 1, 1), f=None):
-        (x, y, z) = xyz
+        x, y, z = xyz
         if f is None:
             f = 0.01 * self.settings.marker_size
         wx_viewer.show_points_and_lines_mixin.draw_cross_at(

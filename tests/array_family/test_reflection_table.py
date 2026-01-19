@@ -6,12 +6,11 @@ import pickle
 import random
 
 import pytest
+from dials.array_family import flex
 
 from cctbx import sgtbx
 from dxtbx.model import Crystal, Experiment, ExperimentList
 from dxtbx.serialize import load
-
-from dials.array_family import flex
 
 
 def test_accessing_invalid_key_throws_keyerror():

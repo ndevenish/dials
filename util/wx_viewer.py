@@ -912,7 +912,7 @@ class show_points_and_lines_mixin(wxGLWindow):
         self.labels_display_list.call()
 
     def draw_cross_at(self, position_tuple, color=(1, 1, 1), f=0.1):
-        (x, y, z) = position_tuple
+        x, y, z = position_tuple
         gl.glBegin(gl.GL_LINES)
         gl.glColor3f(*color)
         gl.glVertex3f(x - f, y, z)

@@ -17,11 +17,10 @@ from __future__ import annotations
 import logging
 
 import scipy.stats
+from dials.array_family import flex
 
 from cctbx import miller
 from dxtbx.model import ExperimentList
-
-from dials.array_family import flex
 
 log = logging.getLogger("dials.util.intensity_explorer")
 
@@ -306,11 +305,9 @@ class IntensityDist:
                 uncertainty_value = flex.sqrt(rtable[uncertainty_name])
             except KeyError:
                 uncertainty_value = flex.sqrt(rtable["intensity.sum.variance"])
-                log.warn(
-                    """Weighted variances haven't been calculated,
+                log.warn("""Weighted variances haven't been calculated,
       be sure to specify calculate_variances=True to use them.
-      Defaulting to measured σ values as a measure of uncertainty instead."""
-                )
+      Defaulting to measured σ values as a measure of uncertainty instead.""")
 
             z = (
                 rtable["intensity.sum.value"] - rtable["intensity.mean.value"]

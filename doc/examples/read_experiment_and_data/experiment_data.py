@@ -3,10 +3,10 @@
 
 from __future__ import annotations
 
-from libtbx.phil import parse
-
 import dials.util.options
 from dials.util import show_mail_handle_errors
+
+from libtbx.phil import parse
 
 help_message = """
 

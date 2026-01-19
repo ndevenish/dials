@@ -4,10 +4,10 @@ import logging
 import pickle
 import sys
 
-from libtbx.phil import parse
-
 import dials.util
 import dials.util.log
+
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials.command_line.model_background")
 

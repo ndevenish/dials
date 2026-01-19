@@ -7,10 +7,6 @@ from random import randint, uniform
 
 import numpy as np
 import pytest
-from numpy.linalg import norm
-
-from scitbx import matrix
-
 from dials.algorithms.profile_model.ellipsoid.model import (
     Simple1ProfileModel,
     Simple6ProfileModel,
@@ -33,6 +29,9 @@ from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalUnitCellParameterisation,
 )
 from dials.array_family import flex
+from numpy.linalg import norm
+
+from scitbx import matrix
 
 
 def first_derivative(func, x, h):
@@ -162,9 +161,7 @@ def refinerdata_testdata(testdata):
     for j in range(11):
         for i in range(11):
             shoebox_data[0, j, i] = (
-                100
-                * exp(-0.5 * (j - 5) ** 2 / 1**2)
-                * exp(-0.5 * (i - 5) ** 2 / 1**2)
+                100 * exp(-0.5 * (j - 5) ** 2 / 1**2) * exp(-0.5 * (i - 5) ** 2 / 1**2)
             )
             shoebox_mask[0, j, i] = 5
     for sbox in reflections["shoebox"]:
@@ -486,9 +483,7 @@ def test_RefinerData(testdata):
     for j in range(11):
         for i in range(11):
             shoebox_data[0, j, i] = (
-                100
-                * exp(-0.5 * (j - 5) ** 2 / 1**2)
-                * exp(-0.5 * (i - 5) ** 2 / 1**2)
+                100 * exp(-0.5 * (j - 5) ** 2 / 1**2) * exp(-0.5 * (i - 5) ** 2 / 1**2)
             )
             shoebox_mask[0, j, i] = 5
     for sbox in reflections["shoebox"]:

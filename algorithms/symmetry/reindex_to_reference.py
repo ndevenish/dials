@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from cctbx import sgtbx
-from mmtbx.scaling.twin_analyses import twin_laws
-
 import dials.util
 from dials.util import Sorry
+
+from cctbx import sgtbx
+from mmtbx.scaling.twin_analyses import twin_laws
 
 
 def determine_reindex_operator_against_reference(test_miller_set, reference_miller_set):
@@ -31,10 +31,8 @@ def determine_reindex_operator_against_reference(test_miller_set, reference_mill
         reference_miller_set.space_group().type().number()
         != test_miller_set.space_group().type().number()
     ):
-        raise Sorry(
-            """Space groups are not equal. Can only reindex against a
-reference dataset if both dataset are in the same spacegroup."""
-        )
+        raise Sorry("""Space groups are not equal. Can only reindex against a
+reference dataset if both dataset are in the same spacegroup.""")
 
     twin_ops = twin_laws(miller_array=test_miller_set.eliminate_sys_absent()).operators
     twin_ops = [sgtbx.change_of_basis_op(op.operator.as_xyz()) for op in twin_ops]

@@ -4,12 +4,11 @@ import os
 
 import procrunner
 import pytest
+from dials.algorithms.refinement import RefinerFactory
+from dials.array_family import flex
 
 from dxtbx.model.experiment_list import ExperimentListFactory
 from libtbx import phil
-
-from dials.algorithms.refinement import RefinerFactory
-from dials.array_family import flex
 
 
 def test1(dials_regression, run_in_tmpdir):
@@ -112,8 +111,7 @@ def test_restrained_refinement_with_fixed_parameterisations(
     # The phil scope
     from dials.algorithms.refinement.refiner import phil_scope
 
-    user_phil = phil.parse(
-        """
+    user_phil = phil.parse("""
 refinement {
   parameterisation {
     auto_reduction {
@@ -133,8 +131,7 @@ refinement {
     }
   }
 }
-"""
-    )
+""")
 
     working_phil = phil_scope.fetch(source=user_phil)
     working_params = working_phil.extract()

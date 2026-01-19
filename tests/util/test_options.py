@@ -7,9 +7,6 @@ from __future__ import annotations
 from unittest.mock import Mock
 
 import pytest
-
-from dxtbx.model import Experiment, ExperimentList
-
 from dials.tests.util import (
     mock_reflection_file_object,
     mock_two_reflection_file_object,
@@ -20,6 +17,8 @@ from dials.util.options import (
     flatten_reflections,
     reflections_and_experiments_from_files,
 )
+
+from dxtbx.model import Experiment, ExperimentList
 
 
 def test_cannot_read_headerless_h5(dials_data):

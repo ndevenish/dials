@@ -1,7 +1,6 @@
 """Testing functions for multivariate outlier rejection by the FAST-MCD
 algorithm"""
 
-
 from __future__ import annotations
 
 
@@ -29,9 +28,9 @@ def test_maha():
     # [1] 2.1838336 1.9673401 1.3335029 4.9191627 2.1246818 5.3297995 4.9022487
     # [8] 2.5335913 0.1952562 1.5105832
 
-    from scitbx.array_family import flex
-
     from dials.algorithms.statistics.fast_mcd import cov, maha_dist_sq
+
+    from scitbx.array_family import flex
 
     # test Mahalanobis distance.
     x1 = flex.double(
@@ -71,9 +70,9 @@ def test_fast_mcd_small():
     # finding less common solutions
     import random
 
-    from scitbx.array_family import flex
-
     from dials.algorithms.statistics.fast_mcd import FastMCD
+
+    from scitbx.array_family import flex
 
     random.seed(42)
     flex.set_random_seed(42)
@@ -200,9 +199,9 @@ def test_fast_mcd_large(dials_regression):
     # finding less common solutions
     import random
 
-    from scitbx.array_family import flex
-
     from dials.algorithms.statistics.fast_mcd import FastMCD
+
+    from scitbx.array_family import flex
 
     random.seed(42)
     flex.set_random_seed(42)

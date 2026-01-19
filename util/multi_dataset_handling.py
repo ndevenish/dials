@@ -3,24 +3,21 @@ Module of functions for handling operations on lists of reflection tables
 and experiment lists.
 """
 
-
 from __future__ import annotations
 
 import copy
 import logging
 
+from dials.array_family import flex
 from orderedset import OrderedSet
 
 from dxtbx.util import ersatz_uuid4
-
-from dials.array_family import flex
 
 logger = logging.getLogger("dials")
 
 import iotbx.phil
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
   dataset_selection {
     use_datasets = None
       .type = ints
@@ -33,8 +30,7 @@ phil_scope = iotbx.phil.parse(
                in the reflection table), to exclude from a multi-dataset input."
       .expert_level = 2
   }
-"""
-)
+""")
 
 
 def generate_experiment_identifiers(experiments, identifier_type="uuid"):
@@ -328,11 +324,9 @@ def select_datasets_on_identifiers(
             "The options use_datasets and exclude_datasets cannot be used in conjunction."
         )
     if experiments.identifiers().count("") > 0:
-        raise ValueError(
-            f"""
+        raise ValueError(f"""
             Not all experiment identifiers set in the ExperimentList.
-            Current identifiers set as: {list(experiments.identifiers())}"""
-        )
+            Current identifiers set as: {list(experiments.identifiers())}""")
     list_of_reflections = []
     if use_datasets:
         total_found = 0
@@ -347,19 +341,15 @@ def select_datasets_on_identifiers(
                     )
                 )
         if total_found != len(use_datasets):
-            raise ValueError(
-                """Attempting to select datasets based on identifiers that
-are not found in the experiment list / reflection tables."""
-            )
+            raise ValueError("""Attempting to select datasets based on identifiers that
+are not found in the experiment list / reflection tables.""")
         experiments.select_on_experiment_identifiers(use_datasets)
     elif exclude_datasets:
         if len(
             set(exclude_datasets).intersection(set(experiments.identifiers()))
         ) != len(set(exclude_datasets)):
-            raise ValueError(
-                """Attempting to exclude datasets based on identifiers that
-are not found in the experiment list / reflection tables."""
-            )
+            raise ValueError("""Attempting to exclude datasets based on identifiers that
+are not found in the experiment list / reflection tables.""")
         for reflection_table in reflection_table_list:
             expids = list(reflection_table.experiment_identifiers().values())
             expids_in_this_table = list(set(exclude_datasets).intersection(set(expids)))

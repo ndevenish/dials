@@ -1,6 +1,7 @@
 """
 Test standalone error model refinement on scaled data
 """
+
 from __future__ import annotations
 
 import procrunner

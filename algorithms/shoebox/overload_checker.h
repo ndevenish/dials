@@ -34,7 +34,7 @@ namespace dials { namespace algorithms { namespace shoebox {
       /**
        * @param overload - The overload values for each pixel
        */
-      Checker(const af::const_ref<double> &overload)
+      Checker(const af::const_ref<double>& overload)
           : overload_(overload.begin(), overload.end()) {}
 
       /**
@@ -44,7 +44,7 @@ namespace dials { namespace algorithms { namespace shoebox {
        * @param mask The mask array
        */
       bool operator()(std::size_t panel,
-                      const af::const_ref<float_type, af::c_grid<3> > &data,
+                      const af::const_ref<float_type, af::c_grid<3> >& data,
                       af::ref<int, af::c_grid<3> > mask) const {
         DIALS_ASSERT(panel < overload_.size());
         DIALS_ASSERT(data.accessor().all_eq(mask.accessor()));
@@ -69,7 +69,7 @@ namespace dials { namespace algorithms { namespace shoebox {
      * Add the overload values for this detector
      * @param overload The overloads for each panel
      */
-    void add(const af::const_ref<double> &overload) {
+    void add(const af::const_ref<double>& overload) {
       checker_.push_back(Checker(overload));
     }
 

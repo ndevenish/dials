@@ -6,20 +6,18 @@ https://doi.org/10.1107/S2059798317010348
 Usage: dials.plot_Fo_vs_Fc hklin=refined.mtz
 """
 
-
 from __future__ import annotations
 
 import sys
 from math import sqrt
 
 import matplotlib
+from dials.util import Sorry, show_mail_handle_errors
+from dials.util.options import ArgumentParser
 
 from iotbx import mtz
 from scitbx.array_family import flex
 from scitbx.lstbx import normal_eqns, normal_eqns_solving
-
-from dials.util import Sorry, show_mail_handle_errors
-from dials.util.options import ArgumentParser
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt

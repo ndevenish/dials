@@ -14,11 +14,10 @@ import logging
 import math
 
 import numpy as np
+from dials.array_family import flex
 
 import scitbx.math
 from dxtbx import flumpy
-
-from dials.array_family import flex
 
 logger = logging.getLogger(__name__)
 
@@ -380,7 +379,7 @@ class ComputeEsdReflectingRange:
             # recorded.
             #
             L = 0
-            for (kj, nj, i0, i1) in zip(
+            for kj, nj, i0, i1 in zip(
                 self.K, self.nj, self.indices[:-1], self.indices[1:]
             ):
                 zj = zi[i0:i1]

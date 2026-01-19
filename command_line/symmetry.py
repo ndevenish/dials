@@ -8,13 +8,6 @@ import math
 import random
 import sys
 
-import iotbx.phil
-from cctbx import sgtbx, uctbx
-from cctbx.sgtbx.bravais_types import bravais_lattice
-from cctbx.sgtbx.lattice_symmetry import metric_subgroups
-from dxtbx.model import ExperimentList
-from libtbx import Auto
-
 import dials.util
 from dials.algorithms.merging.merge import prepare_merged_reflection_table
 from dials.algorithms.symmetry import resolution_filter_from_reflections_experiments
@@ -41,6 +34,13 @@ from dials.util.multi_dataset_handling import (
 )
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+import iotbx.phil
+from cctbx import sgtbx, uctbx
+from cctbx.sgtbx.bravais_types import bravais_lattice
+from cctbx.sgtbx.lattice_symmetry import metric_subgroups
+from dxtbx.model import ExperimentList
+from libtbx import Auto
 
 logger = logging.getLogger("dials.command_line.symmetry")
 

@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import pytest
-
-from scitbx import matrix
-
 from dials.algorithms.indexing.basis_vector_search.utils import (
     group_vectors,
     is_approximate_integer_multiple,
     vector_group,
 )
+
+from scitbx import matrix
 
 
 def test_is_approximate_integer_multiple():

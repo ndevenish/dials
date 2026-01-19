@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import sys
 
-import pkg_resources
-
 import dials.util
+import pkg_resources
 
 BOLD = "\033[1m"
 RED = "\033[1;31m"

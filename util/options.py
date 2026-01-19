@@ -11,13 +11,6 @@ import warnings
 from collections import defaultdict, namedtuple
 from glob import glob
 
-from orderedset import OrderedSet
-
-import libtbx.phil
-from dxtbx.model import ExperimentList
-from dxtbx.model.experiment_list import ExperimentListFactory
-from dxtbx.util import get_url_scheme
-
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.multi_dataset_handling import (
@@ -25,9 +18,14 @@ from dials.util.multi_dataset_handling import (
     sort_tables_to_experiments_order,
 )
 from dials.util.phil import FilenameDataWrapper
+from orderedset import OrderedSet
 
-tolerance_phil_scope = libtbx.phil.parse(
-    """
+import libtbx.phil
+from dxtbx.model import ExperimentList
+from dxtbx.model.experiment_list import ExperimentListFactory
+from dxtbx.util import get_url_scheme
+
+tolerance_phil_scope = libtbx.phil.parse("""
 tolerance
     .help = "Tolerances used to determine shared models"
     .expert_level = 2
@@ -94,8 +92,7 @@ tolerance
 
   }
 }
-"""
-)
+""")
 
 geometry_phil_scope = libtbx.phil.parse(
     """
@@ -123,8 +120,7 @@ geometry
 )
 
 
-format_phil_scope = libtbx.phil.parse(
-    """
+format_phil_scope = libtbx.phil.parse("""
 format
   .help = "Options to pass to the Format class"
   .expert_level = 2
@@ -137,8 +133,7 @@ format
     .help = "Enable a multi-panel detector model."
             "(Not supported by all detector formats)"
 }
-"""
-)
+""")
 
 
 # Simple tuple to hold basic information on why an argument failed
@@ -430,13 +425,13 @@ class PhilCommandParser:
                             ignoring class constructor options.
         :return: The options and parameters and (optionally) unhandled arguments
         """
+        from dials.util.phil import parse
+
         from dxtbx.model.experiment_list import (
             BeamComparison,
             DetectorComparison,
             GoniometerComparison,
         )
-
-        from dials.util.phil import parse
 
         # Parse the command line phil parameters
         user_phils = []
@@ -586,14 +581,12 @@ class PhilCommandParser:
 
         # Add the experiments phil scope
         if self._read_experiments or self._read_experiments_from_images:
-            phil_scope = parse(
-                f"""
+            phil_scope = parse(f"""
         experiments = None
           .type = experiment_list(check_format={self._check_format!r})
           .multiple = True
           .help = "The experiment list file path"
-      """
-            )
+      """)
             main_scope.adopt_scope(phil_scope)
 
         # If reading images, add some more parameters
@@ -602,14 +595,12 @@ class PhilCommandParser:
 
         # Add the reflections scope
         if self._read_reflections:
-            phil_scope = parse(
-                """
+            phil_scope = parse("""
         reflections = None
           .type = reflection_table
           .multiple = True
           .help = "The reflection table file path"
-      """
-            )
+      """)
             main_scope.adopt_scope(phil_scope)
 
         # Return the input scope

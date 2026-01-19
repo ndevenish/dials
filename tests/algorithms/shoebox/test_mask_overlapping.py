@@ -4,11 +4,11 @@ import numpy as np
 
 
 def predict_reflections(sequence, crystal):
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-
     from dials.algorithms import shoebox
     from dials.algorithms.profile_model.gaussian_rs import Model
     from dials.array_family import flex
+
+    from dxtbx.model.experiment_list import Experiment, ExperimentList
 
     # Get models from the sequence
     beam = sequence.get_beam()
@@ -44,10 +44,10 @@ def predict_reflections(sequence, crystal):
 
 
 def test(dials_data):
-    from dxtbx.serialize import load
-
     from dials.algorithms import shoebox
     from dials.array_family import flex
+
+    from dxtbx.serialize import load
 
     # Load the sequence and crystal
     sequence = load.imageset(
@@ -108,9 +108,9 @@ def tst_non_overlapping(reflections, non_overlapping, image_size):
 
 def tst_overlapping(reflections, overlapping, adjacency_list, image_size):
     """Ensure masks for overlapping reflections are set properly."""
-    from scitbx import matrix
-
     from dials.algorithms import shoebox
+
+    from scitbx import matrix
 
     # Loop through all overlaps
     shoeboxes = reflections["shoebox"]

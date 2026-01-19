@@ -6,10 +6,9 @@ import os
 import sys
 from optparse import SUPPRESS_HELP, OptionParser
 
+import dials.util
 import procrunner
 import py
-
-import dials.util
 
 
 @dials.util.show_mail_handle_errors()

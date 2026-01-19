@@ -1,25 +1,23 @@
 from __future__ import annotations
 
-import iotbx.phil
-
 import dials.util
 from dials.array_family import flex
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+
+import iotbx.phil
 
 help_message = """
 Augment spot list with additional information - for example number of pixels
 in peak region etc."""
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 output {
   reflections = stronger.refl
     .type = path
 }
 find_max = False
   .type = bool
-"""
-)
+""")
 
 
 def add_max_pixels_to_reflections(reflections):

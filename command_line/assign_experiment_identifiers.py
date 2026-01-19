@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import sys
 
-from libtbx import phil
-
 from dials.array_family import flex
 from dials.util import Sorry, show_mail_handle_errors
 from dials.util.multi_dataset_handling import (
@@ -12,12 +10,13 @@ from dials.util.multi_dataset_handling import (
 )
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 
+from libtbx import phil
+
 help_message = """Command line script which assigns experiment identifiers
 to reflections and experiments and saves them back to disk.
 """
 
-phil_scope = phil.parse(
-    """
+phil_scope = phil.parse("""
   identifiers = None
     .type = strings
     .help = "User specified identifiers to use, must be a list of strings equal"
@@ -28,8 +27,7 @@ phil_scope = phil.parse(
     experiments = assigned.expt
       .type = str
   }
-"""
-)
+""")
 
 
 @show_mail_handle_errors()

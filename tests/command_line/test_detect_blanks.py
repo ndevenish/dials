@@ -4,7 +4,6 @@ import json
 
 import procrunner
 import pytest
-
 from dials.array_family import flex
 from dials.command_line import detect_blanks
 
@@ -43,8 +42,7 @@ def test_integrated(dials_data, capsys, run_in_tmpdir):
         [expts_file.strpath, "mod.refl", "output.json=detect_blanks.json"]
     )
     captured = capsys.readouterr()
-    assert (
-        """\
+    assert """\
 Analysis of 18171 strong reflections:
 Potential blank images: 41 -> 45
 Analysis of 18171 indexed reflections:
@@ -52,9 +50,7 @@ Potential blank images: 41 -> 45
 Analysis of 44340 integrated reflections:
 Potential blank images: 1 -> 9
 Potential blank images: 41 -> 45
-"""
-        in captured.out
-    )
+""" in captured.out
     json_file = run_in_tmpdir / "detect_blanks.json"
     assert json_file.check(file=1)
     with json_file.open() as fh:

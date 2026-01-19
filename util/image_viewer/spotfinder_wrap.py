@@ -56,7 +56,6 @@ class spot_wrapper:
 
     def display(self, experiments, reflections):
         import wx
-
         from dials.util.image_viewer.spotfinder_frame import SpotFrame
 
         app = wx.App()

@@ -3,16 +3,15 @@ from __future__ import annotations
 import os
 import sys
 
+import dials.util
 import numpy as np
+from dials.array_family import flex
+from dials.util import Sorry, tabulate
 
 import iotbx.phil
 from cctbx import uctbx
 from dxtbx.model.experiment_list import ExperimentListFactory
 from scitbx.math import five_number_summary
-
-import dials.util
-from dials.array_family import flex
-from dials.util import Sorry, tabulate
 
 help_message = """
 

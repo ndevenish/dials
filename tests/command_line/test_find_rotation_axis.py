@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import os
 
+import dials.command_line.find_rotation_axis as dials_find_rotation_axis
+
 from dxtbx.serialize import load
 from scitbx import matrix
-
-import dials.command_line.find_rotation_axis as dials_find_rotation_axis
 
 
 def test_find_rotation_axis(dials_data, run_in_tmpdir):

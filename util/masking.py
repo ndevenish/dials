@@ -7,6 +7,9 @@ import time
 from collections import namedtuple
 from typing import Tuple
 
+from dials.array_family import flex
+from dials.util.ext import ResolutionMaskGenerator
+
 import libtbx.phil
 from cctbx import crystal
 from dxtbx.masking import (
@@ -16,9 +19,6 @@ from dxtbx.masking import (
 )
 from dxtbx.model import ImageSet, SimplePxMmStrategy
 from iotbx.phil import parse
-
-from dials.array_family import flex
-from dials.util.ext import ResolutionMaskGenerator
 
 logger = logging.getLogger(__name__)
 

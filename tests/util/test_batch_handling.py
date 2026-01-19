@@ -8,8 +8,6 @@ have a scan object.
 
 from __future__ import annotations
 
-from dxtbx.model import Experiment, Scan
-
 from dials.array_family import flex
 from dials.util.batch_handling import (
     _next_epoch,
@@ -19,6 +17,8 @@ from dials.util.batch_handling import (
     get_image_ranges,
     set_batch_offsets,
 )
+
+from dxtbx.model import Experiment, Scan
 
 
 def reflections_1():

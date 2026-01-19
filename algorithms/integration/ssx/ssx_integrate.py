@@ -27,7 +27,6 @@ def generate_html_report(plots_data, filename):
 
 
 class SimpleIntegrator(ABC):
-
     """Define an interface for ssx prediction/integration processing"""
 
     def __init__(self, params):
@@ -63,7 +62,6 @@ class SimpleIntegrator(ABC):
 
 
 class NullCollector(object):
-
     """
     Defines a null data collector for cases where you don't want
     to record data during the process.
@@ -89,7 +87,6 @@ class NullCollector(object):
 
 
 class OutputCollector(object):
-
     """
     Defines a data collector to log common quantities for all algorithm choices
     for an individual image.
@@ -134,7 +131,6 @@ class OutputCollector(object):
 
 
 class OutputAggregator:
-
     """
     Simple aggregator class to aggregate data from all images and generate
     json data for output/plotting.
@@ -167,14 +163,12 @@ class OutputAggregator:
         plots_dict = {
             "I_over_sigma_overall": {
                 "data": [
-                    (
-                        {
-                            "x": n,
-                            "y": I_over_sigma,
-                            "type": "scatter",
-                            "mode": "markers",
-                        }
-                    )
+                    {
+                        "x": n,
+                        "y": I_over_sigma,
+                        "type": "scatter",
+                        "mode": "markers",
+                    }
                 ],
                 "layout": {
                     "title": "Overall I/sigma per image",
@@ -207,14 +201,12 @@ class OutputAggregator:
             },
             "n_integrated": {
                 "data": [
-                    (
-                        {
-                            "x": n,
-                            "y": n_integrated,
-                            "type": "scatter",
-                            "mode": "markers",
-                        }
-                    )
+                    {
+                        "x": n,
+                        "y": n_integrated,
+                        "type": "scatter",
+                        "mode": "markers",
+                    }
                 ],
                 "layout": {
                     "title": "Number of integrated reflections per image",

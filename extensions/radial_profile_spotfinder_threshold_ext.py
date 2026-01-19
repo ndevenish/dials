@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from scitbx.array_family import flex
-
 from dials.algorithms.image.filter import convolve
 from dials.algorithms.statistics import BinnedStatistics
+
+from scitbx.array_family import flex
 
 # Module-level definition imported by the image viewer
 phil_str = """

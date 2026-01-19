@@ -5,10 +5,6 @@ import time
 from collections import Counter
 from math import isclose
 
-from iotbx import mtz
-from libtbx import env
-from scitbx import matrix
-
 import dials.util.ext
 from dials.algorithms.scaling.scaling_library import determine_best_unit_cell
 from dials.array_family import flex
@@ -23,6 +19,10 @@ from dials.util.multi_dataset_handling import (
     parse_multiple_datasets,
 )
 from dials.util.version import dials_version
+
+from iotbx import mtz
+from libtbx import env
+from scitbx import matrix
 
 logger = logging.getLogger(__name__)
 

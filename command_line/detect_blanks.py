@@ -4,9 +4,9 @@ import json
 import logging
 import sys
 
-import libtbx.phil
-
 from dials.util import detect_blanks, show_mail_handle_errors
+
+import libtbx.phil
 
 logger = logging.getLogger("dials.detect_blanks")
 

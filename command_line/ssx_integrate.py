@@ -35,13 +35,6 @@ import copy
 import json
 import logging
 
-import iotbx.phil
-from cctbx import crystal
-from dxtbx.model import ExperimentList
-from libtbx import Auto
-from libtbx.introspection import number_of_processors
-from libtbx.utils import Sorry
-
 from dials.algorithms.indexing.ssx.analysis import report_on_crystal_clusters
 from dials.algorithms.integration.ssx.ellipsoid_integrate import (
     EllipsoidIntegrator,
@@ -56,6 +49,13 @@ from dials.array_family import flex
 from dials.util import log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, flatten_experiments, flatten_reflections
 from dials.util.version import dials_version
+
+import iotbx.phil
+from cctbx import crystal
+from dxtbx.model import ExperimentList
+from libtbx import Auto
+from libtbx.introspection import number_of_processors
+from libtbx.utils import Sorry
 
 try:
     from typing import List
@@ -109,9 +109,7 @@ phil_scope = iotbx.phil.parse(
     process_includes=True,
 )
 
-phil_overrides = phil_scope.fetch(
-    source=iotbx.phil.parse(
-        """\
+phil_overrides = phil_scope.fetch(source=iotbx.phil.parse("""\
 profile {
     gaussian_rs {
         min_spots {
@@ -134,19 +132,13 @@ integration {
         }
     }
 }
-"""
-    )
-)
+"""))
 working_phil = phil_scope.fetch(sources=[phil_overrides])
 
-working_phil.adopt_scope(
-    iotbx.phil.parse(
-        """
+working_phil.adopt_scope(iotbx.phil.parse("""
     individual_log_verbosity = 1
     .type =int
-"""
-    )
-)
+"""))
 
 loggers_to_disable = ["dials", "dials.array_family.flex_ext"]
 

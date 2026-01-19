@@ -6,11 +6,10 @@ import os
 import pathlib
 import warnings
 
+import dials.util
 import psutil
 
 import libtbx.easy_mp
-
-import dials.util
 
 logger = logging.getLogger(__name__)
 

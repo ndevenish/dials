@@ -2,16 +2,9 @@
 Test derivatives typed up in dials_regression/doc/notes/prediction/stills_prediction_nave3.pdf
 """
 
-
 from __future__ import annotations
 
 import pytest
-
-from cctbx.sgtbx import space_group, space_group_symbols
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.beam_parameters import (
     BeamParameterisation,
 )
@@ -29,6 +22,11 @@ from dials.algorithms.refinement.prediction.managed_predictors import ScansRayPr
 from dials.algorithms.spot_prediction import IndexGenerator, StillsReflectionPredictor
 from dials.array_family import flex
 from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from scitbx import matrix
 
 
 class Predictor:

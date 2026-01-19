@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import pickle
 
+import dials.util
+
 from dxtbx.format.image import ImageBool
 from iotbx.phil import parse
-
-import dials.util
 
 help_message = """
 

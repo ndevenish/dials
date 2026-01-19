@@ -7,19 +7,17 @@ Take into account any scan-varying models.
 Usage: dials.frame_orientations refined.expt
 """
 
-
 from __future__ import annotations
 
 import sys
 from itertools import tee
 
-import matplotlib
-
-from scitbx import matrix
-
 import dials.util
+import matplotlib
 from dials.util import tabulate
 from dials.util.options import ArgumentParser, flatten_experiments
+
+from scitbx import matrix
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt

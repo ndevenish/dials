@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import pytest
-
 from dials.algorithms.symmetry.absences.laue_groups_info import (
     laue_groups,
     score_screw_axes,

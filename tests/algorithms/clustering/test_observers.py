@@ -3,12 +3,12 @@ from __future__ import annotations
 import random
 from unittest import mock
 
+from dials.algorithms.clustering import observers
+from dials.algorithms.clustering.unit_cell import UnitCellCluster
+
 from cctbx import sgtbx
 from dxtbx.model import Crystal, Experiment, ExperimentList
 from scitbx import matrix
-
-from dials.algorithms.clustering import observers
-from dials.algorithms.clustering.unit_cell import UnitCellCluster
 
 
 def test_UnitCellAnalysisObserver():

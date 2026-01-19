@@ -4,12 +4,12 @@ import concurrent.futures
 import logging
 import math
 
-import libtbx
-from libtbx.phil import parse
-
 from dials.array_family import flex
 from dials.util import tabulate
 from dials.util.mp import available_cores
+
+import libtbx
+from libtbx.phil import parse
 
 logger = logging.getLogger(__name__)
 

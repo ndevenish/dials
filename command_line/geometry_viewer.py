@@ -7,6 +7,7 @@ import copy
 import sys
 
 import wx
+from dials.util import show_mail_handle_errors, wx_viewer
 
 import gltbx
 import gltbx.gl as gl
@@ -16,13 +17,10 @@ from dxtbx.model import MultiAxisGoniometer
 from scitbx.array_family import flex
 from scitbx.math import minimum_covering_sphere
 
-from dials.util import show_mail_handle_errors, wx_viewer
-
 help_message = """
 """
 
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
   angle = None
     .type = float
     .multiple = True
@@ -52,8 +50,7 @@ phil_scope = libtbx.phil.parse(
     .help = "Flag which can be set to False to launch image viewer without
       checking the image format (needed for some image format classes).
       Alternative to DIALS_EXPORT_DO_NOT_CHECK_FORMAT environment variable."
-"""
-)
+""")
 
 
 def settings():
@@ -451,7 +448,7 @@ class GeometryWindow(wx_viewer.show_points_and_lines_mixin):
         )
 
     def draw_cross_at(self, xyz, color=(1, 1, 1), f=None):
-        (x, y, z) = xyz
+        x, y, z = xyz
         if f is None:
             f = 0.01 * self.settings.marker_size
         wx_viewer.show_points_and_lines_mixin.draw_cross_at(

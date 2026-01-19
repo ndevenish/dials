@@ -14,9 +14,7 @@ def test_compare_orientation_matrices(dials_regression, run_in_tmpdir):
     result = easy_run.fully_buffered(cmd).raise_if_errors()
     out = "\n".join(result.stdout_lines[7:])
     out = out.replace("-0", "0")
-    assert (
-        out
-        == """\
+    assert out == """\
 Change of basis op: a,b,c
 Rotation matrix to transform crystal 1 to crystal 2:
 {{1.000, 0.000, 0.000},
@@ -24,4 +22,3 @@ Rotation matrix to transform crystal 1 to crystal 2:
  {0.000, 0.000, 1.000}}
 Rotation of 0.002 degrees about axis (0.916, 0.081, 0.393)
 """
-    )

@@ -6,8 +6,7 @@ from __future__ import annotations
 
 import iotbx.phil
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
   anomalous = False
     .type = bool
     .help = "Separate anomalous pairs in scaling and error model optimisation."
@@ -201,5 +200,4 @@ phil_scope = iotbx.phil.parse(
       .help = "Reject reflections with normalised intensities E^2 > emax^2"
       .expert_level = 2
   }
-  """
-)
+  """)

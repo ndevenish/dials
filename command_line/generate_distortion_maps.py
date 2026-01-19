@@ -4,13 +4,13 @@ import logging
 import math
 import pickle
 
-from iotbx import phil
-from scitbx import matrix
-
 from dials.array_family import flex
 from dials.util import Sorry, log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, flatten_experiments
 from dials.util.version import dials_version
+
+from iotbx import phil
+from scitbx import matrix
 
 logger = logging.getLogger("dials.command_line.generate_distortion_maps")
 
@@ -26,8 +26,7 @@ Examples::
   dials.generate_distortion_maps models.expt mode=ellipse phi=0 l2=0.95
 """
 
-scope = phil.parse(
-    """
+scope = phil.parse("""
   mode = *translate ellipse
     .type = choice
 
@@ -75,8 +74,7 @@ scope = phil.parse(
     log = dials.generate_distortion_maps.log
       .type = str
   }
-"""
-)
+""")
 
 
 def make_dx_dy_translate(imageset, dx, dy):

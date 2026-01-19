@@ -6,12 +6,11 @@ import os
 
 import procrunner
 import pytest
+from dials.array_family import flex
 
 from cctbx import uctbx
 from dxtbx.model import ExperimentList
 from dxtbx.serialize import load
-
-from dials.array_family import flex
 
 
 def unit_cells_are_similar(
@@ -616,18 +615,18 @@ def test_stills_indexer_multi_lattice_bug_MosaicSauter2014(dials_regression, tmp
     only compares whether or not all crystal models have been assigned a
     MosaicSauter2014 model."""
 
+    from dials.algorithms.indexing.stills_indexer import StillsIndexer
+    from dials.array_family import flex
+    from dials.command_line.stills_process import (
+        phil_scope as stills_process_phil_scope,
+    )
+
     import dxtbx.model
     from dxtbx.model import Crystal
     from dxtbx.model.experiment_list import (
         Experiment,
         ExperimentList,
         ExperimentListFactory,
-    )
-
-    from dials.algorithms.indexing.stills_indexer import StillsIndexer
-    from dials.array_family import flex
-    from dials.command_line.stills_process import (
-        phil_scope as stills_process_phil_scope,
     )
 
     experiment_data = os.path.join(

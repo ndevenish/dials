@@ -42,12 +42,12 @@ import logging
 import sys
 from io import StringIO
 
-from libtbx import phil
-
 from dials.algorithms.scaling.algorithm import ScaleAndFilterAlgorithm, ScalingAlgorithm
 from dials.util import Sorry, log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+from libtbx import phil
 
 try:
     from typing import List

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import pytest
+from dials.array_family import flex
 
 import libtbx
 from dxtbx.model.experiment_list import ExperimentListFactory
 from libtbx.phil import parse
-
-from dials.array_family import flex
 
 
 def test_kapton(run_in_tmpdir, dials_data):
@@ -44,8 +43,7 @@ def test_kapton(run_in_tmpdir, dials_data):
         % (mask_file, mask_file, geom_file)
     )
 
-    kapton_input = parse(
-        """ integration {
+    kapton_input = parse(""" integration {
                        absorption_correction {
                          apply=True
                          algorithm=kapton_2019
@@ -65,8 +63,7 @@ def test_kapton(run_in_tmpdir, dials_data):
                            smart_sigmas=True
                            }
                          }
-                       }"""
-    )
+                       }""")
 
     with open("params_without_kapton.phil", "w") as fout:
         fout.write(stills_process_input.as_str())

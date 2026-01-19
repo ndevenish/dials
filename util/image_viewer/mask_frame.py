@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pickle
 
+import dials.util.masking
 import wx
 from wx.lib.agw.floatspin import EVT_FLOATSPIN, FloatSpin
 
@@ -11,8 +12,6 @@ from wxtbx.phil_controls import EVT_PHIL_CONTROL
 from wxtbx.phil_controls.floatctrl import FloatCtrl as _FloatCtrl
 from wxtbx.phil_controls.intctrl import IntCtrl
 from wxtbx.phil_controls.strctrl import StrCtrl
-
-import dials.util.masking
 
 
 class FloatCtrl(_FloatCtrl):
@@ -857,9 +856,9 @@ class MaskSettingsPanel(wx.Panel):
             point_.append((p0, p1))
         vertices = point_
 
-        from libtbx.utils import flat_list
-
         from dials.util import masking
+
+        from libtbx.utils import flat_list
 
         region = masking.phil_scope.extract().untrusted[0]
         points = flat_list(vertices)

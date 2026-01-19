@@ -3,7 +3,6 @@ from __future__ import annotations
 from time import strftime
 
 import h5py
-
 from dials.util.nexus import nx_mx, nx_reflections
 
 

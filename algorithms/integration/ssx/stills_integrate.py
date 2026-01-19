@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import functools
 
-from dxtbx.model import ExperimentList
-
 import dials.extensions
 from dials.algorithms.integration.integrator import (
     Parameters,
@@ -18,6 +16,8 @@ from dials.algorithms.profile_model.factory import ProfileModelFactory
 from dials.algorithms.shoebox import MaskCode
 from dials.array_family import flex
 from dials.command_line.integrate import process_reference
+
+from dxtbx.model import ExperimentList
 
 
 class StillsOutputCollector(OutputCollector):

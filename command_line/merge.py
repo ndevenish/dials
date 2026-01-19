@@ -8,9 +8,6 @@ import logging
 import sys
 from io import StringIO
 
-from dxtbx.model import ExperimentList
-from iotbx import phil
-
 from dials.algorithms.merging.merge import (
     MTZDataClass,
     generate_html_report,
@@ -25,6 +22,9 @@ from dials.util import Sorry, log, show_mail_handle_errors
 from dials.util.export_mtz import match_wavelengths
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+from dxtbx.model import ExperimentList
+from iotbx import phil
 
 help_message = """
 Merge scaled dials data.
@@ -264,10 +264,8 @@ def run(args=None):
     # matching and scaled together.
 
     if len(reflections) != 1:
-        raise Sorry(
-            """Only data scaled together as a single reflection dataset
-can be processed with dials.merge"""
-        )
+        raise Sorry("""Only data scaled together as a single reflection dataset
+can be processed with dials.merge""")
 
     for k in [
         "intensity.scale.value",
@@ -275,10 +273,8 @@ can be processed with dials.merge"""
         "inverse_scale_factor",
     ]:
         if k not in reflections[0]:
-            raise Sorry(
-                f"""{k} not found in the reflection table.
-Only scaled data can be processed with dials.merge"""
-            )
+            raise Sorry(f"""{k} not found in the reflection table.
+Only scaled data can be processed with dials.merge""")
 
     try:
         mtz_file = merge_data_to_mtz(params, experiments, reflections)

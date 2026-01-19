@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import pytest
+from dials.util import resolution_analysis
 
 import iotbx.merging_statistics
 from cctbx import uctbx
 from scitbx.array_family import flex
 from scitbx.math import curve_fitting
-
-from dials.util import resolution_analysis
 
 
 def test_polynomial_fit():

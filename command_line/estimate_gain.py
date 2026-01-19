@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import pickle
 
-import iotbx.phil
-from scitbx.array_family import flex
-
 from dials.util import Sorry, show_mail_handle_errors
 from dials.util.options import ArgumentParser, flatten_experiments
+
+import iotbx.phil
+from scitbx.array_family import flex
 
 help_message = """
 

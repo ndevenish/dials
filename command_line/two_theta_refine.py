@@ -6,12 +6,6 @@ import logging
 import math
 import sys
 
-import iotbx.cif.model
-from cctbx import miller, sgtbx
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from libtbx.utils import format_float_with_standard_uncertainty
-
 import dials.util
 from dials.algorithms.refinement.corrgram import create_correlation_plots
 from dials.algorithms.refinement.engine import LevenbergMarquardtIterations as Refinery
@@ -35,6 +29,12 @@ from dials.util.filter_reflections import filter_reflection_table
 from dials.util.multi_dataset_handling import parse_multiple_datasets
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+import iotbx.cif.model
+from cctbx import miller, sgtbx
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from libtbx.utils import format_float_with_standard_uncertainty
 
 logger = logging.getLogger("dials.command_line.two_theta_refine")
 

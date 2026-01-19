@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 import sys
 
-from libtbx.phil import parse
-
 from dials.util import Sorry, log, show_mail_handle_errors
+
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials.command_line.export_best")
 
@@ -14,8 +14,7 @@ This program is used to export the results of dials processing for the strategy
 program BEST.
 """
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   n_bins = 100
     .type = int(value_min=1)
@@ -37,8 +36,7 @@ phil_scope = parse(
               "(.hkl, .dat and .par files)"
 
   }
-"""
-)
+""")
 
 
 class BestExporter:

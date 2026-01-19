@@ -111,7 +111,7 @@ namespace dials { namespace algorithms {
      * @param beam The beam model.
      * @param goniometer The goniometer model.
      */
-    Corrections(const BeamBase &beam, const Goniometer &goniometer)
+    Corrections(const BeamBase& beam, const Goniometer& goniometer)
         : s0_(beam.get_s0()),
           pn_(beam.get_polarization_normal()),
           pf_(beam.get_polarization_fraction()),
@@ -124,9 +124,9 @@ namespace dials { namespace algorithms {
      * @param goniometer The goniometer model.
      * @param detector The detector model.
      */
-    Corrections(const BeamBase &beam,
-                const Goniometer &goniometer,
-                const Detector &detector)
+    Corrections(const BeamBase& beam,
+                const Goniometer& goniometer,
+                const Detector& detector)
         : s0_(beam.get_s0()),
           pn_(beam.get_polarization_normal()),
           pf_(beam.get_polarization_fraction()),
@@ -138,7 +138,7 @@ namespace dials { namespace algorithms {
      * @param goniometer The goniometer model.
      * @param detector The detector model.
      */
-    Corrections(const BeamBase &beam, const Detector &detector)
+    Corrections(const BeamBase& beam, const Detector& detector)
         : s0_(beam.get_s0()),
           pn_(beam.get_polarization_normal()),
           pf_(beam.get_polarization_fraction()),
@@ -187,7 +187,7 @@ namespace dials { namespace algorithms {
      * Add another correction class
      * @param obj The correction class
      */
-    void push_back(const Corrections &obj) {
+    void push_back(const Corrections& obj) {
       compute_.push_back(obj);
     }
 
@@ -203,8 +203,8 @@ namespace dials { namespace algorithms {
      * @param id The list of experiments ids
      * @param s1 The list of incident beam vectors
      */
-    af::shared<double> lp(const af::const_ref<int> &id,
-                          const af::const_ref<vec3<double> > &s1) const {
+    af::shared<double> lp(const af::const_ref<int>& id,
+                          const af::const_ref<vec3<double> >& s1) const {
       DIALS_ASSERT(id.size() == s1.size());
       af::shared<double> result(id.size(), 0);
       for (std::size_t i = 0; i < id.size(); ++i) {
@@ -221,9 +221,9 @@ namespace dials { namespace algorithms {
      * @param s1 The list of incident beam vectors
      * @param p The list of panels
      */
-    af::shared<double> qe(const af::const_ref<int> &id,
-                          const af::const_ref<vec3<double> > &s1,
-                          const af::const_ref<std::size_t> &p) const {
+    af::shared<double> qe(const af::const_ref<int>& id,
+                          const af::const_ref<vec3<double> >& s1,
+                          const af::const_ref<std::size_t>& p) const {
       DIALS_ASSERT(id.size() == s1.size());
       DIALS_ASSERT(id.size() == p.size());
       af::shared<double> result(id.size(), 0);

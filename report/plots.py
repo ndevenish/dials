@@ -559,15 +559,19 @@ class ResolutionPlotsAndStats:
 
         if method == "sigma_tau":
             cc_one_half_bins = [
-                bin_stats.cc_one_half_sigma_tau
-                if bin_stats.cc_one_half_sigma_tau
-                else 0.0
+                (
+                    bin_stats.cc_one_half_sigma_tau
+                    if bin_stats.cc_one_half_sigma_tau
+                    else 0.0
+                )
                 for bin_stats in self.dataset_statistics.bins
             ]
             cc_one_half_critical_value_bins = [
-                bin_stats.cc_one_half_sigma_tau_critical_value
-                if bin_stats.cc_one_half_sigma_tau_critical_value
-                else 0.0
+                (
+                    bin_stats.cc_one_half_sigma_tau_critical_value
+                    if bin_stats.cc_one_half_sigma_tau_critical_value
+                    else 0.0
+                )
                 for bin_stats in self.dataset_statistics.bins
             ]
         else:
@@ -576,9 +580,11 @@ class ResolutionPlotsAndStats:
                 for bin_stats in self.dataset_statistics.bins
             ]
             cc_one_half_critical_value_bins = [
-                bin_stats.cc_one_half_critical_value
-                if bin_stats.cc_one_half_critical_value
-                else 0.0
+                (
+                    bin_stats.cc_one_half_critical_value
+                    if bin_stats.cc_one_half_critical_value
+                    else 0.0
+                )
                 for bin_stats in self.dataset_statistics.bins
             ]
         cc_anom_bins = [
@@ -586,9 +592,11 @@ class ResolutionPlotsAndStats:
             for bin_stats in self.dataset_statistics.bins
         ]
         cc_anom_critical_value_bins = [
-            bin_stats.cc_anom_critical_value
-            if bin_stats.cc_anom_critical_value
-            else 0.0
+            (
+                bin_stats.cc_anom_critical_value
+                if bin_stats.cc_anom_critical_value
+                else 0.0
+            )
             for bin_stats in self.dataset_statistics.bins
         ]
 
@@ -598,9 +606,9 @@ class ResolutionPlotsAndStats:
                 cc_half=cc_one_half_bins,
                 cc_anom=cc_anom_bins if not self.is_centric else None,
                 cc_half_critical_values=cc_one_half_critical_value_bins,
-                cc_anom_critical_values=cc_anom_critical_value_bins
-                if not self.is_centric
-                else None,
+                cc_anom_critical_values=(
+                    cc_anom_critical_value_bins if not self.is_centric else None
+                ),
                 cc_half_fit=None,
                 d_min=None,
             )

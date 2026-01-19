@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from libtbx.phil import parse
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
 mp {
   method = *multiprocessing sge lsf pbs
@@ -18,5 +17,4 @@ mp {
     .type = int(value_min=1)
     .help = "The number of local threads to use for openmp."
 }
-"""
-)
+""")

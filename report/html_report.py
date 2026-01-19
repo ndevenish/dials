@@ -183,9 +183,7 @@ body {
         document.body);
   </script>
 </body>
-""" % (
-            "\n".join(content.html() for content in self._content)
-        )
+""" % ("\n".join(content.html() for content in self._content))
 
         return html_body
 
@@ -216,9 +214,7 @@ class panel_group:
 <div class="panel-group">
   %s
 </div>
-""" % (
-            "\n".join(p.html() for p in self._panels)
-        )
+""" % ("\n".join(p.html() for p in self._panels))
         return html
 
 
@@ -316,9 +312,7 @@ class container_fluid:
 <div class="container-fluid">
 %s
 </div>
-""" % "\n".join(
-            content.html() for content in self._content
-        )
+""" % "\n".join(content.html() for content in self._content)
         return html
 
 
@@ -334,9 +328,7 @@ class div:
 <div>
 %s
 </div>
-""" % "\n".join(
-            content.html() for content in self._content
-        )
+""" % "\n".join(content.html() for content in self._content)
         return html
 
 

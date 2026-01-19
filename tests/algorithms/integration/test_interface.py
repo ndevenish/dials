@@ -62,10 +62,10 @@ def test_split_blocks_1_frame():
 
 
 def test_split_blocks_non_overlapping():
-    from scitbx.array_family import shared
-
     from dials.algorithms.integration.integrator import JobList
     from dials.array_family import flex
+
+    from scitbx.array_family import shared
 
     blocks = shared.tiny_int_2(
         [
@@ -146,10 +146,10 @@ def test_split_blocks_non_overlapping():
 
 
 def test_split_blocks_overlapping():
-    from scitbx.array_family import shared
-
     from dials.algorithms.integration.integrator import JobList
     from dials.array_family import flex
+
+    from scitbx.array_family import shared
 
     blocks = shared.tiny_int_2(
         [
@@ -406,10 +406,10 @@ def test_reflection_manager():
 def test_integrator_3d(dials_data, nproc):
     from math import pi
 
-    from dxtbx.model.experiment_list import ExperimentListFactory
-
     from dials.algorithms.profile_model.gaussian_rs import Model
     from dials.array_family import flex
+
+    from dxtbx.model.experiment_list import ExperimentListFactory
 
     path = dials_data("centroid_test_data").join("experiments.json").strpath
 
@@ -424,20 +424,15 @@ def test_integrator_3d(dials_data, nproc):
     rlist.compute_zeta_multi(exlist)
     rlist.compute_d(exlist)
 
-    from libtbx.phil import parse
-
     from dials.algorithms.integration.integrator import Integrator3D, phil_scope
 
-    params = phil_scope.fetch(
-        parse(
-            """
+    from libtbx.phil import parse
+
+    params = phil_scope.fetch(parse("""
     integration.block.size=%d
     integration.mp.nproc=%d
     integration.profile_fitting=False
-  """
-            % (5, nproc)
-        )
-    ).extract()
+  """ % (5, nproc))).extract()
 
     integrator = Integrator3D(exlist, rlist, params)
     integrator.integrate()
@@ -446,10 +441,10 @@ def test_integrator_3d(dials_data, nproc):
 def test_summation(dials_data):
     from math import pi
 
-    from dxtbx.model.experiment_list import ExperimentListFactory
-
     from dials.algorithms.profile_model.gaussian_rs import Model
     from dials.array_family import flex
+
+    from dxtbx.model.experiment_list import ExperimentListFactory
 
     path = dials_data("centroid_test_data").join("experiments.json").strpath
 
@@ -462,24 +457,24 @@ def test_summation(dials_data):
     rlist["id"] = flex.int(len(rlist), 0)
 
     def integrate(integrator_type, rlist):
-        from libtbx.phil import parse
-
-        from dials.algorithms.integration.integrator import create_integrator
+        from dials.algorithms.integration.integrator import (
+            create_integrator,
+        )
         from dials.algorithms.integration.integrator import (
             phil_scope as master_phil_scope,
         )
 
+        from libtbx.phil import parse
+
         rlist = rlist.copy()
 
-        phil_scope = parse(
-            f"""
+        phil_scope = parse(f"""
       integration.background.algorithm=null
       integration.intensity.algorithm=sum
       integration.intensity.sum.integrator={integrator_type}
       integration.block.size=0.5
       integration.profile_fitting=False
-    """
-        )
+    """)
 
         params = master_phil_scope.fetch(source=phil_scope).extract()
 

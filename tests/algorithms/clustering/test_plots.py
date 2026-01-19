@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import random
 
-from cctbx import sgtbx
-from scitbx.array_family import flex
-
 from dials.algorithms.clustering import plots
 from dials.algorithms.clustering.unit_cell import UnitCellCluster
+
+from cctbx import sgtbx
+from scitbx.array_family import flex
 
 
 def test_plot_uc_histograms():

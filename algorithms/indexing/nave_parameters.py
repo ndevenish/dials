@@ -3,10 +3,10 @@ from __future__ import annotations
 import logging
 import math
 
-from scitbx.matrix import col, sqr
-
 from dials.algorithms.indexing import DialsIndexError
 from dials.array_family import flex
+
+from scitbx.matrix import col, sqr
 
 logger = logging.getLogger(__name__)
 """

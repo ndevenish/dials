@@ -150,35 +150,27 @@ def install_micromamba(python, include_cctbx):
                 workdir=".",
             )
         except Exception:
-            print(
-                """
+            print("""
 *******************************************************************************
 There was a failure in constructing the conda environment.
 Attempt {retry} of 5 will start {retry} minute(s) from {t}.
 *******************************************************************************
-""".format(
-                    retry=retry, t=time.asctime()
-                )
-            )
+""".format(retry=retry, t=time.asctime()))
             time.sleep(retry * 60)
         else:
             break
     else:
-        sys.exit(
-            """
+        sys.exit("""
 The conda environment could not be constructed. Please check that there is a
 working network connection for downloading conda packages.
-"""
-        )
+""")
     print("Completed {text}:\n  {prefix}".format(text=text_messages[1], prefix=prefix))
     with open(os.path.join(prefix, ".condarc"), "w") as fh:
-        fh.write(
-            """
+        fh.write("""
 changeps1: False
 channels:
   - conda-forge
-""".lstrip()
-        )
+""".lstrip())
 
 
 def install_miniconda(location):
@@ -353,35 +345,27 @@ environments exist and are working.
                 workdir=".",
             )
         except Exception:
-            print(
-                """
+            print("""
 *******************************************************************************
 There was a failure in constructing the conda environment.
 Attempt {retry} of 5 will start {retry} minute(s) from {t}.
 *******************************************************************************
-""".format(
-                    retry=retry, t=time.asctime()
-                )
-            )
+""".format(retry=retry, t=time.asctime()))
             time.sleep(retry * 60)
         else:
             break
     else:
-        sys.exit(
-            """
+        sys.exit("""
 The conda environment could not be constructed. Please check that there is a
 working network connection for downloading conda packages.
-"""
-        )
+""")
     print("Completed {text}:\n  {prefix}".format(text=text_messages[1], prefix=prefix))
     with open(os.path.join(prefix, ".condarc"), "w") as fh:
-        fh.write(
-            """
+        fh.write("""
 changeps1: False
 channels:
   - conda-forge
-""".lstrip()
-        )
+""".lstrip())
 
 
 def run_command(command, workdir):
