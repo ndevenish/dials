@@ -2,20 +2,18 @@
 Test combination of multiple experiments and reflections files.
 """
 
-
 from __future__ import annotations
 
 import copy
 import os
 
+import dials.command_line.combine_experiments as combine_experiments
 import procrunner
 import pytest
+from dials.array_family import flex
 
 from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.serialize import load
-
-import dials.command_line.combine_experiments as combine_experiments
-from dials.array_family import flex
 
 
 def test(dials_regression, run_in_tmpdir):
@@ -38,15 +36,12 @@ def test(dials_regression, run_in_tmpdir):
 
     # assert phil_input == "\n" + phil_input2 + "\n "
 
-    input_phil = (
-        phil_input.format(data_dir)
-        + """
+    input_phil = phil_input.format(data_dir) + """
  reference_from_experiment.beam=0
  reference_from_experiment.scan=0
  reference_from_experiment.goniometer=0
  reference_from_experiment.detector=0
  """
-    )
 
     with open("input.phil", "w") as phil_file:
         phil_file.writelines(input_phil)

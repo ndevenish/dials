@@ -16,12 +16,6 @@ import logging
 from math import pi
 
 import numpy as np
-from numpy.linalg import inv, norm
-
-from dxtbx import flumpy
-from libtbx.phil import parse
-from scitbx import matrix
-
 from dials.algorithms.profile_model.ellipsoid import chisq_pdf
 from dials.algorithms.profile_model.ellipsoid.model import ProfileModelFactory
 from dials.algorithms.profile_model.ellipsoid.parameterisation import ModelState
@@ -33,11 +27,15 @@ from dials.algorithms.profile_model.gaussian_rs.calculator import (
 )
 from dials.algorithms.spot_prediction import IndexGenerator
 from dials.array_family import flex
+from numpy.linalg import inv, norm
+
+from dxtbx import flumpy
+from libtbx.phil import parse
+from scitbx import matrix
 
 logger = logging.getLogger("dials")
 
-ellipsoid_algorithm_phil_scope = parse(
-    """
+ellipsoid_algorithm_phil_scope = parse("""
   integration {
 
     use_crude_shoebox_mask = False
@@ -85,8 +83,7 @@ ellipsoid_algorithm_phil_scope = parse(
   }
 
 
-"""
-)
+""")
 
 # Parameters
 phil_scope = parse(

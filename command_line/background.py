@@ -7,10 +7,6 @@ from __future__ import annotations
 import logging
 import math
 
-import iotbx.phil
-from libtbx.phil import parse
-from scitbx import matrix
-
 import dials.util.masking
 from dials.algorithms.spot_finding.factory import SpotFinderFactory
 from dials.algorithms.spot_finding.factory import phil_scope as spot_phil
@@ -18,6 +14,10 @@ from dials.array_family import flex
 from dials.util import Sorry, log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, flatten_experiments
 from dials.util.version import dials_version
+
+import iotbx.phil
+from libtbx.phil import parse
+from scitbx import matrix
 
 logger = logging.getLogger("dials.command_line.background")
 
@@ -87,9 +87,8 @@ def run(args=None):
 
         matplotlib.use("agg")
 
-        from matplotlib import pyplot
-
         from dials.util.matplotlib_utils import resolution_formatter
+        from matplotlib import pyplot
 
         fig = pyplot.figure(figsize=params.output.size_inches)
         ax = fig.add_subplot(111)

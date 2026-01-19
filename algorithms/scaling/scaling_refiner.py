@@ -1,14 +1,11 @@
-""" Classes for scaling refinement engines.
+"""Classes for scaling refinement engines.
 
 Classes are inherited from the dials.refinement engine with a few
 methods overwritten to use them with scaling code."""
 
-
 from __future__ import annotations
 
 import logging
-
-from libtbx.phil import parse
 
 from dials.algorithms.refinement.engine import (
     GaussNewtonIterations,
@@ -17,6 +14,8 @@ from dials.algorithms.refinement.engine import (
 )
 from dials.algorithms.scaling.scaling_utilities import log_memory_usage
 from dials.util import tabulate
+
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials")
 
@@ -135,7 +134,7 @@ def print_step_table(refinery):
     logger.info("\nRefinement steps:")
 
     header = ["Step", "Nref"]
-    for (name, units) in zip(refinery._target.rmsd_names, refinery._target.rmsd_units):
+    for name, units in zip(refinery._target.rmsd_names, refinery._target.rmsd_units):
         header.append(name + "\n(" + units + ")")
 
     rows = []

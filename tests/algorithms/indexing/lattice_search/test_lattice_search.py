@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import py.path
 import pytest
-
-from cctbx import sgtbx, uctbx
-from dxtbx.imageset import ImageSet
-from dxtbx.serialize import load
-
 from dials.algorithms.indexing import lattice_search, stills_indexer
 from dials.array_family import flex
 from dials.command_line.index import phil_scope
 from dials.command_line.slice_sequence import slice_experiments, slice_reflections
+
+from cctbx import sgtbx, uctbx
+from dxtbx.imageset import ImageSet
+from dxtbx.serialize import load
 
 
 @pytest.fixture

@@ -4,10 +4,10 @@ import logging
 import sys
 from io import StringIO
 
+from dials.util import log, show_mail_handle_errors
+
 from iotbx.phil import parse
 from libtbx import Auto
-
-from dials.util import log, show_mail_handle_errors
 
 logger = logging.getLogger("dials.command_line.export")
 
@@ -75,8 +75,7 @@ Examples::
   dials.export models.expt indexed.refl format=xds
 """
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   format = *mtz sadabs nxs mmcif mosflm xds xds_ascii json shelx pets
     .type = choice
@@ -297,8 +296,7 @@ phil_scope = parse(
       .type = path
       .help = "The log filename"
   }
-"""
-)
+""")
 
 
 def _check_input(experiments, reflections, params=None, check_intensities=False):
@@ -500,9 +498,9 @@ def export_json(params, experiments, reflections):
     if not reflections:
         raise ValueError("json exporter requires a reflection table")
 
-    from scitbx.array_family import flex
-
     from dials.util import export_json
+
+    from scitbx.array_family import flex
 
     imagesets = [expt.imageset for expt in experiments]
 

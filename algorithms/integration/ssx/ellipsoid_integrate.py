@@ -1,11 +1,6 @@
 from __future__ import annotations
 
 import numpy as np
-
-from dxtbx import flumpy
-from dxtbx.model import ExperimentList
-from scitbx.array_family import flex
-
 from dials.algorithms.integration.ssx.ssx_integrate import (
     OutputAggregator,
     OutputCollector,
@@ -18,6 +13,10 @@ from dials.algorithms.profile_model.ellipsoid.algorithm import (
     run_ellipsoid_refinement,
 )
 from dials.algorithms.profile_model.ellipsoid.indexer import reindex
+
+from dxtbx import flumpy
+from dxtbx.model import ExperimentList
+from scitbx.array_family import flex
 
 
 class ToFewReflections(Exception):
@@ -245,14 +244,12 @@ class EllipsoidOutputAggregator(OutputAggregator):
             },
             "partiality": {
                 "data": [
-                    (
-                        {
-                            "x": list(bins),
-                            "y": list(hist),
-                            "type": "scatter",
-                            "mode": "markers",
-                        }
-                    )
+                    {
+                        "x": list(bins),
+                        "y": list(hist),
+                        "type": "scatter",
+                        "mode": "markers",
+                    }
                 ],
                 "layout": {
                     "title": "Partiality distribution",

@@ -9,11 +9,11 @@ scaling.
 from __future__ import annotations
 
 import numpy as np
+from dials.algorithms.scaling.scaling_restraints import ScalingRestraintsCalculator
+from dials.array_family import flex
 
 from dxtbx import flumpy
 
-from dials.algorithms.scaling.scaling_restraints import ScalingRestraintsCalculator
-from dials.array_family import flex
 from dials_scaling_ext import calc_dIh_by_dpi, calc_jacobian, row_multiply
 
 

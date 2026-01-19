@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalOrientationMixin,
     CrystalUnitCellMixin,
@@ -12,6 +10,8 @@ from dials.algorithms.refinement.parameterisation.scan_varying_model_parameters 
     ScanVaryingParameterSet,
 )
 from dials.algorithms.refinement.refinement_helpers import CrystalOrientationCompose
+
+from scitbx import matrix
 
 
 class ScanVaryingCrystalOrientationParameterisation(
@@ -90,13 +90,13 @@ class ScanVaryingCrystalOrientationParameterisation(
 
         # calculate derivatives of state wrt underlying parameters
         dU_dp1 = [None] * dphi1_dp.size
-        for (i, v) in dphi1_dp:
+        for i, v in dphi1_dp:
             dU_dp1[i] = dU_dphi1 * v
         dU_dp2 = [None] * dphi2_dp.size
-        for (i, v) in dphi2_dp:
+        for i, v in dphi2_dp:
             dU_dp2[i] = dU_dphi2 * v
         dU_dp3 = [None] * dphi3_dp.size
-        for (i, v) in dphi3_dp:
+        for i, v in dphi3_dp:
             dU_dp3[i] = dU_dphi3 * v
 
         # store derivatives as list-of-lists

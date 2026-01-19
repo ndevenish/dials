@@ -4,9 +4,9 @@ import math
 
 
 def test_manhattan():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import manhattan_distance
+
+    from scitbx.array_family import flex
 
     data = flex.bool(flex.grid(100, 100), True)
 
@@ -46,9 +46,9 @@ def test_manhattan():
 
 
 def test_chebyshev():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import chebyshev_distance
+
+    from scitbx.array_family import flex
 
     data = flex.bool(flex.grid(100, 100), True)
 
@@ -95,9 +95,9 @@ def test_chebyshev():
 
 
 def test_chebyshev_small():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import chebyshev_distance
+
+    from scitbx.array_family import flex
 
     data = flex.bool(flex.grid(5, 5), True)
     data[1, 1] = False

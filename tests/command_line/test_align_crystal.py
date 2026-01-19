@@ -12,8 +12,7 @@ def test_align_crystal(dials_regression, tmpdir):
         working_directory=tmpdir,
     )
     assert not result.returncode and not result.stderr
-    assert result.stdout.replace(b"\r\n", b"\n").endswith(
-        b"""\
+    assert result.stdout.replace(b"\r\n", b"\n").endswith(b"""\
 Angles between reciprocal cell axes and principal experimental axes:
 +---------------------+--------+--------+--------+
 | Experimental axis   |     a* |     b* |     c* |
@@ -39,5 +38,4 @@ Independent solutions:
 | c* (6-fold)    | a* (2-fold)      |       4.324 |   -77.874 |
 | c* (6-fold)    | a* (2-fold)      |      -4.324 |   106.075 |
 +----------------+------------------+-------------+-----------+
-"""
-    )
+""")

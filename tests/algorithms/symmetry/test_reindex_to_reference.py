@@ -5,14 +5,13 @@ Tests for the reindex_to_reference module.
 from __future__ import annotations
 
 import pytest
-
-from cctbx import sgtbx
-
 from dials.algorithms.symmetry.cosym._generate_test_data import generate_test_data
 from dials.algorithms.symmetry.reindex_to_reference import (
     determine_reindex_operator_against_reference,
 )
 from dials.util import Sorry
+
+from cctbx import sgtbx
 
 
 def test_determine_reindex_operator_against_reference():

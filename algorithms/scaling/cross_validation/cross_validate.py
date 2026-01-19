@@ -36,7 +36,6 @@ cross_validation_mode=multi parameter=physical.decay_interval parameter_values="
 cross_validation_mode=multi parameter=model parameter_values="array physical"
 """
 
-
 from __future__ import annotations
 
 import itertools
@@ -47,8 +46,7 @@ from libtbx import phil
 
 logger = logging.getLogger("dials")
 
-phil_scope = phil.parse(
-    """
+phil_scope = phil.parse("""
   cross_validation {
     cross_validation_mode = multi single
       .type = choice
@@ -80,8 +78,7 @@ phil_scope = phil.parse(
               "the repetition will finish after 1/free_set_percentage folds."
       .expert_level = 2
   }
-"""
-)
+""")
 
 
 def cross_validate(params, cross_validator):

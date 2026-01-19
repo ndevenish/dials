@@ -1,6 +1,7 @@
 """
 Refinement engine and functions for error model refinement.
 """
+
 from __future__ import annotations
 
 import logging
@@ -77,7 +78,6 @@ def error_model_refinery(model, active_parameters, error_model_scope, max_iterat
 
 
 class ErrorModelRegressionRefiner(SimpleLBFGS):
-
     """Use LBFGS for convenience, actually is a linear regression.
 
     Therefore target.predict step is unnecessary."""
@@ -144,7 +144,6 @@ class ErrorModelRegressionRefiner(SimpleLBFGS):
 
 
 class ErrorModelRefinery:
-
     """Refiner for the basic error model."""
 
     def __init__(self, model, parameters_to_refine, *args, **kwargs):
@@ -223,12 +222,10 @@ class ErrorModelRefinery:
                 self.avals.append(self.model.components["a"].parameters[0])
                 self.model.update(self.model.parameters)
             else:
-                logger.info(
-                    """
+                logger.info("""
 Two-parameter Error model refinement failed.
 Performing error model refinement with fixed a=1.0
-"""
-                )
+""")
                 self.model.parameters = [1.0, 0.02]
                 self._refine_b()
                 self.model.update(self.model.parameters)

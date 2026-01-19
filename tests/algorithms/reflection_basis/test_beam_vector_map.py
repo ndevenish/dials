@@ -3,11 +3,10 @@ from __future__ import annotations
 import random
 
 import pytest
+from dials.algorithms.profile_model.gaussian_rs.transform import beam_vector_map
 
 from dxtbx.serialize import load
 from scitbx import matrix
-
-from dials.algorithms.profile_model.gaussian_rs.transform import beam_vector_map
 
 
 @pytest.fixture

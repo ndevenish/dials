@@ -11,6 +11,10 @@ import tarfile
 import time
 from io import BytesIO
 
+import dials.util
+from dials.array_family import flex
+from dials.util import log
+
 from dxtbx.model.experiment_list import (
     Experiment,
     ExperimentList,
@@ -18,10 +22,6 @@ from dxtbx.model.experiment_list import (
 )
 from libtbx.phil import parse
 from libtbx.utils import Abort, Sorry
-
-import dials.util
-from dials.array_family import flex
-from dials.util import log
 
 logger = logging.getLogger("dials.command_line.stills_process")
 
@@ -1480,13 +1480,10 @@ The detector is reporting a gain of %f but you have also supplied a gain of %f. 
             reference.del_selected(~mask)
             logger.info(" removing %d unindexed reflections", mask.count(True))
         if len(reference) == 0:
-            raise Sorry(
-                """
+            raise Sorry("""
         Invalid input for reference reflections.
         Expected > %d indexed spots, got %d
-      """
-                % (0, len(reference))
-            )
+      """ % (0, len(reference)))
         mask = reference["miller_index"] == (0, 0, 0)
         if mask.count(True) > 0:
             rubbish.extend(reference.select(mask))
@@ -1494,13 +1491,10 @@ The detector is reporting a gain of %f but you have also supplied a gain of %f. 
             logger.info(" removing %d reflections with hkl (0,0,0)", mask.count(True))
         mask = reference["id"] < 0
         if mask.count(True) > 0:
-            raise Sorry(
-                """
+            raise Sorry("""
         Invalid input for reference reflections.
         %d reference spots have an invalid experiment id
-      """
-                % mask.count(True)
-            )
+      """ % mask.count(True))
         logger.info(" using %d indexed reflections", len(reference))
         logger.info(" found %d junk reflections", len(rubbish))
         logger.info(" time taken: %g", time.time() - st)
@@ -1620,19 +1614,11 @@ The detector is reporting a gain of %f but you have also supplied a gain of %f. 
                         dest=destrank,
                     )
 
-                    self.all_imported_experiments = (
-                        self.all_strong_reflections
-                    ) = (
+                    self.all_imported_experiments = self.all_strong_reflections = (
                         self.all_indexed_experiments
-                    ) = (
-                        self.all_indexed_reflections
-                    ) = (
+                    ) = self.all_indexed_reflections = (
                         self.all_integrated_experiments
-                    ) = (
-                        self.all_integrated_reflections
-                    ) = (
-                        self.all_coset_experiments
-                    ) = (
+                    ) = self.all_integrated_reflections = self.all_coset_experiments = (
                         self.all_coset_reflections
                     ) = self.all_int_pickles = self.all_integrated_reflections = []
 

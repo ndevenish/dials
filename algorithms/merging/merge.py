@@ -5,11 +5,6 @@ from __future__ import annotations
 import logging
 from io import StringIO
 
-from jinja2 import ChoiceLoader, Environment, PackageLoader
-
-from cctbx import uctbx
-from mmtbx.scaling import data_statistics
-
 from dials.algorithms.scaling.Ih_table import (
     _reflection_table_to_iobs,
     map_indices_to_asu,
@@ -28,6 +23,10 @@ from dials.report.plots import d_star_sq_to_d_ticks
 from dials.util import tabulate
 from dials.util.export_mtz import MADMergedMTZWriter, MergedMTZWriter
 from dials.util.filter_reflections import filter_reflection_table
+from jinja2 import ChoiceLoader, Environment, PackageLoader
+
+from cctbx import uctbx
+from mmtbx.scaling import data_statistics
 
 logger = logging.getLogger("dials")
 
@@ -85,7 +84,6 @@ def prepare_merged_reflection_table(
 
 
 class MTZDataClass:
-
     """Container class (i.e. Python 3.7 dataclass) for per-wavelength mtz dataset."""
 
     def __init__(
@@ -378,7 +376,7 @@ https://strucbio.biologie.uni-konstanz.de/ccp4wiki/index.php?title=SHELX_C/D/E
                 "x": d_star_sq_bins,
                 "y": list(dFsdF),
                 "type": "scatter",
-                "name": "\u03BB" + f"={wave:.4f}",
+                "name": "\u03bb" + f"={wave:.4f}",
             }
         )
 

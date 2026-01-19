@@ -1,9 +1,8 @@
 """Definition of systematic absences check algorithm."""
+
 from __future__ import annotations
 
 import logging
-
-from cctbx import sgtbx
 
 from dials.algorithms.symmetry.absences.laue_groups_info import (
     laue_groups,
@@ -11,6 +10,8 @@ from dials.algorithms.symmetry.absences.laue_groups_info import (
     score_space_groups,
 )
 from dials.util import tabulate
+
+from cctbx import sgtbx
 
 logger = logging.getLogger("dials")
 

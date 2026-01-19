@@ -6,14 +6,12 @@ the corresponding reflections.
 
 from __future__ import annotations
 
+from dials.array_family import flex
 from orderedset import OrderedSet
 
 import iotbx.phil
 
-from dials.array_family import flex
-
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
   exclude_images = None
     .type = strings
     .multiple = True
@@ -25,8 +23,7 @@ phil_scope = iotbx.phil.parse(
             "exclude_images='0:150:200 1:200:250'"
     .short_caption = "Exclude images"
     .expert_level = 1
-"""
-)
+""")
 
 
 def exclude_image_ranges_from_scans(reflections, experiments, exclude_images):

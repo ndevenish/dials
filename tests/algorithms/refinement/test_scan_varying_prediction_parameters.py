@@ -7,11 +7,6 @@ from math import pi
 
 import numpy as np
 import pytest
-
-import dxtbx.flumpy as flumpy
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from scitbx.array_family import flex
-
 from dials.algorithms.refinement.parameterisation.scan_varying_beam_parameters import (
     ScanVaryingBeamParameterisation,
 )
@@ -33,6 +28,11 @@ from dials.algorithms.refinement.prediction.managed_predictors import (
     ScansExperimentsPredictor,
     ScansRayPredictor,
 )
+
+import dxtbx.flumpy as flumpy
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from scitbx.array_family import flex
+
 from dials_refinement_helpers_ext import (
     build_reconstitute_derivatives_mat3,
     build_reconstitute_derivatives_vec3,
@@ -42,10 +42,10 @@ from dials_refinement_helpers_ext import (
 
 class _Test:
     def create_models(self, cmdline_overrides=None):
+        from dials.tests.algorithms.refinement.setup_geometry import Extract
+
         from dxtbx.model import ScanFactory
         from libtbx.phil import parse
-
-        from dials.tests.algorithms.refinement.setup_geometry import Extract
 
         if cmdline_overrides is None:
             cmdline_overrides = []
@@ -105,9 +105,9 @@ geometry.parameters.crystal.c.length.range = 10 50"""
         )
 
     def generate_reflections(self):
-        from cctbx.sgtbx import space_group, space_group_symbols
-
         from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+
+        from cctbx.sgtbx import space_group, space_group_symbols
 
         sequence_range = self.scan.get_oscillation_range(deg=False)
         resolution = 2.0
@@ -218,11 +218,11 @@ def test(cmdline_overrides=[]):
         phi_grads /= delta
 
         try:
-            for (a, b) in zip(x_grads, an_grads[i]["dX_dp"]):
+            for a, b in zip(x_grads, an_grads[i]["dX_dp"]):
                 assert a == pytest.approx(b, abs=1e-5)
-            for (a, b) in zip(y_grads, an_grads[i]["dY_dp"]):
+            for a, b in zip(y_grads, an_grads[i]["dY_dp"]):
                 assert a == pytest.approx(b, abs=1e-5)
-            for (a, b) in zip(phi_grads, an_grads[i]["dphi_dp"]):
+            for a, b in zip(phi_grads, an_grads[i]["dphi_dp"]):
                 assert a == pytest.approx(b, abs=1e-5)
         except AssertionError:
             print(f"Failure for {p_names[i]}")

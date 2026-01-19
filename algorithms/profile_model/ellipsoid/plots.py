@@ -22,13 +22,11 @@ def plot_distance_from_ewald_sphere(experiment, reflection_table, prefix):
     plot = {
         f"{prefix}_epsilon_distribution": {
             "data": [
-                (
-                    {
-                        "x": bin_centers.tolist(),
-                        "y": hist.tolist(),
-                        "type": "bar",
-                    }
-                )
+                {
+                    "x": bin_centers.tolist(),
+                    "y": hist.tolist(),
+                    "type": "bar",
+                }
             ],
             "layout": {
                 "title": f"{prefix} epsilon distribution. <br>Mean(epsilon) = {Dmean:.2e}, Variance(epsilon) = {Dvar:.2e}",
@@ -52,13 +50,11 @@ def plot_partiality(reflection_table):
     plots_dict = {
         "partiality_distribution": {
             "data": [
-                (
-                    {
-                        "x": bin_centers.tolist(),
-                        "y": hist.tolist(),
-                        "type": "bar",
-                    }
-                )
+                {
+                    "x": bin_centers.tolist(),
+                    "y": hist.tolist(),
+                    "type": "bar",
+                }
             ],
             "layout": {
                 "title": "Partiality distribution",

@@ -7,10 +7,6 @@ from __future__ import annotations
 import itertools
 from unittest.mock import Mock
 
-from cctbx import sgtbx, uctbx
-from libtbx import phil
-from scitbx import sparse
-
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.reflection_selection import (
     _loop_over_class_matrix,
@@ -19,6 +15,10 @@ from dials.algorithms.scaling.reflection_selection import (
     select_connected_reflections_across_datasets,
 )
 from dials.array_family import flex
+
+from cctbx import sgtbx, uctbx
+from libtbx import phil
+from scitbx import sparse
 
 
 def test_select_connected_reflections_across_datasets():

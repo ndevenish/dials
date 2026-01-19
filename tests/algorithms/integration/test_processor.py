@@ -4,14 +4,14 @@ import math
 import os
 from unittest import mock
 
-import pytest
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 import dials.algorithms.integration.processor
+import pytest
 from dials.algorithms.integration.processor import assess_available_memory
 from dials.algorithms.profile_model.gaussian_rs import Model
 from dials.array_family import flex
+
+from dxtbx.model.experiment_list import ExperimentListFactory
+
 from dials_algorithms_integration_integrator_ext import JobList, max_memory_needed
 
 
@@ -84,19 +84,15 @@ def test_assess_available_memory_condor_job_ad(mocker, monkeypatch, tmp_path):
     assert available_memory and available_memory != 123
 
     # Now write something sensible to the file
-    job_ad.write_text(
-        """\
+    job_ad.write_text("""\
 MemoryProvisioned = 123
-"""
-    )
+""")
     available_memory, _, _ = assess_available_memory(params)
     assert available_memory == params.block.max_memory_usage * 123 * 1024**2
 
     # Now check it is robust against parsing failures
-    job_ad.write_text(
-        """\
+    job_ad.write_text("""\
 MemoryProvisioned =
-"""
-    )
+""")
     available_memory, _, _ = assess_available_memory(params)
     assert available_memory and available_memory != 123

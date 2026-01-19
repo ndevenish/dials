@@ -6,9 +6,9 @@ import pytest
 
 
 def test_mean_filter():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import mean_filter
+
+    from scitbx.array_family import flex
 
     # Create an image
     image = flex.random_double(2000 * 2000)
@@ -31,9 +31,9 @@ def test_mean_filter():
 
 
 def test_masked_mean_filter():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import mean_filter
+
+    from scitbx.array_family import flex
 
     # Create an image
     image = flex.random_double(2000 * 2000)
@@ -64,9 +64,9 @@ def test_masked_mean_filter():
 
 
 def test_mean_and_variance_filter():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import mean_and_variance_filter
+
+    from scitbx.array_family import flex
 
     # Create an image
     image = flex.random_double(2000 * 2000)
@@ -94,9 +94,9 @@ def test_mean_and_variance_filter():
 
 
 def test_masked_mean_and_variance_filter():
-    from scitbx.array_family import flex
-
     from dials.algorithms.image.filter import mean_and_variance_filter
+
+    from scitbx.array_family import flex
 
     # Create an image
     image = flex.random_double(2000 * 2000)

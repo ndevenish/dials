@@ -4,10 +4,9 @@ import io
 from unittest import mock
 
 import pytest
+from dials.util.ext import ostream, streambuf
 
 import boost_adaptbx.boost.python
-
-from dials.util.ext import ostream, streambuf
 
 ext = boost_adaptbx.boost.python.import_ext("dials_util_streambuf_test_ext")
 

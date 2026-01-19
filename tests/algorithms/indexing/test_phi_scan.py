@@ -3,10 +3,9 @@ from __future__ import annotations
 import os
 
 import pytest
+from dials.tests.algorithms.indexing.test_index import run_indexing
 
 from cctbx import uctbx
-
-from dials.tests.algorithms.indexing.test_index import run_indexing
 
 
 @pytest.mark.xfail
@@ -132,9 +131,9 @@ def test_run(dials_regression, tmpdir):
         ]
     )
 
-    from libtbx.phil import parse
-
     from dials.algorithms.refinement.refiner import phil_scope
+
+    from libtbx.phil import parse
 
     params = phil_scope.fetch(source=parse("")).extract()
     from dials.algorithms.refinement.refiner import RefinerFactory

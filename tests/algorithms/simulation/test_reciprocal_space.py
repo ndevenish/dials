@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import math
 
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from dials.algorithms.simulation.reciprocal_space import Simulator
+
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test_simulation(dials_data):

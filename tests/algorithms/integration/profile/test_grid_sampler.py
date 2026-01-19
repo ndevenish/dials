@@ -136,9 +136,9 @@ def test_nearest_n():
 
 
 def test_weights():
-    from scitbx import matrix
-
     from dials.algorithms.profile_model.modeller import GridSampler
+
+    from scitbx import matrix
 
     width = 1000
     height = 1000

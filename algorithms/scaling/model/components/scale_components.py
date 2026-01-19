@@ -23,9 +23,10 @@ the same way as the data in the Ih_table datastructure.
 
 from __future__ import annotations
 
+from dials.array_family import flex
+
 from scitbx import sparse
 
-from dials.array_family import flex
 from dials_scaling_ext import calculate_harmonic_tables_from_selections
 
 
@@ -94,9 +95,7 @@ class ScaleComponentBase:
 
     @parameters.setter
     def parameters(self, new_parameters):
-        assert len(new_parameters) == len(
-            self._parameters
-        ), f"""
+        assert len(new_parameters) == len(self._parameters), f"""
 attempting to set a new set of parameters of different length than previous
 assignment: was {len(self._parameters)}, attempting {len(new_parameters)}"""
         self._parameters = new_parameters
@@ -191,9 +190,7 @@ class SingleScaleFactor(ScaleComponentBase):
 
     def __init__(self, initial_values, parameter_esds=None):
         """Set the initial parameter values, parameter esds and n_params."""
-        assert (
-            len(initial_values) == 1
-        ), """
+        assert len(initial_values) == 1, """
 This model component can only hold a single parameter."""
         super().__init__(initial_values, parameter_esds)
 

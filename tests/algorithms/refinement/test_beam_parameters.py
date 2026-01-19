@@ -9,8 +9,6 @@ from scitbx import matrix
 
 
 def test_beam_parameters():
-    from dxtbx.model import BeamFactory
-
     from dials.algorithms.refinement.parameterisation.beam_parameters import (
         BeamParameterisation,
     )
@@ -18,6 +16,8 @@ def test_beam_parameters():
         get_fd_gradients,
         random_param_shift,
     )
+
+    from dxtbx.model import BeamFactory
 
     # make a random beam vector and parameterise it
     bf = BeamFactory()

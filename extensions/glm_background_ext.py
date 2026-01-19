@@ -10,8 +10,7 @@ class GLMBackgroundExt:
     def phil():
         from libtbx.phil import parse
 
-        phil = parse(
-            """
+        phil = parse("""
 
       robust {
         tuning_constant = 1.345
@@ -28,8 +27,7 @@ class GLMBackgroundExt:
       min_pixels = 10
         .type = int(value_min=1)
         .help = "The minimum number of pixels required"
-    """
-        )
+    """)
         return phil
 
     def __init__(self, params, experiments):
@@ -39,9 +37,9 @@ class GLMBackgroundExt:
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-
         from dials.algorithms.background.glm import BackgroundAlgorithm
+
+        from libtbx.phil import parse
 
         # Create some default parameters
         if params is None:

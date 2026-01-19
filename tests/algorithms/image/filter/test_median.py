@@ -20,9 +20,8 @@ def generate_mask(xsize, ysize):
 
 
 def test_filter():
-    from numpy import median
-
     from dials.algorithms.image.filter import median_filter
+    from numpy import median
 
     xsize = 200
     ysize = 300
@@ -46,9 +45,8 @@ def test_filter():
 
 
 def test_masked_filter():
-    from numpy import median
-
     from dials.algorithms.image.filter import median_filter
+    from numpy import median
 
     xsize = 200
     ysize = 300

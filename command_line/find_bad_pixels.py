@@ -4,13 +4,13 @@ import math
 import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-import iotbx.phil
-from scitbx.array_family import flex
-
 import dials.util
 from dials.algorithms.spot_finding.factory import SpotFinderFactory
 from dials.algorithms.spot_finding.factory import phil_scope as spot_phil
 from dials.util.options import ArgumentParser, flatten_experiments
+
+import iotbx.phil
+from scitbx.array_family import flex
 
 help_message = """
 
@@ -30,8 +30,7 @@ Examples::
 
 """
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 images = None
   .type = ints
   .help = "Images on which to perform the analysis (otherwise use all images)"
@@ -53,8 +52,7 @@ output {
         .type = bool
         .help = "Print bad pixel values"
 }
-"""
-)
+""")
 
 
 def find_constant_signal_pixels(imageset, images):

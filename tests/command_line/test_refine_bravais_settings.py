@@ -4,11 +4,10 @@ import json
 import os
 
 import pytest
+from dials.command_line import refine_bravais_settings
 
 from cctbx import sgtbx, uctbx
 from dxtbx.serialize import load
-
-from dials.command_line import refine_bravais_settings
 
 
 def test_refine_bravais_settings_i04_weak_data(dials_regression, tmpdir):

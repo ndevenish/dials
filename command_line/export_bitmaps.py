@@ -3,11 +3,6 @@ from __future__ import annotations
 import os
 import sys
 
-from PIL import Image
-
-import iotbx.phil
-from dxtbx.model.detector_helpers import get_detector_projection_2d_axes
-
 from dials.algorithms.image.threshold import DispersionThresholdDebug
 from dials.array_family import flex
 from dials.util import Sorry, show_mail_handle_errors
@@ -16,6 +11,10 @@ from dials.util.image_viewer.slip_viewer.tile_generation import (
     get_flex_image_multipanel,
 )
 from dials.util.options import ArgumentParser, flatten_experiments
+from PIL import Image
+
+import iotbx.phil
+from dxtbx.model.detector_helpers import get_detector_projection_2d_axes
 
 help_message = """
 

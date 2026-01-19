@@ -3,14 +3,13 @@ from __future__ import annotations
 import random
 
 import numpy as np
+from dials.array_family import flex
 
 import scitbx.matrix
 import scitbx.random
 from cctbx import crystal, sgtbx
 from cctbx.sgtbx.subgroups import subgroups
 from dxtbx.model import Crystal, Experiment, ExperimentList, Scan
-
-from dials.array_family import flex
 
 
 def generate_experiments_reflections(

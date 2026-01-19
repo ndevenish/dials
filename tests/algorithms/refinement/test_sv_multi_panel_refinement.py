@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 
 import procrunner
-
 from dials.algorithms.refinement.engine import Journal
 
 

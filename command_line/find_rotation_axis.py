@@ -18,27 +18,25 @@ from __future__ import annotations
 import logging
 import sys
 
+import dials.util
+import dials.util.log
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-
-import dxtbx.flumpy as flumpy
-import libtbx.phil
-
-import dials.util
-import dials.util.log
 from dials.array_family import flex
 
 # from dials.array_family import flex
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
 
+import dxtbx.flumpy as flumpy
+import libtbx.phil
+
 # Define a logger
 logger = logging.getLogger("dials.find_rotation_axis")
 
 # Define the master PHIL scope for this program.
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
 max_two_theta = 10.0
     .type = float
     .help = "Scattering angle limit to select reflections only in the central"
@@ -76,8 +74,7 @@ output {
         .type = str
         .help = "Filename prefix for plots. Set to None for no plots"
 }
-"""
-)
+""")
 
 
 def rotation_axis_to_xyz(rotation_axis, invert=False):

@@ -36,6 +36,7 @@ from dials.array_family import flex
 from dials.util import Sorry, phil, pprint, tabulate
 from dials.util.command_line import heading
 from dials.util.report import Report
+
 from dials_algorithms_integration_integrator_ext import (
     Executor,
     JobList,
@@ -1621,12 +1622,10 @@ def create_integrator(params, experiments, reflections):
     # Check each experiment has an imageset
     for exp in experiments:
         if exp.imageset is None:
-            raise Sorry(
-                """
+            raise Sorry("""
       One or more experiment does not contain an imageset. Access to the
       image data is crucial for integration.
-    """
-            )
+    """)
 
     # Read the mask in if necessary
     if params.integration.lookup.mask and isinstance(

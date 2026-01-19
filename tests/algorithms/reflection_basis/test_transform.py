@@ -4,16 +4,15 @@ import math
 import random
 
 import pytest
-
-from dxtbx.model import ExperimentList
-from scitbx import matrix
-
 from dials.algorithms.profile_model.gaussian_rs import (
     BBoxCalculator3D,
     CoordinateSystem,
     transform,
 )
 from dials.array_family import flex
+
+from dxtbx.model import ExperimentList
+from scitbx import matrix
 
 
 def evaluate_gaussian(x, a, x0, sx):

@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 
 import procrunner
-
 from dials.array_family import flex
 
 

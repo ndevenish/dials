@@ -1,14 +1,13 @@
 from __future__ import annotations
 
+from dials.array_family import flex
+
 from cctbx import uctbx
 from cctbx.miller import index_generator
 from iotbx.phil import parse
 
-from dials.array_family import flex
-
 # The phil scope
-phil_scope = parse(
-    """
+phil_scope = parse("""
   powder {
 
     water_ice {
@@ -30,8 +29,7 @@ phil_scope = parse(
       .type = choice(multi=True)
       .help = "The power ring filters to apply"
   }
-"""
-)
+""")
 
 
 class PowderRingFilter:

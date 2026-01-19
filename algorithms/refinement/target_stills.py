@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from math import pi, sqrt
 
-from cctbx.array_family import flex
-
 from dials.algorithms.refinement.target import SparseGradientsMixin, Target
+
+from cctbx.array_family import flex
 
 # constants
 TWO_PI = 2.0 * pi

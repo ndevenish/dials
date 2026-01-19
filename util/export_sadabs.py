@@ -5,9 +5,9 @@ import math
 import os
 import re
 
-from scitbx import matrix
-
 from dials.util.filter_reflections import filter_reflection_table
+
+from scitbx import matrix
 
 logger = logging.getLogger(__name__)
 

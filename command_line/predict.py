@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from libtbx.phil import parse
-
 from dials.algorithms.shadowing.filter import filter_shadowed_reflections
 from dials.array_family import flex
 from dials.util import show_mail_handle_errors
 from dials.util.command_line import Command
 from dials.util.options import ArgumentParser, flatten_experiments
+
+from libtbx.phil import parse
 
 help_message = """
 

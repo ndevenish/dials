@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from dials.command_line.frame_orientations import extract_experiment_data
 
 

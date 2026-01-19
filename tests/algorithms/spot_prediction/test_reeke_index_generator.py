@@ -3,13 +3,13 @@ from __future__ import annotations
 import math
 import random
 
+from dials.algorithms.spot_prediction import ReekeIndexGenerator
+
 from cctbx.sgtbx import space_group, space_group_info, space_group_symbols
 from cctbx.uctbx import unit_cell
 from rstbx.diffraction import full_sphere_indices, rotation_angles
 from scitbx import matrix
 from scitbx.math import r3_rotation_axis_and_angle_as_matrix
-
-from dials.algorithms.spot_prediction import ReekeIndexGenerator
 
 
 class Test:

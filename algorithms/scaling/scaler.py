@@ -20,11 +20,6 @@ from io import StringIO
 from math import ceil
 
 import numpy as np
-
-from dxtbx import flumpy
-from libtbx import Auto
-from scitbx import sparse
-
 from dials.algorithms.scaling.basis_functions import RefinerCalculator
 from dials.algorithms.scaling.combine_intensities import (
     MultiDatasetIntensityCombiner,
@@ -57,6 +52,11 @@ from dials.algorithms.scaling.target_function import ScalingTarget, ScalingTarge
 from dials.array_family import flex
 from dials.util import tabulate
 from dials.util.observer import Subject
+
+from dxtbx import flumpy
+from libtbx import Auto
+from scitbx import sparse
+
 from dials_scaling_ext import calc_sigmasq as cpp_calc_sigmasq
 from dials_scaling_ext import row_multiply
 

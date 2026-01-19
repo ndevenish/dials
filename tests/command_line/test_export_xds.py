@@ -7,8 +7,7 @@ def test_spots_xds(tmpdir):
     xds_input = "SPOT.XDS"
     output_pickle = "spot.refl"
 
-    tmpdir.join(xds_input).write(
-        """\
+    tmpdir.join(xds_input).write("""\
  2411.40 1000.70 25.00 16384. 0 0 0
  1328.60 2170.40 20.57 7326. 0 0 0
  177.56 2191.30 24.94 6779. 0 0 0
@@ -19,8 +18,7 @@ def test_spots_xds(tmpdir):
  1317.52 1171.59 19.28 120. 6 -4 6
  1260.25 1300.55 13.67 116. -4 2 6
  1090.27 1199.47 41.49 114. -2 3 -13
-"""
-    )
+""")
 
     result = procrunner.run(
         [
@@ -51,18 +49,13 @@ def test_spots_xds(tmpdir):
     assert tmpdir.join("xds", "SPOT.XDS").check(file=1)
 
     txt = tmpdir.join("xds", "SPOT.XDS").read()
-    assert [line.strip() for line in txt.split("\n")] == [
-        line.strip()
-        for line in """\
+    assert [line.strip() for line in txt.split("\n")] == [line.strip() for line in """\
  1341.63 1243.25 5.64 321.00  2 -2 11
  1125.23 1197.72 12.14 231.00  -1 2 -10
  1317.52 1171.59 19.28 120.00  6 -4 6
  1260.25 1300.55 13.67 116.00  -4 2 6
  1090.27 1199.47 41.49 114.00  -2 3 -13
-""".split(
-            "\n"
-        )
-    ]
+""".split("\n")]
 
 
 def test_export_xds(dials_data, tmpdir):

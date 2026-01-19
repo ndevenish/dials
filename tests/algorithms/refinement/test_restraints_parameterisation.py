@@ -6,19 +6,16 @@ import os
 import random
 
 import pytest
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx.phil import parse
-
 from dials.algorithms.refinement import RefinerFactory
 from dials.algorithms.refinement.restraints import RestraintsParameterisation
 from dials.array_family import flex
 
+from dxtbx.model.experiment_list import ExperimentListFactory
+from libtbx.phil import parse
+
 
 def test_single_crystal_restraints_gradients():
     """Simple test with a single triclinic crystal restrained to a target unit cell"""
-
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
 
     from dials.algorithms.refinement.parameterisation.beam_parameters import (
         BeamParameterisation,
@@ -34,6 +31,8 @@ def test_single_crystal_restraints_gradients():
         XYPhiPredictionParameterisation,
     )
     from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+    from dxtbx.model.experiment_list import Experiment, ExperimentList
 
     overrides = """geometry.parameters.crystal.a.length.range = 10 50
   geometry.parameters.crystal.b.length.range = 10 50
@@ -152,8 +151,6 @@ def test_single_crystal_restraints_gradients():
 def test_two_triclinic_crystals():
     """Simple test with two triclinic crystals restrained to a target unit cell"""
 
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-
     from dials.algorithms.refinement.parameterisation.beam_parameters import (
         BeamParameterisation,
     )
@@ -170,6 +167,8 @@ def test_two_triclinic_crystals():
         XYPhiPredictionParameterisation,
     )
     from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+    from dxtbx.model.experiment_list import Experiment, ExperimentList
 
     overrides = """geometry.parameters.crystal.a.length.range = 10 50
   geometry.parameters.crystal.b.length.range = 10 50
@@ -308,8 +307,7 @@ def test_10_crystals_with_stills_parameterisation(dials_regression):
     # The phil scope
     from dials.algorithms.refinement.refiner import phil_scope
 
-    user_phil = parse(
-        """
+    user_phil = parse("""
   refinement
   {
     parameterisation
@@ -331,8 +329,7 @@ def test_10_crystals_with_stills_parameterisation(dials_regression):
       }
     }
   }
-  """
-    )
+  """)
 
     working_phil = phil_scope.fetch(source=user_phil)
     working_params = working_phil.extract()
@@ -404,8 +401,7 @@ def test_group_restraint_with_multiple_crystals_and_a_stills_refiner(dials_regre
     # The phil scope
     from dials.algorithms.refinement.refiner import phil_scope
 
-    user_phil = parse(
-        """
+    user_phil = parse("""
   refinement
   {
     parameterisation
@@ -425,8 +421,7 @@ def test_group_restraint_with_multiple_crystals_and_a_stills_refiner(dials_regre
       }
     }
   }
-  """
-    )
+  """)
 
     working_phil = phil_scope.fetch(source=user_phil)
     working_params = working_phil.extract()

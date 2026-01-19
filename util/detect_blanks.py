@@ -3,9 +3,9 @@ from __future__ import annotations
 import logging
 import math
 
-from libtbx.math_utils import iceil
-
 from dials.array_family import flex
+
+from libtbx.math_utils import iceil
 
 logger = logging.getLogger(__name__)
 

@@ -2,15 +2,15 @@
 
 from __future__ import annotations
 
-from cctbx import miller
-from scitbx.array_family import flex
-
 from dials.algorithms.scaling.scaling_library import scaled_data_as_miller_array
 from dials.util.batch_handling import (
     assign_batches_to_reflections,
     calculate_batch_offsets,
     get_batch_ranges,
 )
+
+from cctbx import miller
+from scitbx.array_family import flex
 
 
 def batch_dependent_properties(batches, intensities, scales=None):

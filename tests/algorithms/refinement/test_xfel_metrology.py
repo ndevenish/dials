@@ -4,14 +4,13 @@ import os
 
 import procrunner
 import pytest
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import phil
-
 from dials.algorithms.refinement import RefinerFactory
 from dials.algorithms.refinement.engine import Journal
 from dials.algorithms.refinement.refiner import phil_scope as refiner_phil_scope
 from dials.array_family import flex
+
+from dxtbx.model.experiment_list import ExperimentListFactory
+from libtbx import phil
 
 
 def test_joint_refinement(dials_regression, run_in_tmpdir):
@@ -76,8 +75,7 @@ def test_constrained_refinement(dials_regression, run_in_tmpdir):
     # Get parameters, combining refine.phil with constraints that enforce distances to move in lockstep
     with open(os.path.join(data_dir, "refine.phil")) as f:
         refine_phil = phil.parse(f.read())
-    constraint_phil = phil.parse(
-        """
+    constraint_phil = phil.parse("""
 refinement {
   parameterisation {
     detector {
@@ -88,8 +86,7 @@ refinement {
     }
   }
 }
-"""
-    )
+""")
     params = refiner_phil_scope.fetch(sources=[refine_phil, constraint_phil]).extract()
 
     detector = expt.detectors()[0]

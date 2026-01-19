@@ -2,20 +2,19 @@
 Module of utility functions for scaling.
 """
 
-
 from __future__ import annotations
 
 import logging
 from math import acos
 
 import numpy as np
+from dials.array_family import flex
+from dials.util.normalisation import quasi_normalisation as _quasi_normalisation
 from scipy.spatial.transform import Rotation
 
 import dxtbx.flumpy as flumpy
 from cctbx import miller
 
-from dials.array_family import flex
-from dials.util.normalisation import quasi_normalisation as _quasi_normalisation
 from dials_scaling_ext import (
     calc_theta_phi,
     create_sph_harm_table,
@@ -112,7 +111,7 @@ def align_axis_along_z(alignment_axis, vectors):
     """Rotate the coordinate system such that the exp_rot_axis is along z."""
     if alignment_axis == (0.0, 0.0, 1.0):
         return vectors
-    (ux, uy, uz) = alignment_axis
+    ux, uy, uz = alignment_axis
     cross_prod_uz = flex.vec3_double([(uy, -1.0 * ux, 0.0)])
     angle_between_u_z = +1.0 * acos(uz / ((ux**2 + uy**2 + uz**2) ** 0.5))
     phi = flex.double(vectors.size(), angle_between_u_z)
@@ -162,12 +161,10 @@ def quasi_normalisation(reflection_table, experiment):
         miller_set, data=rt_subset["intensity"], sigmas=rt_subset["variance"] ** 0.5
     )
     if rt_subset.size() <= 10000:
-        logger.info(
-            """
+        logger.info("""
 Insufficient number of reflections (<10000) to calculate normalised intensities.
 All reflections will be considered for scaling model determination.
-"""
-        )
+""")
         reflection_table["Esq"] = flex.double(reflection_table.size(), 1.0)
     else:
         normalised_intensities = _quasi_normalisation(miller_array)

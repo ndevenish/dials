@@ -10,6 +10,10 @@ import sys
 
 import procrunner
 import pytest
+from dials.algorithms.scaling.algorithm import ScalingAlgorithm, prepare_input
+from dials.array_family import flex
+from dials.command_line import merge, report, scale
+from dials.util.options import ArgumentParser
 
 import iotbx.merging_statistics
 import iotbx.mtz
@@ -18,11 +22,6 @@ from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
 from dxtbx.model.experiment_list import ExperimentList
 from dxtbx.serialize import load
 from libtbx import phil
-
-from dials.algorithms.scaling.algorithm import ScalingAlgorithm, prepare_input
-from dials.array_family import flex
-from dials.command_line import merge, report, scale
-from dials.util.options import ArgumentParser
 
 
 def run_one_scaling(working_directory, argument_list):

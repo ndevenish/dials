@@ -30,10 +30,6 @@ import sys
 import time
 from functools import reduce
 
-from cctbx import crystal
-from libtbx import Auto, phil
-from libtbx.introspection import number_of_processors
-
 from dials.algorithms.indexing.ssx.analysis import (
     generate_html_report,
     generate_plots,
@@ -44,6 +40,10 @@ from dials.algorithms.indexing.ssx.processing import index
 from dials.util import log, show_mail_handle_errors
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+from cctbx import crystal
+from libtbx import Auto, phil
+from libtbx.introspection import number_of_processors
 
 try:
     from typing import List
@@ -98,14 +98,10 @@ include scope dials.command_line.index.phil_scope
     process_includes=True,
 ).fetch(phil.parse(program_defaults_phil_str))
 
-phil_scope.adopt_scope(
-    phil.parse(
-        """
+phil_scope.adopt_scope(phil.parse("""
     individual_log_verbosity = 1
     .type =int
-"""
-    )
-)
+"""))
 
 
 @show_mail_handle_errors()

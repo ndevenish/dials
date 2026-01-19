@@ -6,7 +6,6 @@ import os
 
 import procrunner
 import pytest
-
 from dials.command_line.compute_delta_cchalf import CCHalfFromMTZ, phil_scope, run
 
 

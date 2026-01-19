@@ -5,7 +5,6 @@ Tests for the dials.algorithms.scaling.plots module
 from __future__ import annotations
 
 import numpy as np
-
 from dials.algorithms.scaling.model.model import (
     ArrayScalingModel,
     PhysicalScalingModel,

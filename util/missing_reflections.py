@@ -5,12 +5,11 @@ Tools for analysis of missing reflections.
 from __future__ import annotations
 
 from annlib_ext import AnnAdaptor
+from dials.array_family import flex
 
 import cctbx.miller
 from boost_adaptbx import graph
 from boost_adaptbx.graph import connected_component_algorithm as cca
-
-from dials.array_family import flex
 
 
 def connected_components(

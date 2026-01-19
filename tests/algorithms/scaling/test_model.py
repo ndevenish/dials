@@ -8,9 +8,6 @@ import copy
 from unittest.mock import MagicMock, Mock
 
 import pytest
-
-from libtbx import phil
-
 from dials.algorithms.scaling.model.model import (
     ArrayScalingModel,
     DoseDecay,
@@ -22,6 +19,8 @@ from dials.algorithms.scaling.model.model import (
 )
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+
+from libtbx import phil
 
 
 @pytest.fixture(scope="module")
@@ -689,9 +688,9 @@ def test_model_factory_utilities():
     assert calc_n_param_from_bins(0.0, 10.0, 10) == (12, 1.0)
     assert calc_n_param_from_bins(0.0, 10.0, 5) == (7, 2.0)
     with pytest.raises(AssertionError):
-        (_, _) = calc_n_param_from_bins(0.0, 1.0, 0)
+        _, _ = calc_n_param_from_bins(0.0, 1.0, 0)
     with pytest.raises(AssertionError):
-        (_, _) = calc_n_param_from_bins(0.0, 1.0, 0.5)
+        _, _ = calc_n_param_from_bins(0.0, 1.0, 0.5)
 
     # Test initialise_smooth_input(osc_range, one_osc_width, interval)
     # This is initialised with the oscillation range, width of one osc and

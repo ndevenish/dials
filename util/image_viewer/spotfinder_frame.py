@@ -6,6 +6,17 @@ import math
 import types
 
 import wx
+from dials.algorithms.image.threshold import (
+    DispersionExtendedThresholdDebug,
+    DispersionThresholdDebug,
+)
+from dials.algorithms.shoebox import MaskCode
+from dials.array_family import flex
+from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
+from dials.extensions import SpotFinderThreshold
+from dials.util import masking
+from dials.util.image_viewer.mask_frame import MaskSettingsFrame
+from dials.util.image_viewer.spotfinder_wrap import chooser_wrapper
 from wx.lib.intctrl import IntCtrl
 
 from cctbx import crystal, uctbx
@@ -21,18 +32,6 @@ from wxtbx.phil_controls.floatctrl import FloatCtrl
 from wxtbx.phil_controls.intctrl import IntCtrl as PhilIntCtrl
 from wxtbx.phil_controls.ints import IntsCtrl
 from wxtbx.phil_controls.strctrl import StrCtrl
-
-from dials.algorithms.image.threshold import (
-    DispersionExtendedThresholdDebug,
-    DispersionThresholdDebug,
-)
-from dials.algorithms.shoebox import MaskCode
-from dials.array_family import flex
-from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
-from dials.extensions import SpotFinderThreshold
-from dials.util import masking
-from dials.util.image_viewer.mask_frame import MaskSettingsFrame
-from dials.util.image_viewer.spotfinder_wrap import chooser_wrapper
 
 from .slip_viewer import pyslip
 from .slip_viewer.frame import MASK_VAL, XrayFrame
@@ -415,8 +414,8 @@ class SpotFrame(XrayFrame):
 
         # TODO: speed this up?  Do we need to??
         # get canonical box limits
-        (p1x, p1y) = p1
-        (p2x, p2y) = p2
+        p1x, p1y = p1
+        p2x, p2y = p2
         lx = min(p1x, p2x)  # left x coord
         rx = max(p1x, p2x)
         ty = max(p1y, p2y)  # top y coord

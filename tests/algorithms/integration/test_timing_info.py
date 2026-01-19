@@ -21,11 +21,8 @@ def test_timing_info():
     assert total.user == 11
 
     s = str(total)
-    assert (
-        s
-        == """+--------------+---------------+
+    assert s == """+--------------+---------------+
 | Read time    | 20.00 seconds |
 | Process time | 10.00 seconds |
 | User time    | 11.00 seconds |
 +--------------+---------------+"""
-    )

@@ -48,9 +48,9 @@ namespace dials { namespace algorithms {
     enum FitMethod { ReciprocalSpace = 1, DetectorSpace = 2 };
 
     GaussianRSProfileModellerBase(const boost::shared_ptr<BeamBase> beam,
-                                  const Detector &detector,
-                                  const Goniometer &goniometer,
-                                  const Scan &scan,
+                                  const Detector& detector,
+                                  const Goniometer& goniometer,
+                                  const Scan& scan,
                                   double sigma_b,
                                   double sigma_m,
                                   double n_sigma,
@@ -78,9 +78,9 @@ namespace dials { namespace algorithms {
 
   protected:
     boost::shared_ptr<SamplerIface> init_sampler(boost::shared_ptr<BeamBase> beam,
-                                                 const Detector &detector,
-                                                 const Goniometer &goniometer,
-                                                 const Scan &scan,
+                                                 const Detector& detector,
+                                                 const Goniometer& goniometer,
+                                                 const Scan& scan,
                                                  std::size_t num_scan_points,
                                                  int grid_method) {
       int2 scan_range = scan.get_array_range();
@@ -170,9 +170,9 @@ namespace dials { namespace algorithms {
      * @param grid_method The gridding method
      */
     GaussianRSProfileModeller(boost::shared_ptr<BeamBase> beam,
-                              const Detector &detector,
-                              const Goniometer &goniometer,
-                              const Scan &scan,
+                              const Detector& detector,
+                              const Goniometer& goniometer,
+                              const Scan& scan,
                               double sigma_b,
                               double sigma_m,
                               double n_sigma,
@@ -465,7 +465,7 @@ namespace dials { namespace algorithms {
             flags[i] |= af::IntegratedPrf;
             success[i] = true;
 
-          } catch (dials::error const &e) {
+          } catch (dials::error const& e) {
             /* std::cout << e.what() << std::endl; */
             continue;
           }
@@ -557,7 +557,7 @@ namespace dials { namespace algorithms {
             flags[i] |= af::IntegratedPrf;
             success[i] = true;
 
-          } catch (dials::error const &e) {
+          } catch (dials::error const& e) {
             continue;
           }
         }
@@ -602,7 +602,7 @@ namespace dials { namespace algorithms {
      * @param sbox The reflection shoebox
      * @return True/False
      */
-    bool check1(std::size_t flags, double partiality, const Shoebox<> &sbox) const {
+    bool check1(std::size_t flags, double partiality, const Shoebox<>& sbox) const {
       // Check we're fully recorded
       bool full = partiality > 0.99;
 
@@ -625,7 +625,7 @@ namespace dials { namespace algorithms {
      * @param sbox The reflection shoebox
      * @return True/False
      */
-    bool check2(std::size_t flags, const Shoebox<> &sbox) const {
+    bool check2(std::size_t flags, const Shoebox<>& sbox) const {
       // Check if we want to integrate
       bool integrate = !(flags & af::DontIntegrate);
 
@@ -645,7 +645,7 @@ namespace dials { namespace algorithms {
      * @param sbox The reflection shoebox
      * @return True/False
      */
-    bool check3(std::size_t flags, const Shoebox<> &sbox) const {
+    bool check3(std::size_t flags, const Shoebox<>& sbox) const {
       // Check if we want to integrate
       bool integrate = !(flags & af::DontIntegrate);
 
@@ -662,7 +662,7 @@ namespace dials { namespace algorithms {
      * @param sbox The reflection shoebox
      * @return True/False
      */
-    bool check_bbox_valid(std::size_t flags, const Shoebox<> &sbox) const {
+    bool check_bbox_valid(std::size_t flags, const Shoebox<>& sbox) const {
       return sbox.bbox[0] >= 0 && sbox.bbox[2] >= 0
              && sbox.bbox[1] <= spec_.detector()[sbox.panel].get_image_size()[0]
              && sbox.bbox[3] <= spec_.detector()[sbox.panel].get_image_size()[1];
@@ -674,7 +674,7 @@ namespace dials { namespace algorithms {
      * @param sbox The reflection shoebox
      * @return True/False
      */
-    bool check_foreground_valid(std::size_t flags, const Shoebox<> &sbox) const {
+    bool check_foreground_valid(std::size_t flags, const Shoebox<>& sbox) const {
       bool pixels_valid = true;
       for (std::size_t i = 0; i < sbox.mask.size(); ++i) {
         if (sbox.mask[i] & Foreground && !(sbox.mask[i] & Valid)) {

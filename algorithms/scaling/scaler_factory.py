@@ -6,8 +6,6 @@ from __future__ import annotations
 
 import logging
 
-from libtbx import Auto
-
 from dials.algorithms.scaling.scaler import (
     MultiScaler,
     NullScaler,
@@ -27,6 +25,8 @@ from dials.util.filter_reflections import (
     filter_reflection_table_selection,
     sum_partial_reflections,
 )
+
+from libtbx import Auto
 
 logger = logging.getLogger("dials")
 

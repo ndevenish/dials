@@ -7,8 +7,7 @@ import random
 
 from libtbx.phil import parse
 
-master_phil = parse(
-    """
+master_phil = parse("""
 nrefl = 0
   .type = int
 shoebox_size {
@@ -84,8 +83,7 @@ rotation {
   angle = 0.0
     .type = float
 }
-"""
-)
+""")
 
 
 def random_background_plane2(sbox, a, b, c, d):
@@ -141,9 +139,9 @@ def random_background_plane(sbox, a, b, c, d):
 
 
 def simple_gaussian_spots(params):
-    from scitbx import matrix
-
     from dials.array_family import flex
+
+    from scitbx import matrix
 
     r = params.rotation
     axis = matrix.col((r.axis.x, r.axis.y, r.axis.z))

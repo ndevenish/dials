@@ -8,12 +8,12 @@ import itertools
 import math
 
 import numpy as np
+from dials.array_family import flex
 from scipy.stats import norm
 
 from dxtbx import flumpy
 from scitbx import math as scitbxmath
 
-from dials.array_family import flex
 from dials_scaling_ext import calc_lookup_index, calc_theta_phi
 
 

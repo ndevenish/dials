@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import numpy as np
-
 from dials.algorithms.symmetry.cosym import plots
 
 

@@ -3,7 +3,6 @@ from __future__ import annotations
 import random
 
 import pytest
-
 from dials.algorithms.indexing.basis_vector_search import fft3d, optimise
 
 

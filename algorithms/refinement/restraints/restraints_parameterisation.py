@@ -2,10 +2,6 @@ from __future__ import annotations
 
 from collections import namedtuple
 
-from libtbx.phil import parse
-from scitbx import sparse
-from scitbx.array_family import flex
-
 from dials.algorithms.refinement import DialsRefineConfigError
 from dials.algorithms.refinement.restraints.restraints import (
     LowMemoryMeanUnitCellTie,
@@ -13,6 +9,10 @@ from dials.algorithms.refinement.restraints.restraints import (
     MedianUnitCellTie,
     SingleUnitCellTie,
 )
+
+from libtbx.phil import parse
+from scitbx import sparse
+from scitbx.array_family import flex
 
 # PHIL options for unit cell restraints
 uc_phil_str = """

@@ -2,15 +2,11 @@
 Test refinement of a crystal unit cell using a two theta target.
 """
 
-
 from __future__ import annotations
 
 import os
 from copy import deepcopy
 from math import pi
-
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.test_utils import approx_equal
 
 from dials.algorithms.refinement.two_theta_refiner import (
     TwoThetaExperimentsPredictor,
@@ -19,17 +15,20 @@ from dials.algorithms.refinement.two_theta_refiner import (
     TwoThetaTarget,
 )
 
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.test_utils import approx_equal
+
 
 def generate_reflections(experiments):
-
-    from cctbx.sgtbx import space_group, space_group_symbols
-    from scitbx.array_family import flex
 
     from dials.algorithms.refinement.prediction.managed_predictors import (
         ScansExperimentsPredictor,
         ScansRayPredictor,
     )
     from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+
+    from cctbx.sgtbx import space_group, space_group_symbols
+    from scitbx.array_family import flex
 
     detector = experiments[0].detector
     crystal = experiments[0].crystal
@@ -76,10 +75,10 @@ def generate_reflections(experiments):
 def test_fd_derivatives():
     """Test derivatives of the prediction equation"""
 
-    from libtbx.phil import parse
-
     # Import model builder
     from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+    from libtbx.phil import parse
 
     # Create models
     overrides = """geometry.parameters.crystal.a.length.range = 10 50

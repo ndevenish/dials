@@ -8,8 +8,7 @@ from dials.util.phil import parse
 logger = logging.getLogger(__name__)
 
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   min_count = 5
     .type = int(value_min=1)
@@ -25,8 +24,7 @@ phil_scope = parse(
 
   niter = 10
     .type = int
-"""
-)
+""")
 
 
 class Modeller:

@@ -3,13 +3,14 @@ from __future__ import annotations
 import math
 from collections import namedtuple
 
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.prediction_parameters import (
     SparseGradientVectorMixin,
     XYPhiPredictionParameterisation,
 )
 from dials.array_family import flex
+
+from scitbx import matrix
+
 from dials_refinement_helpers_ext import (
     build_reconstitute_derivatives_mat3,
     build_reconstitute_derivatives_vec3,

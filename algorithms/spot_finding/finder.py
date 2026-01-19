@@ -9,16 +9,16 @@ import math
 import pickle
 from typing import Iterable, Tuple
 
-import libtbx
-from dxtbx.format.image import ImageBool
-from dxtbx.imageset import ImageSequence, ImageSet
-from dxtbx.model import ExperimentList
-
 from dials.array_family import flex
 from dials.model.data import PixelList, PixelListLabeller
 from dials.util import Sorry, log
 from dials.util.log import rehandle_cached_records
 from dials.util.mp import available_cores, batch_multi_node_parallel_map
+
+import libtbx
+from dxtbx.format.image import ImageBool
+from dxtbx.imageset import ImageSequence, ImageSet
+from dxtbx.model import ExperimentList
 
 logger = logging.getLogger(__name__)
 
@@ -140,12 +140,10 @@ class ExtractPixelsFromImage:
                 num_image += len(im)
             max_strong = int(math.ceil(self.max_strong_pixel_fraction * num_image))
             if num_strong > max_strong:
-                raise RuntimeError(
-                    f"""
+                raise RuntimeError(f"""
           The number of strong pixels found ({num_strong}) is greater than the
           maximum allowed ({max_strong}). Try changing spot finding parameters
-        """
-                )
+        """)
 
         # Print some info
         if self.compute_mean_background:

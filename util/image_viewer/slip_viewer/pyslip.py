@@ -91,9 +91,9 @@ def point_inside_polygon(x, y, poly):
 
     inside = False
 
-    (p1x, p1y) = new_poly[0]
+    p1x, p1y = new_poly[0]
 
-    for (p2x, p2y) in new_poly:
+    for p2x, p2y in new_poly:
         if y > min(p1y, p2y):
             if y <= max(p1y, p2y):
                 if x <= max(p1x, p2x):
@@ -101,7 +101,7 @@ def point_inside_polygon(x, y, poly):
                         xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
                     if p1x == p2x or x <= xinters:
                         inside = not inside
-        (p1x, p1y) = (p2x, p2y)
+        p1x, p1y = (p2x, p2y)
 
     return inside
 
@@ -238,7 +238,7 @@ class _Tiles:
             msg = f"'{tile_dir}' doesn't appear to be a tile directory"
             raise Exception(msg)
 
-        (self.tile_size_x, self.tile_size_y) = self.tile_size
+        self.tile_size_x, self.tile_size_y = self.tile_size
 
         # get list of tile levels
         tile_mask = os.path.join(tile_dir, self.TileFilenameTemplate)
@@ -280,7 +280,7 @@ class _Tiles:
         if info is None:
             return None
 
-        (self.num_tiles_x, self.num_tiles_y, self.ppd_x, self.ppd_y) = info
+        self.num_tiles_x, self.num_tiles_y, self.ppd_x, self.ppd_y = info
 
         # store partial path to level dir
         self.tile_level_dir = os.path.join(self.tile_dir, "%02d" % n)
@@ -931,9 +931,9 @@ class PySlip(_BufferedCanvas):
 
         for pt in points:
             if len(pt) == 3:
-                (x, y, attributes) = pt
+                x, y, attributes = pt
             elif len(pt) == 2:
-                (x, y) = pt
+                x, y = pt
                 attributes = {}
             else:
                 msg = (
@@ -1110,7 +1110,7 @@ class PySlip(_BufferedCanvas):
 
             # Gather ellipse center, major and minor axes in view
             # coordinates.
-            (ellipse_center, semimajor_axis, semiminor_axis) = [
+            ellipse_center, semimajor_axis, semiminor_axis = [
                 self.ConvertGeo2View(lonlat) for lonlat in p
             ]
 
@@ -1186,7 +1186,7 @@ class PySlip(_BufferedCanvas):
         draw_data = []
         for d in data:
             if len(d) == 2:
-                (p, attributes) = d
+                p, attributes = d
             elif len(d) == 1:
                 p = d
                 attributes = {}
@@ -1293,9 +1293,9 @@ class PySlip(_BufferedCanvas):
         draw_data = []
         for d in data:
             if len(d) == 4:
-                (lon, lat, fname, attributes) = d
+                lon, lat, fname, attributes = d
             elif len(d) == 3:
-                (lon, lat, fname) = d
+                lon, lat, fname = d
                 attributes = {}
             else:
                 msg = (
@@ -1317,7 +1317,7 @@ class PySlip(_BufferedCanvas):
                 fname_cache = fname
                 img = wx.Image(fname, wx.BITMAP_TYPE_ANY)
                 bmp_cache = bmap = img.ConvertToBitmap()
-                (w, h) = bmap.GetSize()
+                w, h = bmap.GetSize()
                 w_cache = w
                 h_cache = h
             draw_data.append(
@@ -1392,9 +1392,9 @@ class PySlip(_BufferedCanvas):
         draw_data = []
         for t in text:
             if len(t) == 4:
-                (lon, lat, tdata, attributes) = t
+                lon, lat, tdata, attributes = t
             elif len(t) == 3:
-                (lon, lat, tdata) = t
+                lon, lat, tdata = t
                 attributes = {}
             else:
                 msg = (
@@ -1625,7 +1625,7 @@ class PySlip(_BufferedCanvas):
         assert map_rel is True
         if len(data) == 0:
             return
-        (lon, lat, place, radius, colour, x_off, y_off, pdata) = data[0]
+        lon, lat, place, radius, colour, x_off, y_off, pdata = data[0]
 
         # draw points on map/view
         if map_rel:
@@ -1639,10 +1639,10 @@ class PySlip(_BufferedCanvas):
             rectangles = []
             if radius:
                 diameter = 2 * radius
-            for (lon, lat, place, radius, colour, x_off, y_off, pdata) in data:
+            for lon, lat, place, radius, colour, x_off, y_off, pdata in data:
                 pt = self.ConvertGeo2ViewMasked((lon, lat))
                 if pt:
-                    (x, y) = pt
+                    x, y = pt
                     if radius:
                         rectangles.append(
                             (x + x_off - radius, y + y_off - radius, diameter, diameter)
@@ -1666,7 +1666,7 @@ class PySlip(_BufferedCanvas):
         assert map_rel is True
         if len(data) == 0:
             return
-        (lon, lat, place, radius, colour, x_off, y_off, pdata) = data[0]
+        lon, lat, place, radius, colour, x_off, y_off, pdata = data[0]
 
         # draw points on map/view
         if map_rel:
@@ -1676,10 +1676,10 @@ class PySlip(_BufferedCanvas):
             # dc = wx.GCDC(dc)            # allow transparent colours
             dc.SetPen(wx.Pen(colour))
             dc.SetBrush(wx.Brush(colour))
-            for (lon, lat, place, radius, colour, x_off, y_off, pdata) in data:
+            for lon, lat, place, radius, colour, x_off, y_off, pdata in data:
                 pt = self.ConvertGeo2ViewMasked((lon, lat))
                 if pt:
-                    (x, y) = pt
+                    x, y = pt
                     if radius:
                         dc.DrawCircle(x + x_off, y + y_off, radius)
 
@@ -1695,22 +1695,22 @@ class PySlip(_BufferedCanvas):
         # draw points on map/view
         if map_rel:
             dc = wx.GCDC(dc)  # allow transparent colours
-            for (lon, lat, place, radius, colour, x_off, y_off, pdata) in data:
+            for lon, lat, place, radius, colour, x_off, y_off, pdata in data:
                 pt = self.ConvertGeo2ViewMasked((lon, lat))
                 if pt:
                     dc.SetPen(wx.Pen(colour))
                     dc.SetBrush(wx.Brush(colour))
-                    (x, y) = pt
+                    x, y = pt
                     if radius:
                         dc.DrawCircle(x + x_off, y + y_off, radius)
         else:
-            (dc_w, dc_h) = dc.GetSize()
+            dc_w, dc_h = dc.GetSize()
             dc_w2 = dc_w / 2  # noqa; lgtm; self-modifying code
             dc_h2 = dc_h / 2  # noqa; lgtm; self-modifying code
             dc_h -= 1
             dc_w -= 1
             dc = wx.GCDC(dc)  # allow transparent colours
-            for (x, y, place, radius, colour, x_off, y_off, pdata) in data:
+            for x, y, place, radius, colour, x_off, y_off, pdata in data:
                 dc.SetPen(wx.Pen(colour))
                 dc.SetBrush(wx.Brush(colour))
                 exec(self.point_view_placement[place])
@@ -1754,7 +1754,7 @@ class PySlip(_BufferedCanvas):
                 # gather all polygon points as view coords
                 p_lonlat = []
                 for lonlat in p:
-                    (x, y) = self.ConvertGeo2View(lonlat)
+                    x, y = self.ConvertGeo2View(lonlat)
                     if closed:
                         p_lonlat.append((x + x_off, y + y_off))
                     else:
@@ -1772,7 +1772,7 @@ class PySlip(_BufferedCanvas):
                 else:
                     lines.append(p_lonlat)
         else:
-            (dc_w, dc_h) = dc.GetSize()
+            dc_w, dc_h = dc.GetSize()
             dc_w2 = dc_w / 2  # noqa; lgtm; self-modifying code
             dc_h2 = dc_h / 2  # noqa; lgtm; self-modifying code
             dc_w -= 1
@@ -1793,7 +1793,7 @@ class PySlip(_BufferedCanvas):
                 # fetch the exec code, don't refetch for each point in polygon
                 place_exec = self.poly_view_placement[place]
                 pp = []
-                for (x, y) in p:
+                for x, y in p:
                     exec(place_exec)
                     if closed:
                         pp.append((x, y))
@@ -1826,19 +1826,19 @@ class PySlip(_BufferedCanvas):
 
         # draw images on map/view
         if map_rel:
-            for (lon, lat, bmap, w, h, place, x_off, y_off, idata) in images:
+            for lon, lat, bmap, w, h, place, x_off, y_off, idata in images:
                 w2 = w / 2  # noqa; lgtm; self-modifying code
                 h2 = h / 2  # noqa; lgtm; self-modifying code
                 pt = self.ConvertGeo2ViewMasked((lon, lat))
                 if pt:
-                    (x, y) = pt
+                    x, y = pt
                     exec(self.image_map_placement[place])
                     dc.DrawBitmap(bmap, x, y, False)
         else:
-            (dc_w, dc_h) = dc.GetSize()
+            dc_w, dc_h = dc.GetSize()
             dc_w2 = dc_w / 2  # noqa; lgtm; self-modifying code
             dc_h2 = dc_h / 2  # noqa; lgtm; self-modifying code
-            for (x, y, bmap, w, h, place, x_off, y_off, idata) in images:
+            for x, y, bmap, w, h, place, x_off, y_off, idata in images:
                 w2 = w / 2  # noqa; lgtm; self-modifying code
                 h2 = h / 2  # noqa; lgtm; self-modifying code
                 exec(self.image_view_placement[place])
@@ -1879,7 +1879,7 @@ class PySlip(_BufferedCanvas):
                 # convert geo position to view (returns None if off-view)
                 pt = self.ConvertGeo2ViewMasked((lon, lat))
                 if pt:
-                    (x, y) = pt
+                    x, y = pt
 
                     # set font characteristics
                     dc.SetPen(wx.Pen(colour))
@@ -1895,7 +1895,7 @@ class PySlip(_BufferedCanvas):
                         dc.DrawCircle(x, y, radius)
 
                     # place the text relative to hotpoint
-                    (w, h, _, _) = dc.GetFullTextExtent(tdata)
+                    w, h, _, _ = dc.GetFullTextExtent(tdata)
                     w2 = w / 2  # noqa; lgtm; self-modifying code
                     h2 = h / 2  # noqa; lgtm; self-modifying code
                     exec(self.text_map_placement[place])
@@ -1903,7 +1903,7 @@ class PySlip(_BufferedCanvas):
                     dc.DrawText(tdata, x, y)
         else:
             # we need the size of the DC
-            (dc_w, dc_h) = dc.GetSize()
+            dc_w, dc_h = dc.GetSize()
             dc_w2 = dc_w / 2  # noqa; lgtm; self-modifying code
             dc_h2 = dc_h / 2  # noqa; lgtm; self-modifying code
             dc_w -= 1
@@ -1936,15 +1936,15 @@ class PySlip(_BufferedCanvas):
                 dc.SetFont(font)
 
                 # draw hotpoint circle - do placement with x & y zero
-                (save_x, save_y) = (x, y)
-                (w, h, w2, h2, x, y) = (0, 0, 0, 0, 0, 0)
+                save_x, save_y = (x, y)
+                w, h, w2, h2, x, y = (0, 0, 0, 0, 0, 0)
                 exec(self.text_view_placement[place])
                 if radius:
                     dc.DrawCircle(x, y, radius)
-                (x, y) = (save_x, save_y)
+                x, y = (save_x, save_y)
 
                 # place the text relative to hotpoint
-                (w, h, _, _) = dc.GetFullTextExtent(tdata)  # size of text
+                w, h, _, _ = dc.GetFullTextExtent(tdata)  # size of text
                 w2 = w / 2  # noqa; lgtm; self-modifying code
                 h2 = h / 2  # noqa; lgtm; self-modifying code
                 exec(self.text_view_placement[place])
@@ -1960,7 +1960,7 @@ class PySlip(_BufferedCanvas):
 
         posn  a tuple (lon,lat) to centre view on
         """
-        (lon, lat) = posn
+        lon, lat = posn
 
         x = (lon - self.map_llon) * self.ppd_x
         y = (self.map_tlat - lat) * self.ppd_y
@@ -1996,12 +1996,12 @@ class PySlip(_BufferedCanvas):
         Use the ppd_x and ppd_y values in the level 'tiles.info' file.
         """
         # unpack area width/height (degrees)
-        (awidth, aheight) = size
+        awidth, aheight = size
 
         # step through levels (smallest first) and check view size (degrees)
         for l in self.tiles.levels:
             level = l
-            (_, _, ppd_x, ppd_y) = self.tiles.getInfo(l)
+            _, _, ppd_x, ppd_y = self.tiles.getInfo(l)
             view_deg_width = self.view_width / ppd_x
             view_deg_height = self.view_height / ppd_y
 
@@ -2023,7 +2023,7 @@ class PySlip(_BufferedCanvas):
         Return screen pixels coordinates of the point (x,y).
         """
 
-        (lon, lat) = lonlat
+        lon, lat = lonlat
 
         return (
             (lon - self.view_llon) * self.ppd_x,
@@ -2039,7 +2039,7 @@ class PySlip(_BufferedCanvas):
         if point is off-view.
         """
 
-        (lon, lat) = lonlat
+        lon, lat = lonlat
 
         if (
             self.view_llon <= lon <= self.view_rlon
@@ -2057,7 +2057,7 @@ class PySlip(_BufferedCanvas):
         Return a tuple (lon, lat) - geo coordinates of the point.
         """
 
-        (x, y) = xy
+        x, y = xy
 
         # x_pix is from left map edge, y_pix from top map edge
         x_pix = x + self.view_offset_x
@@ -2095,7 +2095,7 @@ class PySlip(_BufferedCanvas):
             # are we doing box select?
             if self.is_box_select:
                 # set select box point 2 at mouse position
-                (self.sbox_w, self.sbox_h) = (x - self.sbox_1_x, y - self.sbox_1_y)
+                self.sbox_w, self.sbox_h = (x - self.sbox_1_x, y - self.sbox_1_y)
             elif self.last_drag_x is not None:
                 # no, just a map drag
                 self.was_dragging = True
@@ -2123,12 +2123,12 @@ class PySlip(_BufferedCanvas):
         if event.ShiftDown():
             self.is_box_select = True
             self.SetCursor(wx.Cursor(wx.CURSOR_CROSS))
-            (self.sbox_w, self.sbox_h) = (0, 0)
-            (self.sbox_1_x, self.sbox_1_y) = click_posn
+            self.sbox_w, self.sbox_h = (0, 0)
+            self.sbox_1_x, self.sbox_1_y = click_posn
         else:
             self.is_box_select = False
             self.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-            (self.last_drag_x, self.last_drag_y) = click_posn
+            self.last_drag_x, self.last_drag_y = click_posn
         event.Skip()
 
     def OnLeftUp(self, event):
@@ -2262,8 +2262,8 @@ class PySlip(_BufferedCanvas):
         if event.ShiftDown():
             self.is_box_select = True
             self.SetCursor(wx.Cursor(wx.CURSOR_CROSS))
-            (self.sbox_w, self.sbox_h) = (0, 0)
-            (self.sbox_1_x, self.sbox_1_y) = click_posn
+            self.sbox_w, self.sbox_h = (0, 0)
+            self.sbox_1_x, self.sbox_1_y = click_posn
         event.Skip()
 
     def OnRightUp(self, event):
@@ -2511,7 +2511,7 @@ class PySlip(_BufferedCanvas):
             map_extent = self.tiles.UseLevel(level)
             if map_extent:
                 self.level = level
-                (self.map_width, self.map_height, self.ppd_x, self.ppd_y) = map_extent
+                self.map_width, self.map_height, self.ppd_x, self.ppd_y = map_extent
                 (
                     self.map_llon,
                     self.map_rlon,
@@ -2535,7 +2535,7 @@ class PySlip(_BufferedCanvas):
         """
 
         # unpack the position
-        (view_x, view_y) = posn
+        view_x, view_y = posn
 
         # calculate map coords
         map_x = view_x + self.view_offset_x
@@ -2560,12 +2560,12 @@ class PySlip(_BufferedCanvas):
         # http://en.wikipedia.org/wiki/Kd-tree
         # would need to create kd-tree in AddLayer()
 
-        (ptx, pty) = pt
+        ptx, pty = pt
         res = None
         dist = 9999999.0  # more than possible
         if layer.map_rel:
             for p in layer.data:
-                (x, y, _, _, _, _, _, data) = p
+                x, y, _, _, _, _, _, data = p
                 d = (x - ptx) * (x - ptx) + (y - pty) * (y - pty)
                 if d < dist:
                     dist = d
@@ -2576,12 +2576,12 @@ class PySlip(_BufferedCanvas):
         else:
             for p in layer.data:
                 dc = wx.BufferedPaintDC(self, self.buffer)
-                (dc_w, dc_h) = dc.GetSize()
+                dc_w, dc_h = dc.GetSize()
                 dc_w2 = dc_w / 2  # noqa; lgtm; self-modifying code
                 dc_h2 = dc_h / 2  # noqa; lgtm; self-modifying code
                 dc_h -= 1
                 dc_w -= 1
-                (x, y, place, _, _, x_off, y_off, pdata) = p
+                x, y, place, _, _, x_off, y_off, pdata = p
                 exec(self.point_view_placement[place])
                 d = (x - ptx) * (x - ptx) + (y - pty) * (y - pty)
                 if d < dist:
@@ -2609,8 +2609,8 @@ class PySlip(_BufferedCanvas):
 
         # TODO: speed this up?  Do we need to??
         # get canonical box limits
-        (p1x, p1y) = p1
-        (p2x, p2y) = p2
+        p1x, p1y = p1
+        p2x, p2y = p2
         lx = min(p1x, p2x)  # left x coord
         rx = max(p1x, p2x)
         ty = max(p1y, p2y)  # top y coord
@@ -2621,18 +2621,18 @@ class PySlip(_BufferedCanvas):
 
         if layer.map_rel:
             for p in layer.data:
-                (x, y, _, _, _, _, _, pdata) = p
+                x, y, _, _, _, _, _, pdata = p
                 if lx <= x <= rx and by <= y <= ty:
                     result.append(((x, y), pdata))
         else:
             for p in layer.data:
                 dc = wx.BufferedPaintDC(self, self.buffer)
-                (dc_w, dc_h) = dc.GetSize()
+                dc_w, dc_h = dc.GetSize()
                 dc_w2 = dc_w / 2  # noqa; lgtm; self-modifying code
                 dc_h2 = dc_h / 2  # noqa; lgtm; self-modifying code
                 dc_h -= 1
                 dc_w -= 1
-                (x, y, place, _, _, x_off, y_off, pdata) = p
+                x, y, place, _, _, x_off, y_off, pdata = p
                 exec(self.point_view_placement[place])
                 if lx <= x <= rx and by <= y <= ty:
                     result.append(((x, y), pdata))
@@ -2648,7 +2648,7 @@ class PySlip(_BufferedCanvas):
         Return None (no selection) or data for closest image.
         """
 
-        (ptx, pty) = pt
+        ptx, pty = pt
         res = None
         dist = 9999999.0  # more than possible
         for p in layer.data:
@@ -2677,8 +2677,8 @@ class PySlip(_BufferedCanvas):
         """
 
         # get canonical box limits
-        (p1x, p1y) = p1
-        (p2x, p2y) = p2
+        p1x, p1y = p1
+        p2x, p2y = p2
         lx = min(p1x, p2x)  # left x coord
         rx = max(p1x, p2x)
         ty = max(p1y, p2y)  # top y coord
@@ -2705,7 +2705,7 @@ class PySlip(_BufferedCanvas):
         [http://paulbourke.net/geometry/insidepoly/].
         """
 
-        (ptx, pty) = pt
+        ptx, pty = pt
 
         for poly in layer.data:
             p = poly[0]
@@ -2740,11 +2740,11 @@ class PySlip(_BufferedCanvas):
         Later make text sensitive (need text extent data).
         """
 
-        (ptx, pty) = pt
+        ptx, pty = pt
         res = None
         dist = 1.0e100  # more than possible
         for p in layer.data:
-            (x, y, _, _, _, _, _, _, _, _, _, data) = p
+            x, y, _, _, _, _, _, _, _, _, _, data = p
             d = (x - ptx) * (x - ptx) + (y - pty) * (y - pty)
             if d < dist:
                 dist = d
@@ -2770,8 +2770,8 @@ class PySlip(_BufferedCanvas):
         """
 
         # get canonical box limits
-        (p1x, p1y) = p1
-        (p2x, p2y) = p2
+        p1x, p1y = p1
+        p2x, p2y = p2
         lx = min(p1x, p2x)  # left x coord
         rx = max(p1x, p2x)
         ty = max(p1y, p2y)  # top y coord
@@ -2781,7 +2781,7 @@ class PySlip(_BufferedCanvas):
         result = []
 
         for p in layer.data:
-            (x, y, _, _, _, _, _, _, _, _, _, data) = p
+            x, y, _, _, _, _, _, _, _, _, _, data = p
             if lx <= x <= rx and by <= y <= ty:
                 result.append(((x, y), data))
 
@@ -2802,7 +2802,7 @@ class PySlip(_BufferedCanvas):
         The tile stuff has already been set to the correct level.
         """
         # set view state
-        (map_x, map_y) = self.GetMapCoordsFromView(xy)
+        map_x, map_y = self.GetMapCoordsFromView(xy)
         self.view_offset_x = map_x * 2 - self.view_width / 2
         self.view_offset_y = map_y * 2 - self.view_height / 2
 
@@ -2820,7 +2820,7 @@ class PySlip(_BufferedCanvas):
         The tile stuff has already been set to the correct level.
         """
         # set view state
-        (map_x, map_y) = self.GetMapCoordsFromView(xy)
+        map_x, map_y = self.GetMapCoordsFromView(xy)
         self.view_offset_x = map_x / 2 - self.view_width / 2
         self.view_offset_y = map_y / 2 - self.view_height / 2
 

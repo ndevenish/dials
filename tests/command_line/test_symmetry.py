@@ -5,12 +5,6 @@ import math
 
 import procrunner
 import pytest
-
-import scitbx.matrix
-from cctbx import sgtbx, uctbx
-from dxtbx.model import Crystal, Experiment, ExperimentList, Scan
-from dxtbx.serialize import load
-
 from dials.algorithms.symmetry.cosym._generate_test_data import (
     generate_experiments_reflections,
 )
@@ -26,6 +20,11 @@ from dials.command_line.symmetry import (
 from dials.util.exclude_images import exclude_image_ranges_from_scans
 from dials.util.multi_dataset_handling import assign_unique_identifiers
 from dials.util.phil import parse
+
+import scitbx.matrix
+from cctbx import sgtbx, uctbx
+from dxtbx.model import Crystal, Experiment, ExperimentList, Scan
+from dxtbx.serialize import load
 
 
 def test_symmetry_laue_only(dials_data, tmpdir):

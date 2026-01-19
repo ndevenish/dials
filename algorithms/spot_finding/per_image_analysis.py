@@ -3,13 +3,13 @@ from __future__ import annotations
 import collections
 import math
 
-from cctbx import sgtbx, uctbx
-from libtbx.math_utils import nearest_integer as nint
-from scitbx import matrix
-
 from dials.algorithms.integration import filtering
 from dials.array_family import flex
 from dials.util import tabulate
+
+from cctbx import sgtbx, uctbx
+from libtbx.math_utils import nearest_integer as nint
+from scitbx import matrix
 
 Slot = collections.namedtuple("Slot", "d_min d_max")
 _stats_field_names = [
@@ -310,9 +310,8 @@ def estimate_resolution_limit(reflections, ice_sel=None, plot_filename=None):
             resolution_estimate = -1
 
     if plot_filename is not None:
-        from matplotlib import pyplot
-
         from dials.util.matplotlib_utils import resolution_formatter
+        from matplotlib import pyplot
 
         fig = pyplot.figure()
         ax = fig.add_subplot(1, 1, 1)

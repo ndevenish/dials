@@ -4,10 +4,9 @@ import os
 import shutil
 
 import procrunner
+from dials.command_line.show import model_connectivity, run
 
 from dxtbx.serialize import load
-
-from dials.command_line.show import model_connectivity, run
 
 
 def test_dials_show(dials_regression):
@@ -18,9 +17,7 @@ def test_dials_show(dials_regression):
     assert not result.returncode and not result.stderr
     output = result.stdout.decode("latin-1")
     output = [_f for _f in (s.rstrip() for s in output.split("\n")) if _f]
-    assert (
-        "\n".join(output[6:])
-        == """
+    assert "\n".join(output[6:]) == """
 Detector:
 Panel:
   name: Panel
@@ -76,7 +73,6 @@ Crystal:
                 { 0.0124,  0.0200, -0.0032}}
     Mosaicity:  0.157000
 """.strip()
-    )
 
 
 def test_dials_show_i04_weak_data(dials_regression):
@@ -92,9 +88,7 @@ def test_dials_show_i04_weak_data(dials_regression):
     assert not result.returncode and not result.stderr
     output = result.stdout.decode("latin-1")
     output = [_f for _f in (s.rstrip() for s in output.split("\n")) if _f]
-    assert (
-        "\n".join(output[6:])
-        == """
+    assert "\n".join(output[6:]) == """
 Detector:
 Panel:
   name: Panel
@@ -137,7 +131,6 @@ Goniometer:
     Fixed rotation:  {1,0,0,0,1,0,0,0,1}
     Setting rotation:{1,0,0,0,1,0,0,0,1}
 """.strip()
-    )
 
 
 def test_dials_show_centroid_test_data(dials_data):
@@ -149,9 +142,7 @@ def test_dials_show_centroid_test_data(dials_data):
     assert not result.returncode and not result.stderr
     output = result.stdout.decode("latin-1")
     output = [_f for _f in (s.rstrip() for s in output.split("\n")) if _f]
-    assert (
-        "\n".join(output[7:])
-        == """
+    assert "\n".join(output[7:]) == """
 Detector:
 Panel:
   name: Panel
@@ -196,7 +187,6 @@ Goniometer:
     Fixed rotation:  {1,0,0,0,1,0,0,0,1}
     Setting rotation:{1,0,0,0,1,0,0,0,1}
 """.strip()
-    )
 
 
 def test_dials_show_multi_panel_i23(dials_regression):
@@ -209,9 +199,7 @@ def test_dials_show_multi_panel_i23(dials_regression):
     assert not result.returncode and not result.stderr
     output = result.stdout.decode("latin-1")
     output = [_f for _f in (s.rstrip() for s in output.split("\n")) if _f]
-    assert (
-        "\n".join(output[7:27])
-        == """
+    assert "\n".join(output[7:27]) == """
 Detector:
 Panel:
   name: row-00
@@ -233,11 +221,8 @@ Panel:
     mu: 3.663
     t0: 0.32
 """.strip()
-    )
 
-    assert (
-        "\n".join(output[-44:])
-        == """
+    assert "\n".join(output[-44:]) == """
 Panel:
   name: row-23
   type: SENSOR_PAD
@@ -283,7 +268,6 @@ Goniometer:
     Fixed rotation:  {1,0,0,0,1,0,0,0,1}
     Setting rotation:{1,0,0,0,1,0,0,0,1}
 """.strip()
-    )
 
 
 def test_dials_show_reflection_table(dials_data):
@@ -338,7 +322,7 @@ def test_dials_show_reflection_table(dials_data):
         "xyzobs.px.variance",
         "zeta",
     ]
-    for (name, out) in zip(row_names, output[8:-1]):
+    for name, out in zip(row_names, output[8:-1]):
         assert name in out
 
 
@@ -388,9 +372,7 @@ def test_model_connectivity(dials_data):
     expts = load.experiment_list(
         location.join("indexed.expt").strpath, check_format=False
     )
-    assert (
-        model_connectivity(expts)
-        == """\
+    assert model_connectivity(expts) == """\
 Experiment / Models
 
 Detector:
@@ -413,7 +395,6 @@ Experiment 0  x
 Experiment 1  x
 Experiment 2  x
 Experiment 3  x"""
-    )
 
 
 def test_dials_show_shared_models(dials_data, capsys):

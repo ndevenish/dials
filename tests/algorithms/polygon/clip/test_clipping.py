@@ -3,9 +3,9 @@ from __future__ import annotations
 import math
 import random
 
-from scitbx.array_family import flex
-
 from dials.algorithms.polygon import clip
+
+from scitbx.array_family import flex
 
 
 def generate_intersecting(subject_size=None, target_size=4):

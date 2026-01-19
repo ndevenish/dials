@@ -14,8 +14,7 @@ class DispersionSpotFinderThresholdExt:
     def phil():
         from libtbx.phil import parse
 
-        phil = parse(
-            """
+        phil = parse("""
       gain = None
         .type = float(value_min=0.0)
         .help = "Use a flat gain map for the entire detector to act as a"
@@ -61,8 +60,7 @@ class DispersionSpotFinderThresholdExt:
         .type = float
         .help = "The global threshold value. Consider all pixels less than this"
                 "value to be part of the background."
-    """
-        )
+    """)
         return phil
 
     def __init__(self, params):

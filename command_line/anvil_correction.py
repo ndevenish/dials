@@ -20,35 +20,32 @@ Examples::
   dials.anvil_correction integrated.expt integrated.refl thickness=1.2 normal=1,0,0
 """
 
-
 from __future__ import annotations
 
 import logging
 import sys
 from typing import List, Sequence, SupportsFloat
 
-import numpy as np
-from scipy.spatial.transform import Rotation
-
-import libtbx.phil
-from cctbx.eltbx import attenuation_coefficient
-from dxtbx.model import Experiment
-
 import dials.util.log
+import numpy as np
 from dials.array_family import flex
 from dials.util.multi_dataset_handling import (
     parse_multiple_datasets,
     sort_tables_to_experiments_order,
 )
 from dials.util.options import ArgumentParser, flatten_experiments, flatten_reflections
+from scipy.spatial.transform import Rotation
+
+import libtbx.phil
+from cctbx.eltbx import attenuation_coefficient
+from dxtbx.model import Experiment
 
 Vector = Sequence[SupportsFloat]
 
 
 logger = logging.getLogger("dials.command_line.anvil_correction")
 
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
     anvil
         .caption = "Properties of the mounted diamond anvils"
     {
@@ -81,8 +78,7 @@ phil_scope = libtbx.phil.parse(
         log = dials.anvil_correction.log
             .type = path
     }
-    """
-)
+    """)
 
 # Get the tabulated NIST mass attenuation coefficient data for carbon.
 carbon_attenuation_data = attenuation_coefficient.get_table("C")

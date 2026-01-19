@@ -5,17 +5,17 @@ import copy
 import logging
 import math
 
-import libtbx
-from dxtbx.model import Crystal
-from scitbx import matrix
-from scitbx.array_family import flex
-
 import dials.util
 from dials.algorithms.indexing.compare_orientation_matrices import (
     difference_rotation_matrix_axis_angle,
 )
 from dials.algorithms.refinement import RefinerFactory
 from dials.util.log import LoggingContext
+
+import libtbx
+from dxtbx.model import Crystal
+from scitbx import matrix
+from scitbx.array_family import flex
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ def filter_doubled_cell(solutions):
     accepted_solutions = []
     for i1, s1 in enumerate(solutions):
         doubled_cell = False
-        for (m1, m2, m3) in (
+        for m1, m2, m3 in (
             (2, 1, 1),
             (1, 2, 1),
             (1, 1, 2),

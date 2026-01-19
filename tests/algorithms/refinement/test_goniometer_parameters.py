@@ -3,12 +3,6 @@ from __future__ import annotations
 import math
 
 import pytest
-
-from dxtbx.model import Goniometer
-from libtbx.test_utils import approx_equal
-from scitbx import matrix
-from scitbx.array_family import flex
-
 from dials.algorithms.refinement.parameterisation.goniometer_parameters import (
     GoniometerParameterisation,
 )
@@ -16,6 +10,11 @@ from dials.algorithms.refinement.refinement_helpers import (
     get_fd_gradients,
     random_param_shift,
 )
+
+from dxtbx.model import Goniometer
+from libtbx.test_utils import approx_equal
+from scitbx import matrix
+from scitbx.array_family import flex
 
 
 def random_gonio():

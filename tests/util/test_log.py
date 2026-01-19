@@ -3,9 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Any, List
 
-import pytest
-
 import dials.util.log
+import pytest
 from dials.util.mp import batch_multi_node_parallel_map, multi_node_parallel_map
 
 

@@ -3,10 +3,9 @@ from __future__ import annotations
 import os
 
 import pytest
+from dials.array_family import flex
 
 from dxtbx.serialize import load
-
-from dials.array_family import flex
 
 
 @pytest.fixture

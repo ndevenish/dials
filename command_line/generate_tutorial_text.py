@@ -12,9 +12,9 @@ import sys
 import tempfile
 import time
 
+import dials.util
 import procrunner
 
-import dials.util
 import dials_data.download
 
 

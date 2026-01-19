@@ -7,7 +7,6 @@ but also that the command line program is functioning and that the output models
 have not changed format and so on.
 """
 
-
 from __future__ import annotations
 
 import os
@@ -15,11 +14,10 @@ import os
 import procrunner
 import pytest
 from annlib_ext import AnnAdaptor
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from dials.algorithms.refinement.engine import Journal
 from dials.array_family import flex
+
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test1(dials_regression, tmpdir):

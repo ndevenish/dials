@@ -1,13 +1,12 @@
 from __future__ import annotations
 
+import dials.pychef
 import pytest
 
 import iotbx.mtz
 from cctbx import sgtbx
 from cctbx.array_family import flex
 from dxtbx.model import Experiment, ExperimentList, Scan
-
-import dials.pychef
 
 
 def test_observations():

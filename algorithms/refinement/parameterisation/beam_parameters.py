@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from scitbx import matrix
-
 from dials.algorithms.refinement.parameterisation.model_parameters import (
     ModelParameterisation,
     Parameter,
 )
 from dials.algorithms.refinement.refinement_helpers import dR_from_axis_and_angle
+
+from scitbx import matrix
 
 
 class BeamMixin:

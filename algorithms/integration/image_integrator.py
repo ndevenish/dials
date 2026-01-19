@@ -10,6 +10,7 @@ from dials.model.data import ImageVolume, MultiPanelImageVolume, make_image
 from dials.util import log
 from dials.util.log import rehandle_cached_records
 from dials.util.mp import multi_node_parallel_map
+
 from dials_algorithms_integration_integrator_ext import ReflectionManagerPerImage
 
 logger = logging.getLogger(__name__)

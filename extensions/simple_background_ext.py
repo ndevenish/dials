@@ -10,8 +10,7 @@ class SimpleBackgroundExt:
     def phil():
         from libtbx.phil import parse
 
-        phil = parse(
-            """
+        phil = parse("""
       outlier
         .help = "Outlier rejection prior to background fit"
       {
@@ -93,8 +92,7 @@ class SimpleBackgroundExt:
       min_pixels = 10
         .type = int(value_min=1)
         .help = "The minimum number of pixels to compute the background"
-    """
-        )
+    """)
         return phil
 
     def __init__(self, params, experiments):
@@ -104,9 +102,9 @@ class SimpleBackgroundExt:
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-
         from dials.algorithms.background.simple import BackgroundAlgorithm
+
+        from libtbx.phil import parse
 
         # Create some default parameters
         if params is None:

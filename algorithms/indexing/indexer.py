@@ -3,14 +3,8 @@ from __future__ import annotations
 import logging
 import math
 
-import pkg_resources
-
-import iotbx.phil
-import libtbx
-from cctbx import sgtbx
-from dxtbx.model import ExperimentList, ImageSequence
-
 import dials.util
+import pkg_resources
 from dials.algorithms.indexing import (
     DialsIndexError,
     DialsIndexRefineError,
@@ -24,6 +18,11 @@ from dials.algorithms.indexing.symmetry import SymmetryHandler
 from dials.algorithms.refinement import DialsRefineConfigError, DialsRefineRuntimeError
 from dials.array_family import flex
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
+
+import iotbx.phil
+import libtbx
+from cctbx import sgtbx
+from dxtbx.model import ExperimentList, ImageSequence
 
 logger = logging.getLogger(__name__)
 
@@ -70,8 +69,7 @@ max_cell_estimation
 }
 """
 
-phil_str = (
-    """\
+phil_str = """\
 indexing {
   nproc = 1
     .type = int(value_min=1)
@@ -291,9 +289,7 @@ indexing {
       .help=If specified, will set the mosaic half degree value and override the value determined from nave refinement
   }
 }
-"""
-    % max_cell_phil_str
-)
+""" % max_cell_phil_str
 
 phil_scope = iotbx.phil.parse(phil_str, process_includes=True)
 

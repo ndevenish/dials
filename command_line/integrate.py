@@ -19,17 +19,11 @@ Examples::
   dials.integrate models.expt refined.refl background.algorithm=glm
 """
 
-
 from __future__ import annotations
 
 import logging
 import math
 import sys
-
-from orderedset import OrderedSet
-
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
 
 import dials.util.log
 from dials.algorithms.integration.integrator import create_integrator
@@ -40,6 +34,10 @@ from dials.util.command_line import heading
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.slice import slice_crystal
 from dials.util.version import dials_version
+from orderedset import OrderedSet
+
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials.command_line.integrate")
 
@@ -137,15 +135,13 @@ phil_scope = parse(
 )
 
 # Local overrides for dials.integrate
-phil_overrides = parse(
-    """
+phil_overrides = parse("""
 integration {
   mp {
     nproc = Auto
   }
 }
-"""
-)
+""")
 working_phil = phil_scope.fetch(sources=[phil_overrides])
 
 
@@ -201,13 +197,10 @@ def process_reference(reference):
     mask = reference["id"] < 0
     n_masked = mask.count(True)
     if n_masked > 0:
-        raise ValueError(
-            """
+        raise ValueError("""
     Invalid input for reference reflections.
     %d reference spots have an invalid experiment id
-    """
-            % n_masked
-        )
+    """ % n_masked)
     if (reference["panel"] == reference["shoebox"].panels()).count(False) > 0:
         raise ValueError(
             'reflection table "panel" column does not match "shoebox" panel'
@@ -511,12 +504,10 @@ def run_integration(params, experiments, reference=None):
         assert len(matched) == len(predicted)
         assert matched.count(True) <= len(reference)
         if matched.count(True) == 0:
-            raise ValueError(
-                """
+            raise ValueError("""
         Invalid input for reference reflections.
         Zero reference spots were matched to predictions
-    """
-            )
+    """)
         elif unmatched:
             msg = (
                 "Warning: %d reference spots were not matched to predictions"

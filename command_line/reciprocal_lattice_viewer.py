@@ -8,12 +8,12 @@ from __future__ import annotations
 import copy
 import os
 
-import wxtbx.app
-from scitbx.array_family import flex
-
 import dials.util.log
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.reciprocal_lattice.viewer import ReciprocalLatticeViewer, phil_scope
+
+import wxtbx.app
+from scitbx.array_family import flex
 
 help_message = """
 Visualise the strong spots from spotfinding in reciprocal space.

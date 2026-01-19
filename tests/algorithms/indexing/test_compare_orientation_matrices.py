@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import pytest
+from dials.algorithms.indexing import compare_orientation_matrices
 
 from cctbx import sgtbx
 from dxtbx.model import Crystal
 from scitbx import matrix
 from scitbx.math import euler_angles as euler
-
-from dials.algorithms.indexing import compare_orientation_matrices
 
 
 def test_compare_orientation_matrices():
@@ -75,9 +74,7 @@ def test_compare_orientation_matrices():
     )
     s = "\n".join(s.splitlines()[:-1]).replace("-0.000", "0.000")
     print(s)
-    assert (
-        s
-        == """\
+    assert s == """\
 Change of basis op: b,c,a
 Rotation matrix to transform crystal 1 to crystal 2:
 {{0.986, -0.135, 0.098},
@@ -97,16 +94,13 @@ Rotation matrix to transform crystal 2 to crystal 3:
 {{1.000, 0.000, 0.000},
  {0.000, 1.000, 0.000},
  {0.000, 0.000, 1.000}}"""
-    )
 
     s = compare_orientation_matrices.rotation_matrix_differences(
         [crystal_a, crystal_b, crystal_c], comparison="sequential"
     )
     s = "\n".join(s.splitlines()[:-1]).replace("-0.000", "0.000")
     print(s)
-    assert (
-        s
-        == """\
+    assert s == """\
 Change of basis op: b,c,a
 Rotation matrix to transform crystal 1 to crystal 2:
 {{0.986, -0.135, 0.098},
@@ -119,14 +113,11 @@ Rotation matrix to transform crystal 2 to crystal 3:
 {{1.000, 0.000, 0.000},
  {0.000, 1.000, 0.000},
  {0.000, 0.000, 1.000}}"""
-    )
 
     s = compare_orientation_matrices.rotation_matrix_differences(
         (crystal_a, crystal_b), miller_indices=((1, 0, 0), (1, 1, 0))
     )
-    assert (
-        s
-        == """\
+    assert s == """\
 Change of basis op: b,c,a
 Rotation matrix to transform crystal 1 to crystal 2:
 {{0.986, -0.135, 0.098},
@@ -136,4 +127,3 @@ Rotation of 9.738 degrees about axis (0.172, 0.565, 0.807)
 (1,0,0): 15.26 deg
 (1,1,0): 9.12 deg
 """
-    )

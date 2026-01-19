@@ -4,16 +4,15 @@ from math import exp
 from random import randint
 
 import pytest
-from numpy.random import poisson
-
-from scitbx.array_family import flex
-
 from dials.algorithms.image.threshold import (
     DispersionExtendedThreshold,
     DispersionExtendedThresholdDebug,
     DispersionThreshold,
     DispersionThresholdDebug,
 )
+from numpy.random import poisson
+
+from scitbx.array_family import flex
 
 
 class Test:

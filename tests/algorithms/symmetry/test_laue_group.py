@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import pytest
-
-from cctbx import crystal, miller, sgtbx
-
 from dials.algorithms.symmetry.cosym._generate_test_data import generate_intensities
 from dials.algorithms.symmetry.laue_group import LaueGroupAnalysis
+
+from cctbx import crystal, miller, sgtbx
 
 
 def generate_fake_intensities(crystal_symmetry):

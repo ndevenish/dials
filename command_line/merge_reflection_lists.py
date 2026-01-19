@@ -5,11 +5,11 @@ from __future__ import annotations
 
 import sys
 
-from libtbx.phil import parse
-
 from dials.util import show_mail_handle_errors
 from dials.util.command_line import Command
 from dials.util.options import ArgumentParser
+
+from libtbx.phil import parse
 
 # Create the help message
 help_message = """
@@ -24,8 +24,7 @@ help_message = """
 """
 
 # Create the phil parameters
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   output = merged.refl
     .type = str
@@ -34,8 +33,7 @@ phil_scope = parse(
   method = *update extend
     .type = choice
     .help = "The method of merging"
-"""
-)
+""")
 
 
 class Script:

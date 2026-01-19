@@ -7,19 +7,19 @@ import os
 import pathlib
 from time import time
 
-import psutil
-
-import boost_adaptbx.boost.python
-import libtbx
-
 import dials.algorithms.integration
 import dials.util
 import dials.util.log
+import psutil
 from dials.array_family import flex
 from dials.model.data import make_image
 from dials.util import tabulate
 from dials.util.log import rehandle_cached_records
 from dials.util.mp import available_cores, multi_node_parallel_map
+
+import boost_adaptbx.boost.python
+import libtbx
+
 from dials_algorithms_integration_integrator_ext import (
     Executor,
     Group,
@@ -403,13 +403,11 @@ class _ProcessorRot(_Processor):
         """
         # Ensure we have the correct type of data
         if not experiments.all_sequences():
-            raise RuntimeError(
-                """
+            raise RuntimeError("""
         An inappropriate processing algorithm may have been selected!
          Trying to perform rotation processing when not all experiments
          are indicated as rotation experiments.
-      """
-            )
+      """)
 
         super().__init__(manager)
 
@@ -911,16 +909,13 @@ class _Manager:
         logger.log(output_level, "\n".join(report))
 
         if output_level >= logging.ERROR:
-            raise MemoryError(
-                """
+            raise MemoryError("""
           Not enough memory to run integration jobs.  This could be caused by a
           highly mosaic crystal model.  Possible solutions include increasing the
           percentage of memory allowed for shoeboxes or decreasing the block size.
           The average shoebox size is %d x %d pixels x %d images - is your crystal
           really this mosaic?
-          """
-                % _average_bbox_size(self.reflections)
-            )
+          """ % _average_bbox_size(self.reflections))
 
     def summary(self):
         """
@@ -1063,13 +1058,11 @@ class ProcessorStills(_Processor):
 
         # Ensure we have the correct type of data
         if not experiments.all_stills():
-            raise RuntimeError(
-                """
+            raise RuntimeError("""
         An inappropriate processing algorithm may have been selected!
          Trying to perform stills processing when not all experiments
          are indicated as stills experiments.
-      """
-            )
+      """)
 
         # Create the processing manager
         manager = _Manager(experiments, reflections, params)

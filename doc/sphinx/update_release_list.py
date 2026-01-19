@@ -84,14 +84,12 @@ if __name__ == "__main__":
 
     with open(release_file, "w") as release:
         caption = f"Stable Release: {latest_release['name']}"
-        release.write(
-            f"""
+        release.write(f"""
 {caption}
 {'=' * len(caption)}
 
 The current stable release can be downloaded from `Github <{latest_release['html_url']}>`_,
 where you can also find further release notes.
 
-""".lstrip()
-        )
+""".lstrip())
         release.write("".join(sorted(_release_asset_buttons(latest_release))))

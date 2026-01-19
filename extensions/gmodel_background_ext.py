@@ -10,8 +10,7 @@ class GModelBackgroundExt:
     def phil():
         from libtbx.phil import parse
 
-        phil = parse(
-            """
+        phil = parse("""
 
       robust {
 
@@ -31,8 +30,7 @@ class GModelBackgroundExt:
       model = None
         .type = str
         .help = "The model filename"
-    """
-        )
+    """)
         return phil
 
     def __init__(self, params, experiments):
@@ -42,9 +40,9 @@ class GModelBackgroundExt:
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-
         from dials.algorithms.background.gmodel import BackgroundAlgorithm
+
+        from libtbx.phil import parse
 
         # Create some default parameters
         if params is None:

@@ -46,8 +46,8 @@ namespace dials { namespace af { namespace boost_python {
    * @returns A reflection table
    */
   template <typename T>
-  T *make_from_observation_and_shoebox(const af::const_ref<Observation> &o,
-                                       const af::const_ref<Shoebox<> > &s) {
+  T* make_from_observation_and_shoebox(const af::const_ref<Observation>& o,
+                                       const af::const_ref<Shoebox<> >& s) {
     // FIXME Should remove as we don't know whether intensity is summed or
     // profile fitted. In any case observation model should be deprecated.
     DIALS_ASSERT(o.size() == s.size());
@@ -91,7 +91,7 @@ namespace dials { namespace af { namespace boost_python {
    * A function to print some help about keys
    */
   template <typename T>
-  std::string help_keys(const T &self) {
+  std::string help_keys(const T& self) {
     std::string result =
       "Standard column names:\n"
       "======================\n"
@@ -154,8 +154,8 @@ namespace dials { namespace af { namespace boost_python {
    * Do ray intersections for all items
    */
   template <typename T>
-  af::shared<vec2<double> > compute_ray_intersections(const T &self,
-                                                      const model::Detector &detector) {
+  af::shared<vec2<double> > compute_ray_intersections(const T& self,
+                                                      const model::Detector& detector) {
     af::shared<vec2<double> > result(self.nrows());
     af::const_ref<vec3<double> > s1 =
       self.template get<vec3<double> >("s1").const_ref();
@@ -171,7 +171,7 @@ namespace dials { namespace af { namespace boost_python {
    * Get where the flag value is set
    */
   template <typename T>
-  af::shared<bool> get_flags(const T &self, std::size_t value, bool all) {
+  af::shared<bool> get_flags(const T& self, std::size_t value, bool all) {
     af::shared<bool> result(self.nrows());
     af::shared<std::size_t> flags = self.template get<std::size_t>("flags");
     DIALS_ASSERT(flags.size() == result.size());
@@ -334,7 +334,7 @@ namespace dials { namespace af { namespace boost_python {
     af::shared<std::size_t> indices(num_partial);
     std::size_t j = 0;
     for (std::size_t i = 0; i < num_full; ++i) {
-      const Shoebox<> &s1 = sbox[i];
+      const Shoebox<>& s1 = sbox[i];
       int6 b = bbox[i];
       DIALS_ASSERT(s1.is_consistent());
       DIALS_ASSERT(s1.bbox[0] == b[0] && s1.bbox[1] == b[1]);
@@ -589,8 +589,8 @@ namespace dials { namespace af { namespace boost_python {
    * @returns The new table with the requested rows
    */
   template <typename T>
-  T reflection_table_select_rows_index(const T &self,
-                                       const af::const_ref<std::size_t> &index) {
+  T reflection_table_select_rows_index(const T& self,
+                                       const af::const_ref<std::size_t>& index) {
     T result = flex_table_suite::select_rows_index<T>(self, index);
     return result;
   }
@@ -602,8 +602,8 @@ namespace dials { namespace af { namespace boost_python {
    * @returns The new table with the requested rows
    */
   template <typename T>
-  T reflection_table_select_rows_flags(const T &self,
-                                       const af::const_ref<bool> &flags) {
+  T reflection_table_select_rows_flags(const T& self,
+                                       const af::const_ref<bool>& flags) {
     T result = flex_table_suite::select_rows_flags<T>(self, flags);
     return result;
   }
@@ -615,8 +615,8 @@ namespace dials { namespace af { namespace boost_python {
    * @returns The new table with the requested columns
    */
   template <typename T>
-  T reflection_table_select_cols_keys(const T &self,
-                                      const af::const_ref<std::string> &keys) {
+  T reflection_table_select_cols_keys(const T& self,
+                                      const af::const_ref<std::string>& keys) {
     T result = flex_table_suite::select_cols_keys<T>(self, keys);
     flex_table_suite::reflection_table_extend_identifiers(result, self);
     return result;
@@ -629,7 +629,7 @@ namespace dials { namespace af { namespace boost_python {
    * @returns The new table with the requested columns
    */
   template <typename T>
-  T reflection_table_select_cols_tuple(const T &self, boost::python::tuple keys) {
+  T reflection_table_select_cols_tuple(const T& self, boost::python::tuple keys) {
     T result = flex_table_suite::select_cols_tuple<T>(self, keys);
     flex_table_suite::reflection_table_extend_identifiers(result, self);
     return result;
@@ -638,7 +638,7 @@ namespace dials { namespace af { namespace boost_python {
   /**
    * Extend the reflection table
    */
-  void reflection_table_extend(reflection_table &self, const reflection_table &other) {
+  void reflection_table_extend(reflection_table& self, const reflection_table& other) {
     flex_table_suite::reflection_table_extend_identifiers(self, other);
     flex_table_suite::extend(self, other);
   }
@@ -646,7 +646,7 @@ namespace dials { namespace af { namespace boost_python {
   /**
    * Update the reflection table
    */
-  void reflection_table_update(reflection_table &self, const reflection_table &other) {
+  void reflection_table_update(reflection_table& self, const reflection_table& other) {
     flex_table_suite::reflection_table_extend_identifiers(self, other);
     flex_table_suite::update(self, other);
   }
@@ -656,7 +656,7 @@ namespace dials { namespace af { namespace boost_python {
    */
   struct item_to_object_visitor : public boost::static_visitor<object> {
     template <typename T>
-    object operator()(T &data) {
+    object operator()(T& data) {
       return object(data);
     }
   };
@@ -666,7 +666,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param self The reflection
    * @param name The item name
    */
-  boost::python::object Reflection_get(const Reflection &self, std::string name) {
+  boost::python::object Reflection_get(const Reflection& self, std::string name) {
     Reflection::mapped_type item = self[name];
     item_to_object_visitor visitor;
     return item.apply_visitor(visitor);
@@ -678,7 +678,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_bool(Reflection &self, std::string name, bool item) {
+  void Reflection_set_bool(Reflection& self, std::string name, bool item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -688,7 +688,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_int(Reflection &self, std::string name, int item) {
+  void Reflection_set_int(Reflection& self, std::string name, int item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -698,7 +698,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_size_t(Reflection &self, std::string name, std::size_t item) {
+  void Reflection_set_size_t(Reflection& self, std::string name, std::size_t item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -708,7 +708,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_double(Reflection &self, std::string name, double item) {
+  void Reflection_set_double(Reflection& self, std::string name, double item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -718,7 +718,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_string(Reflection &self, std::string name, std::string item) {
+  void Reflection_set_string(Reflection& self, std::string name, std::string item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -728,7 +728,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_vec2_double(Reflection &self,
+  void Reflection_set_vec2_double(Reflection& self,
                                   std::string name,
                                   vec2<double> item) {
     self[name] = Reflection::data_type(item);
@@ -740,7 +740,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_vec3_double(Reflection &self,
+  void Reflection_set_vec3_double(Reflection& self,
                                   std::string name,
                                   vec3<double> item) {
     self[name] = Reflection::data_type(item);
@@ -752,7 +752,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_mat3_double(Reflection &self,
+  void Reflection_set_mat3_double(Reflection& self,
                                   std::string name,
                                   mat3<double> item) {
     self[name] = Reflection::data_type(item);
@@ -764,7 +764,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_int6(Reflection &self, std::string name, int6 item) {
+  void Reflection_set_int6(Reflection& self, std::string name, int6 item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -774,7 +774,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_miller_index(Reflection &self,
+  void Reflection_set_miller_index(Reflection& self,
                                    std::string name,
                                    cctbx::miller::index<> item) {
     self[name] = Reflection::data_type(item);
@@ -786,7 +786,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param name The name of the item
    * @param item The item
    */
-  void Reflection_set_shoebox(Reflection &self, std::string name, Shoebox<> item) {
+  void Reflection_set_shoebox(Reflection& self, std::string name, Shoebox<> item) {
     self[name] = Reflection::data_type(item);
   }
 
@@ -794,7 +794,7 @@ namespace dials { namespace af { namespace boost_python {
    * Copy the reflection
    * @param self The reflection
    */
-  Reflection Reflection_copy(const Reflection &self) {
+  Reflection Reflection_copy(const Reflection& self) {
     return Reflection(self);
   }
 
@@ -832,7 +832,7 @@ namespace dials { namespace af { namespace boost_python {
    * @param self The reflection table
    * @param output A streambuf object encapsulating a Python file-like object
    */
-  void reflection_table_as_msgpack_to_file(reflection_table self, streambuf &output) {
+  void reflection_table_as_msgpack_to_file(reflection_table self, streambuf& output) {
     streambuf::ostream os(output);
     msgpack::pack(os, self);
   }
@@ -842,7 +842,7 @@ namespace dials { namespace af { namespace boost_python {
    */
   bool reflection_table_reference_func(msgpack::type::object_type type,
                                        std::size_t length,
-                                       void *user_data) {
+                                       void* user_data) {
     return true;
   }
 
@@ -852,7 +852,7 @@ namespace dials { namespace af { namespace boost_python {
    * @returns The reflection table
    */
   reflection_table reflection_table_from_msgpack(boost::python::object packed) {
-    const char *data = PyBytes_AsString(packed.ptr());
+    const char* data = PyBytes_AsString(packed.ptr());
     std::size_t size = PyBytes_Size(packed.ptr());
     msgpack::unpacked result;
     std::size_t off = 0;
@@ -868,7 +868,7 @@ namespace dials { namespace af { namespace boost_python {
     typedef reflection_table flex_table_type;
     typedef reflection_table::const_iterator const_iterator;
 
-    static boost::python::tuple getstate(const flex_table_type &self) {
+    static boost::python::tuple getstate(const flex_table_type& self) {
       DIALS_ASSERT(self.is_consistent());
       unsigned int version = 2;
 
@@ -893,7 +893,7 @@ namespace dials { namespace af { namespace boost_python {
         version, identifiers, self.nrows(), self.ncols(), columns);
     }
 
-    static void setstate(flex_table_type &self, boost::python::tuple state) {
+    static void setstate(flex_table_type& self, boost::python::tuple state) {
       DIALS_ASSERT(boost::python::len(state) > 0);
       std::size_t version = extract<unsigned int>(state[0]);
       if (version == 1) {
@@ -905,7 +905,7 @@ namespace dials { namespace af { namespace boost_python {
       }
     }
 
-    static void setstate_version_1(flex_table_type &self, boost::python::tuple state) {
+    static void setstate_version_1(flex_table_type& self, boost::python::tuple state) {
       DIALS_ASSERT(boost::python::len(state) == 4);
       DIALS_ASSERT(extract<unsigned int>(state[0]) == 1);
       std::size_t nrows = extract<std::size_t>(state[1]);
@@ -927,7 +927,7 @@ namespace dials { namespace af { namespace boost_python {
       DIALS_ASSERT(self.is_consistent());
     }
 
-    static void setstate_version_2(flex_table_type &self, boost::python::tuple state) {
+    static void setstate_version_2(flex_table_type& self, boost::python::tuple state) {
       DIALS_ASSERT(boost::python::len(state) == 5);
       DIALS_ASSERT(extract<unsigned int>(state[0]) == 2);
 
@@ -975,7 +975,7 @@ namespace dials { namespace af { namespace boost_python {
     /**
      * Wrap the reflection table class
      */
-    static class_type wrap(const char *name) {
+    static class_type wrap(const char* name) {
       // Wrap with flex table bindings
       class_type result = base_type::wrap(name);
 
@@ -1062,7 +1062,7 @@ namespace dials { namespace af { namespace boost_python {
     /**
      * Get an item
      */
-    std::string getitem(const reflection_table::experiment_map_type &self,
+    std::string getitem(const reflection_table::experiment_map_type& self,
                         std::size_t index) {
       typedef reflection_table::experiment_map_type::const_iterator iterator;
       iterator it = self.find(index);
@@ -1073,7 +1073,7 @@ namespace dials { namespace af { namespace boost_python {
     /**
      * Set an item
      */
-    void setitem(reflection_table::experiment_map_type &self,
+    void setitem(reflection_table::experiment_map_type& self,
                  std::size_t index,
                  std::string value) {
       self[index] = value;
@@ -1082,14 +1082,14 @@ namespace dials { namespace af { namespace boost_python {
     /**
      * Del an item
      */
-    void delitem(reflection_table::experiment_map_type &self, std::size_t index) {
+    void delitem(reflection_table::experiment_map_type& self, std::size_t index) {
       self.erase(index);
     }
 
     /**
      * Check if the map contains an item
      */
-    bool contains(const reflection_table::experiment_map_type &self,
+    bool contains(const reflection_table::experiment_map_type& self,
                   std::size_t index) {
       return self.find(index) != self.end();
     }
@@ -1097,7 +1097,7 @@ namespace dials { namespace af { namespace boost_python {
     /**
      * Get the keys
      */
-    af::shared<std::size_t> keys(const reflection_table::experiment_map_type &self) {
+    af::shared<std::size_t> keys(const reflection_table::experiment_map_type& self) {
       typedef reflection_table::experiment_map_type::const_iterator iterator;
       af::shared<std::size_t> k;
       for (iterator it = self.begin(); it != self.end(); ++it) {
@@ -1109,7 +1109,7 @@ namespace dials { namespace af { namespace boost_python {
     /**
      * Get the values
      */
-    af::shared<std::string> values(const reflection_table::experiment_map_type &self) {
+    af::shared<std::string> values(const reflection_table::experiment_map_type& self) {
       typedef reflection_table::experiment_map_type::const_iterator iterator;
       af::shared<std::string> v;
       for (iterator it = self.begin(); it != self.end(); ++it) {
@@ -1127,17 +1127,17 @@ namespace dials { namespace af { namespace boost_python {
       typedef ptrdiff_t difference_type;
       typedef std::forward_iterator_tag iterator_category;
       typedef boost::python::tuple value_type;
-      typedef const value_type *pointer;
+      typedef const value_type* pointer;
       typedef const value_type reference;
 
-      iterator(const map_type::const_iterator &it) : it_(it) {}
+      iterator(const map_type::const_iterator& it) : it_(it) {}
 
       reference operator*() {
         boost::python::tuple result;
         return boost::python::make_tuple(it_->first, it_->second);
       }
 
-      iterator &operator++() {
+      iterator& operator++() {
         ++it_;
         return *this;
       }
@@ -1148,11 +1148,11 @@ namespace dials { namespace af { namespace boost_python {
         return result;
       }
 
-      bool operator==(const iterator &rhs) const {
+      bool operator==(const iterator& rhs) const {
         return it_ == rhs.it_;
       }
 
-      bool operator!=(const iterator &rhs) const {
+      bool operator!=(const iterator& rhs) const {
         return !(*this == rhs);
       }
 
@@ -1164,11 +1164,11 @@ namespace dials { namespace af { namespace boost_python {
      * Map the iterator range
      */
     struct make_iterator {
-      static iterator begin(const reflection_table::experiment_map_type &self) {
+      static iterator begin(const reflection_table::experiment_map_type& self) {
         return iterator(self.begin());
       }
 
-      static iterator end(const reflection_table::experiment_map_type &self) {
+      static iterator end(const reflection_table::experiment_map_type& self) {
         return iterator(self.end());
       }
 

@@ -4,12 +4,12 @@ import datetime
 import logging
 from collections import Counter
 
-from dxtbx.imageset import ImageSequence
-from libtbx.phil import parse
-
 from dials.util import log, show_mail_handle_errors, tabulate
 from dials.util.options import ArgumentParser, flatten_experiments
 from dials.util.version import dials_version
+
+from dxtbx.imageset import ImageSequence
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials.command_line.find_shared_models")
 

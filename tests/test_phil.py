@@ -14,8 +14,7 @@ def test(ExperimentListFactory, dials_data):
     reflections_path1 = path.join("integrated.pickle").strpath
     reflections_path2 = path.join("integrated.refl").strpath
 
-    phil_scope = dials.util.phil.parse(
-        """
+    phil_scope = dials.util.phil.parse("""
     input {
       reflections1 = %s
         .type = reflection_table
@@ -24,9 +23,7 @@ def test(ExperimentListFactory, dials_data):
       experiments = %s
         .type = experiment_list
     }
-  """
-        % (reflections_path1, reflections_path2, experiments_path)
-    )
+  """ % (reflections_path1, reflections_path2, experiments_path))
 
     params = phil_scope.extract()
 

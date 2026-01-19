@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import List
 
-import libtbx.phil
-from dxtbx.model import ExperimentList
-
 import dials.util
 from dials.command_line.dials_import import ManualGeometryUpdater
 from dials.util.options import ArgumentParser, flatten_experiments
+
+import libtbx.phil
+from dxtbx.model import ExperimentList
 
 help_message = """
 """
@@ -27,7 +27,6 @@ output {
 def update(
     experiments: ExperimentList, new_params: libtbx.phil.scope_extract
 ) -> ExperimentList:
-
     """
     Modify detector, beam, goniometer and scan in experiments with the values in new_params
     """

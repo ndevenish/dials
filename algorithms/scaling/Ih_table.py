@@ -11,15 +11,14 @@ from typing import List, Optional, Union
 
 import numpy as np
 import pandas as pd
+from dials.algorithms.scaling.error_model.error_model import BasicErrorModel
+from dials.array_family import flex
 from orderedset import OrderedSet
 from scipy.sparse import csc_matrix
 
 from cctbx import crystal, miller, sgtbx, uctbx
 from dxtbx import flumpy
 from scitbx import sparse
-
-from dials.algorithms.scaling.error_model.error_model import BasicErrorModel
-from dials.array_family import flex
 
 
 def map_indices_to_asu(miller_indices, space_group, anomalous=False):
@@ -153,9 +152,9 @@ class IhTable:
             data_for_block = data[block.block_selections[dataset_id]]
             start = block.dataset_info[dataset_id]["start_index"]
             end = block.dataset_info[dataset_id]["end_index"]
-            block.Ih_table.loc[
-                np.arange(start=start, stop=end), column
-            ] = data_for_block
+            block.Ih_table.loc[np.arange(start=start, stop=end), column] = (
+                data_for_block
+            )
 
     def get_block_selections_for_dataset(self, dataset: int) -> List[flex.size_t]:
         """Generate the block selection list for a given dataset."""
@@ -529,17 +528,13 @@ class IhTableBlock:
         Add data to the Ih_table, write data to the h_index_matrix and
         add the loc indices to the block_selections list.
         """
-        assert not self._setup_info[
-            "setup_complete"
-        ], """
+        assert not self._setup_info["setup_complete"], """
 No further data can be added to the IhTableBlock as setup marked complete."""
         assert (
             self._setup_info["next_row"] + len(group_ids) <= self.h_index_matrix.n_rows
         ), """
 Not enough space left to add this data, please check for correct block initialisation."""
-        assert (
-            dataset_id == self._setup_info["next_dataset"]
-        ), """
+        assert dataset_id == self._setup_info["next_dataset"], """
 Datasets must be added in correct order: expected: {}, this dataset: {}""".format(
             self._setup_info["next_dataset"],
             dataset_id,
@@ -575,9 +570,7 @@ Datasets must be added in correct order: expected: {}, this dataset: {}""".forma
     def _complete_setup(self) -> None:
         """Finish the setup of the Ih_table once all data has been added."""
         self.h_index_matrix.compact()
-        assert (
-            self._setup_info["next_row"] == self.h_index_matrix.n_rows
-        ), """
+        assert self._setup_info["next_row"] == self.h_index_matrix.n_rows, """
 Not all rows of h_index_matrix appear to be filled in IhTableBlock setup."""
         self.h_expand_matrix = self.h_index_matrix.transpose()
         data = np.full(self._csc_cols.size, 1.0)
@@ -823,10 +816,8 @@ Not all rows of h_index_matrix appear to be filled in IhTableBlock setup."""
         elif output == "per_refl":  # return the summed quantity per reflection
             return (array @ self._csc_h_index_matrix) @ self._csc_h_expand_matrix
         else:
-            raise ValueError(
-                f"""Bad value for output= parameter
-(value={output}, allowed values: per_group, per_refl)"""
-            )
+            raise ValueError(f"""Bad value for output= parameter
+(value={output}, allowed values: per_group, per_refl)""")
 
     def as_reflection_table(self) -> flex.reflection_table:
         """Return the data in flex reflection table format"""

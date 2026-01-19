@@ -5,14 +5,13 @@ import math
 from typing import List
 
 import numpy as np
+from dials.algorithms.clustering import plots as cluster_plotter
+from dials.util import tabulate
 from jinja2 import ChoiceLoader, Environment, PackageLoader
 
 from scitbx.array_family import flex
 from xfel.clustering.cluster import Cluster
 from xfel.clustering.cluster_groups import unit_cell_info
-
-from dials.algorithms.clustering import plots as cluster_plotter
-from dials.util import tabulate
 
 logger = logging.getLogger("dials.algorithms.indexing.ssx.analysis")
 
@@ -116,12 +115,10 @@ def report_on_crystal_clusters(crystal_symmetries, make_plots=True):
     large_clusters.sort(key=lambda x: len(x.members), reverse=True)
 
     if large_clusters:
-        logger.info(
-            f"""
+        logger.info(f"""
 Unit cell clustering analysis, clusters with >{min_cluster_pc}% of the number of crystals indexed
 {unit_cell_info(large_clusters)}
-"""
-        )
+""")
         if make_plots:
             cluster_plots = make_cluster_plots(large_clusters)
     else:

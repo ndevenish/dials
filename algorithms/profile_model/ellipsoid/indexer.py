@@ -4,14 +4,13 @@ import logging
 from math import floor, sqrt
 
 import numpy as np
+from dials.algorithms.profile_model.ellipsoid import chisq_quantile
+from dials.algorithms.statistics.fast_mcd import FastMCD, maha_dist_sq
 from numpy.linalg import inv, norm
 
 from cctbx.array_family import flex
 from dxtbx import flumpy
 from scitbx import matrix
-
-from dials.algorithms.profile_model.ellipsoid import chisq_quantile
-from dials.algorithms.statistics.fast_mcd import FastMCD, maha_dist_sq
 
 logger = logging.getLogger("dials")
 
@@ -173,12 +172,9 @@ def _filter_reflections_based_on_centroid_distance(
     logger.info(" Mean Y RMSD: %f" % (sqrt(flex.sum(Yres**2) / len(Yres))))
     logger.info(" Mean E RMSD: %f" % (sqrt(flex.sum(Eres**2) / len(Eres))))
     logger.info(" MCD location estimate: %.4f, %.4f" % tuple(T))
-    logger.info(
-        """ MCD scatter estimate:
+    logger.info(""" MCD scatter estimate:
     %.7f, %.7f,
-    %.7f, %.7f"""
-        % tuple(S)
-    )
+    %.7f, %.7f""" % tuple(S))
     logger.info(" Number of outliers: %d" % selection1.count(False))
     logger.info(
         " Number of reflections with residual > %0.2f pixels: %d"

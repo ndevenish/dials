@@ -9,14 +9,6 @@ import logging
 import math
 import typing
 
-import iotbx.merging_statistics
-import iotbx.mtz
-import iotbx.phil
-from cctbx import miller, uctbx
-from cctbx.array_family import flex
-from iotbx.reflection_file_utils import label_table
-from scitbx.math import curve_fitting, five_number_summary
-
 from dials.algorithms.scaling.scaling_library import determine_best_unit_cell
 from dials.report import plots
 from dials.util import Sorry, tabulate
@@ -26,6 +18,14 @@ from dials.util.batch_handling import (
 )
 from dials.util.filter_reflections import filter_reflection_table
 from dials.util.normalisation import quasi_normalisation
+
+import iotbx.merging_statistics
+import iotbx.mtz
+import iotbx.phil
+from cctbx import miller, uctbx
+from cctbx.array_family import flex
+from iotbx.reflection_file_utils import label_table
+from scitbx.math import curve_fitting, five_number_summary
 
 logger = logging.getLogger(__name__)
 
@@ -226,9 +226,11 @@ def _get_cc_half_critical_values(merging_stats, cc_half_method):
         ).reversed()
     elif merging_stats.overall.cc_one_half_critical_value is not None:
         critical = [
-            b.cc_one_half_critical_value
-            if b.cc_one_half_critical_value is not None
-            else 0.0
+            (
+                b.cc_one_half_critical_value
+                if b.cc_one_half_critical_value is not None
+                else 0.0
+            )
             for b in merging_stats.bins
         ]
         return flex.double(critical).reversed()
@@ -407,16 +409,13 @@ phil_str = """
 """
 
 
-phil_defaults = iotbx.phil.parse(
-    """
+phil_defaults = iotbx.phil.parse("""
 resolution {
 %s
   batch_range = None
     .type = ints(size=2, value_min=0)
 }
-"""
-    % phil_str
-)
+""" % phil_str)
 
 
 def plot_result(metric, result):
@@ -622,9 +621,9 @@ class Resolutionizer:
                 self._merging_statistics,
                 limit,
                 cc_half_method=self._params.cc_half_method,
-                model=tanh_fit
-                if self._params.cc_half_fit == "tanh"
-                else polynomial_fit,
+                model=(
+                    tanh_fit if self._params.cc_half_fit == "tanh" else polynomial_fit
+                ),
             )
         elif metric == metrics.CC_REF:
             return self._resolution_cc_ref(limit=self._params.cc_ref)

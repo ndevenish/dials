@@ -8,11 +8,6 @@ import sys
 import time
 import urllib.parse
 
-import libtbx.phil
-from cctbx import uctbx
-from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx.introspection import number_of_processors
-
 from dials.algorithms.indexing import indexer
 from dials.algorithms.integration.integrator import create_integrator
 from dials.algorithms.profile_model.factory import ProfileModelFactory
@@ -23,6 +18,11 @@ from dials.command_line.index import phil_scope as index_phil_scope
 from dials.command_line.integrate import phil_scope as integrate_phil_scope
 from dials.util import Sorry, show_mail_handle_errors
 from dials.util.options import ArgumentParser
+
+import libtbx.phil
+from cctbx import uctbx
+from dxtbx.model.experiment_list import ExperimentListFactory
+from libtbx.introspection import number_of_processors
 
 logger = logging.getLogger("dials.command_line.find_spots_server")
 
@@ -99,8 +99,7 @@ def work(filename, cl=None):
     if cl is None:
         cl = []
 
-    phil_scope = libtbx.phil.parse(
-        """\
+    phil_scope = libtbx.phil.parse("""\
 ice_rings {
   filter = True
     .type = bool
@@ -113,8 +112,7 @@ integrate = False
   .type = bool
 indexing_min_spots = 10
   .type = int(value_min=1)
-"""
-    )
+""")
     interp = phil_scope.command_line_argument_interpreter()
     params, unhandled = interp.process_and_fetch(
         cl, custom_processor="collect_remaining"
@@ -250,12 +248,10 @@ indexing_min_spots = 10
                 assert len(matched) == len(predicted)
                 assert matched.count(True) <= len(reference)
                 if matched.count(True) == 0:
-                    raise Sorry(
-                        """
+                    raise Sorry("""
             Invalid input for reference reflections.
             Zero reference spots were matched to predictions
-          """
-                    )
+          """)
                 elif matched.count(True) != len(reference):
                     logger.info("")
                     logger.info("*" * 80)
@@ -336,14 +332,12 @@ def serve(httpd):
         pass
 
 
-phil_scope = libtbx.phil.parse(
-    """\
+phil_scope = libtbx.phil.parse("""\
 nproc = Auto
   .type = int(value_min=1)
 port = 1701
   .type = int(value_min=1)
-"""
-)
+""")
 
 
 def main(nproc, port):

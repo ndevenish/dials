@@ -4,13 +4,12 @@ import os
 import pickle
 import shutil
 
+import dials.command_line.find_spots
 import procrunner
 import pytest
+from dials.array_family import flex
 
 from dxtbx.model.experiment_list import ExperimentListFactory
-
-import dials.command_line.find_spots
-from dials.array_family import flex
 
 
 def _check_expected_results(reflections):

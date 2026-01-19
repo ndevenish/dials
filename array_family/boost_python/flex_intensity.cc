@@ -31,7 +31,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of observed intensity values */
   static af::shared<double> intensity_observed_value(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<double> result(obj.size(), af::init_functor_null<double>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].observed.value;
@@ -41,7 +41,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of observed intensity variances */
   static af::shared<double> intensity_observed_variance(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<double> result(obj.size(), af::init_functor_null<double>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].observed.variance;
@@ -51,7 +51,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of success values */
   static af::shared<bool> intensity_observed_success(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<bool> result(obj.size(), af::init_functor_null<bool>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].observed.success;
@@ -61,7 +61,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of corrected intensity values */
   static af::shared<double> intensity_corrected_value(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<double> result(obj.size(), af::init_functor_null<double>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].corrected.value;
@@ -71,7 +71,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of corrected intensity variances */
   static af::shared<double> intensity_corrected_variance(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<double> result(obj.size(), af::init_functor_null<double>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].corrected.variance;
@@ -81,7 +81,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of background intensity values */
   static af::shared<double> intensity_background_value(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<double> result(obj.size(), af::init_functor_null<double>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].background.value;
@@ -91,7 +91,7 @@ namespace dials { namespace af { namespace boost_python {
 
   /** @returns An array of background intensity variances */
   static af::shared<double> intensity_background_variance(
-    const af::const_ref<Intensity> &obj) {
+    const af::const_ref<Intensity>& obj) {
     af::shared<double> result(obj.size(), af::init_functor_null<double>());
     for (std::size_t i = 0; i < result.size(); ++i) {
       result[i] = obj[i].background.variance;

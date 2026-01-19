@@ -1,14 +1,13 @@
 """Analysis of centroid residuals for determining suitable refinement and
 outlier rejection parameters automatically"""
 
-
 from __future__ import annotations
 
 import math
 
-from scitbx.math.periodogram import Periodogram
-
 from dials.array_family import flex
+
+from scitbx.math.periodogram import Periodogram
 
 RAD2DEG = 180.0 / math.pi
 

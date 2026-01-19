@@ -6,6 +6,10 @@ import logging
 import pickle
 from collections import namedtuple
 
+from dials.util import Sorry, show_mail_handle_errors
+from dials.util.multi_dataset_handling import generate_experiment_identifiers
+from dials.util.options import flatten_experiments
+
 import dxtbx.model.compare as compare
 from dxtbx.imageset import ImageGrid, ImageSequence
 from dxtbx.model.experiment_list import (
@@ -14,10 +18,6 @@ from dxtbx.model.experiment_list import (
     ExperimentListFactory,
 )
 from libtbx.phil import parse
-
-from dials.util import Sorry, show_mail_handle_errors
-from dials.util.multi_dataset_handling import generate_experiment_identifiers
-from dials.util.options import flatten_experiments
 
 logger = logging.getLogger("dials.command_line.import")
 
@@ -531,8 +531,7 @@ class MetaDataUpdater:
 
             # Check beam and detector are present
             if imageset.get_beam() is None or imageset.get_detector() is None:
-                raise Sorry(
-                    """
+                raise Sorry("""
           Imageset contains no beam or detector model. This means you will be
           unable to process your data.
 
@@ -541,8 +540,7 @@ class MetaDataUpdater:
              - A lack of header information in the file itself.
 
           You can override this by specifying the metadata as geometry parameters
-        """
-                )
+        """)
 
             # Check if dx and dy are set
             if [
@@ -554,11 +552,9 @@ class MetaDataUpdater:
                 imageset.external_lookup.dx.filename,
                 imageset.external_lookup.dy.filename,
             ].count(None) == 1:
-                raise Sorry(
-                    """
+                raise Sorry("""
           Only 1 offset map is set. Need to set both dx and d
-        """
-                )
+        """)
 
             # Append to new imageset list
             if isinstance(imageset, ImageSequence):
@@ -903,8 +899,7 @@ class ImageImporter:
             self.diagnose_multiple_sequences(sequences, params)
 
             # Raise exception
-            raise Sorry(
-                """
+            raise Sorry("""
         More than 1 sequence was found. Two things may be happening here:
 
         1. There really is more than 1 sequence. If you expected this to be the
@@ -916,8 +911,7 @@ class ImageImporter:
            investigate what went wrong, but you can force dials.import to treat
            your images as a single sequence by using the template=image_####.cbf
            parameter (see help).
-      """
-            )
+      """)
 
     def diagnose_multiple_sequences(self, sequences, params):
         """

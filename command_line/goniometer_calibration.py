@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import dials.util
+
 import iotbx.phil
 from scitbx import matrix
-
-import dials.util
 
 help_message = """
 dials.goniometer_calibration is a tool to aid calibration of multi-axis
@@ -26,8 +26,7 @@ dials.goniometer_calibration space_group=P422 \\
 """
 
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 space_group = None
   .type = space_group
 use_space_group_from_experiments = False
@@ -36,8 +35,7 @@ output {
   xoalign = None
     .type = path
 }
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

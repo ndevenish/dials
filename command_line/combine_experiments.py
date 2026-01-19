@@ -5,6 +5,12 @@ import os
 import random
 import sys
 
+import dials.util
+from dials.algorithms.integration.stills_significance_filter import SignificanceFilter
+from dials.array_family import flex
+from dials.util import tabulate
+from dials.util.options import ArgumentParser, flatten_experiments
+
 import dxtbx.model.compare as compare
 import xfel.clustering.cluster
 from dxtbx.command_line.image_average import splitit
@@ -18,12 +24,6 @@ from dxtbx.model.experiment_list import (
 from libtbx.phil import parse
 from scitbx import matrix
 from xfel.clustering.cluster_groups import unit_cell_info
-
-import dials.util
-from dials.algorithms.integration.stills_significance_filter import SignificanceFilter
-from dials.array_family import flex
-from dials.util import tabulate
-from dials.util.options import ArgumentParser, flatten_experiments
 
 logger = logging.getLogger(__name__)
 
@@ -561,7 +561,7 @@ class Script:
                     experiments.append(combine(exp))
                 except ComparisonError as e:
                     # When we failed tolerance checks, give a useful error message
-                    (path, index) = find_experiment_in(exp, params.input.experiments)
+                    path, index = find_experiment_in(exp, params.input.experiments)
                     sys.exit(
                         "Model didn't match reference within required tolerance for experiment {} in {}:"
                         "\n{}\nAdjust tolerances or set compare_models=False to ignore differences.".format(

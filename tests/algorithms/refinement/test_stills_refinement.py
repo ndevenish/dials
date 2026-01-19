@@ -3,26 +3,12 @@ A simple test of stills refinement using fake data.
 Only the crystal is perturbed while the beam and detector are known.
 """
 
-
 from __future__ import annotations
 
 
 def test(args=[]):
     # Python and cctbx imports
     from math import pi
-
-    from cctbx.sgtbx import space_group, space_group_symbols
-
-    # Symmetry constrained parameterisation for the unit cell
-    from cctbx.uctbx import unit_cell
-
-    # We will set up a mock scan and a mock experiment list
-    from dxtbx.model import ScanFactory
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-    from libtbx.phil import parse
-    from libtbx.test_utils import approx_equal
-    from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
-    from scitbx import matrix
 
     # Get module to build models using PHIL
     import dials.tests.algorithms.refinement.setup_geometry as setup_geometry
@@ -42,6 +28,19 @@ def test(args=[]):
 
     # Import for surgery on reflection_tables
     from dials.array_family import flex
+
+    from cctbx.sgtbx import space_group, space_group_symbols
+
+    # Symmetry constrained parameterisation for the unit cell
+    from cctbx.uctbx import unit_cell
+
+    # We will set up a mock scan and a mock experiment list
+    from dxtbx.model import ScanFactory
+    from dxtbx.model.experiment_list import Experiment, ExperimentList
+    from libtbx.phil import parse
+    from libtbx.test_utils import approx_equal
+    from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+    from scitbx import matrix
 
     #############################
     # Setup experimental models #

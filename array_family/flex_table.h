@@ -64,11 +64,11 @@ namespace dials { namespace af {
      * Visitor to copy a column from mapped type
      */
     struct copy_column_visitor : public boost::static_visitor<void> {
-      flex_table *t_;
+      flex_table* t_;
       key_type k_;
-      copy_column_visitor(flex_table *t, key_type &k) : t_(t), k_(k) {}
+      copy_column_visitor(flex_table* t, key_type& k) : t_(t), k_(k) {}
       template <typename T>
-      void operator()(const af::shared<T> &other_column) const {
+      void operator()(const af::shared<T>& other_column) const {
         size_type n = t_->nrows();
         boost::shared_ptr<map_type> table = t_->table_;
         iterator it = table->lower_bound(k_);
@@ -88,10 +88,10 @@ namespace dials { namespace af {
      * operator[] proxy to aid in returning and casting elements.
      */
     struct proxy {
-      flex_table *t_;
+      flex_table* t_;
       key_type k_;
 
-      proxy(flex_table *t, key_type k) : t_(t), k_(k) {}
+      proxy(flex_table* t, key_type k) : t_(t), k_(k) {}
 
       /**
        * Assign a column.
@@ -108,7 +108,7 @@ namespace dials { namespace af {
       /**
        * Assign a column
        */
-      void operator=(const mapped_type &item) {
+      void operator=(const mapped_type& item) {
         copy_column_visitor visitor(t_, k_);
         item.apply_visitor(visitor);
       }
@@ -116,7 +116,7 @@ namespace dials { namespace af {
       /**
        * Assign from another proxy
        */
-      void operator=(const proxy &p) {
+      void operator=(const proxy& p) {
         (*this) = p.variant();
       }
 
@@ -173,7 +173,7 @@ namespace dials { namespace af {
     /** Get the size of each column */
     struct size_visitor : boost::static_visitor<size_type> {
       template <typename T>
-      size_type operator()(const T &v) const {
+      size_type operator()(const T& v) const {
         return v.size();
       }
     };
@@ -183,7 +183,7 @@ namespace dials { namespace af {
       size_type n_;
       resize_visitor(size_type n) : n_(n) {}
       template <typename T>
-      void operator()(T &v) const {
+      void operator()(T& v) const {
         v.resize(n_);
       }
     };
@@ -193,7 +193,7 @@ namespace dials { namespace af {
       size_type pos, n;
       insert_visitor(size_type pos_, size_type n_) : pos(pos_), n(n_) {}
       template <typename T>
-      void operator()(T &v) const {
+      void operator()(T& v) const {
         v.insert(v.begin() + pos, n, typename T::value_type());
       }
     };
@@ -203,7 +203,7 @@ namespace dials { namespace af {
       size_type pos, n;
       erase_visitor(size_type pos_, size_type n_) : pos(pos_), n(n_) {}
       template <typename T>
-      void operator()(T &v) const {
+      void operator()(T& v) const {
         typename T::iterator first = v.begin() + pos;
         typename T::iterator last = first + n;
         v.erase(first, last);
@@ -231,7 +231,7 @@ namespace dials { namespace af {
      * @param key The column name
      * @returns The proxy object to access the column data
      */
-    proxy operator[](const key_type &key) {
+    proxy operator[](const key_type& key) {
       return proxy(this, key);
     }
 
@@ -241,7 +241,7 @@ namespace dials { namespace af {
      * @returns The column.
      */
     template <typename T>
-    af::shared<T> get(const key_type &key) {
+    af::shared<T> get(const key_type& key) {
       af::shared<T> result = proxy(this, key);
       return result;
     }
@@ -252,7 +252,7 @@ namespace dials { namespace af {
      * @returns The column.
      */
     template <typename T>
-    af::shared<T> get(const key_type &key) const {
+    af::shared<T> get(const key_type& key) const {
       const_iterator it = find(key);
       DIALS_ASSERT(it != end());
       return boost::get<af::shared<T> >(it->second);
@@ -325,7 +325,7 @@ namespace dials { namespace af {
     }
 
     /** @returns The number of columns matching the key (0 or 1) */
-    size_type count(const key_type &key) const {
+    size_type count(const key_type& key) const {
       return table_->count(key);
     }
 
@@ -334,7 +334,7 @@ namespace dials { namespace af {
      * @param key The column name
      * @returns An iterator to the column
      */
-    iterator find(const key_type &key) {
+    iterator find(const key_type& key) {
       return table_->find(key);
     }
 
@@ -343,7 +343,7 @@ namespace dials { namespace af {
      * @param key The column name
      * @returns A const iterator to the column
      */
-    const_iterator find(const key_type &key) const {
+    const_iterator find(const key_type& key) const {
       return table_->find(key);
     }
 
@@ -414,7 +414,7 @@ namespace dials { namespace af {
      * @param key The column name
      * @returns The number of columns removed
      */
-    size_type erase(const key_type &key) {
+    size_type erase(const key_type& key) {
       return table_->erase(key);
     }
 
@@ -425,7 +425,7 @@ namespace dials { namespace af {
     }
 
     /** @returns Does the table contain the key. */
-    bool contains(const key_type &key) const {
+    bool contains(const key_type& key) const {
       const_iterator it = find(key);
       return it != end();
     }

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import iotbx.phil
-from cctbx.array_family import flex
-
 import dials.algorithms.indexing.compare_orientation_matrices
 import dials.util
 from dials.util.options import ArgumentParser, flatten_experiments
+
+import iotbx.phil
+from cctbx.array_family import flex
 
 help_message = """
 
@@ -25,8 +25,7 @@ Examples::
 """
 
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 hkl = None
   .type = ints(size=3)
   .multiple=True
@@ -34,8 +33,7 @@ comparison = *pairwise sequential
   .type = choice
 space_group = None
   .type = space_group
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

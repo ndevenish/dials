@@ -7,11 +7,6 @@ import logging
 import math
 import random
 
-import libtbx
-from libtbx.phil import parse
-from scitbx import matrix
-from scitbx.math import five_number_summary
-
 import dials.util
 from dials.algorithms.refinement import DialsRefineConfigError, weighting_strategies
 from dials.algorithms.refinement.analysis.centroid_analysis import CentroidAnalyser
@@ -24,6 +19,11 @@ from dials.algorithms.refinement.refinement_helpers import (
 )
 from dials.array_family import flex
 
+import libtbx
+from libtbx.phil import parse
+from scitbx import matrix
+from scitbx.math import five_number_summary
+
 logger = logging.getLogger(__name__)
 
 # constants
@@ -32,8 +32,7 @@ DEG2RAD = math.pi / 180.0
 
 # PHIL
 format_data = {"outlier_phil": outlier_phil_str}
-phil_str = (
-    """
+phil_str = """
     reflections_per_degree = Auto
       .help = "The number of centroids per degree of the sequence to use in"
               "refinement. The default (Auto) uses all reflections unless"
@@ -105,9 +104,7 @@ phil_str = (
     }
 
     %(outlier_phil)s
-"""
-    % format_data
-)
+""" % format_data
 phil_scope = parse(phil_str)
 
 

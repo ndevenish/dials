@@ -6,12 +6,11 @@ import pathlib
 
 import procrunner
 import pytest
+from dials.command_line import cluster_unit_cell
 
 from cctbx import crystal
 from dxtbx.model.experiment_list import ExperimentList, ExperimentListFactory
 from dxtbx.serialize import load
-
-from dials.command_line import cluster_unit_cell
 
 
 def test_dials_cluster_unit_cell_command_line(dials_regression, run_in_tmpdir):

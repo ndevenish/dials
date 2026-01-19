@@ -14,15 +14,11 @@ Examples::
   dials.refine indexed.expt indexed.refl scan_varying=(False/True/Auto)
 """
 
-
 from __future__ import annotations
 
 import copy
 import logging
 import sys
-
-import libtbx.phil
-from libtbx import Auto
 
 import dials.util
 import dials.util.log
@@ -35,6 +31,9 @@ from dials.algorithms.refinement.corrgram import create_correlation_plots
 from dials.array_family import flex
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+
+import libtbx.phil
+from libtbx import Auto
 
 logger = logging.getLogger("dials.command_line.refine")
 
@@ -96,16 +95,14 @@ phil_scope = libtbx.phil.parse(
 )
 
 # local overrides for refiner.phil_scope
-phil_overrides = libtbx.phil.parse(
-    """
+phil_overrides = libtbx.phil.parse("""
   refinement
   {
     parameterisation.scan_varying = Auto
 
     reflections.outlier.nproc = Auto
   }
-"""
-)
+""")
 
 working_phil = phil_scope.fetch(sources=[phil_overrides])
 
@@ -136,7 +133,7 @@ def write_centroids_table(refiner, filename):
         f.write(header)
 
         for m in matches:
-            (h, k, l) = m["miller_index"]
+            h, k, l = m["miller_index"]
             frame = m["xyzobs.px.value"][2]
             x_obs, y_obs, phi_obs = m["xyzobs.mm.value"]
             x_calc, y_calc, phi_calc = m["xyzcal.mm"]

@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import pytest
-
-from cctbx import sgtbx
-from cctbx.sgtbx.lattice_symmetry import metric_subgroups
-
 from dials.algorithms.symmetry.cosym._generate_test_data import generate_intensities
 from dials.algorithms.symmetry.laue_group import (
     ScoreCorrelationCoefficient,
     ScoreSubGroup,
     ScoreSymmetryElement,
 )
+
+from cctbx import sgtbx
+from cctbx.sgtbx.lattice_symmetry import metric_subgroups
 
 
 def test_score_correlation_coefficient():

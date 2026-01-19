@@ -3,11 +3,10 @@ from __future__ import annotations
 import math
 
 import pytest
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from dials.algorithms.refinement.reflection_manager import ReflectionManager
 from dials.array_family import flex
+
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def test_scan_margin(dials_data):

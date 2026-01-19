@@ -32,11 +32,6 @@ from __future__ import annotations
 from unittest import mock
 
 import pytest
-
-from cctbx import miller
-from dxtbx.model import Crystal, Experiment, ExperimentList
-from dxtbx.model.experiment_list import ExperimentListFactory
-
 from dials.array_family import flex
 from dials.util.filter_reflections import (
     AllSumPrfScaleIntensityReducer,
@@ -54,6 +49,10 @@ from dials.util.filter_reflections import (
     filtered_arrays_from_experiments_reflections,
     sum_partial_reflections,
 )
+
+from cctbx import miller
+from dxtbx.model import Crystal, Experiment, ExperimentList
+from dxtbx.model.experiment_list import ExperimentListFactory
 
 
 def generate_simple_table():

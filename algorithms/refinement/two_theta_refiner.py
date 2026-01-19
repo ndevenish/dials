@@ -1,13 +1,9 @@
 """Versions of refinement classes for two theta refinement of the unit cell"""
 
-
 from __future__ import annotations
 
 import logging
 from math import pi, sqrt
-
-from scitbx import matrix
-from scitbx.math import five_number_summary
 
 from dials.algorithms.refinement.parameterisation.prediction_parameters import (
     PredictionParameterisation,
@@ -19,6 +15,9 @@ from dials.algorithms.refinement.reflection_manager import ReflectionManager
 from dials.algorithms.refinement.target import Target
 from dials.array_family import flex
 from dials.util import tabulate
+
+from scitbx import matrix
+from scitbx.math import five_number_summary
 
 logger = logging.getLogger(__name__)
 

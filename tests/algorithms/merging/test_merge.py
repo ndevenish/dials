@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import pytest
+from dials.algorithms.merging.merge import dano_over_sigdano
 
 from cctbx import crystal, miller
 from scitbx.array_family import flex
-
-from dials.algorithms.merging.merge import dano_over_sigdano
 
 
 def test_dano_over_sigdano():

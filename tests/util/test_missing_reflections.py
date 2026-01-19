@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from cctbx import miller
-from dxtbx.model import ExperimentList
-
 from dials.algorithms.spot_prediction import ScanStaticReflectionPredictor
 from dials.util import missing_reflections
+
+from cctbx import miller
+from dxtbx.model import ExperimentList
 
 
 def test_connected_components(dials_data):

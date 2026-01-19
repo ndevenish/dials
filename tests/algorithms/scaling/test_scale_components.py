@@ -7,9 +7,6 @@ from __future__ import annotations
 from math import exp
 
 import pytest
-
-from scitbx import sparse
-
 from dials.algorithms.scaling.model.components.scale_components import (
     ScaleComponentBase,
     SHScaleComponent,
@@ -24,6 +21,8 @@ from dials.algorithms.scaling.model.components.smooth_scale_components import (
     SmoothScaleComponent3D,
 )
 from dials.array_family import flex
+
+from scitbx import sparse
 
 
 def test_ScaleComponentBase():

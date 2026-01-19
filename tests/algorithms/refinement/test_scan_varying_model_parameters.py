@@ -5,12 +5,6 @@ import random
 import textwrap
 
 import pytest
-
-from dxtbx.model import Beam, Crystal, Goniometer
-from libtbx.test_utils import approx_equal
-from scitbx import matrix
-from scitbx.array_family import flex
-
 from dials.algorithms.refinement.parameterisation.scan_varying_beam_parameters import (
     ScanVaryingBeamParameterisation,
 )
@@ -29,6 +23,11 @@ from dials.algorithms.refinement.refinement_helpers import (
     get_fd_gradients,
     random_param_shift,
 )
+
+from dxtbx.model import Beam, Crystal, Goniometer
+from libtbx.test_utils import approx_equal
+from scitbx import matrix
+from scitbx.array_family import flex
 
 
 def test_gaussian_smoother(plots=False):

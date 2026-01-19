@@ -7,11 +7,6 @@ from math import log, pi, sqrt
 from typing import List
 
 import numpy as np
-from numpy.linalg import det, inv, norm
-
-from dxtbx import flumpy
-from scitbx import linalg, matrix
-
 from dials.algorithms.profile_model.ellipsoid import mosaicity_from_eigen_decomposition
 from dials.algorithms.profile_model.ellipsoid.model import (
     compute_change_of_basis_operation,
@@ -21,6 +16,10 @@ from dials.algorithms.profile_model.ellipsoid.parameterisation import (
 )
 from dials.array_family import flex
 from dials.util import tabulate
+from numpy.linalg import det, inv, norm
+
+from dxtbx import flumpy
+from scitbx import linalg, matrix
 
 logger = logging.getLogger("dials")
 
@@ -1177,14 +1176,12 @@ def print_eigen_values_and_vectors(A):
     )
 
     mosaicity = mosaicity_from_eigen_decomposition(eigen_values)
-    logger.info(
-        f"""
+    logger.info(f"""
  Mosaicity in degrees equivalent units:
  M1 : {mosaicity[0]:.5f} degrees
  M2 : {mosaicity[1]:.5f} degrees
  M3 : {mosaicity[2]:.5f} degrees
-"""
-    )
+""")
 
 
 def print_matrix_np(A, fmt="%.3g", indent=0):

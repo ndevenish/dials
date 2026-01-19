@@ -4,13 +4,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from libtbx.phil import parse
-
 from dials.util import Sorry
 
+from libtbx.phil import parse
+
 # The phil parameters
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   prediction {
 
@@ -34,8 +33,7 @@ phil_scope = parse(
       .type = float(value_min=0)
       .help = "The padding in degrees"
   }
-"""
-)
+""")
 
 
 class ReflectionPredictor:
@@ -56,14 +54,14 @@ class ReflectionPredictor:
         :param margin: The margin of hkl to predict
         :param force_static: force scan varying prediction to be static
         """
-        from dxtbx.imageset import ImageSequence
-
         from dials.algorithms.spot_prediction import (
             ScanStaticReflectionPredictor,
             ScanVaryingReflectionPredictor,
             StillsReflectionPredictor,
         )
         from dials.array_family import flex
+
+        from dxtbx.imageset import ImageSequence
 
         class Predictor:
             def __init__(self, name, func):

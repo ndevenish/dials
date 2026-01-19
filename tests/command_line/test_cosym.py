@@ -3,17 +3,16 @@ from __future__ import annotations
 import os
 import pathlib
 
-import pytest
-
-from cctbx import sgtbx, uctbx
-from dxtbx.serialize import load
-
 import dials.command_line.cosym as dials_cosym
+import pytest
 from dials.algorithms.symmetry.cosym._generate_test_data import (
     generate_experiments_reflections,
 )
 from dials.array_family import flex
 from dials.util import Sorry
+
+from cctbx import sgtbx, uctbx
+from dxtbx.serialize import load
 
 
 @pytest.mark.parametrize(

@@ -7,13 +7,6 @@ from __future__ import annotations
 import json
 import logging
 
-from jinja2 import ChoiceLoader, Environment, PackageLoader
-from orderedset import OrderedSet
-
-from cctbx import uctbx
-from dxtbx import flumpy
-from scitbx.array_family import flex
-
 from dials.algorithms.scaling.error_model.error_model import (
     calc_deltahl,
     calc_sigmaprime,
@@ -54,6 +47,12 @@ from dials.util import tabulate
 from dials.util.batch_handling import batch_manager, get_image_ranges
 from dials.util.exclude_images import get_valid_image_ranges
 from dials.util.resolution_analysis import resolution_cc_half
+from jinja2 import ChoiceLoader, Environment, PackageLoader
+from orderedset import OrderedSet
+
+from cctbx import uctbx
+from dxtbx import flumpy
+from scitbx.array_family import flex
 
 logger = logging.getLogger("dials")
 
@@ -99,7 +98,7 @@ def print_scaling_summary(script):
     valid_ranges = get_valid_image_ranges(script.experiments)
     image_ranges = get_image_ranges(script.experiments)
     msg = []
-    for (img, valid, refl) in zip(image_ranges, valid_ranges, script.reflections):
+    for img, valid, refl in zip(image_ranges, valid_ranges, script.reflections):
         if valid:
             if len(valid) > 1 or valid[0][0] != img[0] or valid[-1][1] != img[1]:
                 msg.append(
@@ -160,9 +159,9 @@ were considered for use when refining the scaling model.
             if d_min and d_min - max_current_res > 0.005:
                 logger.info(
                     "Resolution limit suggested from CC"
-                    + "\u00BD"
+                    + "\u00bd"
                     + " fit (limit CC"
-                    + "\u00BD"
+                    + "\u00bd"
                     + "=0.3): %.2f",
                     d_min,
                 )

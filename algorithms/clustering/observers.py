@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from scitbx.array_family import flex
-
 from dials.algorithms.clustering import plots
 from dials.util.observer import Observer, singleton
+
+from scitbx.array_family import flex
 
 
 def uc_params_from_experiments(experiments):

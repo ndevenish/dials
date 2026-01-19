@@ -8,14 +8,14 @@ import sys
 from collections import defaultdict
 from typing import List, Tuple, Union
 
-from dxtbx.model import Experiment, ExperimentList
-from libtbx import Auto, phil
-
 from dials.algorithms.indexing import DialsIndexError
 from dials.algorithms.indexing.indexer import Indexer
 from dials.algorithms.indexing.max_cell import find_max_cell
 from dials.array_family import flex
 from dials.command_line.combine_experiments import CombineWithReference
+
+from dxtbx.model import Experiment, ExperimentList
+from libtbx import Auto, phil
 
 RAD2DEG = 180 / math.pi
 
@@ -245,7 +245,7 @@ def preprocess(
                     pass
         if not max_cells:
             raise ValueError("Unable to find a max cell for any images")
-        logger.info(f"Setting max cell to {max(max_cells):.1f} " + "\u212B")
+        logger.info(f"Setting max cell to {max(max_cells):.1f} " + "\u212b")
         params.indexing.max_cell = max(max_cells)
 
     # Determine which methods to try

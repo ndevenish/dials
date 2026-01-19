@@ -11,15 +11,15 @@ logger = logging.getLogger(__name__)
 
 from io import StringIO
 
+from dials.util import resolution_analysis
+from dials.util.normalisation import quasi_normalisation
+
 import libtbx
 from cctbx import adptbx, sgtbx, uctbx
 from cctbx.sgtbx.lattice_symmetry import metric_subgroups
 from mmtbx import scaling
 from mmtbx.scaling import absolute_scaling, matthews
 from scitbx.array_family import flex
-
-from dials.util import resolution_analysis
-from dials.util.normalisation import quasi_normalisation
 
 
 class symmetry_base:

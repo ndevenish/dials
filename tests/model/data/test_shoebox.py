@@ -4,9 +4,9 @@ import math
 import pickle
 import random
 
-from scitbx import matrix
-
 from dials.model.data import Shoebox
+
+from scitbx import matrix
 
 
 def random_shoeboxes(num, mask=False):

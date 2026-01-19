@@ -8,16 +8,16 @@ import copy
 import json
 import sys
 
+import dials.util
+from dials.algorithms.refinement import rotation_decomposition
+from dials.util import tabulate
+from dials.util.options import ArgumentParser, flatten_experiments
+
 import iotbx.phil
 from cctbx import sgtbx
 from dxtbx.model import MultiAxisGoniometer
 from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 from scitbx import matrix
-
-import dials.util
-from dials.algorithms.refinement import rotation_decomposition
-from dials.util import tabulate
-from dials.util.options import ArgumentParser, flatten_experiments
 
 help_message = """
 Calculation of possible goniometer settings for re-alignment of crystal axes.
@@ -42,8 +42,7 @@ Examples::
   dials.align_crystal models.expt frame=direct
 """
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 space_group = None
   .type = space_group
 align {
@@ -61,8 +60,7 @@ output {
   json = align_crystal.json
     .type = path
 }
-"""
-)
+""")
 
 
 a_star = matrix.col((1.0, 0.0, 0.0))
@@ -157,7 +155,7 @@ class align_crystal:
             [-ex, ey, -ez],
         )
 
-        for (v1_, v2_) in self.vectors:
+        for v1_, v2_ in self.vectors:
             result_dictionary = collections.defaultdict(list)
             results.append((v1_, v2_, result_dictionary))
             space_group = self.experiment.crystal.get_space_group()

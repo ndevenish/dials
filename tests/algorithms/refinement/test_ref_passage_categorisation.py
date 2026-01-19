@@ -1,7 +1,6 @@
 """Trivial check for whether classification of reflections as exiting or
 entering the Ewald sphere is done the right way round"""
 
-
 from __future__ import annotations
 
 import math
@@ -10,15 +9,6 @@ import pytest
 
 
 def test():
-    from cctbx.sgtbx import space_group, space_group_symbols
-
-    # We will set up a mock scan
-    from dxtbx.model import ScanFactory
-    from dxtbx.model.experiment_list import Experiment, ExperimentList
-    from libtbx.phil import parse
-    from scitbx import matrix
-    from scitbx.array_family import flex
-
     from dials.algorithms.refinement.prediction.managed_predictors import (
         ScansExperimentsPredictor,
         ScansRayPredictor,
@@ -29,6 +19,15 @@ def test():
 
     # Building experimental models
     from dials.tests.algorithms.refinement.setup_geometry import Extract
+
+    from cctbx.sgtbx import space_group, space_group_symbols
+
+    # We will set up a mock scan
+    from dxtbx.model import ScanFactory
+    from dxtbx.model.experiment_list import Experiment, ExperimentList
+    from libtbx.phil import parse
+    from scitbx import matrix
+    from scitbx.array_family import flex
 
     master_phil = parse(
         """

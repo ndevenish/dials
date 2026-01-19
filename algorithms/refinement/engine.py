@@ -10,14 +10,14 @@ import logging
 from io import StringIO
 from typing import List, Union
 
+from dials.algorithms.refinement import DialsRefineRuntimeError
+
 import libtbx
 from libtbx import easy_mp
 from libtbx.phil import parse
 from scitbx import lbfgs, sparse
 from scitbx.array_family import flex
 from scitbx.lstbx import normal_eqns, normal_eqns_solving
-
-from dials.algorithms.refinement import DialsRefineRuntimeError
 
 from .target import Target
 

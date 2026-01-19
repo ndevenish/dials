@@ -2,18 +2,17 @@ from __future__ import annotations
 
 import os
 
+import dials.command_line.reindex
 import procrunner
 import pytest
+from dials.array_family import flex
+from dials.command_line.reindex import reindex_experiments
 
 import scitbx.matrix
 from cctbx import sgtbx
 from cctbx.sgtbx.lattice_symmetry import metric_subgroups
 from dxtbx.model import Crystal, Experiment, ExperimentList
 from dxtbx.serialize import load
-
-import dials.command_line.reindex
-from dials.array_family import flex
-from dials.command_line.reindex import reindex_experiments
 
 
 def test_reindex(dials_regression, tmpdir):

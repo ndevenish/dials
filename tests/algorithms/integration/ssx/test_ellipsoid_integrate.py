@@ -3,12 +3,11 @@ from __future__ import annotations
 import copy
 
 import pytest
-
-from dxtbx.serialize import load
-
 from dials.algorithms.profile_model.ellipsoid.algorithm import run_ellipsoid_refinement
 from dials.algorithms.profile_model.ellipsoid.indexer import reindex
 from dials.array_family import flex
+
+from dxtbx.serialize import load
 
 
 @pytest.mark.xdist_group(name="group1")

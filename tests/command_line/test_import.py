@@ -156,8 +156,7 @@ def test_override_geometry(dials_data, tmpdir):
     )
 
     # Write a geometry phil file
-    tmpdir.join("geometry.phil").write(
-        """
+    tmpdir.join("geometry.phil").write("""
       geometry {
         beam {
           wavelength = 2
@@ -187,8 +186,7 @@ def test_override_geometry(dials_data, tmpdir):
           oscillation = 1,2
         }
       }
-  """
-    )
+  """)
 
     result = procrunner.run(
         ["dials.import", "geometry.phil", "output.experiments=override_geometry.expt"]

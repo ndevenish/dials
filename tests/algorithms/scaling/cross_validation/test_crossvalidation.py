@@ -3,14 +3,13 @@ from __future__ import annotations
 from unittest import mock
 
 import pytest
-
-from libtbx import phil
-
 from dials.algorithms.scaling.cross_validation.cross_validate import cross_validate
 from dials.algorithms.scaling.cross_validation.crossvalidator import (
     DialsScaleCrossValidator,
 )
 from dials.util.options import ArgumentParser
+
+from libtbx import phil
 
 
 def generated_param():

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from dials.util import resolution_analysis
+
 from cctbx.array_family import flex
 from iotbx.data_plots import table_data
 from libtbx import phil
 
-from dials.util import resolution_analysis
 from dials_pychef_ext import ChefStatistics, Observations
 
 __all__ = [
@@ -38,8 +39,7 @@ dose {
 }
 """
 
-phil_scope = phil.parse(
-    """\
+phil_scope = phil.parse("""\
 d_min = None
   .type = float(value_min=0)
 d_max = None
@@ -61,9 +61,7 @@ range {
     .type = float(value_min=0)
 }
 %s
-"""
-    % dose_phil_str
-)
+""" % dose_phil_str)
 
 
 def interpret_images_to_doses_options(
@@ -73,12 +71,9 @@ def interpret_images_to_doses_options(
     if len(dose_per_image) == 1:
         doses_per_image = dose_per_image * len(experiments)
     elif len(dose_per_image) != len(experiments):
-        raise ValueError(
-            """
+        raise ValueError("""
 The dose_per_image option must provide either one value, or a number of values
-equal to the number of experiments (%s)"""
-            % len(experiments)
-        )
+equal to the number of experiments (%s)""" % len(experiments))
     else:
         doses_per_image = dose_per_image
 

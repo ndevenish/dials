@@ -25,20 +25,12 @@ from libtbx.phil import parse, scope
 try:
     import pyFAI  # noqa: F401
 except ModuleNotFoundError:
-    exit(
-        """
+    exit("""
             This script requires the pyFAI library. Try:
                 $ conda install -c conda-forge pyFAI-base
                    OR if you prefer mamba
                 $ mamba install pyFAI-base
-            """
-    )
-from pyFAI.calibrant import get_calibrant as pfCalibrant
-from pyFAI.detectors import Detector as pfDetector
-from pyFAI.geometry import Geometry as pfGeometry
-from pyFAI.goniometer import SingleGeometry as pfSingleGeometry
-from pyFAI.gui import jupyter as pfjupyter
-
+            """)
 # dxtbx and dials must be imported after pyfai,
 # the alternative causes pyfai to segv
 import dials.util
@@ -46,12 +38,16 @@ import dials.util.log
 from dials.command_line import modify_geometry
 from dials.util.options import ArgumentParser, flatten_experiments
 from dials.util.version import dials_version
+from pyFAI.calibrant import get_calibrant as pfCalibrant
+from pyFAI.detectors import Detector as pfDetector
+from pyFAI.geometry import Geometry as pfGeometry
+from pyFAI.goniometer import SingleGeometry as pfSingleGeometry
+from pyFAI.gui import jupyter as pfjupyter
 
 # Define a logger.
 logger = logging.getLogger("dials.command_line.powder_calibrate")
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
     output {
         coarse_geom = coarse_geom.expt
             .type = str
@@ -77,8 +73,7 @@ phil_scope = parse(
   eyeball = True
     .type = bool
     .help = use widget to eyeball a better starting geometry?
-    """
-)
+    """)
 
 
 class Point(NamedTuple):

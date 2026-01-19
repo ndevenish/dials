@@ -7,7 +7,6 @@ from __future__ import annotations
 from unittest.mock import Mock
 
 import pytest
-
 from dials.algorithms.scaling.weighting import (
     CauchyWeights,
     GemanMcClureWeights,

@@ -5,25 +5,14 @@ single panel detector, and a geometrically identical 3x3 panel detector,
 ensuring the results are the same.
 """
 
-
 from __future__ import annotations
 
 from collections import namedtuple
 from math import pi
 
-import pytest
-
-from cctbx.sgtbx import space_group, space_group_symbols
-from cctbx.uctbx import unit_cell
-from dxtbx.model import Detector, Panel, ScanFactory
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from libtbx.test_utils import approx_equal
-from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
-from scitbx import matrix
-
 import dials.tests.algorithms.refinement.setup_geometry as setup_geometry
 import dials.tests.algorithms.refinement.setup_minimiser as setup_minimiser
+import pytest
 from dials.algorithms.refinement.parameterisation.beam_parameters import (
     BeamParameterisation,
 )
@@ -49,6 +38,15 @@ from dials.algorithms.refinement.target import (
 )
 from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
 from dials.array_family import flex
+
+from cctbx.sgtbx import space_group, space_group_symbols
+from cctbx.uctbx import unit_cell
+from dxtbx.model import Detector, Panel, ScanFactory
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from libtbx.test_utils import approx_equal
+from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
+from scitbx import matrix
 
 
 def make_panel_in_array(array_elt, reference_panel):

@@ -1,20 +1,18 @@
 """Test Refiners can be constructed with various configurations"""
 
-
 from __future__ import annotations
 
 import os
 from copy import deepcopy
 
 import pytest
-
-from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import phil
-
 from dials.algorithms.refinement import DialsRefineConfigError, RefinerFactory
 from dials.algorithms.refinement.refiner import _trim_scans_to_observations, phil_scope
 from dials.array_family import flex
 from dials.util.slice import slice_reflections
+
+from dxtbx.model.experiment_list import ExperimentListFactory
+from libtbx import phil
 
 
 @pytest.mark.parametrize(

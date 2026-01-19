@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import sys
 
-import libtbx.pkg_utils
-
 import dials.precommitbx.nagger
+
+import libtbx.pkg_utils
 
 if sys.version_info.major == 2:
     sys.exit("Python 2 is no longer supported")
@@ -118,9 +118,7 @@ export PATH
 }
 
 unset LIBTBX_BUILD
-""" % abs(
-            libtbx.env.build_path
-        )
+""" % abs(libtbx.env.build_path)
     with open(filename, "w") as fh:
         fh.write(script.lstrip())
 
@@ -188,8 +186,7 @@ def _install_dials_autocompletion():
 
     # Generate the autocompletion SConscript.
     with open(os.path.join(output_directory, "SConscript"), "w") as builder:
-        builder.write(
-            """import os.path
+        builder.write("""import os.path
 import libtbx.load_env\n
 Import("env")\n\n
 def dispatcher_outer(name):
@@ -211,10 +208,7 @@ for cmd in [
     Requires(ac, Dir(libtbx.env.under_build("lib")))
     Depends(ac, os.path.join(libtbx.env.dist_path("dials"), "util", "options.py"))
     Depends(ac, os.path.join(libtbx.env.dist_path("dials"), "util", "autocomplete.sh"))
-""".format(
-                "\n".join([f'    "{cmd}",' for cmd in command_list])
-            )
-        )
+""".format("\n".join([f'    "{cmd}",' for cmd in command_list])))
 
     # Generate a bash script activating command line completion for each relevant command
     with open(os.path.join(output_directory, "bash.sh"), "w") as script:

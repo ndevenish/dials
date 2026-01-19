@@ -3,21 +3,19 @@ from __future__ import annotations
 import errno
 import os
 
-import matplotlib
-
-from libtbx.phil import parse
-
 import dials.util
+import matplotlib
 from dials.algorithms.refinement.rotation_decomposition import (
     solve_r3_rotation_for_angles_given_axes,
 )
+
+from libtbx.phil import parse
 
 matplotlib.use("Agg")
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
   output {
     directory = .
       .type = str
@@ -51,8 +49,7 @@ phil_scope = parse(
     relative_to_static_orientation = True
       .type = bool
   }
-"""
-)
+""")
 
 help_message = """
 
@@ -92,9 +89,9 @@ class Script:
 
     def run(self, args=None):
         """Run the script."""
-        from scitbx import matrix
-
         from dials.util.options import flatten_experiments
+
+        from scitbx import matrix
 
         params, options = self.parser.parse_args(args)
         if len(params.input.experiments) == 0:

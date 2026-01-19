@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from dials.algorithms.integration import filtering
+
 from cctbx import sgtbx, uctbx
 from scitbx.array_family import flex
-
-from dials.algorithms.integration import filtering
 
 
 def test_powder_ring_filter():

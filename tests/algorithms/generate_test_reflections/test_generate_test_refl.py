@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-from libtbx.phil import command_line
-
 from dials.algorithms.simulation.generate_test_reflections import main, master_phil
+
+from libtbx.phil import command_line
 
 
 def test_generate_test_reflections(run_in_tmpdir):
     cmd = command_line.argument_interpreter(master_phil=master_phil)
-    working_phil = cmd.process_and_fetch(
-        args=[
-            """nrefl = 10
+    working_phil = cmd.process_and_fetch(args=["""nrefl = 10
 shoebox_size {
   x = 20
   y = 20
@@ -48,8 +46,6 @@ rotation {
   }
   angle = 45
 }
-"""
-        ]
-    )
+"""])
     main(working_phil.extract())
     assert (run_in_tmpdir / "all_refl.refl").check()

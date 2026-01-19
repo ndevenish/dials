@@ -5,11 +5,8 @@ import itertools
 import json
 import math
 
-import numpy as np
-
-from cctbx import uctbx
-
 import dials.util.log
+import numpy as np
 from dials.algorithms.scaling.model.model import plot_scaling_models
 from dials.algorithms.scaling.scaling_library import (
     merging_stats_from_scaled_array,
@@ -30,6 +27,8 @@ from dials.report.plots import (
 from dials.util import show_mail_handle_errors
 from dials.util.batch_handling import batch_manager
 from dials.util.command_line import Command
+
+from cctbx import uctbx
 
 RAD2DEG = 180 / math.pi
 
@@ -56,8 +55,7 @@ Examples::
 import libtbx.phil
 
 # Create the phil parameters
-phil_scope = libtbx.phil.parse(
-    """
+phil_scope = libtbx.phil.parse("""
   output {
     html = dials.report.html
       .type = path
@@ -102,8 +100,7 @@ phil_scope = libtbx.phil.parse(
     relative_to_static_orientation = True
       .type = bool
   }
-"""
-)
+""")
 
 
 def ensure_directory(path):
@@ -329,11 +326,11 @@ the refinement algorithm accounting for unmodelled features in the data.
         return d
 
     def plot_orientation(self, experiments):
-        from scitbx import matrix
-
         from dials.algorithms.refinement.rotation_decomposition import (
             solve_r3_rotation_for_angles_given_axes,
         )
+
+        from scitbx import matrix
 
         # orientation plot
         dat = []

@@ -3,13 +3,6 @@ from __future__ import annotations
 from math import exp, sqrt
 
 import numpy as np
-from numpy.linalg import norm
-
-from dxtbx import flumpy
-from libtbx.phil import parse
-from scitbx import matrix
-from scitbx.linalg import eigensystem, l_l_transpose_cholesky_decomposition_in_place
-
 from dials.algorithms.profile_model.ellipsoid import (
     BBoxCalculatorAngular,
     BBoxCalculatorSimple,
@@ -26,9 +19,14 @@ from dials.algorithms.profile_model.ellipsoid.parameterisation import (
 )
 from dials.array_family import flex
 from dials.model.experiment.profile import ProfileModelExt
+from numpy.linalg import norm
 
-phil_scope = parse(
-    """
+from dxtbx import flumpy
+from libtbx.phil import parse
+from scitbx import matrix
+from scitbx.linalg import eigensystem, l_l_transpose_cholesky_decomposition_in_place
+
+phil_scope = parse("""
 rlp_mosaicity {
 
     model = simple1 simple6 angular2 *angular4
@@ -89,12 +87,10 @@ prediction {
 
     probability = 0.9973
         .type = float
-}"""
-)
+}""")
 
 
 class EllipsoidProfileModel(ProfileModelExt):
-
     """
     An overall model class that conforms to the requirements of a
     dxtbx.profile_model entry point.

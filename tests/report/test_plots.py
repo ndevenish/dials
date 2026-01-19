@@ -9,11 +9,6 @@ import random
 from unittest import mock
 
 import pytest
-
-from cctbx import crystal, miller, uctbx
-from cctbx.array_family import flex
-from iotbx.merging_statistics import dataset_statistics
-
 from dials.report.plots import (
     AnomalousPlotter,
     IntensityStatisticsPlots,
@@ -23,6 +18,10 @@ from dials.report.plots import (
     scale_rmerge_vs_batch_plot,
 )
 from dials.util.batch_handling import batch_manager
+
+from cctbx import crystal, miller, uctbx
+from cctbx.array_family import flex
+from iotbx.merging_statistics import dataset_statistics
 
 
 @pytest.fixture
@@ -44,7 +43,6 @@ def iobs():
 
 
 def test_AnomalousPlotter():
-
     "Make a larger array to allow all plots to be made"
     cs = crystal.symmetry(space_group_symbol="P1", unit_cell=(6, 6, 6, 90, 90, 90))
     ms = miller.build_set(cs, anomalous_flag=True, d_min=1.0)

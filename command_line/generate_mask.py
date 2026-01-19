@@ -17,7 +17,6 @@ Examples::
   dials.generate_mask models.expt d_max=2.00
 """
 
-
 from __future__ import annotations
 
 import logging
@@ -25,15 +24,15 @@ import os.path
 import pickle
 from typing import List, Optional, Tuple
 
-import libtbx.phil as phil
-from dxtbx.format.image import ImageBool
-from dxtbx.model.experiment_list import ExperimentList
-from scitbx.array_family import flex
-
 import dials.util
 import dials.util.log
 import dials.util.masking
 from dials.util.options import ArgumentParser, flatten_experiments
+
+import libtbx.phil as phil
+from dxtbx.format.image import ImageBool
+from dxtbx.model.experiment_list import ExperimentList
+from scitbx.array_family import flex
 
 Masks = List[Tuple[flex.bool, ...]]
 

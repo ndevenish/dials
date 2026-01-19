@@ -3,10 +3,6 @@ from __future__ import annotations
 import math
 import random
 
-from dxtbx.serialize import load
-from scitbx import matrix
-from scitbx.array_family import flex
-
 from dials.algorithms.profile_model.gaussian_rs import (
     BBoxCalculator3D,
     CoordinateSystem,
@@ -15,6 +11,10 @@ from dials.algorithms.profile_model.gaussian_rs.transform import (
     MapFramesForward,
     MapFramesReverse,
 )
+
+from dxtbx.serialize import load
+from scitbx import matrix
+from scitbx.array_family import flex
 
 
 def test_map_frames_forward(dials_data):

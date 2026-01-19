@@ -5,6 +5,13 @@ import copy
 import logging
 import math
 
+import dials.util
+from dials.algorithms.indexing.refinement import refine
+from dials.command_line.check_indexing_symmetry import (
+    get_symop_correlation_coefficients,
+)
+from dials.util.log import LoggingContext
+
 import libtbx
 import libtbx.phil
 import scitbx.matrix
@@ -16,13 +23,6 @@ from libtbx.introspection import number_of_processors
 from rstbx.dps_core.lepage import iotbx_converter
 from rstbx.symmetry.subgroup import MetricSubgroup
 from scitbx.array_family import flex
-
-import dials.util
-from dials.algorithms.indexing.refinement import refine
-from dials.command_line.check_indexing_symmetry import (
-    get_symop_correlation_coefficients,
-)
-from dials.util.log import LoggingContext
 
 logger = logging.getLogger(__name__)
 
@@ -48,17 +48,13 @@ include scope dials.algorithms.refinement.refiner.phil_scope
 )
 
 # override default refinement parameters
-phil_scope = phil_scope.fetch(
-    source=libtbx.phil.parse(
-        """\
+phil_scope = phil_scope.fetch(source=libtbx.phil.parse("""\
 refinement {
   reflections {
     reflections_per_degree=100
   }
 }
-"""
-    )
-)
+"""))
 
 
 def dxtbx_crystal_from_orientation(crystal_orientation, space_group):

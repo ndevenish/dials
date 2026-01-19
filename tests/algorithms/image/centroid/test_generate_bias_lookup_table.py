@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from dials.algorithms.image.centroid.generate_bias_lookup_table import (
     compute_lookup_table,
 )

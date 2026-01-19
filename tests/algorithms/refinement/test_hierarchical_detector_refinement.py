@@ -8,14 +8,14 @@ import pytest
 
 
 def generate_reflections(experiments):
-    from cctbx.sgtbx import space_group, space_group_symbols
-    from scitbx.array_family import flex
-
     from dials.algorithms.refinement.prediction.managed_predictors import (
         ScansExperimentsPredictor,
         ScansRayPredictor,
     )
     from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+
+    from cctbx.sgtbx import space_group, space_group_symbols
+    from scitbx.array_family import flex
 
     detector = experiments[0].detector
     crystal = experiments[0].crystal

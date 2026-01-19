@@ -4,13 +4,12 @@ from __future__ import annotations
 
 import math
 
+from dials.report.plots import d_star_sq_to_d_ticks
+
 from libtbx import phil
 from scitbx.array_family import flex
 
-from dials.report.plots import d_star_sq_to_d_ticks
-
-phil_scope = phil.parse(
-    """
+phil_scope = phil.parse("""
 filtering {
     method = None deltacchalf
         .type = choice
@@ -40,8 +39,7 @@ filtering {
             .help = "Filename for output json of scale and filter results."
     }
 }
-"""
-)
+""")
 
 
 def ordinal(n):

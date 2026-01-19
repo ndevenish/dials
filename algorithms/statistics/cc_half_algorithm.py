@@ -1,16 +1,10 @@
 """ΔCC½ algorithm definitions"""
 
-
 from __future__ import annotations
 
 import logging
 from collections import defaultdict
 from math import sqrt
-
-from jinja2 import ChoiceLoader, Environment, PackageLoader
-
-from cctbx import uctbx
-from iotbx import mtz
 
 from dials.algorithms.scaling.scale_and_filter import (
     make_histogram_plots,
@@ -21,12 +15,15 @@ from dials.array_family import flex
 from dials.util.exclude_images import exclude_image_ranges_for_scaling
 from dials.util.filter_reflections import filter_reflection_table
 from dials.util.multi_dataset_handling import select_datasets_on_identifiers
+from jinja2 import ChoiceLoader, Environment, PackageLoader
+
+from cctbx import uctbx
+from iotbx import mtz
 
 logger = logging.getLogger("dials.command_line.compute_delta_cchalf")
 
 
 class CCHalfFromMTZ:
-
     """
     Run a cc-half algorithm using an MTZ file.
     """
@@ -153,7 +150,6 @@ Batch offset can be specified with mtz.batch_offset=
 
 
 class CCHalfFromDials:
-
     """
     Run a cc-half algorithm using dials datafiles.
     """
@@ -465,7 +461,6 @@ class CCHalfFromDials:
 
 
 class DeltaCCHalf:
-
     """
     Implementation of a ΔCC½ algorithm.
     """

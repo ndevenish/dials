@@ -8,9 +8,6 @@ import copy
 from unittest.mock import Mock
 
 import pytest
-
-from dxtbx.model import Experiment, ExperimentList, Scan
-
 from dials.array_family import flex
 from dials.util.exclude_images import (
     _parse_exclude_images_commands,
@@ -20,6 +17,8 @@ from dials.util.exclude_images import (
     get_valid_image_ranges,
     set_initial_valid_image_ranges,
 )
+
+from dxtbx.model import Experiment, ExperimentList, Scan
 
 
 def make_scan_experiment(image_range=(1, 100), expid="0"):

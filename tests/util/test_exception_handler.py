@@ -3,9 +3,8 @@ from __future__ import annotations
 import os
 import sys
 
-import pytest
-
 import dials.util
+import pytest
 
 
 class _SomeError(RuntimeError):

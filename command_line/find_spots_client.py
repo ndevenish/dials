@@ -11,13 +11,13 @@ import urllib.parse
 import urllib.request
 from multiprocessing.pool import ThreadPool
 
+import dials.util
+
 import libtbx.phil
 from dxtbx.model.crystal import CrystalFactory
 from dxtbx.util import get_url_scheme
 from libtbx.introspection import number_of_processors
 from scitbx.array_family import flex
-
-import dials.util
 
 
 def work(host, port, filename, params):
@@ -180,8 +180,7 @@ def stop(host, port, nproc):
     return stopped
 
 
-phil_scope = libtbx.phil.parse(
-    """\
+phil_scope = libtbx.phil.parse("""\
 nproc = Auto
   .type = int(value_min=1)
 host = localhost
@@ -196,8 +195,7 @@ json = None
   .type = path
 grid = None
   .type = ints(size=2, value_min=1)
-"""
-)
+""")
 
 
 @dials.util.show_mail_handle_errors()

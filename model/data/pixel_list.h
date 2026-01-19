@@ -24,7 +24,7 @@ namespace dials { namespace model {
 
   namespace detail {
 
-    inline bool lessthan(const vec3<int> &a, const vec3<int> &b) {
+    inline bool lessthan(const vec3<int>& a, const vec3<int>& b) {
       return (
         a[0] < b[0]
           ? true
@@ -58,8 +58,8 @@ namespace dials { namespace model {
      * @param mask The pixel mask
      */
     PixelList(int frame,
-              const af::const_ref<int, af::c_grid<2> > &image,
-              const af::const_ref<bool, af::c_grid<2> > &mask) {
+              const af::const_ref<int, af::c_grid<2> >& image,
+              const af::const_ref<bool, af::c_grid<2> >& mask) {
       DIALS_ASSERT(image.accessor().all_eq(mask.accessor()));
 
       frame_ = frame;
@@ -89,8 +89,8 @@ namespace dials { namespace model {
      * @param mask The pixel mask
      */
     PixelList(int frame,
-              const af::const_ref<double, af::c_grid<2> > &image,
-              const af::const_ref<bool, af::c_grid<2> > &mask) {
+              const af::const_ref<double, af::c_grid<2> >& image,
+              const af::const_ref<bool, af::c_grid<2> >& mask) {
       DIALS_ASSERT(image.accessor().all_eq(mask.accessor()));
 
       frame_ = frame;
@@ -179,7 +179,7 @@ namespace dials { namespace model {
      * Add a pixel list
      * @param pixel_list The pixel list
      */
-    void add(const PixelList &pixel_list) {
+    void add(const PixelList& pixel_list) {
       // Check the frame number
       if (last_frame_ == first_frame_) {
         first_frame_ = pixel_list.frame();
@@ -292,16 +292,14 @@ namespace dials { namespace model {
           boost::add_edge(i1, i1 + 1, graph);
         }
         if (a0[1] < size_[0] - 1) {
-          for (; detail::lessthan(coords_[i2], a2) && i2 < coords_.size() - 1; ++i2)
-            ;
+          for (; detail::lessthan(coords_[i2], a2) && i2 < coords_.size() - 1; ++i2);
           if (coords_[i2] == a2) {
             boost::add_edge(i1, i2, graph);
           }
         }
         if (a0[0] < last_frame_ - 1) {
           if (i2 > i3) i3 = i2;
-          for (; detail::lessthan(coords_[i3], a3) && i3 < coords_.size() - 1; ++i3)
-            ;
+          for (; detail::lessthan(coords_[i3], a3) && i3 < coords_.size() - 1; ++i3);
           if (coords_[i3] == a3) {
             boost::add_edge(i1, i3, graph);
           }
@@ -346,8 +344,7 @@ namespace dials { namespace model {
           boost::add_edge(i1, i1 + 1, graph);
         }
         if (a0[1] < size_[0] - 1) {
-          for (; detail::lessthan(coords_[i2], a2) && i2 < coords_.size() - 1; ++i2)
-            ;
+          for (; detail::lessthan(coords_[i2], a2) && i2 < coords_.size() - 1; ++i2);
           if (coords_[i2] == a2) {
             boost::add_edge(i1, i2, graph);
           }

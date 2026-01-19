@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+from dials.array_family.flex_ext import (  # noqa: F401; lgtm
+    real,
+    reflection_table_selector,
+)
+
 from cctbx.array_family.flex import (  # noqa: F401; lgtm
     abs,
     acos,
@@ -136,10 +141,6 @@ from scitbx.array_family.flex import (  # noqa: F401; lgtm
     uint64,
 )
 
-from dials.array_family.flex_ext import (  # noqa: F401; lgtm
-    real,
-    reflection_table_selector,
-)
 from dials_array_family_flex_ext import (  # noqa: F401; lgtm
     Binner,
     PixelListShoeboxCreator,

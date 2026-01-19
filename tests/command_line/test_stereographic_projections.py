@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 
 import procrunner
-
 from dials.command_line import stereographic_projection
 
 

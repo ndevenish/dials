@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from os.path import basename, splitext
 
-from dxtbx.model.experiment_list import ExperimentList
-
 import dials.util
 from dials.algorithms.refinement.refinement_helpers import calculate_frame_numbers
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
 from dials.util.slice import slice_experiments, slice_reflections
+
+from dxtbx.model.experiment_list import ExperimentList
 
 help_message = """
 
@@ -33,8 +33,7 @@ Examples::
 
 from libtbx.phil import parse
 
-phil_scope = parse(
-    """
+phil_scope = parse("""
 
   output {
 
@@ -64,8 +63,7 @@ phil_scope = parse(
     .help = "Overrides image_range if present. This option splits each sequence"
             "into the nearest integer number of equal size blocks close to"
             "block_size degrees in width"
-"""
-)
+""")
 
 
 def calculate_block_ranges(scan, block_size):

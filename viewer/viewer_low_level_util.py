@@ -5,7 +5,6 @@ import math
 import wx
 import wx.grid as gridlib
 import wx.lib.scrolledpanel as scroll_pan
-
 from dials.array_family import flex
 from dials.viewer.from_flex_to_wxbitmap import wxbitmap_convert
 

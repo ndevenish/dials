@@ -7,10 +7,9 @@ from __future__ import annotations
 import os
 
 import procrunner
+from dials.array_family import flex
 
 from dxtbx.serialize import load
-
-from dials.array_family import flex
 
 
 def run_assign_identifiers(pickle_path_list, sequence_path_list, extra_args):

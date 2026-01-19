@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import sys
 
-import iotbx.phil
-
 import dials.util
+
+import iotbx.phil
 
 help_message = """
 

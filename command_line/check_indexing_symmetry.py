@@ -3,18 +3,18 @@ from __future__ import annotations
 import logging
 import math
 
+from dials.algorithms.symmetry import origin
+from dials.array_family import flex
+from dials.util import log, show_mail_handle_errors
+from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+from dials.util.version import dials_version
+
 import iotbx.phil
 from cctbx import sgtbx
 from cctbx.crystal import symmetry as crystal_symmetry
 from cctbx.miller import set as miller_set
 from cctbx.sgtbx import space_group as sgtbx_space_group
 from libtbx.utils import format_float_with_standard_uncertainty
-
-from dials.algorithms.symmetry import origin
-from dials.array_family import flex
-from dials.util import log, show_mail_handle_errors
-from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
-from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.check_indexing_symmetry")
 

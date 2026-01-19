@@ -5,8 +5,6 @@ from __future__ import annotations
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.algorithms.shoebox import MaskCode
 from dials.algorithms.spot_finding import per_image_analysis
 from dials.array_family import flex
@@ -15,6 +13,8 @@ from dials.util.ascii_art import spot_counts_per_image_plot
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
 from dials.util.options import ArgumentParser, flatten_experiments
 from dials.util.version import dials_version
+
+from libtbx.phil import parse
 
 logger = logging.getLogger("dials.command_line.find_spots")
 
@@ -83,15 +83,13 @@ phil_scope = parse(
 )
 
 # Local overrides for dials.find_spots
-phil_overrides = parse(
-    """
+phil_overrides = parse("""
 spotfinder {
   mp {
     nproc = Auto
   }
 }
-"""
-)
+""")
 working_phil = phil_scope.fetch(sources=[phil_overrides])
 
 

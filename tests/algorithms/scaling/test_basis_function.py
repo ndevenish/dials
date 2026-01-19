@@ -5,7 +5,6 @@ Test for the basis function module.
 from __future__ import annotations
 
 import pytest
-
 from dials.algorithms.scaling.basis_functions import RefinerCalculator
 from dials.algorithms.scaling.model.components.scale_components import (
     SingleBScaleFactor,

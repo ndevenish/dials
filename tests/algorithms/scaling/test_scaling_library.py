@@ -7,13 +7,6 @@ from __future__ import annotations
 from unittest.mock import Mock, patch
 
 import pytest
-
-from cctbx import crystal, miller, uctbx
-from cctbx.sgtbx import space_group
-from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
-from dxtbx.model.experiment_list import ExperimentList
-from libtbx import phil
-
 from dials.algorithms.scaling.model.model import KBScalingModel, PhysicalScalingModel
 from dials.algorithms.scaling.scaling_library import (
     choose_initial_scaling_intensities,
@@ -26,6 +19,12 @@ from dials.algorithms.scaling.scaling_library import (
 )
 from dials.array_family import flex
 from dials.util.options import ArgumentParser
+
+from cctbx import crystal, miller, uctbx
+from cctbx.sgtbx import space_group
+from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
+from dxtbx.model.experiment_list import ExperimentList
+from libtbx import phil
 
 
 @pytest.fixture

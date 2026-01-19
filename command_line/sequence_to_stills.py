@@ -6,15 +6,9 @@ Example:
   dials.sequence_to_stills sequence.expt sequence.refl
 """
 
-
 from __future__ import annotations
 
 import logging
-
-from dxtbx.model import MosaicCrystalSauter2014
-from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
-from scitbx import matrix
 
 from dials.algorithms.refinement.prediction.managed_predictors import (
     ExperimentsPredictorFactory,
@@ -24,11 +18,15 @@ from dials.model.data import Shoebox
 from dials.util import show_mail_handle_errors
 from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
 
+from dxtbx.model import MosaicCrystalSauter2014
+from dxtbx.model.experiment_list import Experiment, ExperimentList
+from libtbx.phil import parse
+from scitbx import matrix
+
 logger = logging.getLogger("dials.command_line.sequence_to_stills")
 
 # The phil scope
-phil_scope = parse(
-    """
+phil_scope = parse("""
 output {
   experiments = stills.expt
     .type = str
@@ -49,8 +47,7 @@ max_scan_points = None
   .type = int
   .expert_level = 2
   .help = Limit number of scan points
-"""
-)
+""")
 
 
 def sequence_to_stills(experiments, reflections, params):
@@ -232,7 +229,7 @@ def run(args=None, phil=phil_scope):
         params.input.reflections, params.input.experiments
     )
 
-    (new_experiments, new_reflections) = sequence_to_stills(
+    new_experiments, new_reflections = sequence_to_stills(
         experiments, reflections, params
     )
     # Write out the output experiments, reflections

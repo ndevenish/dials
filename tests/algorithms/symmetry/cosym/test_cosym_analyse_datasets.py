@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import pytest
+from dials.algorithms.symmetry.cosym import CosymAnalysis, phil_scope
+from dials.algorithms.symmetry.cosym._generate_test_data import generate_test_data
 
 import libtbx
 from cctbx import sgtbx
-
-from dials.algorithms.symmetry.cosym import CosymAnalysis, phil_scope
-from dials.algorithms.symmetry.cosym._generate_test_data import generate_test_data
 
 
 @pytest.mark.parametrize(

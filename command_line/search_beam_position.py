@@ -8,6 +8,12 @@ import logging
 import math
 import random
 
+import dials.util
+from dials.algorithms.indexing.indexer import find_max_cell
+from dials.util import Sorry, log
+from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
+from dials.util.slice import slice_reflections
+
 import iotbx.phil
 import libtbx.introspection
 from libtbx.test_utils import approx_equal
@@ -19,12 +25,6 @@ from rstbx.phil.phil_preferences import indexing_api_defs
 from scitbx import matrix
 from scitbx.array_family import flex
 from scitbx.simplex import simplex_opt
-
-import dials.util
-from dials.algorithms.indexing.indexer import find_max_cell
-from dials.util import Sorry, log
-from dials.util.options import ArgumentParser, reflections_and_experiments_from_files
-from dials.util.slice import slice_reflections
 
 logger = logging.getLogger("dials.command_line.search_beam_position")
 
@@ -38,8 +38,7 @@ Examples::
   dials.search_beam_position imported.expt strong.refl
 """
 
-phil_scope = iotbx.phil.parse(
-    """
+phil_scope = iotbx.phil.parse("""
 nproc = Auto
   .type = int(value_min=1)
 plot_search_scope = False
@@ -80,8 +79,7 @@ output {
   log = "dials.search_beam_position.log"
     .type = str
 }
-"""
-)
+""")
 
 
 def optimize_origin_offset_local_scope(

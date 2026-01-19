@@ -3,13 +3,12 @@ from __future__ import annotations
 import random
 
 import pytest
+from dials.algorithms.indexing.max_cell import find_max_cell
+from dials.array_family import flex
 
 import scitbx.matrix
 from cctbx import sgtbx
 from cctbx.sgtbx import bravais_types
-
-from dials.algorithms.indexing.max_cell import find_max_cell
-from dials.array_family import flex
 
 
 @pytest.fixture(params=bravais_types.acentric)

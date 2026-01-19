@@ -15,9 +15,13 @@ import os
 import pickle
 from typing import List, Tuple
 
+import dials.extensions.glm_background_ext
+import dials.extensions.simple_centroid_ext
+import dials.util.ext
 import numpy as np
 import pandas as pd
 from annlib_ext import AnnAdaptorSelfInclude
+from dials.algorithms.centroid import centroid_px_to_mm_panel
 
 import boost_adaptbx.boost.python
 import cctbx.array_family.flex
@@ -25,11 +29,7 @@ import cctbx.miller
 import libtbx.smart_open
 from scitbx import matrix
 
-import dials.extensions.glm_background_ext
-import dials.extensions.simple_centroid_ext
-import dials.util.ext
 import dials_array_family_flex_ext
-from dials.algorithms.centroid import centroid_px_to_mm_panel
 
 __all__ = ["real", "reflection_table_selector"]
 
@@ -1162,13 +1162,10 @@ class _:
                     id_values.append(k)
                     break
         if len(id_values) != len(list_of_identifiers):
-            raise KeyError(
-                """Not all requested identifiers
+            raise KeyError("""Not all requested identifiers
 found in the table's map, has the experiment_identifiers() map been created?
 Requested %s:
-Found %s"""
-                % (list_of_identifiers, id_values)
-            )
+Found %s""" % (list_of_identifiers, id_values))
         # Build up a selection and use this
         sel = cctbx.array_family.flex.bool(self.size(), False)
         for id_val, exp_id in zip(id_values, list_of_identifiers):
@@ -1195,13 +1192,10 @@ Found %s"""
                     id_values.append(k)
                     break
         if len(id_values) != len(list_of_identifiers):
-            raise KeyError(
-                """Not all requested identifiers
+            raise KeyError("""Not all requested identifiers
 found in the table's map, has the experiment_identifiers() map been created?
 Requested %s:
-Found %s"""
-                % (list_of_identifiers, id_values)
-            )
+Found %s""" % (list_of_identifiers, id_values))
         # Now delete the selections, also removing the entry from the map
         for id_val in id_values:
             sel = self["id"] == id_val

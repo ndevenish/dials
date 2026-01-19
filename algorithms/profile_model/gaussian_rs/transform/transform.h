@@ -24,11 +24,8 @@
 #include <dials/algorithms/profile_model/gaussian_rs/transform/beam_vector_map.h>
 #include <dials/model/data/shoebox.h>
 
-namespace dials {
-  namespace algorithms {
-    namespace profile_model {
-      namespace gaussian_rs {
-  namespace transform {
+namespace dials { namespace algorithms { namespace profile_model {
+  namespace gaussian_rs { namespace transform {
 
     using dials::algorithms::polygon::simple_area;
     using dials::algorithms::polygon::clip::quad_with_convex_quad;
@@ -80,9 +77,9 @@ namespace dials {
        * @param grid_size The size of the reflection basis grid
        */
       TransformSpec(const boost::shared_ptr<BeamBase> beam,
-                    const Detector &detector,
-                    const Goniometer &gonio,
-                    const Scan &scan,
+                    const Detector& detector,
+                    const Goniometer& gonio,
+                    const Scan& scan,
                     double sigma_b,
                     double sigma_m,
                     double n_sigma,
@@ -114,17 +111,17 @@ namespace dials {
       }
 
       /** @returns the detector */
-      const Detector &detector() const {
+      const Detector& detector() const {
         return detector_;
       }
 
       /** @return the goniometer */
-      const Goniometer &goniometer() const {
+      const Goniometer& goniometer() const {
         return goniometer_;
       }
 
       /** @return the scan */
-      const Scan &scan() const {
+      const Scan& scan() const {
         return scan_;
       }
 
@@ -197,23 +194,23 @@ namespace dials {
 
       TransformForward() {}
 
-      TransformForward(const TransformSpec &spec,
-                       const CoordinateSystem &cs,
+      TransformForward(const TransformSpec& spec,
+                       const CoordinateSystem& cs,
                        int6 bbox,
                        std::size_t panel,
-                       const af::const_ref<FloatType, af::c_grid<3> > &image,
-                       const af::const_ref<bool, af::c_grid<3> > &mask) {
+                       const af::const_ref<FloatType, af::c_grid<3> >& image,
+                       const af::const_ref<bool, af::c_grid<3> >& mask) {
         init(spec, cs, bbox, panel);
         call(spec.detector()[panel], image, mask);
       }
 
-      TransformForward(const TransformSpec &spec,
-                       const CoordinateSystem &cs,
+      TransformForward(const TransformSpec& spec,
+                       const CoordinateSystem& cs,
                        int6 bbox,
                        std::size_t panel,
-                       const af::const_ref<FloatType, af::c_grid<3> > &image,
-                       const af::const_ref<FloatType, af::c_grid<3> > &bkgrd,
-                       const af::const_ref<bool, af::c_grid<3> > &mask) {
+                       const af::const_ref<FloatType, af::c_grid<3> >& image,
+                       const af::const_ref<FloatType, af::c_grid<3> >& bkgrd,
+                       const af::const_ref<bool, af::c_grid<3> >& mask) {
         init(spec, cs, bbox, panel);
         call(spec.detector()[panel], image, bkgrd, mask);
       }
@@ -234,8 +231,8 @@ namespace dials {
 
     private:
       /** Initialise using a coordinate system struct */
-      void init(const TransformSpec &spec,
-                const CoordinateSystem &cs,
+      void init(const TransformSpec& spec,
+                const CoordinateSystem& cs,
                 int6 bbox,
                 std::size_t panel) {
         // Initialise some stuff
@@ -279,9 +276,9 @@ namespace dials {
        * @param image The image to transform
        * @param mask The mask accompanying the image
        */
-      void call(const Panel &panel,
-                const af::const_ref<FloatType, af::c_grid<3> > &image,
-                const af::const_ref<bool, af::c_grid<3> > &mask) {
+      void call(const Panel& panel,
+                const af::const_ref<FloatType, af::c_grid<3> >& image,
+                const af::const_ref<bool, af::c_grid<3> >& mask) {
         // Check the input
         DIALS_ASSERT(image.accessor().all_eq(shoebox_size_));
         DIALS_ASSERT(image.accessor().all_eq(mask.accessor()));
@@ -366,10 +363,10 @@ namespace dials {
        * @param bkgrd The background image to transform
        * @param mask The mask accompanying the image
        */
-      void call(const Panel &panel,
-                const af::const_ref<FloatType, af::c_grid<3> > &image,
-                const af::const_ref<FloatType, af::c_grid<3> > &bkgrd,
-                const af::const_ref<bool, af::c_grid<3> > &mask) {
+      void call(const Panel& panel,
+                const af::const_ref<FloatType, af::c_grid<3> >& image,
+                const af::const_ref<FloatType, af::c_grid<3> >& bkgrd,
+                const af::const_ref<bool, af::c_grid<3> >& mask) {
         // Check the input
         DIALS_ASSERT(image.accessor().all_eq(shoebox_size_));
         DIALS_ASSERT(image.accessor().all_eq(mask.accessor()));
@@ -461,14 +458,14 @@ namespace dials {
        * @param i The x index
        * @returns The grid (c1, c2) index
        */
-      vec2<double> gc(const Panel &panel, std::size_t j, std::size_t i) const {
+      vec2<double> gc(const Panel& panel, std::size_t j, std::size_t i) const {
         vec3<double> sp = panel.get_pixel_lab_coord(vec2<double>(x0_ + i, y0_ + j));
         vec3<double> ds = sp.normalize() * s1_.length() - s1_;
         return vec2<double>(grid_cent_[2] + (e1_ * ds) / step_size_[2],
                             grid_cent_[1] + (e2_ * ds) / step_size_[1]);
       }
 
-      vec2<double> gc(const Panel &panel,
+      vec2<double> gc(const Panel& panel,
                       std::size_t j,
                       std::size_t i,
                       double attenuation_length) const {
@@ -499,23 +496,23 @@ namespace dials {
     public:
       TransformForwardNoModel() {}
 
-      TransformForwardNoModel(const TransformSpec &spec,
-                              const CoordinateSystem &cs,
+      TransformForwardNoModel(const TransformSpec& spec,
+                              const CoordinateSystem& cs,
                               int6 bbox,
                               std::size_t panel,
-                              const af::const_ref<double, af::c_grid<3> > &image,
-                              const af::const_ref<bool, af::c_grid<3> > &mask) {
+                              const af::const_ref<double, af::c_grid<3> >& image,
+                              const af::const_ref<bool, af::c_grid<3> >& mask) {
         af::versa<double, af::c_grid<3> > bkgrd;
         init(spec, cs, bbox, panel, image, bkgrd.const_ref(), mask);
       }
 
-      TransformForwardNoModel(const TransformSpec &spec,
-                              const CoordinateSystem &cs,
+      TransformForwardNoModel(const TransformSpec& spec,
+                              const CoordinateSystem& cs,
                               int6 bbox,
                               std::size_t panel,
-                              const af::const_ref<double, af::c_grid<3> > &image,
-                              const af::const_ref<double, af::c_grid<3> > &bkgrd,
-                              const af::const_ref<bool, af::c_grid<3> > &mask) {
+                              const af::const_ref<double, af::c_grid<3> >& image,
+                              const af::const_ref<double, af::c_grid<3> >& bkgrd,
+                              const af::const_ref<bool, af::c_grid<3> >& mask) {
         init(spec, cs, bbox, panel, image, bkgrd, mask);
       }
 
@@ -530,13 +527,13 @@ namespace dials {
       }
 
     private:
-      void init(const TransformSpec &spec,
-                const CoordinateSystem &cs,
+      void init(const TransformSpec& spec,
+                const CoordinateSystem& cs,
                 int6 bbox,
                 std::size_t panel,
-                const af::const_ref<double, af::c_grid<3> > &image,
-                const af::const_ref<double, af::c_grid<3> > &bkgrd,
-                const af::const_ref<bool, af::c_grid<3> > &mask) {
+                const af::const_ref<double, af::c_grid<3> >& image,
+                const af::const_ref<double, af::c_grid<3> >& bkgrd,
+                const af::const_ref<bool, af::c_grid<3> >& mask) {
         // Check if we're using background
         bool use_background = bkgrd.size() > 0;
 
@@ -574,7 +571,7 @@ namespace dials {
         double zstep = (2.0 * delta_m) / data_.accessor()[0];
 
         // Get the panel
-        const Panel &dp = spec.detector()[panel];
+        const Panel& dp = spec.detector()[panel];
 
         // Compute the detector coordinates of each point on the grid
         af::versa<vec2<double>, af::c_grid<2> > xy(
@@ -680,11 +677,11 @@ namespace dials {
     public:
       TransformReverseNoModel() {}
 
-      TransformReverseNoModel(const TransformSpec &spec,
-                              const CoordinateSystem &cs,
+      TransformReverseNoModel(const TransformSpec& spec,
+                              const CoordinateSystem& cs,
                               int6 bbox,
                               std::size_t panel,
-                              const af::const_ref<double, af::c_grid<3> > &data) {
+                              const af::const_ref<double, af::c_grid<3> >& data) {
         init(spec, cs, bbox, panel, data);
       }
 
@@ -694,11 +691,11 @@ namespace dials {
       }
 
     private:
-      void init(const TransformSpec &spec,
-                const CoordinateSystem &cs,
+      void init(const TransformSpec& spec,
+                const CoordinateSystem& cs,
                 int6 bbox,
                 std::size_t panel,
-                const af::const_ref<double, af::c_grid<3> > &data) {
+                const af::const_ref<double, af::c_grid<3> >& data) {
         DIALS_ASSERT(data.accessor().all_eq(spec.grid_size()));
         DIALS_ASSERT(bbox[1] > bbox[0]);
         DIALS_ASSERT(bbox[3] > bbox[2]);
@@ -723,7 +720,7 @@ namespace dials {
         double zstep = (2.0 * delta_m) / data.accessor()[0];
 
         // Get the panel
-        const Panel &dp = spec.detector()[panel];
+        const Panel& dp = spec.detector()[panel];
 
         // Compute the detector coordinates of each point on the grid
         af::versa<vec2<double>, af::c_grid<2> > xy(
@@ -828,11 +825,11 @@ namespace dials {
     public:
       TransformReverse() {}
 
-      TransformReverse(const TransformSpec &spec,
-                       const CoordinateSystem &cs,
+      TransformReverse(const TransformSpec& spec,
+                       const CoordinateSystem& cs,
                        int6 bbox,
                        std::size_t panel,
-                       const af::const_ref<double, af::c_grid<3> > &data) {
+                       const af::const_ref<double, af::c_grid<3> >& data) {
         init(spec, cs, bbox, panel, data);
       }
 
@@ -842,11 +839,11 @@ namespace dials {
       }
 
     private:
-      void init(const TransformSpec &spec,
-                const CoordinateSystem &cs,
+      void init(const TransformSpec& spec,
+                const CoordinateSystem& cs,
                 int6 bbox,
                 std::size_t panel,
-                const af::const_ref<double, af::c_grid<3> > &data) {
+                const af::const_ref<double, af::c_grid<3> >& data) {
         DIALS_ASSERT(data.accessor().all_eq(spec.grid_size()));
         DIALS_ASSERT(bbox[1] > bbox[0]);
         DIALS_ASSERT(bbox[3] > bbox[2]);
@@ -871,7 +868,7 @@ namespace dials {
         double zstep = (2.0 * delta_m) / data.accessor()[0];
 
         // Get the panel
-        const Panel &dp = spec.detector()[panel];
+        const Panel& dp = spec.detector()[panel];
 
         // Compute the detector coordinates of each point on the grid
         af::versa<vec2<double>, af::c_grid<2> > xy(

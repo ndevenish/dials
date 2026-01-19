@@ -11,18 +11,16 @@ class Script:
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
-
         from dials.util.options import ArgumentParser
 
+        from libtbx.phil import parse
+
         # Create the phil parameters
-        phil_scope = parse(
-            """
+        phil_scope = parse("""
       interfaces=False
         .type = bool
         .help = "Only show information about the interfaces"
-    """
-        )
+    """)
 
         # Create the option parser
         usage = "dev.dials.show_extensions [options] /path/to/image/files"

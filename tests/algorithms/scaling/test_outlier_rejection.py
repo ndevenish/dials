@@ -7,10 +7,6 @@ from __future__ import annotations
 from unittest.mock import Mock
 
 import pytest
-
-from cctbx import uctbx
-from cctbx.sgtbx import space_group
-
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.outlier_rejection import (
     NormDevOutlierRejection,
@@ -22,6 +18,9 @@ from dials.algorithms.scaling.outlier_rejection import (
     reject_outliers,
 )
 from dials.array_family import flex
+
+from cctbx import uctbx
+from cctbx.sgtbx import space_group
 
 
 @pytest.fixture(scope="module")

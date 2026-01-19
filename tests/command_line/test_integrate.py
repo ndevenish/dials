@@ -7,11 +7,10 @@ import shutil
 
 import procrunner
 import pytest
-
-from dxtbx.serialize import load
-
 from dials.algorithms.integration.processor import _average_bbox_size
 from dials.array_family import flex
+
+from dxtbx.serialize import load
 
 
 def test_basic_integrate(dials_data, tmpdir):

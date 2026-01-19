@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import pytest
-
-from dxtbx.serialize import load
-
 from dials.algorithms.spot_finding import per_image_analysis
 from dials.array_family import flex
+
+from dxtbx.serialize import load
 
 
 @pytest.fixture

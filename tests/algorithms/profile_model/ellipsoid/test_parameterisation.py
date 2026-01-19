@@ -6,9 +6,6 @@ from random import randint, uniform
 
 import numpy as np
 import pytest
-
-from scitbx import matrix
-
 from dials.algorithms.profile_model.ellipsoid.parameterisation import (
     Angular2MosaicityParameterisation,
     Angular4MosaicityParameterisation,
@@ -23,6 +20,8 @@ from dials.algorithms.refinement.parameterisation.crystal_parameters import (
     CrystalUnitCellParameterisation,
 )
 from dials.array_family import flex
+
+from scitbx import matrix
 
 
 def test_Simple1MosaicityParameterisation():

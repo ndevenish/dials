@@ -6,14 +6,13 @@ import math
 from io import StringIO
 
 import pkg_resources
+from dials.algorithms.indexing import indexer
+from dials.algorithms.indexing.basis_vector_search import combinations, optimise
 
 import libtbx.phil
 import scitbx.matrix
 from dxtbx.model.experiment_list import Experiment, ExperimentList
 from scitbx.array_family import flex
-
-from dials.algorithms.indexing import indexer
-from dials.algorithms.indexing.basis_vector_search import combinations, optimise
 
 from .low_res_spot_match import LowResSpotMatch
 from .strategy import Strategy
@@ -83,15 +82,12 @@ for entry_point in itertools.chain(
     pkg_resources.iter_entry_points("dials.index.basis_vector_search"),
     pkg_resources.iter_entry_points("dials.index.lattice_search"),
 ):
-    ext_master_scope = libtbx.phil.parse(
-        """
+    ext_master_scope = libtbx.phil.parse("""
 %s
 .expert_level=1
 .help=%s
 {}
-        """
-        % (entry_point.name, entry_point.load().phil_help)
-    )
+        """ % (entry_point.name, entry_point.load().phil_help))
     ext_phil_scope = ext_master_scope.get_without_substitution(entry_point.name)
     assert len(ext_phil_scope) == 1
     ext_phil_scope = ext_phil_scope[0]
@@ -217,9 +213,9 @@ class LatticeSearch(indexer.Indexer):
             if refl.get_flags(refl.flags.indexed).count(True) == 0:
                 continue
 
-            from rstbx.dps_core.cell_assessment import SmallUnitCellVolume
-
             from dials.algorithms.indexing import non_primitive_basis
+
+            from rstbx.dps_core.cell_assessment import SmallUnitCellVolume
 
             threshold = self.params.basis_vector_combinations.sys_absent_threshold
             if threshold and (

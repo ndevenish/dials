@@ -2,6 +2,11 @@ from __future__ import annotations
 
 import os
 
+from dials.array_family import flex
+from dials.util import show_mail_handle_errors
+from dials.util.command_line import Command
+from dials.util.options import ArgumentParser
+
 from cctbx import sgtbx
 from dxtbx.model import Crystal
 from dxtbx.model.experiment_list import ExperimentListFactory
@@ -9,11 +14,6 @@ from iotbx.xds import integrate_hkl, spot_xds
 from libtbx.phil import parse
 from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 from scitbx import matrix
-
-from dials.array_family import flex
-from dials.util import show_mail_handle_errors
-from dials.util.command_line import Command
-from dials.util.options import ArgumentParser
 
 
 class SpotXDSImporter:
@@ -376,8 +376,7 @@ class Script:
     def __init__(self):
         """Initialise the script."""
         # Create the phil parameters
-        phil_scope = parse(
-            """
+        phil_scope = parse("""
       input {
         method = *experiment reflections
           .type = choice
@@ -411,8 +410,7 @@ class Script:
         .type = bool
         .help = "Attempt to create a scan-varying crystal model from"
                 "INTEGRATE.LP, if present"
-    """
-        )
+    """)
 
         # The option parser
         usage = "usage: dials.import_xds [options] (SPOT.XDS|INTEGRATE.HKL)"
